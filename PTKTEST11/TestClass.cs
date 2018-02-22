@@ -37,6 +37,7 @@ namespace PTK
         #endregion
 
         #region methods
+
         public bool Equals(Node other)
         {
             if (x == other.X && y == other.Y && z == other.Z)
@@ -63,7 +64,6 @@ namespace PTK
 
             return _nodes;
         }
-
         #endregion
     }
 
