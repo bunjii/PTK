@@ -64,6 +64,8 @@
     <Compile Include="TestB.cs" />
     <Compile Include="TestC.cs" />
     <Compile Include="TestClass.cs" />
+    <Compile Include="TestD.cs" />
+    <Compile Include="TestE.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
