@@ -28,7 +28,7 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddLineParameter("lines", "lns", "lines", GH_ParamAccess.list);
+            pManager.AddLineParameter("Lines", "Lines", "Lines", GH_ParamAccess.list);
         }
 
         /// <summary>
