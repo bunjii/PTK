@@ -38,7 +38,6 @@ namespace PTK
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("PTK ELEM", "PTK E", "PTK ELEM", GH_ParamAccess.list);
-            // pManager.AddGenericParameter("PTK NODE", "PTK N", "PTK NODE", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -48,8 +47,6 @@ namespace PTK
         {
             pManager.AddGenericParameter("PTK NODE", "PTK N", "PTK NODE", GH_ParamAccess.item);
             pManager.AddGenericParameter("PTK ELEM", "PTK E", "PTK ELEM", GH_ParamAccess.item);
-            pManager.AddLineParameter("Line", "Line", "Line", GH_ParamAccess.list);
-            pManager.AddPointParameter("Points", "Pts", "Points", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -59,23 +56,23 @@ namespace PTK
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // 1. Declare placeholder variables
-
+            #region variables
             int nodeIdNum = 0;
             int elemIdNum = 0;
+
             List<Node> nodes = new List<Node>();
-            List<Line> lines = new List<Line>();
-            List<Point3d> pts = new List<Point3d>();
             List<Element> elems = new List<Element>();
             List<Element> tempElemList = new List<Element>();
 
             GH_ObjectWrapper wrapNode = new GH_ObjectWrapper();
             List<GH_ObjectWrapper> wrapElemList = new List<GH_ObjectWrapper>();
+            #endregion
 
-            // 2. Retrieve input data
+            #region input
             if (!DA.GetDataList(0, wrapElemList)) { return; }
+            #endregion
 
-            // 3. Solve
+            #region solve
             // DDL "unwrap wrapped element class" and "merge multiple element class"
             for (int i = 0; i < wrapElemList.Count; i++)
             {
@@ -90,35 +87,36 @@ namespace PTK
                 elemIdNum++;
             }
 
-            // DDL "create grasshopper lines" and "create node"
+            // DDL "generate Node"
             for (int i = 0; i < elems.Count; i++)
             {
-                lines.Add(elems[i].Ln);
                 Node tempNode0 = new Node(elems[i].Ln.From);
                 Node tempNode1 = new Node(elems[i].Ln.To);
 
                 Node.AddElemIds(nodes, elems[i], tempNode0);
                 Node.AddElemIds(nodes, elems[i], tempNode1);
-
             }
 
-            // DDL "generate Node ID" and "grasshopper pts"
+            // DDL "generate Node ID"
             for (int i = 0; i < nodes.Count; i++)
             {
                 nodes[i].ID = nodeIdNum;
                 nodeIdNum++;
-
-                pts.Add(nodes[i].Pt3d);
-
             }
 
-            // DDL "output"
+            // DDL "generate N0id and N1id in Elements"
+            foreach (Element e in elems)
+            {
+                e.N0id = Node.FindNodeId(nodes, e.Ln.From);
+                e.N1id = Node.FindNodeId(nodes, e.Ln.To);
+            }
+            #endregion
+
+            #region output
             DA.SetData(0, nodes);
             DA.SetData(1, elems);
-            DA.SetDataList(2, lines);
-            DA.SetDataList(3, pts);
-            
-            
+            #endregion
+
         }
 
         /// <summary>

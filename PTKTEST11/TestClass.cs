@@ -64,6 +64,22 @@ namespace PTK
 
             return _nodes;
         }
+
+        public static int FindNodeId(List<Node> _nodes, Point3d _pt)
+        {
+            int tempId = -999;
+            tempId = _nodes.Find(n => n.Pt3d == _pt).ID;
+
+            return tempId;
+        }
+
+        public static Node FindNodeById(List<Node> _nodes, int _nid)
+        {
+            Node tempNode;
+            tempNode = _nodes.Find(n => n.ID == _nid);
+
+            return tempNode; 
+        }
         #endregion
     }
 
@@ -91,12 +107,25 @@ namespace PTK
         #region properties
         public Line Ln { get { return elemLine; } }
         public double Length { get { return length; } }
-        public int N0id { get { return n0id; } }
-        public int N1id { get { return n1id; } }
+        public int N0id { get { return n0id; } set { n0id = value; } }
+        public int N1id { get { return n1id; } set { n1id = value; } }
         public int ID { get { return id; } set { id = value; } }
         #endregion
 
         #region methods
+        public static List<Element> AddNodeIds(List<Element> _elems, List<Node> _nodes)
+        {
+
+            return _elems;
+        }
+
+        public static Element FindElementById(List<Element> _elems, int _eid)
+        {
+            Element tempElement;
+            tempElement = _elems.Find(e => e.ID == _eid);
+
+            return tempElement;
+        }
         #endregion
     }
 }
