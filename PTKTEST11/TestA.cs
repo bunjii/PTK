@@ -2,67 +2,12 @@
 using System.Collections.Generic;
 
 using Grasshopper.Kernel;
+// using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
-namespace PTKTEST11
+namespace PTK
 {
-
-    public class Node
-    {
-        #region fields
-        private int ID;
-        private double X;
-        private double Y;
-        private double Z;
-        #endregion
-
-        #region constructors
-        public Node(Point3d pt)
-        {
-            X = pt.X;
-            Y = pt.Y;
-            Z = pt.Z;
-            ID = -999;
-        }
-        #endregion
-
-        #region properties
-
-        #endregion
-
-        #region methods
-
-        #endregion
-    }
-
-    // test comments
-    public class Element
-    {
-        #region fields
-        private Node N0;
-        private Node N1;
-        private Line ElemLine;
-        private double Length;
-        #endregion
-
-        #region constructors
-        public Element(Line line)
-        {
-            ElemLine = line;
-
-        }
-        #endregion
-
-        #region properties
-        
-        #endregion
-
-        #region methods
-
-        #endregion
-    }
-
-    public class TEST11A : GH_Component
+    public class PTK1 : GH_Component
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public 
@@ -71,9 +16,9 @@ namespace PTKTEST11
         /// Subcategory the panel. If you use non-existing tab or panel names, 
         /// new tabs/panels will automatically be created.
         /// </summary>
-        public TEST11A()
-          : base("Test11A", "A",
-              "TestAcomponent",
+        public PTK1()
+          : base("1", "1",
+              "Test component no.1: Family Maker",
               "PTK", "STR")
         {
         }
@@ -91,8 +36,9 @@ namespace PTKTEST11
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            // pManager.AddFieldParameter
-            // pManager.AddGenericParameter()
+            pManager.AddGenericParameter("PTK ELEM", "PTK E", "PTK ELEM", GH_ParamAccess.item);
+            // pManager.AddGenericParameter("PTK NODE", "PTK N", "PTK NODE", GH_ParamAccess.item);
+            // pManager.AddPointParameter("Points", "Pts", "Point 3d", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -102,6 +48,38 @@ namespace PTKTEST11
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // 1. Declare placeholder variables and assign initial invalid data.
+            //    This way, if the input parameters fail to supply valid data, we know when to abort.
+            List<Line> lines = new List<Line>();
+            List<Point3d> pts = new List<Point3d>();
+            List<Element> elems = new List<Element>();
+            List<Node> nodes = new List<Node>();
+
+            // 2. Retrieve input data
+            if (!DA.GetDataList(0, lines)) { return; }
+
+            // 3. Abort on invalid inputs
+            // if (!lines.IsValid) { return; }
+
+            // Solve
+            for (int i = 0; i < lines.Count; i++)
+            {
+                if (!lines[i].IsValid) { return; }
+
+                elems.Add(new Element(lines[i]));
+
+                pts.Add(lines[i].From);
+                pts.Add(lines[i].To);
+            }
+
+            for (int i = 0; i < pts.Count; i++)
+            {
+                nodes.Add(new Node(pts[i]));
+            }
+
+            DA.SetData(0, elems);
+            // DA.SetData(1, nodes);
+            // DA.SetDataList(1, pts);
             
         }
 
@@ -115,7 +93,8 @@ namespace PTKTEST11
             {
                 // You can add image files to your project resources and access them like this:
                 //return Resources.IconForThisComponent;
-                return null;
+                // return null;
+                return PTKTEST11.Properties.Resources.icon_truss;
             }
         }
 
