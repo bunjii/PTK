@@ -2,9 +2,9 @@
 using System.Drawing;
 using Grasshopper.Kernel;
 
-namespace PTKTEST11
+namespace PTK
 {
-    public class PTKTEST11Info : GH_AssemblyInfo
+    public class PTKTestInfo : GH_AssemblyInfo
     {
         public override string Name
         {
@@ -19,6 +19,7 @@ namespace PTKTEST11
             {
                 //Return a 24x24 pixel bitmap to represent this GHA library.
                 return null;
+                
             }
         }
         public override string Description

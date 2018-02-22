@@ -1,74 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
-
 using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
+// using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
 namespace PTK
 {
-    // public class Node : GH_Goo<int>
-    public class Node
-    {
-        #region fields
-        private int ID;
-        private double X;
-        private double Y;
-        private double Z;
-        #endregion
-
-        #region constructors
-        public Node(Point3d pt)
-        {
-            X = pt.X;
-            Y = pt.Y;
-            Z = pt.Z;
-            ID = -999;
-        }
-        #endregion
-
-        #region properties
-
-        public double Xval { get { return X; } set { X = value; } }
-        public double Yval { get { return Y; } set { Y = value; } }
-        public double Zval { get { return Z; } set { Z = value; } }
-   
-        #endregion
-
-        #region methods
-
-        #endregion
-    }
-    
-    // test comments
-    // test commit br-bunji
-    public class Element
-    {
-        #region fields
-        private Node N0;
-        private Node N1;
-        private Line ElemLine;
-        private double Length;
-        #endregion
-
-        #region constructors
-        public Element(Line line)
-        {
-            ElemLine = line;
-
-        }
-        #endregion
-
-        #region properties
-        
-        #endregion
-
-        #region methods
-
-        #endregion
-    }
-
     public class PTK1 : GH_Component
     {
         /// <summary>
@@ -80,7 +18,7 @@ namespace PTK
         /// </summary>
         public PTK1()
           : base("1", "1",
-              "Test component no.1",
+              "Test component no.1: Family Maker",
               "PTK", "STR")
         {
         }
@@ -98,8 +36,9 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Nodes", "Nodes", "PTK NODE ELEM", GH_ParamAccess.item);
-            pManager.AddPointParameter("Points", "Pts", "Point 3d", GH_ParamAccess.list);
+            pManager.AddGenericParameter("PTK ELEM", "PTK E", "PTK ELEM", GH_ParamAccess.item);
+            // pManager.AddGenericParameter("PTK NODE", "PTK N", "PTK NODE", GH_ParamAccess.item);
+            // pManager.AddPointParameter("Points", "Pts", "Point 3d", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -113,7 +52,7 @@ namespace PTK
             //    This way, if the input parameters fail to supply valid data, we know when to abort.
             List<Line> lines = new List<Line>();
             List<Point3d> pts = new List<Point3d>();
-
+            List<Element> elems = new List<Element>();
             List<Node> nodes = new List<Node>();
 
             // 2. Retrieve input data
@@ -127,6 +66,8 @@ namespace PTK
             {
                 if (!lines[i].IsValid) { return; }
 
+                elems.Add(new Element(lines[i]));
+
                 pts.Add(lines[i].From);
                 pts.Add(lines[i].To);
             }
@@ -136,11 +77,10 @@ namespace PTK
                 nodes.Add(new Node(pts[i]));
             }
 
-            DA.SetData(0, nodes);
-            DA.SetDataList(1, pts);
-
-
-
+            DA.SetData(0, elems);
+            // DA.SetData(1, nodes);
+            // DA.SetDataList(1, pts);
+            
         }
 
         /// <summary>
