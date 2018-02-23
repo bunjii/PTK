@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using Rhino.Geometry;
 
+using System.Windows.Forms;
+
 namespace PTK
 {
     public class Node : IEquatable<Node>
@@ -86,27 +88,38 @@ namespace PTK
     public class Element 
     {
         #region fields
-        private int id; 
+        private int id;
+        private string tag;
         private int n0id;
         private int n1id;
         private Line elemLine;
+        private Section rectSec;
+
         #endregion
 
         #region constructors
-        public Element(Line line)
+        public Element(Line _line, string _tag)
         {
-            elemLine = line;
+            elemLine = _line;
+            tag = _tag;
             id = -999;
             n0id = -999;
             n1id = -999;
         }
+
         #endregion
 
         #region properties
         public Line Ln { get { return elemLine; } }
+        public string Tag
+        {
+            get { return tag; }
+            set { tag = value; }
+        }
         public int N0id { get { return n0id; } set { n0id = value; } }
         public int N1id { get { return n1id; } set { n1id = value; } }
         public int ID { get { return id; } set { id = value; } }
+        public Section RectSec { get { return rectSec; } set { rectSec = value; } }
         #endregion
 
         #region methods
@@ -131,24 +144,35 @@ namespace PTK
         #region fields
         private string tag;
         private int id;
+        private Vector3d offset;
         private double width;
         private double height;
-        private Vector2d offsetVec;
         #endregion
 
         #region constructors
-        public Section()
+        public Section(string _tag, double _width, double _height, Vector3d _offset)
         {
-
+            tag = _tag; // inheriting Section Class
+            id = -999; // inheriting Section Class
+            offset = _offset; // inheriting Section Class
+            width = _width;
+            height = _height;
         }
         #endregion
-        
+
         #region properties
+        public double Width { get { return width; }  }
+        public double Height { get { return height; }  }
+        public string Tag { get { return tag; } set { tag = value; } }
+        public int ID { get { return id; } set { id = value; } }
+        public Vector3d Offset { get { return offset; } set { offset = value; } }
         #endregion
-        
+
         #region methods
+
         #endregion
     }
+
 
     /*
     public class SomeNewClass
@@ -162,5 +186,9 @@ namespace PTK
         #region methods
         #endregion
     }
+    
+        private double width;
+        private double height;
+        private Vector2d offsetVec;
     */
 }

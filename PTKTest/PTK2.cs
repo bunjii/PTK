@@ -47,6 +47,7 @@ namespace PTK
         {
             pManager.AddGenericParameter("PTK NODE", "PTK N", "PTK NODE", GH_ParamAccess.item);
             pManager.AddGenericParameter("PTK ELEM", "PTK E", "PTK ELEM", GH_ParamAccess.item);
+            pManager.AddGenericParameter("PTK SECTION", "PTK S", "PTK SECTION", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -62,9 +63,9 @@ namespace PTK
 
             List<Node> nodes = new List<Node>();
             List<Element> elems = new List<Element>();
+            List<Section> rectSecs = new List<Section>();
             List<Element> tempElemList = new List<Element>();
-
-            GH_ObjectWrapper wrapNode = new GH_ObjectWrapper();
+            
             List<GH_ObjectWrapper> wrapElemList = new List<GH_ObjectWrapper>();
             #endregion
 

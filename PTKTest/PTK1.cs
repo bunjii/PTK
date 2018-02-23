@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 using Grasshopper.Kernel;
-// using Grasshopper.Kernel.Types;
+using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
 namespace PTK
@@ -29,12 +29,12 @@ namespace PTK
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddLineParameter("Lines", "Lines", "Lines", GH_ParamAccess.list);
-            // pManager.AddGenericParameter();
             pManager.AddTextParameter("Tag", "Tag", "Tag", GH_ParamAccess.item);
+            pManager.AddGenericParameter("PTK SECTION", "PTK S", "PTK SECTION", GH_ParamAccess.item);
             pManager.AddVectorParameter("Vec z", "Vec z", "Vec z", GH_ParamAccess.list);
 
             pManager[1].Optional = true;
-            pManager[2].Optional = true;
+            pManager[3].Optional = true;
 
         }
 
@@ -44,8 +44,7 @@ namespace PTK
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddGenericParameter("PTK ELEM", "PTK E", "PTK ELEM", GH_ParamAccess.item);
-            // pManager.AddGenericParameter("PTK NODE", "PTK N", "PTK NODE", GH_ParamAccess.item);
-            // pManager.AddPointParameter("Points", "Pts", "Point 3d", GH_ParamAccess.list);
+
         }
 
         /// <summary>
@@ -55,37 +54,45 @@ namespace PTK
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // 1. Declare placeholder variables and assign initial invalid data.
-            //    This way, if the input parameters fail to supply valid data, we know when to abort.
+            #region variables
             List<Line> lines = new List<Line>();
             List<Point3d> pts = new List<Point3d>();
             List<Element> elems = new List<Element>();
             List<Node> nodes = new List<Node>();
+            string elemTag = "N/A";
+            List<Vector3d> normalVec = new List<Vector3d>();
+            GH_ObjectWrapper wrapSec = new GH_ObjectWrapper();
+            Section rectSec;
+            #endregion
 
-            // 2. Retrieve input data
+            #region input
             if (!DA.GetDataList(0, lines)) { return; }
+            DA.GetData(1, ref elemTag);
+            DA.GetData(2, ref wrapSec);
+            DA.GetDataList(3, normalVec);
 
-            // 3. Abort on invalid inputs
-            // if (!lines.IsValid) { return; }
+            #endregion
 
-            // Solve
+            #region solve
+            wrapSec.CastTo<Section>(out rectSec);
+
+            elemTag = elemTag.Trim();
             for (int i = 0; i < lines.Count; i++)
             {
                 if (!lines[i].IsValid) { return; }
-
-                elems.Add(new Element(lines[i]));
-
-                pts.Add(lines[i].From);
-                pts.Add(lines[i].To);
+                Element tempElement = new Element(lines[i], elemTag);
+                if (rectSec != null)
+                {
+                    tempElement.RectSec = rectSec;
+                }
+                elems.Add(tempElement);
+                
             }
+            #endregion
 
-            for (int i = 0; i < pts.Count; i++)
-            {
-                nodes.Add(new Node(pts[i]));
-            }
-
+            #region output
             DA.SetData(0, elems);
-            
+            #endregion
         }
 
         /// <summary>
@@ -98,7 +105,6 @@ namespace PTK
             {
                 // You can add image files to your project resources and access them like this:
                 //return Resources.IconForThisComponent;
-                // return null;
                 return PTK.Properties.Resources.icon_truss;
             }
         }
