@@ -1,26 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
-using Grasshopper;
 using Grasshopper.Kernel;
-using Grasshopper.Kernel.Data;
-using Grasshopper.Kernel.Types;
-
 using Rhino.Geometry;
-
-using System.Numerics;
 
 namespace PTK
 {
-    public class PTK4 : GH_Component
+    public class PTK6 : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the TestD class.
+        /// Initializes a new instance of the PTK6 class.
         /// </summary>
-        public PTK4()
-          : base("4", "4",
-              "Test component no.4: Decompose Node (Extract Node)",
-              "PTK", "5_UTIL")
+        public PTK6()
+          : base("6", "6",
+              "Test component no.6: PTK Rectangular Section",
+              "PTK", "1_INPUT")
         {
         }
 
@@ -29,7 +24,13 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK NODE", "PTK N", "PTK NODE", GH_ParamAccess.item);
+            pManager.AddTextParameter("Tag", "Tag", "Tag", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Width", "Width", "Width", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Height", "Height", "Height", GH_ParamAccess.item);
+            pManager.AddVectorParameter("Offset", "Offset", "Offset", GH_ParamAccess.item);
+
+            pManager[0].Optional = true;
+            pManager[3].Optional = true;
         }
 
         /// <summary>
@@ -37,9 +38,7 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddPointParameter("Points", "Points", "Points", GH_ParamAccess.list);
-            pManager.AddIntegerParameter("PTK NODE ID", "PTK N ID", "PTK NODE ID", GH_ParamAccess.list);
-            pManager.AddIntegerParameter("PTK NODE ELEM ID", "PTK N E ID", "PTK NODE ELEM ID", GH_ParamAccess.tree);
+            pManager.AddGenericParameter("PTK SECTION", "PTK_S", "PTK_SECTION", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -49,41 +48,32 @@ namespace PTK
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             #region variables
-            GH_ObjectWrapper wrapNode = new GH_ObjectWrapper();
-            List<Node> nodes = new List<Node>();
-
-            List<Point3d> points = new List<Point3d>();
-            List<int> nodeIds = new List<int>();
-            DataTree<int> elemIdTree = new DataTree<int>();
+            string sectionTag = "N/A";
+            double width = new double();
+            double height = new double();
+            Vector3d offset = new Vector3d(0, 0, 0);
+            
             #endregion
 
             #region input
-            if (!DA.GetData(0, ref wrapNode)) { return; }
-            wrapNode.CastTo<List<Node>>(out nodes);
+            DA.GetData(0, ref sectionTag);
+            if (!DA.GetData(1, ref width)) { return; }
+            if (!DA.GetData(2, ref height)) { return; }
+            DA.GetData(3, ref offset);
             #endregion
 
             #region solve
-            // foreach (Node n in nodes)
-            for (int i = 0; i < nodes.Count; i++)
-            {
-                points.Add(nodes[i].Pt3d);
-                nodeIds.Add(nodes[i].ID);
-                GH_Path path = new GH_Path(i);
-                foreach (int j in nodes[i].ElemIds)
-                {
-                    elemIdTree.Add(j, path);
-
-                }
-            }
+            Section rectSec = new Section(sectionTag, width, height, offset);
+            string test = "";
+            test += rectSec.Tag + ", " + rectSec.Height.ToString();
+            // MessageBox.Show(test);
             #endregion
-
 
             #region output
-            DA.SetDataList(0, points);
-            DA.SetDataList(1, nodeIds);
-            DA.SetDataTree(2, elemIdTree);
+            DA.SetData(0, rectSec);
             #endregion
         }
+
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -103,7 +93,7 @@ namespace PTK
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("dd8adcf2-521c-44a4-8448-f0335469c0dd"); }
+            get { return new Guid("59eb5896-0ccb-4e37-be5e-ba4ee7931ee1"); }
         }
     }
 }
