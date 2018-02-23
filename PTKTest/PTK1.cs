@@ -19,7 +19,7 @@ namespace PTK
         public PTK1()
           : base("1", "1",
               "Test component no.1: Family Maker",
-              "PTK", "STR")
+              "PTK", "1_INPUT")
         {
         }
 
@@ -99,7 +99,7 @@ namespace PTK
                 // You can add image files to your project resources and access them like this:
                 //return Resources.IconForThisComponent;
                 // return null;
-                return PTKTEST11.Properties.Resources.icon_truss;
+                return PTK.Properties.Resources.icon_truss;
             }
         }
 

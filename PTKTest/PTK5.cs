@@ -15,7 +15,7 @@ namespace PTK
         public PTK5()
           : base("5", "5",
               "Test component no.5: Select Node",
-              "PTK", "STR")
+              "PTK", "5_UTIL")
         {
         }
 
@@ -78,7 +78,7 @@ namespace PTK
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return PTKTEST11.Properties.Resources.icon_truss;
+                return PTK.Properties.Resources.icon_truss;
             }
         }
 

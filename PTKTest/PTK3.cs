@@ -21,7 +21,7 @@ namespace PTK
         public PTK3()
           : base("3", "3",
               "Test component no.3: Decompose Element",
-              "PTK", "STR")
+              "PTK", "5_UTIL")
         {
         }
 
@@ -100,7 +100,7 @@ namespace PTK
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return PTKTEST11.Properties.Resources.icon_truss;
+                return PTK.Properties.Resources.icon_truss;
             }
         }
 
