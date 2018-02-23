@@ -84,9 +84,11 @@ namespace PTK
             DA.SetDataList(3, n1ids);
             #endregion
 
+            /*
             #region messagebox
             this.Message = "P T K";
             #endregion
+            */
         }
 
         /// <summary>
@@ -113,7 +115,7 @@ namespace PTK
 
 
         // DDL custom attributes, etc
-        /*
+        /* 
         public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
         {
             base.AppendAdditionalComponentMenuItems(menu);

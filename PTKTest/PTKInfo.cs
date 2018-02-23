@@ -4,13 +4,13 @@ using Grasshopper.Kernel;
 
 namespace PTK
 {
-    public class PTKTestInfo : GH_AssemblyInfo
+    public class PTKInfo : GH_AssemblyInfo
     {
         public override string Name
         {
             get
             {
-                return "PTKTEST11";
+                return "PTK";
             }
         }
         public override Bitmap Icon

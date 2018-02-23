@@ -86,18 +86,16 @@ namespace PTK
     public class Element 
     {
         #region fields
-        private int id;
+        private int id; 
         private int n0id;
         private int n1id;
         private Line elemLine;
-        private double length;
         #endregion
 
         #region constructors
         public Element(Line line)
         {
             elemLine = line;
-            length = line.Length;
             id = -999;
             n0id = -999;
             n1id = -999;
@@ -106,7 +104,6 @@ namespace PTK
 
         #region properties
         public Line Ln { get { return elemLine; } }
-        public double Length { get { return length; } }
         public int N0id { get { return n0id; } set { n0id = value; } }
         public int N1id { get { return n1id; } set { n1id = value; } }
         public int ID { get { return id; } set { id = value; } }
@@ -128,4 +125,42 @@ namespace PTK
         }
         #endregion
     }
+
+    public class Section
+    {
+        #region fields
+        private string tag;
+        private int id;
+        private double width;
+        private double height;
+        private Vector2d offsetVec;
+        #endregion
+
+        #region constructors
+        public Section()
+        {
+
+        }
+        #endregion
+        
+        #region properties
+        #endregion
+        
+        #region methods
+        #endregion
+    }
+
+    /*
+    public class SomeNewClass
+    {
+        #region fields
+        #endregion
+        #region constructors
+        #endregion
+        #region properties
+        #endregion
+        #region methods
+        #endregion
+    }
+    */
 }

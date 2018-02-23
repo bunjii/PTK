@@ -29,6 +29,13 @@ namespace PTK
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddLineParameter("Lines", "Lines", "Lines", GH_ParamAccess.list);
+            // pManager.AddGenericParameter();
+            pManager.AddTextParameter("Tag", "Tag", "Tag", GH_ParamAccess.item);
+            pManager.AddVectorParameter("Vec z", "Vec z", "Vec z", GH_ParamAccess.list);
+
+            pManager[1].Optional = true;
+            pManager[2].Optional = true;
+
         }
 
         /// <summary>
@@ -78,8 +85,6 @@ namespace PTK
             }
 
             DA.SetData(0, elems);
-            // DA.SetData(1, nodes);
-            // DA.SetDataList(1, pts);
             
         }
 
