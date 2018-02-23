@@ -1,26 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
-using Rhino.Geometry;
-
-using Rhino;
-using Rhino.DocObjects;
-using Rhino.Collections;
-
-using GH_IO;
-using GH_IO.Serialization;
 using Grasshopper;
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
+using Grasshopper.Kernel.Types;
 
-using System.IO;
-using System.Linq;
-using System.Drawing;
-using System.Reflection;
-using System.Collections;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
+using Rhino.Geometry;
 
 namespace PTK
 {
@@ -32,7 +18,7 @@ namespace PTK
         public PTK4()
           : base("4", "4",
               "Test component no.4: Decompose Node (Extract Node)",
-              "PTK", "STR")
+              "PTK", "5_UTIL")
         {
         }
 
@@ -105,7 +91,7 @@ namespace PTK
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return PTKTEST11.Properties.Resources.icon_truss;
+                return PTK.Properties.Resources.icon_truss;
             }
         }
 
