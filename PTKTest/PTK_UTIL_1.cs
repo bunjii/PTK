@@ -2,19 +2,18 @@
 using System.Collections.Generic;
 
 using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
 namespace PTK
 {
-    public class PTK5 : GH_Component
+    public class PTK_UTIL_1 : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the TestE class.
+        /// Initializes a new instance of the PTK_UTIL_1 class.
         /// </summary>
-        public PTK5()
-          : base("5", "5",
-              "Test component no.5: Select Node",
+        public PTK_UTIL_1()
+          : base("GENERATE GEOMETRY", "GEOMETRY",
+              "Generating Mesh or Brep Geometry",
               "PTK", "5_UTIL")
         {
         }
@@ -24,9 +23,9 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK NODE", "PTK N", "PTK NODE", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("PTK NODE ID", "PTK N ID", "PTK NODE ID", GH_ParamAccess.list);
-
+            pManager.AddGenericParameter("PTK INPUT", "PTK IN", "PTK DATA INPUT", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("IsMesh", "IsMesh", "IsMesh", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("IsBrep", "IsBrep", "IsBrep", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -34,7 +33,8 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK NODE", "PTK N", "PTK NODE", GH_ParamAccess.item);
+            pManager.AddBrepParameter("BREP", "BREP", "BREP", GH_ParamAccess.list);
+            pManager.AddMeshParameter("MESH", "MESH", "MESH", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -43,30 +43,6 @@ namespace PTK
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            #region variables
-            GH_ObjectWrapper wrapNode = new GH_ObjectWrapper();
-            List<Node> nodes = new List<Node>();
-            List<int> nodeIds = new List<int>();
-            List<Node> outNodes = new List<Node>();
-            #endregion
-
-            #region input
-            if (!DA.GetData(0, ref wrapNode)) { return; }
-            wrapNode.CastTo<List<Node>>(out nodes);
-            if (!DA.GetDataList(1, nodeIds)) { return; }
-            #endregion
-
-            #region solve
-            // foreach (Node n in nodes)
-            for (int i = 0; i < nodeIds.Count; i++)
-            {
-                outNodes.Add(Node.FindNodeById(nodes, nodeIds[i]));
-            }
-            #endregion
-
-            #region output
-            DA.SetData(0, outNodes);
-            #endregion
         }
 
         /// <summary>
@@ -79,6 +55,7 @@ namespace PTK
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
                 return PTK.Properties.Resources.icon_truss;
+
             }
         }
 
@@ -87,7 +64,7 @@ namespace PTK
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("d9fab058-b10a-459e-8cb9-8afe2d3a90d3"); }
+            get { return new Guid("38eb4f7f-a3bc-4563-8ebe-dd37784db737"); }
         }
     }
 }
