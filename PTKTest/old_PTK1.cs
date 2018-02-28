@@ -7,7 +7,7 @@ using Rhino.Geometry;
 
 namespace PTK
 {
-    public class PTK1 : GH_Component
+    public class old_PTK1 : GH_Component
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public 
@@ -16,7 +16,7 @@ namespace PTK
         /// Subcategory the panel. If you use non-existing tab or panel names, 
         /// new tabs/panels will automatically be created.
         /// </summary>
-        public PTK1()
+        public old_PTK1()
           : base("1", "1",
               "Test component no.1: Family Maker",
               "PTK", "1_INPUT")
