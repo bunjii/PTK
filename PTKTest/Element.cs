@@ -9,12 +9,16 @@ namespace PTK
         #region fields
         private int id;
         private string tag;
+        private List<int> ptid;
         private int n0id;
         private int n1id;
         private Curve elemLine;
         private Section rectSec;
         private Material mtl;
         private Forces force;
+        private List<Line> strctrlLine;
+        private List<int> strctrlLineID;
+        private int numberOfStructuralLines = 1;
         //private SubElementStructural SubEl
 
         #endregion
@@ -25,19 +29,29 @@ namespace PTK
             elemLine = _crv;
             tag = _tag;
             id = -999;
-            n0id = -999;
-            n1id = -999;
+            //n0id = -999;
+            //n1id = -999;
+            ptid = new List<int>();
+            strctrlLine = new List<Line>();
+            strctrlLineID = new List<int>();
         }
 
         #endregion
 
         #region properties
-        public Curve Ln { get { return elemLine; } }
+        public Curve Crv
+        {
+            get
+            {
+                return elemLine;
+            }
+        }
         public string Tag
         {
             get { return tag; }
             set { tag = value; }
         }
+        public List<Line> StrctrlLine { get { return strctrlLine; }  }
         public int N0id { get { return n0id; } set { n0id = value; } }
         public int N1id { get { return n1id; } set { n1id = value; } }
         public int ID { get { return id; } set { id = value; } }
@@ -52,6 +66,21 @@ namespace PTK
 
             return _elems;
         }
+
+        public void AddNeighbour(int _ids)
+        {
+            ptid.Add(_ids);
+        }
+
+        public void AddStrctline(Line _structuralline)
+        {
+            strctrlLine.Add(_structuralline);
+            strctrlLineID.Add(numberOfStructuralLines);
+            numberOfStructuralLines++;
+
+            
+        }
+
 
         public static Element FindElementById(List<Element> _elems, int _eid)
         {

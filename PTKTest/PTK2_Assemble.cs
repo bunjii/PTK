@@ -53,8 +53,13 @@ namespace PTK
             pManager.AddGenericParameter("Assembly", "A", "AssemblyObjectContaining the whole project", GH_ParamAccess.item);
             pManager.AddPointParameter("Point", "", "", GH_ParamAccess.list);
             pManager.AddBrepParameter("Breptest", "", "", GH_ParamAccess.list);
+            pManager.AddTextParameter("ID", "", "", GH_ParamAccess.list);
+            pManager.AddCurveParameter("CenterCurve", "", "", GH_ParamAccess.list);
+            pManager.AddNumberParameter("CenterCurve", "", "", GH_ParamAccess.list);
+            pManager.AddTextParameter("Neighbours", "", "", GH_ParamAccess.list);
+            pManager.AddLineParameter("Lines", "", "", GH_ParamAccess.list);
 
-            
+
         }
 
         /// <summary>
@@ -64,6 +69,7 @@ namespace PTK
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            Node.ResetIDCount();
             #region variables
             int nodeIdNum = 0;
             int elemIdNum = 0;
@@ -102,20 +108,23 @@ namespace PTK
             //Removing duplicates
             //Asigning to nodes
             List<Point3d> TempPoint = new List<Point3d>();
-            const double intersection_tolerance = 0.001;
-            const double overlap_tolerance = 0.0;
+            
 
+            //ADDING NODES
+            //COMMENT JOHN: I thought it was more safe to first create a unique set of points, then assign it as nodes
+
+            //This loop is finding all points and add it to the TempPointList
+            //First by adding end/start point
+            //Then it finds the intersections and add text if 
             for (int i = 0; i < elems.Count; i++)
             {
-                TempPoint.Add(elems[i].Ln.PointAtEnd);
-                TempPoint.Add(elems[i].Ln.PointAtStart);
+                TempPoint.Add(elems[i].Crv.PointAtEnd);
+                TempPoint.Add(elems[i].Crv.PointAtStart);
 
+                
                 for (int j = i; j<elems.Count; j++)
                 {
-                    var events = Rhino.Geometry.Intersect.Intersection.CurveCurve(elems[i].Ln, elems[j].Ln, intersection_tolerance, overlap_tolerance);
-                    
-
-
+                    var events = Rhino.Geometry.Intersect.Intersection.CurveCurve(elems[i].Crv, elems[j].Crv, ProjectProperties.tolerances, ProjectProperties.tolerances);
                     if (events!= null)
                     {
                         for (int k =0; k<events.Count; k++)
@@ -123,46 +132,25 @@ namespace PTK
                             TempPoint.Add(events[k].PointA);
                         }
                     }
-
                 }
-
             }
 
-
-            List<Brep> BokseTest = new List<Brep>();
-
-            //Testing, making breps
-            for (int i = 0; i < elems.Count; i++)
-            {
-                BokseTest.Add( elems[i].MakeBrep() );
-            }
-            
-
-
-
+            //Removing all duplicates. With a tolerance. Tolerance is best to be set as low as possible. May be an input. Or one can use the rhino unit tolerance
+            TempPoint = Functions.RemoveDuplicates(TempPoint, 0.001);
 
             // DDL "generate Node"
-            for (int i = 0; i < elems.Count; i++)
+            for (int i = 0; i < TempPoint.Count; i++)
             {
-
-
-
-
-                Node tempNode0 = new Node(elems[i].Ln.PointAtEnd);
-                Node tempNode1 = new Node(elems[i].Ln.PointAtStart);
-
-                
-
-                Node.AddElemIds(nodes, elems[i], tempNode0);
-                Node.AddElemIds(nodes, elems[i], tempNode1);
+                nodes.Add(new Node(TempPoint[i]));
             }
 
-            // DDL "generate Node ID"
+            /* DDL "generate Node ID"
             for (int i = 0; i < nodes.Count; i++)
             {
                 nodes[i].ID = nodeIdNum;
                 nodeIdNum++;
             }
+            
 
             // DDL "generate N0id and N1id in Elements"
             foreach (Element e in elems)
@@ -170,20 +158,71 @@ namespace PTK
                 e.N0id = Node.FindNodeId(nodes, e.Ln.PointAtStart);
                 e.N1id = Node.FindNodeId(nodes, e.Ln.PointAtEnd);
             }
-            #endregion
 
-            #region output
+            
+            */
+            List<Brep> BokseTest = new List<Brep>();
+            List<Curve> elementCurves = new List<Curve>();
+            List<int> elementid = new List<int>();
 
-            Assembly Assembly = new Assembly();
+            Functions.AsignNeighbour(elems, nodes);
+            List<Line> strLine = new List<Line>();
+        
+
+            //Testing, making breps
+            for (int i = 0; i < elems.Count; i++)
+            {
+                BokseTest.Add(elems[i].MakeBrep());
+                elementCurves.Add(elems[i].Crv);
+                elementid.Add(elems[i].ID);
+                strLine.AddRange(elems[i].StrctrlLine);
+            }
+
+            List<string> IDs = new List<string>();
+            List<Point3d> PointNodes = new List<Point3d>();
+            List<string> NeighbourList = new List<string>();
+            for (int i = 0; i < nodes.Count; i++)
+            {
+
+                IDs.Add(Convert.ToString( nodes[i].ID));
+                PointNodes.Add(nodes[i].Pt3d);
+                string text ="N"+ Convert.ToString(nodes[i].ID)+"_";
+                for (int j = 0; j < nodes[i].ElemsId.Count; j++)
+                {
+                    text += "E:" +Convert.ToString(nodes[i].ElemsId[j])+" ";
+                }
+                NeighbourList.Add(text);
+
+
+            }
+
+            
+
+
+                #endregion
+
+                #region output
+
+                Assembly Assembly = new Assembly();
             Assembly.element = elems;
             Assembly.Node = nodes;
 
             DA.SetData(0, Assembly);
             DA.SetDataList(1, TempPoint);
             DA.SetDataList(2, BokseTest);
+            DA.SetDataList(3, IDs);
+            DA.SetDataList(4, elementCurves);
+            DA.SetDataList(5, elementid);
+            DA.SetDataList(6, NeighbourList);
+            DA.SetDataList(7, strLine);
             #endregion
 
+
+
+
         }
+
+
 
         /// <summary>
         /// Provides an Icon for every component that will be visible in the User Interface.

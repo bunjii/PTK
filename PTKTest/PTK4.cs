@@ -63,7 +63,7 @@ namespace PTK
             #endregion
 
             #region solve
-            // foreach (Node n in nodes)
+            /* foreach (Node n in nodes)
             for (int i = 0; i < nodes.Count; i++)
             {
                 points.Add(nodes[i].Pt3d);
@@ -75,6 +75,7 @@ namespace PTK
 
                 }
             }
+            */
             #endregion
 
 

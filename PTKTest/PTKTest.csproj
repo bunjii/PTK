@@ -61,8 +61,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assembly.cs" />
+    <Compile Include="Functions.cs" />
+    <Compile Include="MyComponent1.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="Element.cs" />
+    <Compile Include="ProjectProperties.cs" />
     <Compile Include="PTK8_Forces.cs" />
     <Compile Include="Forces.cs" />
     <Compile Include="Material.cs" />

@@ -13,9 +13,12 @@ namespace PTK
         private int id;
         private List<int> elemIds;
         private Point3d pt3d;
+        private Plane nodePlane;
         private double x;
         private double y;
         private double z;
+        private static int idCount = 0;
+        int temp;
         #endregion
 
         #region constructors
@@ -25,21 +28,35 @@ namespace PTK
             x = pt.X;
             y = pt.Y;
             z = pt.Z;
-            id = -999;
+            id = idCount;
+            nodePlane = new Plane(pt, new Vector3d(0, 0, 1));
+            idCount++;
             elemIds = new List<int>();
+            
         }
         #endregion
 
         #region properties
         public Point3d Pt3d { get { return pt3d; } }
+        public List<int> ElemsId { get { return elemIds; } }
         public double X { get { return x; } }
         public double Y { get { return y; } }
         public double Z { get { return z; } }
-        public int ID { get { return id; } set { id = value; } }
-        public List<int> ElemIds { get { return elemIds; } set { elemIds = value; } }
+        public int ID { get { return id; } }  //removed the possability to set an ID
+        
         #endregion
 
         #region methods
+
+        public void AddNeighbour(int ids)
+        { 
+            if (elemIds==null)
+            {
+                elemIds = new List<int>();
+            }
+            temp = ids;
+            elemIds.Add(ids);
+        }
 
         public bool Equals(Node other)
         {
@@ -55,12 +72,7 @@ namespace PTK
 
         public static List<Node> AddElemIds(List<Node> _nodes, Element _elem, Node _nd)
         {
-            if (!_nodes.Contains(_nd))
-            {
-                _nd.ElemIds.Add(_elem.ID);
-                _nodes.Add(_nd);
-            }
-            else
+            
             {
                 _nodes.Find(n => n.Pt3d == _nd.Pt3d).elemIds.Add(_elem.ID);
             }
@@ -83,6 +95,12 @@ namespace PTK
 
             return tempNode;
         }
+
+        public static void ResetIDCount()
+        {
+            idCount = 0;
+        }
+
         #endregion
     }
 }

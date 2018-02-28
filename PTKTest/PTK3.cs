@@ -72,7 +72,7 @@ namespace PTK
             #region solve
             foreach (Element e in elems)
             {
-                curves.Add(e.Ln);
+                curves.Add(e.Crv);
                 elemTags.Add(e.Tag);
                 elemids.Add(e.ID);
                 n0ids.Add(e.N0id);
