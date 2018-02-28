@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PTK
 {
-    public class Material
+    public class PTK1_2_Material
     {
 
         #region fields

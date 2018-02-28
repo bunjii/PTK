@@ -95,18 +95,11 @@ namespace PTK
 
                     }
 
-                    List<double> a1 = new List<double> { 1, 3, 5, 6 };
-                    a1.Sort();
+                    
                     
 
                      
-                    parameterTemp.Sort();
-
-                    var cloned = parameterTemp.ToArray();
-                    var sourceArr =  pointOnCurves.ToArray();
-                    Array.Sort(cloned, sourceArr);
                     
-
                     
 
 
@@ -114,9 +107,23 @@ namespace PTK
 
                 }
 
-                for (int i = 1; i < pointOnCurves.Count; i++)
+                
+
+                var key = parameterTemp.ToArray();
+                var elements = pointOnCurves.ToArray();
+
+
+
+                
+                Array.Sort(elements,key);
+
+
+                List<Point3d> pt =  elements.ToList();
+                List<double> test = key.ToList();
+
+                for (int i = 1; i < pt.Count; i++)
                 {
-                    Line segment = new Line(pointOnCurves[i - 1], pointOnCurves[i]);
+                    Line segment = new Line(pt[i - 1], pt[i]);
                     element[e].AddStrctline(segment);
 
 

@@ -12,13 +12,13 @@ using Rhino.Geometry;
 
 namespace PTK
 {
-    public class PTK3 : GH_Component
+    public class PTK_old : GH_Component
     {
 
         /// <summary>
         /// Initializes a new instance of the TestC class.
         /// </summary>
-        public PTK3()
+        public PTK_old()
           : base("3", "3",
               "Test component no.3: Decompose Element",
               "PTK", "5_UTIL")

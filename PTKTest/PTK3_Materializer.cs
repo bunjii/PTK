@@ -7,7 +7,7 @@ using Rhino.Geometry;
 
 namespace PTK
 {
-    public class PTK1 : GH_Component
+    public class PTK3_Materializer : GH_Component
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public 
@@ -18,7 +18,7 @@ namespace PTK
         /// </summary>
         /// 
         
-        public PTK1()
+        public PTK3_Materializer()
           : base("Materializer", "MT",
               "This component materializes curves. This based on cross-sections, material and alignments",
               "PTK", "1_INPUT")
@@ -34,6 +34,7 @@ namespace PTK
             pManager.AddCurveParameter("Curves", "Crv", "Add element-curves that shall be materalized", GH_ParamAccess.list);
             pManager.AddGenericParameter("CrossSection", "CS", "Add the cross-section componentt here", GH_ParamAccess.item);
             pManager.AddGenericParameter("Material", "MT", "Add Material-component here",GH_ParamAccess.item);
+            pManager.AddGenericParameter("Align", "A", "Describes the alignment of the member. (Rotation and offset)", GH_ParamAccess.item);
             pManager.AddGenericParameter("Forces", "F", "Add Forces-component here", GH_ParamAccess.item);
 
             pManager.AddTextParameter("Tags", "T", "Add tags to the structure here. Tags are individual to each element", GH_ParamAccess.tree);
@@ -45,6 +46,7 @@ namespace PTK
             pManager[3].Optional = true;
             pManager[4].Optional = true;
             pManager[5].Optional = true;
+            pManager[6].Optional = true;
 
 
         }
@@ -75,10 +77,11 @@ namespace PTK
             List<Vector3d> normalVec = new List<Vector3d>();
             GH_ObjectWrapper wrapSec = new GH_ObjectWrapper();
             GH_ObjectWrapper  wrapMat = new GH_ObjectWrapper();
+            GH_ObjectWrapper wrapAli = new GH_ObjectWrapper();
             GH_ObjectWrapper wrapForc = new GH_ObjectWrapper();
 
             Section rectSec;
-            Material material;
+            PTK1_2_Material material;
             Forces forces;
             #endregion
 
@@ -88,7 +91,8 @@ namespace PTK
             if (!DA.GetDataList(1, curves)) { return; }
             DA.GetData(2, ref wrapSec);
             DA.GetData(3, ref wrapMat);
-            DA.GetData(4, ref wrapForc);
+            DA.GetData(4, ref wrapMat);
+            DA.GetData(5, ref wrapForc);
             
 
 
@@ -98,7 +102,8 @@ namespace PTK
             #region solve
             wrapSec.CastTo<Section>(out rectSec);
             wrapForc.CastTo<Forces>(out forces);
-            wrapMat.CastTo<Material>(out material);
+            wrapMat.CastTo<PTK1_2_Material>(out material);
+            wrapAli.CastTo<PTK1_2_Material>(out align);
 
             elemTag = elemTag.Trim();
             for (int i = 0; i < curves.Count; i++)

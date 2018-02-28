@@ -14,7 +14,7 @@ namespace PTK
         private int n1id;
         private Curve elemLine;
         private Section rectSec;
-        private Material mtl;
+        private PTK1_2_Material mtl;
         private Forces force;
         private List<Line> strctrlLine;
         private List<int> strctrlLineID;
@@ -56,7 +56,7 @@ namespace PTK
         public int N1id { get { return n1id; } set { n1id = value; } }
         public int ID { get { return id; } set { id = value; } }
         public Section RectSec { get { return rectSec; } set { rectSec = value; } }
-        public Material Mtl { get { return mtl; } set { mtl = value; } }
+        public PTK1_2_Material Mtl { get { return mtl; } set { mtl = value; } }
         public Forces Force { get { return force; } set { force = value; } }
         #endregion
 

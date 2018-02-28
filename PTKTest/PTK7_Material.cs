@@ -63,7 +63,7 @@ namespace PTK
             #endregion
 
             #region solve
-            Material Material = new Material();
+            PTK1_2_Material Material = new PTK1_2_Material();
             Material.Materialname = MaterialName;
             Material.YoungModulus = YoungModulus;
             Material.Density = Density;
