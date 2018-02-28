@@ -103,7 +103,7 @@ namespace PTK
             wrapSec.CastTo<Section>(out rectSec);
             wrapForc.CastTo<Forces>(out forces);
             wrapMat.CastTo<PTK1_2_Material>(out material);
-            wrapAli.CastTo<PTK1_2_Material>(out align);
+            // wrapAli.CastTo<PTK1_2_Material>(out align); // commented out by bunji 01 Mar 2017
 
             elemTag = elemTag.Trim();
             for (int i = 0; i < curves.Count; i++)
