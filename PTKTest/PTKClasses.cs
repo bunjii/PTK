@@ -6,6 +6,7 @@ using System.Windows.Forms;
 
 namespace PTK
 {
+#region class nodes
     public class Node : IEquatable<Node>
     {
         #region fields
@@ -84,7 +85,9 @@ namespace PTK
         }
         #endregion
     }
+    #endregion
 
+#region class elements
     public class Element 
     {
         #region fields
@@ -138,7 +141,9 @@ namespace PTK
         }
         #endregion
     }
+    #endregion
 
+#region class section
     public class Section
     {
         #region fields
@@ -172,8 +177,39 @@ namespace PTK
 
         #endregion
     }
+    #endregion
 
+#region class Load
+    public class Load 
+    {
+        #region fields
+        private string tag;
+        private int loadid;
+        private Vector3d loadvector;
+        private Point3d loadpoint;
 
+        #endregion
+
+        #region constructors
+        public Load(string _tag, double _width, double _height, Vector3d _loadvector, Point3d _loadpoint)
+        {
+            tag = _tag; // inheriting Section Class
+            loadid = -999; // inheriting Section Class
+            
+            
+        }
+        #endregion
+
+        #region properties
+
+        public string Tag { get { return tag; } set { tag = value; } }
+        public int Loadid { get { return loadid; } set { loadid = value; } }
+        public Vector3d Loadvector { get { return loadvector; } set { loadvector = value; } }
+        public Point3d Loadpoint { get { return loadpoint; } set { loadpoint = value; } }
+        #endregion
+    }
+
+    #endregion
     /*
     public class SomeNewClass
     {
@@ -186,7 +222,7 @@ namespace PTK
         #region methods
         #endregion
     }
-    
+
         private double width;
         private double height;
         private Vector2d offsetVec;
