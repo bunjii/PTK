@@ -7,15 +7,15 @@ using Rhino.Geometry;
 
 namespace PTK
 {
-    public class PTK6 : GH_Component
+    public class PTK6_RectangularCrossection : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the PTK6 class.
         /// </summary>
-        public PTK6()
-          : base("6", "6",
-              "Test component no.6: PTK Rectangular Section",
-              "PTK", "1_INPUT")
+        public PTK6_RectangularCrossection()
+          : base("Rectangular CrossSection", "R CS",
+              "CrossSection is being generated based on width, height, alignment and height-direction ",
+              "PTK", "Materializer")
         {
         }
 
@@ -24,13 +24,15 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Tag", "Tag", "Tag", GH_ParamAccess.item);
-            pManager.AddNumberParameter("Width", "Width", "Width", GH_ParamAccess.item);
-            pManager.AddNumberParameter("Height", "Height", "Height", GH_ParamAccess.item);
-            pManager.AddVectorParameter("Offset", "Offset", "Offset", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Width", "W", "Width", GH_ParamAccess.item,100);  
+            pManager.AddNumberParameter("Height", "H", "Height", GH_ParamAccess.item,100);
+            pManager.AddNumberParameter("Offset Y", "O:Y", "Offset from Width in positive or negative direction", GH_ParamAccess.item,0);
+            pManager.AddNumberParameter("Offset Z", "O:Z", "Offset from HeightDirection in positive or negative direction", GH_ParamAccess.item,0);
+            pManager.AddVectorParameter("Z direction", "Z", "A vector that describe the Height-direction of the element",GH_ParamAccess.item, new Vector3d(0,0,1));
 
             pManager[0].Optional = true;
-            pManager[3].Optional = true;
+            pManager[1].Optional = true;
+
         }
 
         /// <summary>
@@ -38,7 +40,7 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK SECTION", "PTK_S", "PTK_SECTION", GH_ParamAccess.item);
+            pManager.AddGenericParameter("CrossSection", "CS", "Crossection data to be connected in the materializer", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -56,10 +58,10 @@ namespace PTK
             #endregion
 
             #region input
-            DA.GetData(0, ref sectionTag);
-            if (!DA.GetData(1, ref width)) { return; }
-            if (!DA.GetData(2, ref height)) { return; }
-            DA.GetData(3, ref offset);
+           
+            if (!DA.GetData(0, ref width)) { return; }
+            if (!DA.GetData(1, ref height)) { return; }
+            DA.GetData(4, ref offset);
             #endregion
 
             #region solve

@@ -16,9 +16,11 @@ namespace PTK
         /// Subcategory the panel. If you use non-existing tab or panel names, 
         /// new tabs/panels will automatically be created.
         /// </summary>
+        /// 
+        
         public PTK1()
-          : base("1", "1",
-              "Test component no.1: Family Maker",
+          : base("Materializer", "MT",
+              "This component materializes curves. This based on cross-sections, material and alignments",
               "PTK", "1_INPUT")
         {
         }
@@ -28,13 +30,22 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddLineParameter("Lines", "Lines", "Lines", GH_ParamAccess.list);
-            pManager.AddTextParameter("Tag", "Tag", "Tag", GH_ParamAccess.item);
-            pManager.AddGenericParameter("PTK SECTION", "PTK S", "PTK SECTION", GH_ParamAccess.item);
-            pManager.AddVectorParameter("Vec z", "Vec z", "Vec z", GH_ParamAccess.list);
+            pManager.AddTextParameter("Name", "N", "Add name of the group here", GH_ParamAccess.item, "Untitled");
+            pManager.AddCurveParameter("Curves", "Crv", "Add element-curves that shall be materalized", GH_ParamAccess.list);
+            pManager.AddGenericParameter("CrossSection", "CS", "Add the cross-section componentt here", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Material", "MT", "Add Material-component here",GH_ParamAccess.item);
+            pManager.AddGenericParameter("Forces", "F", "Add Forces-component here", GH_ParamAccess.item);
 
-            pManager[1].Optional = true;
+            pManager.AddTextParameter("Tags", "T", "Add tags to the structure here. Tags are individual to each element", GH_ParamAccess.tree);
+
+            
+
+            pManager[0].Optional = true;
+            pManager[2].Optional = true;
             pManager[3].Optional = true;
+            pManager[4].Optional = true;
+            pManager[5].Optional = true;
+
 
         }
 
@@ -43,8 +54,7 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK ELEM", "PTK E", "PTK ELEM", GH_ParamAccess.item);
-
+            pManager.AddGenericParameter("Element", "E", "The output from the Materializer are elements", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -55,36 +65,62 @@ namespace PTK
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             #region variables
-            List<Line> lines = new List<Line>();
+            List<Curve> curves = new List<Curve>();
             List<Point3d> pts = new List<Point3d>();
             List<Element> elems = new List<Element>();
             List<Node> nodes = new List<Node>();
+            
+
             string elemTag = "N/A";
             List<Vector3d> normalVec = new List<Vector3d>();
             GH_ObjectWrapper wrapSec = new GH_ObjectWrapper();
+            GH_ObjectWrapper  wrapMat = new GH_ObjectWrapper();
+            GH_ObjectWrapper wrapForc = new GH_ObjectWrapper();
+
             Section rectSec;
+            Material material;
+            Forces forces;
             #endregion
 
             #region input
-            if (!DA.GetDataList(0, lines)) { return; }
-            DA.GetData(1, ref elemTag);
+            
+            DA.GetData(0, ref elemTag);
+            if (!DA.GetDataList(1, curves)) { return; }
             DA.GetData(2, ref wrapSec);
-            DA.GetDataList(3, normalVec);
+            DA.GetData(3, ref wrapMat);
+            DA.GetData(4, ref wrapForc);
+            
+
+
 
             #endregion
 
             #region solve
             wrapSec.CastTo<Section>(out rectSec);
+            wrapForc.CastTo<Forces>(out forces);
+            wrapMat.CastTo<Material>(out material);
 
             elemTag = elemTag.Trim();
-            for (int i = 0; i < lines.Count; i++)
+            for (int i = 0; i < curves.Count; i++)
             {
-                if (!lines[i].IsValid) { return; }
-                Element tempElement = new Element(lines[i], elemTag);
+                if (!curves[i].IsValid) { return; }
+                Element tempElement = new Element(curves[i], elemTag);
+
+
                 if (rectSec != null)
                 {
                     tempElement.RectSec = rectSec;
+                    tempElement.Mtl = material;
+                    tempElement.Force = forces;
                 }
+                else
+                {
+                    tempElement.RectSec = new Section("", 100, 100, new Vector3d(0, 0, 1));
+                }
+
+                    
+
+
                 elems.Add(tempElement);
                 
             }

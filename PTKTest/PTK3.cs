@@ -39,7 +39,7 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddLineParameter("Lines", "Lines", "Lines", GH_ParamAccess.list);
+            pManager.AddCurveParameter("Curve", "Lines", "Lines", GH_ParamAccess.list);
             pManager.AddTextParameter("Tag", "Tag", "Tag", GH_ParamAccess.list);
             pManager.AddIntegerParameter("PTK ELEM ID", "PTK E ID", "PTK ELEM ID", GH_ParamAccess.list);
             pManager.AddIntegerParameter("PTK NODE ID 0", "PTK N0 ID", "PTK NODE ID 0", GH_ParamAccess.list);
@@ -57,7 +57,7 @@ namespace PTK
             GH_ObjectWrapper wrapElem = new GH_ObjectWrapper();
             List<Element> elems = new List<Element>();
             List<string> elemTags = new List<string>();
-            List<Line> lines = new List<Line>();
+            List<Curve> curves = new List<Curve>();
             List<int> elemids = new List<int>();
             List<int> n0ids = new List<int>();
             List<int> n1ids = new List<int>();
@@ -72,7 +72,7 @@ namespace PTK
             #region solve
             foreach (Element e in elems)
             {
-                lines.Add(e.Ln);
+                curves.Add(e.Ln);
                 elemTags.Add(e.Tag);
                 elemids.Add(e.ID);
                 n0ids.Add(e.N0id);
@@ -81,7 +81,7 @@ namespace PTK
             #endregion
 
             #region output
-            DA.SetDataList(0, lines);
+            DA.SetDataList(0, curves);
             DA.SetDataList(1, elemTags);
             DA.SetDataList(2, elemids);
             DA.SetDataList(3, n0ids);

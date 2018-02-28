@@ -16,7 +16,7 @@ using Rhino.Geometry;
 namespace PTK
 {
    
-    public class PTK2 : GH_Component
+    public class PTK2_Assemble : GH_Component
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public 
@@ -25,9 +25,9 @@ namespace PTK
         /// Subcategory the panel. If you use non-existing tab or panel names, 
         /// new tabs/panels will automatically be created.
         /// </summary>
-        public PTK2()
+        public PTK2_Assemble()
           : base("2", "2",
-              "Test component no.2: Family Gatherer",
+              "Assemble",
               "PTK", "2_ASSEMBLE")
         {
         }
@@ -37,7 +37,12 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK ELEM", "PTK E", "PTK ELEM", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Element", "E", "Add elements here", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Supports", "S", "Add Supports here", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Loads", "L", "Add Loads here", GH_ParamAccess.list);
+
+            pManager[1].Optional = true;
+            pManager[2].Optional = true;
         }
 
         /// <summary>
@@ -45,9 +50,11 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK NODE", "PTK N", "PTK NODE", GH_ParamAccess.item);
-            pManager.AddGenericParameter("PTK ELEM", "PTK E", "PTK ELEM", GH_ParamAccess.item);
-            pManager.AddGenericParameter("PTK SECTION", "PTK S", "PTK SECTION", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Assembly", "A", "AssemblyObjectContaining the whole project", GH_ParamAccess.item);
+            pManager.AddPointParameter("Point", "", "", GH_ParamAccess.list);
+            pManager.AddBrepParameter("Breptest", "", "", GH_ParamAccess.list);
+
+            
         }
 
         /// <summary>
@@ -88,11 +95,63 @@ namespace PTK
                 elemIdNum++;
             }
 
+            //Adding a list of points.
+            //Adding Endpoints
+            //Adding StartPoints
+            //Adding Intersections
+            //Removing duplicates
+            //Asigning to nodes
+            List<Point3d> TempPoint = new List<Point3d>();
+            const double intersection_tolerance = 0.001;
+            const double overlap_tolerance = 0.0;
+
+            for (int i = 0; i < elems.Count; i++)
+            {
+                TempPoint.Add(elems[i].Ln.PointAtEnd);
+                TempPoint.Add(elems[i].Ln.PointAtStart);
+
+                for (int j = i; j<elems.Count; j++)
+                {
+                    var events = Rhino.Geometry.Intersect.Intersection.CurveCurve(elems[i].Ln, elems[j].Ln, intersection_tolerance, overlap_tolerance);
+                    
+
+
+                    if (events!= null)
+                    {
+                        for (int k =0; k<events.Count; k++)
+                        {
+                            TempPoint.Add(events[k].PointA);
+                        }
+                    }
+
+                }
+
+            }
+
+
+            List<Brep> BokseTest = new List<Brep>();
+
+            //Testing, making breps
+            for (int i = 0; i < elems.Count; i++)
+            {
+                BokseTest.Add( elems[i].MakeBrep() );
+            }
+            
+
+
+
+
             // DDL "generate Node"
             for (int i = 0; i < elems.Count; i++)
             {
-                Node tempNode0 = new Node(elems[i].Ln.From);
-                Node tempNode1 = new Node(elems[i].Ln.To);
+
+
+
+
+                Node tempNode0 = new Node(elems[i].Ln.PointAtEnd);
+                Node tempNode1 = new Node(elems[i].Ln.PointAtStart);
+
+                
 
                 Node.AddElemIds(nodes, elems[i], tempNode0);
                 Node.AddElemIds(nodes, elems[i], tempNode1);
@@ -108,14 +167,20 @@ namespace PTK
             // DDL "generate N0id and N1id in Elements"
             foreach (Element e in elems)
             {
-                e.N0id = Node.FindNodeId(nodes, e.Ln.From);
-                e.N1id = Node.FindNodeId(nodes, e.Ln.To);
+                e.N0id = Node.FindNodeId(nodes, e.Ln.PointAtStart);
+                e.N1id = Node.FindNodeId(nodes, e.Ln.PointAtEnd);
             }
             #endregion
 
             #region output
-            DA.SetData(0, nodes);
-            DA.SetData(1, elems);
+
+            Assembly Assembly = new Assembly();
+            Assembly.element = elems;
+            Assembly.Node = nodes;
+
+            DA.SetData(0, Assembly);
+            DA.SetDataList(1, TempPoint);
+            DA.SetDataList(2, BokseTest);
             #endregion
 
         }
