@@ -10,6 +10,7 @@ namespace PTK
     {
 
         #region fields
+        private static int MaterialCount = 2000;  //ID Corresponds to the name of the component
         private string materialName;
         private int materialId;
         private double youngModulus;
@@ -19,6 +20,15 @@ namespace PTK
         #endregion
 
         #region constructors
+
+        public Material() { }
+
+        public Material(string _materialName, double _materialId, double _younModulus, double _density)
+        {
+
+        }
+
+
         #endregion
 
         #region properties

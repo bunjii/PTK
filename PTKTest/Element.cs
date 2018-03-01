@@ -17,6 +17,7 @@ namespace PTK
         private Section rectSec;
         private Material mtl;
         private Forces force;
+        private Align align; 
         private List<SubElementStructural> subStructural;
         private int numberOfStructuralLines = 0;
 
@@ -34,6 +35,7 @@ namespace PTK
             //n1id = -999; This one is currently missing, but easy to remake in the AsignNeighbour function
             ptid = new List<int>();
             subStructural = new List<SubElementStructural>();
+            
 
 
         }
@@ -50,6 +52,7 @@ namespace PTK
         public Section RectSec { get { return rectSec; } set { rectSec = value; } }
         public Material Mtl { get { return mtl; } set { mtl = value; } }
         public Forces Force { get { return force; } set { force = value; } }
+        public Align Align { get { return align; } set { align = value; } }
         public List<SubElementStructural> SubStructural { get { return subStructural; } }
 
         #endregion

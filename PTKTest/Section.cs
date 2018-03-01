@@ -13,19 +13,20 @@ namespace PTK
     public class Section
     {
         #region fields
-        private string tag;
-        private int id;
-        private Vector3d offset;
+        private static int sectionIDCount = 2000;  //ID Corresponds to the name of the component
+        private string sectionName;
+        private int sectionID;
+        
         private double width = 100;
         private double height = 100;
         #endregion
 
         #region constructors
-        public Section(string _tag, double _width, double _height, Vector3d _offset)
+        public Section(string _name, double _width, double _height)
         {
-            tag = _tag; // inheriting Section Class
-            id = -999; // inheriting Section Class
-            offset = _offset; // inheriting Section Class
+            sectionID = sectionIDCount;
+            sectionIDCount++;
+            sectionName = _name;
             width = _width;
             height = _height;
         }
@@ -34,9 +35,8 @@ namespace PTK
         #region properties
         public double Width { get { return width; }  }
         public double Height { get { return height; }  }
-        public string Tag { get { return tag; } set { tag = value; } }
-        public int ID { get { return id; } set { id = value; } }
-        public Vector3d Offset { get { return offset; } set { offset = value; } }
+        public string SectionName { get { return sectionName; } set { sectionName = value; } }
+        public int SectionID { get { return sectionID; } set { sectionID = value; } }
         #endregion
 
         #region methods

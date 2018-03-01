@@ -128,7 +128,25 @@ namespace PTK
 
         }
 
+        public static bool CheckInputValidity (List <int> counts)
+        {
+            counts.Sort();
+            bool valid = true;
+            int Max = counts.Last();
+            
 
+            for (int i = 0; i<counts.Count; i++)
+            {
+                if ( counts[i] != 1 || counts[i] != Max)
+                {
+                    valid = false;
+                    break; 
+                }
+              
+            }
+            return valid; 
+            
+        }
 
 
     }

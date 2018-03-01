@@ -34,7 +34,7 @@ namespace PTK
             pManager.AddCurveParameter("Curves", "Crv", "Add element-curves that shall be materalized", GH_ParamAccess.list);
             pManager.AddGenericParameter("CrossSection", "CS", "Add the cross-section componentt here", GH_ParamAccess.item);
             pManager.AddGenericParameter("Material", "MT", "Add Material-component here",GH_ParamAccess.item);
-            pManager.AddGenericParameter("Align", "A", "Describes the alignment of the member. (Rotation and offset)", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Align", "A", "Describes the alignment of the member. (Rotation and offset)", GH_ParamAccess.list);
             pManager.AddGenericParameter("Forces", "F", "Add Forces-component here", GH_ParamAccess.item);
 
             pManager.AddTextParameter("Tags", "T", "Add tags to the structure here. Tags are individual to each element", GH_ParamAccess.tree);
@@ -78,7 +78,7 @@ namespace PTK
             List<Vector3d> normalVec = new List<Vector3d>();
             GH_ObjectWrapper wrapSec = new GH_ObjectWrapper();
             GH_ObjectWrapper  wrapMat = new GH_ObjectWrapper();
-            GH_ObjectWrapper wrapAli = new GH_ObjectWrapper();
+            List<GH_ObjectWrapper> wrapAli = new List<GH_ObjectWrapper>();
             GH_ObjectWrapper wrapForc = new GH_ObjectWrapper();
 
             Section rectSec;
@@ -93,7 +93,7 @@ namespace PTK
             if (!DA.GetDataList(1, curves)) { return; }
             DA.GetData(2, ref wrapSec);
             DA.GetData(3, ref wrapMat);
-            DA.GetData(4, ref wrapMat);
+            DA.GetDataList(4, wrapAli);
             DA.GetData(5, ref wrapForc);
 
 
@@ -107,13 +107,41 @@ namespace PTK
             wrapSec.CastTo<Section>(out rectSec);
             wrapForc.CastTo<Forces>(out forces);
             wrapMat.CastTo<Material>(out material);
-            wrapAli.CastTo<Align>(out align);
+            
 
             elemTag = elemTag.Trim();
+
+
+
+
+            int aliInt = 0;
+            int mtlInt = 0;
+            int frcInt = 0;
+            
+            
+
             for (int i = 0; i < curves.Count; i++)
             {
+                
                 if (!curves[i].IsValid) { return; }
                 Element tempElement = new Element(curves[i], elemTag);
+                /*
+                if (wrapAli.Count == curves.Count) { aliInt = i; } else { aliInt = 0; }
+                if (wrapAli[0] == null)
+                {
+                    align = new Align("Default", new Vector3d(0, 0, 1), 0, 0);
+                }
+                else
+                {
+                    wrapAli[aliInt].CastTo<Align>(out align);
+                }
+
+                
+                tempElement.Align = align; 
+                */
+      
+
+
 
                 if (rectSec != null)
                 {
@@ -123,7 +151,7 @@ namespace PTK
                 }
                 else
                 {
-                    tempElement.RectSec = new Section("", 100, 100, new Vector3d(0, 0, 1));
+                    tempElement.RectSec = new Section("", 100, 100);
                 }
 
                     
