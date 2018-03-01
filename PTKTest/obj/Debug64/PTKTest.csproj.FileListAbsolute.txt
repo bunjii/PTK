@@ -21,3 +21,8 @@ D:\code\PTKTest_BUNJI\PTKTest\bin\PTKTest.dll
 D:\code\PTKTest_BUNJI\PTKTest\bin\PTKTest.pdb
 D:\code\PTKTest_BUNJI\PTKTest\bin\System.Numerics.Vectors.dll
 D:\code\PTKTest_BUNJI\PTKTest\bin\System.Numerics.Vectors.xml
+C:\Users\marcinl\Documents\GitHub\PTKTest\PTKTest\obj\Debug64\PTKTest.csprojResolveAssemblyReference.cache
+C:\Users\marcinl\Documents\GitHub\PTKTest\PTKTest\obj\Debug64\PTK.Properties.Resources.resources
+C:\Users\marcinl\Documents\GitHub\PTKTest\PTKTest\obj\Debug64\PTKTest.csproj.GenerateResource.Cache
+C:\Users\marcinl\Documents\GitHub\PTKTest\PTKTest\obj\Debug64\PTKTest.dll
+C:\Users\marcinl\Documents\GitHub\PTKTest\PTKTest\obj\Debug64\PTKTest.pdb
