@@ -84,6 +84,7 @@ namespace PTK
 
                         element[e].AddNeighbour(Node[n].ID);
                         Node[n].AddNeighbour(element[e].ID);
+                        /*
                         if (Node[e].Pt3d.DistanceTo(element[e].Crv.PointAtEnd) < ProjectProperties.tolerances)
                         {
                             element[e].N1id = Node[n].ID;
@@ -92,18 +93,11 @@ namespace PTK
                         {
                             element[e].N0id = Node[n].ID;
                         }
+                        */
 
                     }
 
-                    
-                    
-
-                     
-                    
-                    
-
-
-                    
+          
 
                 }
 

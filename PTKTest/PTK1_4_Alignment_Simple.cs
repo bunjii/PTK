@@ -23,8 +23,12 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddVectorParameter("Local Z-vector", "z", "Direction of the local z(height)-vector", GH_ParamAccess.item);
-            pManager.AddNumberParameter("Offset Local Y", "local Y", "Offset length local y", GH_ParamAccess.item);
+            pManager.AddVectorParameter("Local Z-vector", "z", "Direction of the local z(height)-vector", GH_ParamAccess.list,new Vector3d(0,0,1));
+            pManager.AddNumberParameter("Offset Local Y", "local Y", "Offset length local y", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Offset Local Y", "local Y", "Offset length local y", GH_ParamAccess.list);
+
+            pManager[1].Optional = true;
+            pManager[2].Optional = true;
         }
 
         /// <summary>
@@ -32,6 +36,7 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
+            pManager.AddGenericParameter("Alignment", "A,", "AlignmentData to be added to materializer", GH_ParamAccess.item);
         }
 
         /// <summary>

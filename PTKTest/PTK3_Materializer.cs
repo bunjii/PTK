@@ -38,6 +38,7 @@ namespace PTK
             pManager.AddGenericParameter("Forces", "F", "Add Forces-component here", GH_ParamAccess.item);
 
             pManager.AddTextParameter("Tags", "T", "Add tags to the structure here. Tags are individual to each element", GH_ParamAccess.tree);
+            pManager.AddIntegerParameter("Priority", "P", "Add a integer value that defines the priority of the member", GH_ParamAccess.list);
 
             
 
@@ -47,7 +48,7 @@ namespace PTK
             pManager[4].Optional = true;
             pManager[5].Optional = true;
             pManager[6].Optional = true;
-
+            pManager[7].Optional = true;
 
         }
 
@@ -72,7 +73,7 @@ namespace PTK
             List<Element> elems = new List<Element>();
             List<Node> nodes = new List<Node>();
             
-
+            //
             string elemTag = "N/A";
             List<Vector3d> normalVec = new List<Vector3d>();
             GH_ObjectWrapper wrapSec = new GH_ObjectWrapper();
@@ -81,8 +82,9 @@ namespace PTK
             GH_ObjectWrapper wrapForc = new GH_ObjectWrapper();
 
             Section rectSec;
-            PTK1_2_Material material;
+            Material material;
             Forces forces;
+            Align align; 
             #endregion
 
             #region input
@@ -93,24 +95,25 @@ namespace PTK
             DA.GetData(3, ref wrapMat);
             DA.GetData(4, ref wrapMat);
             DA.GetData(5, ref wrapForc);
-            
+
 
 
 
             #endregion
 
             #region solve
+
+            //Turning objectwrappers into its respective objects. 
             wrapSec.CastTo<Section>(out rectSec);
             wrapForc.CastTo<Forces>(out forces);
-            wrapMat.CastTo<PTK1_2_Material>(out material);
-            // wrapAli.CastTo<PTK1_2_Material>(out align); // commented out by bunji 01 Mar 2017
+            wrapMat.CastTo<Material>(out material);
+            wrapAli.CastTo<Align>(out align);
 
             elemTag = elemTag.Trim();
             for (int i = 0; i < curves.Count; i++)
             {
                 if (!curves[i].IsValid) { return; }
                 Element tempElement = new Element(curves[i], elemTag);
-
 
                 if (rectSec != null)
                 {

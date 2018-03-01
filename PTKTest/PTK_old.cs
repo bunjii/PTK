@@ -75,8 +75,8 @@ namespace PTK
                 curves.Add(e.Crv);
                 elemTags.Add(e.Tag);
                 elemids.Add(e.ID);
-                n0ids.Add(e.N0id);
-                n1ids.Add(e.N1id);
+                //n0ids.Add(e.N0id);
+                //n1ids.Add(e.N1id);
             }
             #endregion
 
