@@ -22,6 +22,7 @@ namespace PTK
         #endregion
 
         #region constructors
+        //The points are given from the PTK4_assemble. ID is unique by iterating each time the class is instanced. idCount is static
         public Node(Point3d pt)
         {
             pt3d = pt;
@@ -43,11 +44,13 @@ namespace PTK
         public double Y { get { return y; } }
         public double Z { get { return z; } }
         public int ID { get { return id; } }  //removed the possability to set an ID
-        
+
         #endregion
 
         #region methods
 
+
+        //Adding neighbours. see the function called AssignNeighbours in function.cs. 
         public void AddNeighbour(int ids)
         { 
             if (elemIds==null)
@@ -58,6 +61,8 @@ namespace PTK
             elemIds.Add(ids);
         }
 
+
+        //are the next functions in use? Probably usefull later when extracting the geometry. 
         public bool Equals(Node other)
         {
             if (x == other.X && y == other.Y && z == other.Z)
@@ -70,15 +75,7 @@ namespace PTK
             }
         }
 
-        public static List<Node> AddElemIds(List<Node> _nodes, Element _elem, Node _nd)
-        {
-            
-            {
-                _nodes.Find(n => n.Pt3d == _nd.Pt3d).elemIds.Add(_elem.ID);
-            }
-
-            return _nodes;
-        }
+        
 
         public static int FindNodeId(List<Node> _nodes, Point3d _pt)
         {

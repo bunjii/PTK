@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Rhino.Geometry;
+using System.Linq;
 
 namespace PTK
 {
@@ -10,16 +11,14 @@ namespace PTK
         private int id;
         private string tag;
         private List<int> ptid;
-        private int n0id;
-        private int n1id;
+        private Point3d startpoint;
+        private Point3d endpoint; 
         private Curve elemLine;
         private Section rectSec;
-        private PTK1_2_Material mtl;
+        private Material mtl;
         private Forces force;
-        private List<Line> strctrlLine;
-        private List<int> strctrlLineID;
-        private int numberOfStructuralLines = 1;
-        //private SubElementStructural SubEl
+        private List<SubElementStructural> subStructural;
+        private int numberOfStructuralLines = 0;
 
         #endregion
 
@@ -29,68 +28,52 @@ namespace PTK
             elemLine = _crv;
             tag = _tag;
             id = -999;
-            //n0id = -999;
-            //n1id = -999;
+            endpoint = _crv.PointAtEnd;
+            startpoint = _crv.PointAtStart;
+            //n0id = -999: This one is currently missing, but easy to remake in the AsignNeighbour function
+            //n1id = -999; This one is currently missing, but easy to remake in the AsignNeighbour function
             ptid = new List<int>();
-            strctrlLine = new List<Line>();
-            strctrlLineID = new List<int>();
+            subStructural = new List<SubElementStructural>();
+
+
         }
 
         #endregion
 
         #region properties
-        public Curve Crv
-        {
-            get
-            {
-                return elemLine;
-            }
-        }
-        public string Tag
-        {
-            get { return tag; }
-            set { tag = value; }
-        }
-        public List<Line> StrctrlLine { get { return strctrlLine; }  }
-        public int N0id { get { return n0id; } set { n0id = value; } }
-        public int N1id { get { return n1id; } set { n1id = value; } }
+        public Curve Crv{ get{ return elemLine;}}
+        public int NumberOfStructuralLines { get { return numberOfStructuralLines; } }
+        public string Tag{get { return tag; }set { tag = value; } }
+        //public int N0id { get { return n0id; } set { n0id = value; } } Not working atm. See line 33
+        //public int N1id { get { return n1id; } set { n1id = value; } } Not working atm. See line 34
         public int ID { get { return id; } set { id = value; } }
         public Section RectSec { get { return rectSec; } set { rectSec = value; } }
-        public PTK1_2_Material Mtl { get { return mtl; } set { mtl = value; } }
+        public Material Mtl { get { return mtl; } set { mtl = value; } }
         public Forces Force { get { return force; } set { force = value; } }
+        public List<SubElementStructural> SubStructural { get { return subStructural; } }
+
         #endregion
 
         #region methods
-        public static List<Element> AddNodeIds(List<Element> _elems, List<Node> _nodes)
-        {
 
-            return _elems;
-        }
-
+        //This class add neighbouring  points. The the analysis is done in the function called AsignNeighbour in functions.cs
         public void AddNeighbour(int _ids)
         {
             ptid.Add(_ids);
         }
 
+
+        //This function send needed information to the subclass "subStructural"
         public void AddStrctline(Line _structuralline)
-        {
-            strctrlLine.Add(_structuralline);
-            strctrlLineID.Add(numberOfStructuralLines);
+        { 
+
+            subStructural.Add(new SubElementStructural(_structuralline, numberOfStructuralLines));
             numberOfStructuralLines++;
-
-            
+    
         }
+        
 
-
-        public static Element FindElementById(List<Element> _elems, int _eid)
-        {
-            Element tempElement;
-            tempElement = _elems.Find(e => e.ID == _eid);
-
-            return tempElement;
-        }
-
-
+        //THIS FUNCTION IS TEMPORARY. The function generates a box or a sweep. This determined by the linearity of the curve. 
         public Brep MakeBrep()
         {
 
@@ -123,42 +106,34 @@ namespace PTK
                 
 
             }
-            /*
             else
             {
-
-                SweepOneRail SweepedGeomtry;
+                SweepOneRail tempsweep = new SweepOneRail();
+                Rectangle3d rect = new Rectangle3d(tempPlane, iy, iz);
+                rect.ToPolyline();
                 
-                Rectangle3d CrossSection;
-                SweepedGeomtry = new SweepOneRail();
-                SweepedGeomtry.SweepTolerance = 0;
-                
-
+                var sweep = tempsweep.PerformSweep(elemLine, rect.ToNurbsCurve());
                 
 
-                Rectangle3d TempRect = new Rectangle3d(tempPlane, iy, iz);
-                Brep[] temp;
-                temp = SweepedGeomtry.PerformSweep(elemLine, TempRect.ToNurbsCurve());
-                
-                Geometri = temp[0];
-
-
+                Geometri = sweep[0];
             }
-            */
-            return Geometri;
 
+
+
+            return Geometri;
         }
 
-
-        /*
-        private class SubElementStructural
+        //THIS IS THE CLASS THAT STORES DATA OF ALL BEAMELEMENTS. SUB LINES. An element contains one or more sub-elements
+        public class SubElementStructural
         {
 
             #region fields
-            private int subIdStructural;
-            private Line subLine;
+
+            private Line strctrlLine;
+            private int strctrlLineID;
             private Point3d subStartPoint;
             private Point3d subEndPoint;
+            
             private double fx;
             private double fy;
             private double fz;
@@ -168,45 +143,35 @@ namespace PTK
             #endregion
             #region constructors
             
-            public SubElementStructural(Curve MainCurve, List<double> parameter)
+            public SubElementStructural(Line _subLine, int _id)
             {
                 
-
-                MainCurve.ClosestPoint()
-
-
+                strctrlLine = _subLine;
+                strctrlLineID= _id;
+                subStartPoint = _subLine.From;
+                subEndPoint = _subLine.To;
+                
+                
+                
             }
-            
+
 
 
             #endregion
             #region properties
-
-
-
-
-            public List<int> SubIdStructural
-
-
-            {
-                get {
-                    return elemIds;
-                } set { elemIds = value; } }
-
+            public Line StrctrLine { get { return strctrlLine; } }
+            public int StrctrlLineID { get { return strctrlLineID; } }
 
             #endregion
             #region methods
             #endregion
-    
-    
+
+
         }
-        */
+        
 
-
-
-
-            #endregion
             
     }
     
     }
+#endregion

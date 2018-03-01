@@ -58,6 +58,7 @@ namespace PTK
             pManager.AddNumberParameter("CenterCurve", "", "", GH_ParamAccess.list);
             pManager.AddTextParameter("Neighbours", "", "", GH_ParamAccess.list);
             pManager.AddLineParameter("Lines", "", "", GH_ParamAccess.list);
+            pManager.AddTextParameter("SubID", "", "", GH_ParamAccess.list);
 
 
         }
@@ -71,14 +72,15 @@ namespace PTK
         {
             Node.ResetIDCount();
             #region variables
-            int nodeIdNum = 0;
             int elemIdNum = 0;
 
+            //Assigning lists off objects
             List<Node> nodes = new List<Node>();
             List<Element> elems = new List<Element>();
             List<Section> rectSecs = new List<Section>();
             List<Element> tempElemList = new List<Element>();
             
+
             List<GH_ObjectWrapper> wrapElemList = new List<GH_ObjectWrapper>();
             #endregion
 
@@ -87,6 +89,7 @@ namespace PTK
             #endregion
 
             #region solve
+
             // DDL "unwrap wrapped element class" and "merge multiple element class"
             for (int i = 0; i < wrapElemList.Count; i++)
             {
@@ -94,7 +97,7 @@ namespace PTK
                 elems.AddRange(tempElemList);
             }
 
-            // DDL "generate Elem ID"
+            // DDL "generate Elem ID"  // John: I think the ID-asignment should be done inside the class
             for (int i = 0; i < elems.Count; i++)
             {
                 elems[i].ID = elemIdNum;
@@ -143,39 +146,34 @@ namespace PTK
             {
                 nodes.Add(new Node(TempPoint[i]));
             }
-
-            /* DDL "generate Node ID"
-            for (int i = 0; i < nodes.Count; i++)
-            {
-                nodes[i].ID = nodeIdNum;
-                nodeIdNum++;
-            }
+  
             
-
-            // DDL "generate N0id and N1id in Elements"
-            foreach (Element e in elems)
-            {
-                e.N0id = Node.FindNodeId(nodes, e.Ln.PointAtStart);
-                e.N1id = Node.FindNodeId(nodes, e.Ln.PointAtEnd);
-            }
-
-            
-            */
             List<Brep> BokseTest = new List<Brep>();
             List<Curve> elementCurves = new List<Curve>();
             List<int> elementid = new List<int>();
 
             Functions.AsignNeighbour(elems, nodes);
             List<Line> strLine = new List<Line>();
+            List<String> SubID = new List<String>();
         
 
             //Testing, making breps
             for (int i = 0; i < elems.Count; i++)
             {
+
                 BokseTest.Add(elems[i].MakeBrep());
                 elementCurves.Add(elems[i].Crv);
+                
                 elementid.Add(elems[i].ID);
-                strLine.AddRange(elems[i].StrctrlLine);
+                string tempID = Convert.ToString(elems[i].ID);
+
+
+                for (int j = 0; j < elems[i].SubStructural.Count; j++)
+                {
+                    strLine.Add(elems[i].SubStructural[j].StrctrLine);
+                    SubID.Add(tempID + "_" + Convert.ToString(elems[i].SubStructural[j].StrctrlLineID));
+                }
+
             }
 
             List<string> IDs = new List<string>();
@@ -215,6 +213,7 @@ namespace PTK
             DA.SetDataList(5, elementid);
             DA.SetDataList(6, NeighbourList);
             DA.SetDataList(7, strLine);
+            DA.SetDataList(8, SubID);
             #endregion
 
 
