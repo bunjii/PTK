@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 
+using Karamba;
+
 namespace PTK
 {
 
@@ -38,6 +40,7 @@ namespace PTK
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddGenericParameter("Supports", "S", "Support data to be send to Assembler(PTK)", GH_ParamAccess.item);
+            pManager.RegisterParam(new Karamba.Supports.Param_Support(), "supportK", "SK", "Support data to be send to Assembler(Karamba)");
         }
 
         /// <summary>
@@ -53,6 +56,12 @@ namespace PTK
             List<bool> lrot = new List<bool> { false, false, false };
             List<bool> ltra = new List<bool> { false, false, false };
             #endregion
+
+
+            Karamba.Supports.Support news = new Karamba.Supports.Support(new Point3d(0,0,0), new List<bool> { false,false, false, false,false,false }, new Plane(new Point3d(0, 0, 0), new Vector3d(0,0,1)));
+
+
+
 
             #region input
             DA.GetData(0, ref Tag);
@@ -71,6 +80,7 @@ namespace PTK
 
             #region output
             DA.SetData(0, PTKsupports);
+            DA.SetData(1, new Karamba.Supports.GH_Support(news));
             #endregion
 
         }
