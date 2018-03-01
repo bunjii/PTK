@@ -49,17 +49,29 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="RhinoCommon">
       <SpecificVersion>False</SpecificVersion>
+<<<<<<< HEAD
       <HintPath>..\..\..\..\..\..\Program Files\Rhinoceros 5 (64-bit)\System\RhinoCommon.dll</HintPath>
+=======
+      <HintPath>..\..\Library\RhinoCommon.dll</HintPath>
+>>>>>>> 27395352bc301c958c19b6499270581c81c70578
       <Private>False</Private>
     </Reference>
     <Reference Include="Grasshopper">
       <SpecificVersion>False</SpecificVersion>
+<<<<<<< HEAD
       <HintPath>..\..\..\..\AppData\Roaming\McNeel\Rhinoceros\5.0\Plug-ins\Grasshopper (b45a29b1-4343-4035-989e-044e8580d9cf)\0.9.76.0\Grasshopper.dll</HintPath>
+=======
+      <HintPath>..\..\Library\Grasshopper.dll</HintPath>
+>>>>>>> 27395352bc301c958c19b6499270581c81c70578
       <Private>False</Private>
     </Reference>
     <Reference Include="GH_IO">
       <SpecificVersion>False</SpecificVersion>
+<<<<<<< HEAD
       <HintPath>..\..\..\..\AppData\Roaming\McNeel\Rhinoceros\5.0\Plug-ins\Grasshopper (b45a29b1-4343-4035-989e-044e8580d9cf)\0.9.76.0\GH_IO.dll</HintPath>
+=======
+      <HintPath>..\..\Library\GH_IO.dll</HintPath>
+>>>>>>> 27395352bc301c958c19b6499270581c81c70578
       <Private>False</Private>
     </Reference>
   </ItemGroup>
