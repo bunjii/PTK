@@ -24,14 +24,14 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
+            pManager.AddTextParameter("CrossSectionName", "N", "Add Cross-SectionName", GH_ParamAccess.item,"Untitled");
             pManager.AddNumberParameter("Width", "W", "Width", GH_ParamAccess.item,100);  
             pManager.AddNumberParameter("Height", "H", "Height", GH_ParamAccess.item,100);
-            pManager.AddNumberParameter("Offset Y", "O:Y", "Offset from Width in positive or negative direction", GH_ParamAccess.item,0);
-            pManager.AddNumberParameter("Offset Z", "O:Z", "Offset from HeightDirection in positive or negative direction", GH_ParamAccess.item,0);
-            pManager.AddVectorParameter("Z direction", "Z", "A vector that describe the Height-direction of the element",GH_ParamAccess.item, new Vector3d(0,0,1));
+            
 
             pManager[0].Optional = true;
             pManager[1].Optional = true;
+            pManager[2].Optional = true;
 
         }
 
@@ -50,22 +50,23 @@ namespace PTK
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             #region variables
-            string sectionTag = "N/A";
+            string name = "N/A";
             double width = new double();
             double height = new double();
             Vector3d offset = new Vector3d(0, 0, 0);
-            
+
             #endregion
 
             #region input
-           
-            if (!DA.GetData(0, ref width)) { return; }
-            if (!DA.GetData(1, ref height)) { return; }
-            DA.GetData(4, ref offset);
+            if (!DA.GetData(0, ref name)) { return; }
+            if (!DA.GetData(1, ref width)) { return; }
+            if (!DA.GetData(2, ref height)) { return; }
+            
+
             #endregion
 
             #region solve
-            Section rectSec = new Section(sectionTag, width, height);
+            Section rectSec = new Section(name, width, height);
             string test = "";
             test += rectSec.SectionName + ", " + rectSec.Height.ToString();
             // MessageBox.Show(test);

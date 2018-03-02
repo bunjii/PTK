@@ -24,7 +24,7 @@ namespace PTK
         #endregion
 
         #region constructors
-        public Element(Curve _crv, string _tag)
+        public Element(Curve _crv, string _tag, Align _align)
         {
             elemLine = _crv;
             tag = _tag;
@@ -35,6 +35,8 @@ namespace PTK
             //n1id = -999; This one is currently missing, but easy to remake in the AsignNeighbour function
             ptid = new List<int>();
             subStructural = new List<SubElementStructural>();
+            align = _align;
+            
             
 
 
@@ -52,7 +54,7 @@ namespace PTK
         public Section RectSec { get { return rectSec; } set { rectSec = value; } }
         public Material Mtl { get { return mtl; } set { mtl = value; } }
         public Forces Force { get { return force; } set { force = value; } }
-        public Align Align { get { return align; } set { align = value; } }
+        public Align Ali { get { return align; } set { align = value; } }
         public List<SubElementStructural> SubStructural { get { return subStructural; } }
 
         #endregion
@@ -83,9 +85,20 @@ namespace PTK
             Brep Geometri = new Brep();
             double[] parameter = { 0.0, 2.2 };
 
-            Plane[] Planet = new Plane[1];
-            Planet = elemLine.GetPerpendicularFrames(parameter);
-            Plane tempPlane = Planet[0];
+             
+            Plane tempPlane = new Plane(elemLine.PointAtStart, elemLine.TangentAtStart);
+            Ali.rotationVectorToPoint(elemLine.PointAtStart);
+            Vector3d alignvector = Ali.Rotation;
+            //Getting rotation angle
+            double angle = Rhino.Geometry.Vector3d.VectorAngle(tempPlane.XAxis, alignvector, tempPlane);
+            
+            tempPlane.Rotate(angle, tempPlane.Normal,tempPlane.Origin);
+            tempPlane.Translate(tempPlane.XAxis * Ali.OffsetY);
+            tempPlane.Translate(tempPlane.YAxis * Ali.OffsetZ);
+
+            
+
+
             Interval iz = new Interval();
             Interval iy = new Interval();
             Interval ix = new Interval();
@@ -104,7 +117,7 @@ namespace PTK
 
 
 
-                Box boxen = new Box(Planet[0], iy, iz, ix);
+                Box boxen = new Box(tempPlane, iy, iz, ix);
                 Geometri = boxen.ToBrep();
                 
 

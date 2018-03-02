@@ -34,7 +34,7 @@ namespace PTK
             pManager.AddCurveParameter("Curves", "Crv", "Add element-curves that shall be materalized", GH_ParamAccess.list);
             pManager.AddGenericParameter("CrossSection", "CS", "Add the cross-section componentt here", GH_ParamAccess.item);
             pManager.AddGenericParameter("Material", "MT", "Add Material-component here",GH_ParamAccess.item);
-            pManager.AddGenericParameter("Align", "A", "Describes the alignment of the member. (Rotation and offset)", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Align", "A", "Describes the alignment of the member. (Rotation and offset)", GH_ParamAccess.item);
             pManager.AddGenericParameter("Forces", "F", "Add Forces-component here", GH_ParamAccess.item);
 
             pManager.AddTextParameter("Tags", "T", "Add tags to the structure here. Tags are individual to each element", GH_ParamAccess.tree);
@@ -72,7 +72,33 @@ namespace PTK
             List<Point3d> pts = new List<Point3d>();
             List<Element> elems = new List<Element>();
             List<Node> nodes = new List<Node>();
+            List<Align> alignList = new List<Align>();
+
+
+
+            Align aligner;
+            GH_ObjectWrapper test = new GH_ObjectWrapper();
             
+
+            DA.GetData(4, ref test);
+
+            test.CastTo<Align>(out aligner);
+            if (aligner == null)
+            {
+                aligner = new Align("", new Vector3d(0, 0, 1), 0, 0);
+            }
+
+
+            
+
+            
+            
+
+
+
+
+
+
             //
             string elemTag = "N/A";
             List<Vector3d> normalVec = new List<Vector3d>();
@@ -84,16 +110,19 @@ namespace PTK
             Section rectSec;
             Material material;
             Forces forces;
-            Align align; 
+            Align aligna; 
             #endregion
 
             #region input
             
             DA.GetData(0, ref elemTag);
             if (!DA.GetDataList(1, curves)) { return; }
+            
+
+
             DA.GetData(2, ref wrapSec);
             DA.GetData(3, ref wrapMat);
-            DA.GetDataList(4, wrapAli);
+            
             DA.GetData(5, ref wrapForc);
 
 
@@ -109,14 +138,9 @@ namespace PTK
             wrapMat.CastTo<Material>(out material);
             
 
+
+
             elemTag = elemTag.Trim();
-
-
-
-
-            int aliInt = 0;
-            int mtlInt = 0;
-            int frcInt = 0;
             
             
 
@@ -124,22 +148,12 @@ namespace PTK
             {
                 
                 if (!curves[i].IsValid) { return; }
-                Element tempElement = new Element(curves[i], elemTag);
-                /*
-                if (wrapAli.Count == curves.Count) { aliInt = i; } else { aliInt = 0; }
-                if (wrapAli[0] == null)
-                {
-                    align = new Align("Default", new Vector3d(0, 0, 1), 0, 0);
-                }
-                else
-                {
-                    wrapAli[aliInt].CastTo<Align>(out align);
-                }
+
 
                 
-                tempElement.Align = align; 
-                */
-      
+
+                Element tempElement = new Element(curves[i], elemTag, aligner);
+
 
 
 
