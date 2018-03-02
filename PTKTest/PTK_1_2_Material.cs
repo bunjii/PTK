@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
 namespace PTK
 {
-    public class PTK1_2_Material : GH_Component
+    public class PTK_1_2_Material : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the MyComponent1 class.
         /// </summary>
-        public PTK1_2_Material()
+        public PTK_1_2_Material()
           : base("Material", "MT",
               "Add materialdata here",
               "PTK", "Materializer")
@@ -24,10 +25,9 @@ namespace PTK
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddTextParameter("MaterialName","MN", "Name the material", GH_ParamAccess.item,"UntitledMaterial");      //We should add default values here.
-            pManager.AddNumberParameter("Young Modulus", "Y", "Add Young Modulus", GH_ParamAccess.item,10);    //We should add default values here.
-            pManager.AddNumberParameter("Density", "D", "Add density here", GH_ParamAccess.item,10);    //We should add default values here.
-            pManager.AddNumberParameter("Price", "P", "Price pr M3", GH_ParamAccess.item, 300);
-            pManager.AddTextParameter("Currency", "$", "name the currency",GH_ParamAccess.item,"Euro"); //Dollars
+            pManager.AddIntegerParameter("MaterialID", "MId", "ID of the material", GH_ParamAccess.item,0);    //We should add default values here.
+            pManager.AddGenericParameter("Properties", "Pro", "Add strutural properties here", GH_ParamAccess.item);    //We should add default values here.
+
            
 
         }
@@ -47,33 +47,29 @@ namespace PTK
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             #region variables
-            string MaterialName = "N/A";
-            double YoungModulus = new double();
-            double Density = new double();
-            double Price = new double();
-            string Currency = "Dollars";
+            string materialName = "N/A";
+            int materailId = 0;
+
+            Material_properties properties ;
             #endregion
+            GH_ObjectWrapper wrapprop = new GH_ObjectWrapper();
 
             #region input
-            DA.GetData(0, ref MaterialName);
-            if (!DA.GetData(1, ref YoungModulus)) { return; }
-            if (!DA.GetData(2, ref Density)) { return; }
-            if (!DA.GetData(3, ref Price)) { return; }
-            if (!DA.GetData(4, ref Currency)) { return; }
+            DA.GetData(0, ref materialName);
+            if (!DA.GetData(1, ref materailId)) { return; }
+            if (!DA.GetData(2, ref wrapprop)) { return; }
+
+            wrapprop.CastTo <Material_properties>(out properties);
             #endregion
 
             #region solve
-            Material Material = new Material();
-            Material.Materialname = MaterialName;
-            Material.YoungModulus = YoungModulus;
-            Material.Density = Density;
-            Material.Price = Price;
-            Material.Currency = Currency;
+            Material outMaterial = new Material(materialName, materailId, properties);
+            
 
             #endregion
 
             #region output
-            DA.SetData(0, Material);
+            DA.SetData(0, outMaterial);
             #endregion
 
         }
@@ -96,7 +92,7 @@ namespace PTK
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("965bef7b-feea-46d8-abe9-f686d28b9c41"); }
+            get { return new Guid("911bef7b-feea-46d8-abe9-f686d11b9c41"); }
         }
     }
 }
