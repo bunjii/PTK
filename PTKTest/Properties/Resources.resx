@@ -142,4 +142,34 @@
   <data name="thirdgatherer" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\thirdgatherer.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="icontest0" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icontest0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="icontest1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icontest1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="icontest10" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icontest10.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="icontest11" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icontest11.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="icontest12" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icontest12.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="icontest13" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icontest13.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="icontest14" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icontest14.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="icontest2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icontest2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="icontest3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icontest3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="icontest4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icontest4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

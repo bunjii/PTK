@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PTK</RootNamespace>
     <AssemblyName>PTKTest</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <TargetFrameworkProfile />
@@ -116,7 +116,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="Resources\icon_truss.png" />
   </ItemGroup>
   <ItemGroup>
@@ -139,6 +138,36 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\thirdgatherer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icontest0.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icontest1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icontest2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icontest3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icontest4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icontest10.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icontest11.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icontest12.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icontest13.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icontest14.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

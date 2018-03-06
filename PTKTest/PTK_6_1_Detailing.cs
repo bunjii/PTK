@@ -54,7 +54,7 @@ namespace PTK
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return PTK.Properties.Resources.Detail;
+                return PTK.Properties.Resources.icontest1;
 
             }
         }
