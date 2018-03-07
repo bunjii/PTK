@@ -7,7 +7,7 @@ using Rhino.Geometry;
 
 namespace PTK
 {
-    public class PTK_3_Materializer : GH_Component
+    public class PTK3_Materializer : GH_Component
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public 
@@ -18,7 +18,7 @@ namespace PTK
         /// </summary>
         /// 
         
-        public PTK_3_Materializer()
+        public PTK3_Materializer()
           : base("Materializer", "MT",
               "This component materializes curves. This based on cross-sections, material and alignments",
               "PTK", "1_INPUT")

@@ -16,7 +16,7 @@ using Rhino.Geometry;
 namespace PTK
 {
    
-    public class PTK4_Assemble : GH_Component
+    public class PTK_4_Assemble : GH_Component
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public 
@@ -25,7 +25,7 @@ namespace PTK
         /// Subcategory the panel. If you use non-existing tab or panel names, 
         /// new tabs/panels will automatically be created.
         /// </summary>
-        public PTK4_Assemble()
+        public PTK_4_Assemble()
           : base("2", "2",
               "Assemble",
               "PTK", "2_ASSEMBLE")
@@ -234,7 +234,7 @@ namespace PTK
                 // You can add image files to your project resources and access them like this:
                 //return Resources.IconForThisComponent;
                 // return null;
-                return PTK.Properties.Resources.icon_truss;
+                return PTK.Properties.Resources.icontest11;
             }
         }
 

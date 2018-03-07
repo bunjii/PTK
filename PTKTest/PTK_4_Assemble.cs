@@ -16,7 +16,7 @@ using Rhino.Geometry;
 namespace PTK
 {
    
-    public class PTK_4_Assemble : GH_Component
+    public class PTK4_Assemble : GH_Component
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public 
@@ -25,7 +25,7 @@ namespace PTK
         /// Subcategory the panel. If you use non-existing tab or panel names, 
         /// new tabs/panels will automatically be created.
         /// </summary>
-        public PTK_4_Assemble()
+        public PTK4_Assemble()
           : base("2", "2",
               "Assemble",
               "PTK", "2_ASSEMBLE")

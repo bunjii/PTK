@@ -7,12 +7,12 @@ using Rhino.Geometry;
 
 namespace PTK
 {
-    public class PTK_1_3_RectangularCrossection : GH_Component
+    public class PTK1_3_RectangularCrossection : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the PTK6 class.
         /// </summary>
-        public PTK_1_3_RectangularCrossection()
+        public PTK1_3_RectangularCrossection()
           : base("Rectangular CrossSection", "R CS",
               "CrossSection is being generated based on width, height, alignment and height-direction ",
               "PTK", "Materializer")
