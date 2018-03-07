@@ -35,7 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="referenceKaramba, Version=1.14.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>C:\Program Files\Rhinoceros 5.0 (64-bit)\Plug-ins\karamba.gha</HintPath>
+      <HintPath>..\..\Library\karamba.gha</HintPath>
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
       <EmbedInteropTypes>False</EmbedInteropTypes>
@@ -76,24 +76,21 @@
     <Compile Include="Node.cs" />
     <Compile Include="Element.cs" />
     <Compile Include="ProjectProperties.cs" />
-    <Compile Include="PTK1_4_Alignment_Simple.cs" />
-    <Compile Include="PTK1_5_Forces.cs" />
     <Compile Include="Forces.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="PTK1_3_RectangularCrossection.cs" />
     <Compile Include="PTKInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PTK3_Materializer.cs" />
-    <Compile Include="PTK4_Assemble.cs" />
     <Compile Include="PTK_1_2_1_Material_load.cs" />
     <Compile Include="PTK_1_2_1_Material_properties.cs" />
     <Compile Include="PTK_1_2_Material.cs" />
     <Compile Include="PTK_2_1_Loads.cs" />
     <Compile Include="PTK_2_2_Supports.cs" />
+    <Compile Include="PTK_3_Materializer.cs" />
+    <Compile Include="PTK_4_Assemble.cs" />
     <Compile Include="PTK_5_GlobalModel.cs" />
     <Compile Include="PTK_6_1_Detailing.cs" />
     <Compile Include="PTK_6_DetailModel.cs" />
@@ -103,6 +100,9 @@
     <Compile Include="PTK_9_BtlExport.cs" />
     <Compile Include="PTK_old.cs" />
     <Compile Include="PTK_UTIL_1.cs" />
+    <Compile Include="Resources\PTK_1_3_RectangularCrossection.cs" />
+    <Compile Include="Resources\PTK_1_4_Alignment_Simple.cs" />
+    <Compile Include="Resources\PTK_1_5_Forces.cs" />
     <Compile Include="Section.cs" />
     <Compile Include="PTK_old2.cs" />
     <Compile Include="PTK_old3.cs" />
