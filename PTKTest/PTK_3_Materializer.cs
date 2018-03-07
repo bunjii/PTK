@@ -72,28 +72,57 @@ namespace PTK
             List<Point3d> pts = new List<Point3d>();
             List<Element> elems = new List<Element>();
             List<Node> nodes = new List<Node>();
+            List<Align> alignList = new List<Align>();
+
+
+
+            Align aligner;
+            GH_ObjectWrapper test = new GH_ObjectWrapper();
             
+
+            DA.GetData(4, ref test);
+
+            test.CastTo<Align>(out aligner);
+            if (aligner == null)
+            {
+                aligner = new Align("", new Vector3d(0, 0, 1), 0, 0);
+            }
+
+
+            
+
+            
+            
+
+
+
+
+
+
             //
             string elemTag = "N/A";
             List<Vector3d> normalVec = new List<Vector3d>();
             GH_ObjectWrapper wrapSec = new GH_ObjectWrapper();
             GH_ObjectWrapper  wrapMat = new GH_ObjectWrapper();
-            GH_ObjectWrapper wrapAli = new GH_ObjectWrapper();
+            List<GH_ObjectWrapper> wrapAli = new List<GH_ObjectWrapper>();
             GH_ObjectWrapper wrapForc = new GH_ObjectWrapper();
 
             Section rectSec;
             Material material;
             Forces forces;
-            Align align; 
+            Align aligna; 
             #endregion
 
             #region input
             
             DA.GetData(0, ref elemTag);
             if (!DA.GetDataList(1, curves)) { return; }
+            
+
+
             DA.GetData(2, ref wrapSec);
             DA.GetData(3, ref wrapMat);
-            DA.GetData(4, ref wrapMat);
+            
             DA.GetData(5, ref wrapForc);
 
 
@@ -107,13 +136,26 @@ namespace PTK
             wrapSec.CastTo<Section>(out rectSec);
             wrapForc.CastTo<Forces>(out forces);
             wrapMat.CastTo<Material>(out material);
-            wrapAli.CastTo<Align>(out align);
+            
+
+
 
             elemTag = elemTag.Trim();
+            
+            
+
             for (int i = 0; i < curves.Count; i++)
             {
+                
                 if (!curves[i].IsValid) { return; }
-                Element tempElement = new Element(curves[i], elemTag);
+
+
+                
+
+                Element tempElement = new Element(curves[i], elemTag, aligner);
+
+
+
 
                 if (rectSec != null)
                 {
@@ -123,7 +165,7 @@ namespace PTK
                 }
                 else
                 {
-                    tempElement.RectSec = new Section("", 100, 100, new Vector3d(0, 0, 1));
+                    tempElement.RectSec = new Section("", 100, 100);
                 }
 
                     
@@ -149,7 +191,7 @@ namespace PTK
             {
                 // You can add image files to your project resources and access them like this:
                 //return Resources.IconForThisComponent;
-                return PTK.Properties.Resources.icon_truss;
+                return PTK.Properties.Resources.icontest1;
             }
         }
 

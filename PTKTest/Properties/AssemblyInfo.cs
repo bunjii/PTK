@@ -10,7 +10,7 @@ using Rhino.PlugIns;
 [assembly: AssemblyTitle("PTK")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("NTNU & NIKKEN DDL")]
 [assembly: AssemblyProduct("PTK")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
