@@ -58,7 +58,7 @@ namespace PTK
 
            
             List<Node> Node = Assembly.Node;
-            List<Element> Element = Assembly.element;
+            List<Element> Element = Assembly.Element;
 
             List<double> Height = new List<double>();
             for (int i = 0; i < Element.Count; i++)

@@ -9,6 +9,6 @@ namespace PTK
     public class Assembly
     {
         public List<Node> Node;
-        public List<Element> element;
+        public List<Element> Element;
     }
 }

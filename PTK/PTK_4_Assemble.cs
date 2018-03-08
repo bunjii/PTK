@@ -197,12 +197,12 @@ namespace PTK
             
 
 
-                #endregion
+            #endregion
 
-                #region output
+            #region output
 
-                Assembly Assembly = new Assembly();
-            Assembly.element = elems;
+            Assembly Assembly = new Assembly();
+            Assembly.Element = elems;
             Assembly.Node = nodes;
 
             DA.SetData(0, Assembly);
