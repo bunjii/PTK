@@ -1,7 +1,0 @@
-D:\code\PTKTest11\PTKTEST11\bin\PTKTEST11.dll
-D:\code\PTKTest11\PTKTEST11\bin\PTKTEST11.pdb
-D:\code\PTKTest11\PTKTEST11\obj\Debug64\PTKTEST11.dll
-D:\code\PTKTest11\PTKTEST11\obj\Debug64\PTKTEST11.pdb
-D:\code\PTKTest11\PTKTEST11\obj\Debug64\PTKTEST11.Properties.Resources.resources
-D:\code\PTKTest11\PTKTEST11\obj\Debug64\PTKTEST11.csproj.GenerateResource.Cache
-D:\code\PTKTest11\PTKTEST11\obj\Debug64\PTKTEST11.csprojResolveAssemblyReference.cache
