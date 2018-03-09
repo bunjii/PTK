@@ -12,15 +12,15 @@ using Rhino.Geometry;
 
 namespace PTK
 {
-    public class PTK_old : GH_Component
+    public class PTK_UTIL_5 : GH_Component
     {
 
         /// <summary>
         /// Initializes a new instance of the TestC class.
         /// </summary>
-        public PTK_old()
-          : base("3", "3",
-              "Test component no.3: Decompose Element",
+        public PTK_UTIL_5()
+          : base("Disassemble Element (PTK)", "DA_E (PTK)",
+              "Disassemble Element (PTK)",
               "PTK", "5_UTIL")
         {
         }
@@ -42,8 +42,8 @@ namespace PTK
             pManager.AddCurveParameter("Curve", "Lines", "Lines", GH_ParamAccess.list);
             pManager.AddTextParameter("Tag", "Tag", "Tag", GH_ParamAccess.list);
             pManager.AddIntegerParameter("PTK ELEM ID", "PTK E ID", "PTK ELEM ID", GH_ParamAccess.list);
-            pManager.AddIntegerParameter("PTK NODE ID 0", "PTK N0 ID", "PTK NODE ID 0", GH_ParamAccess.list);
-            pManager.AddIntegerParameter("PTK NODE ID 1", "PKT N1 ID", "PTK NODE ID 1", GH_ParamAccess.list);
+            // pManager.AddIntegerParameter("PTK NODE ID 0", "PTK N0 ID", "PTK NODE ID 0", GH_ParamAccess.list);
+            // pManager.AddIntegerParameter("PTK NODE ID 1", "PKT N1 ID", "PTK NODE ID 1", GH_ParamAccess.list);
             pManager.AddGenericParameter("PTK SECTION", "PTK S", "PTK SECTION", GH_ParamAccess.list);
         }
 
@@ -75,6 +75,7 @@ namespace PTK
                 curves.Add(e.Crv);
                 elemTags.Add(e.Tag);
                 elemids.Add(e.ID);
+                // e.SubStructural[0].StrctrLine;
                 //n0ids.Add(e.N0id);
                 //n1ids.Add(e.N1id);
             }
@@ -84,8 +85,8 @@ namespace PTK
             DA.SetDataList(0, curves);
             DA.SetDataList(1, elemTags);
             DA.SetDataList(2, elemids);
-            DA.SetDataList(3, n0ids);
-            DA.SetDataList(4, n1ids);
+            // DA.SetDataList(3, n0ids);
+            // DA.SetDataList(4, n1ids);
             #endregion
 
         }

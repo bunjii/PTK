@@ -101,7 +101,7 @@
     <Compile Include="PTK_7_StrSummarize.cs" />
     <Compile Include="PTK_8_FeasibleCheck.cs" />
     <Compile Include="PTK_9_BtlExport.cs" />
-    <Compile Include="PTK_old.cs" />
+    <Compile Include="PTK_UTIL_5_DisassembleElem.cs" />
     <Compile Include="PTK_UTIL_1.cs" />
     <Compile Include="CL_Section.cs" />
     <Compile Include="PTK_UTIL_4_DisassembleNode.cs" />

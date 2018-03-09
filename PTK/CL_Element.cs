@@ -9,7 +9,7 @@ namespace PTK
     {
         #region fields
         private int id;
-        private string tag;
+        private string tag="N/A";
         private List<int> ptid;
         private Point3d startpoint;
         private Point3d endpoint; 
@@ -36,18 +36,18 @@ namespace PTK
             ptid = new List<int>();
             subStructural = new List<SubElementStructural>();
             align = _align;
-            
-            
-
 
         }
-
         #endregion
 
         #region properties
         public Curve Crv{ get{ return elemLine;}}
         public int NumberOfStructuralLines { get { return numberOfStructuralLines; } }
-        public string Tag{get { return tag; }set { tag = value; } }
+        public string Tag
+        {
+            get { return tag; }
+            set { tag = value; }
+        }
         //public int N0id { get { return n0id; } set { n0id = value; } } Not working atm. See line 33
         //public int N1id { get { return n1id; } set { n1id = value; } } Not working atm. See line 34
         public int ID { get { return id; } set { id = value; } }

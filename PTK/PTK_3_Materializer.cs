@@ -5,6 +5,8 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
+using System.Windows.Forms;
+
 namespace PTK
 {
     public class PTK3_Materializer : GH_Component
@@ -73,33 +75,18 @@ namespace PTK
             List<Element> elems = new List<Element>();
             List<Node> nodes = new List<Node>();
             List<Align> alignList = new List<Align>();
-
-
-
             Align aligner;
             GH_ObjectWrapper test = new GH_ObjectWrapper();
-            
 
-            DA.GetData(4, ref test);
-
+            #region doing some test
             test.CastTo<Align>(out aligner);
             if (aligner == null)
             {
                 aligner = new Align("", new Vector3d(0, 0, 1), 0, 0);
             }
+            DA.GetData(4, ref test);
+            #endregion
 
-
-            
-
-            
-            
-
-
-
-
-
-
-            //
             string elemTag = "N/A";
             List<Vector3d> normalVec = new List<Vector3d>();
             GH_ObjectWrapper wrapSec = new GH_ObjectWrapper();
@@ -110,53 +97,30 @@ namespace PTK
             Section rectSec;
             Material material;
             Forces forces;
-            Align aligna; 
+            // Align aligna; 
             #endregion
 
             #region input
-            
-            DA.GetData(0, ref elemTag);
             if (!DA.GetDataList(1, curves)) { return; }
-            
-
-
             DA.GetData(2, ref wrapSec);
             DA.GetData(3, ref wrapMat);
-            
             DA.GetData(5, ref wrapForc);
-
-
-
-
+            // DA.GetData(0, ref elemTag);
+            DA.GetData(6, ref elemTag);
             #endregion
 
             #region solve
-
             //Turning objectwrappers into its respective objects. 
             wrapSec.CastTo<Section>(out rectSec);
             wrapForc.CastTo<Forces>(out forces);
             wrapMat.CastTo<Material>(out material);
             
-
-
-
             elemTag = elemTag.Trim();
-            
-            
-
             for (int i = 0; i < curves.Count; i++)
             {
-                
                 if (!curves[i].IsValid) { return; }
-
-
-                
-
                 Element tempElement = new Element(curves[i], elemTag, aligner);
-
-
-
-
+                
                 if (rectSec != null)
                 {
                     tempElement.RectSec = rectSec;
@@ -167,12 +131,8 @@ namespace PTK
                 {
                     tempElement.RectSec = new Section("", 100, 100);
                 }
-
-                    
-
-
-                elems.Add(tempElement);
                 
+                elems.Add(tempElement);
             }
             #endregion
 
