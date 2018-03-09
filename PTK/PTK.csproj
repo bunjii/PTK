@@ -67,7 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CL_Align.cs" />
-    <Compile Include="Assembly.cs" />
+    <Compile Include="CL_Assembly.cs" />
     <Compile Include="CL_Functions.cs" />
     <Compile Include="CL_Loads.cs" />
     <Compile Include="CL_Material.cs" />
