@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
 namespace PTK
@@ -12,7 +13,7 @@ namespace PTK
         /// Initializes a new instance of the PTK_C_02 class.
         /// </summary>
         public PTK_6_DetailModel()
-          : base("3rd Gatherer", "#3 Gatherer",
+          : base("Detail Model (PTK)", "DM (PTK)",
               "This is to combine detail logic to PTK Class",
               "PTK", "4_DETAIL")
         {
@@ -23,8 +24,8 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK INPUT", "PTK IN", "PTK DATA INPUT", GH_ParamAccess.item);
-            pManager.AddGenericParameter("PTK LOGIC", "PTK LOGIC", "COLLECTIONS OF DETAIL SELECTIONS", GH_ParamAccess.item);
+            pManager.AddGenericParameter("PTK Assembly", "PTK A", "PTK Assembly", GH_ParamAccess.item);
+            // pManager.AddGenericParameter("PTK LOGIC", "PTK LOGIC", "COLLECTIONS OF DETAIL SELECTIONS", GH_ParamAccess.item);
 
         }
 
@@ -33,7 +34,7 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK OUTPUT", "PTK OUT", "PTK OUTPUT", GH_ParamAccess.item);
+            pManager.AddGenericParameter("PTK Assembly", "PTK A", "PTK Assembly", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -42,6 +43,31 @@ namespace PTK
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            #region variables
+            List<Node> nodes = new List<Node>();
+            List<Element> elems = new List<Element>();
+            GH_ObjectWrapper wrapAssembly = new GH_ObjectWrapper();
+            Assembly assemble;
+            #endregion
+
+            #region input
+            if (!DA.GetData(0, ref wrapAssembly)) { return; }
+            #endregion
+
+            #region solve
+
+            wrapAssembly.CastTo<Assembly>(out assemble);
+
+            nodes = assemble.Nodes;
+            elems = assemble.Elems;
+
+            Assembly assemble2 = new Assembly(nodes, elems);
+
+            #endregion
+
+            #region output
+            DA.SetData(0, assemble2);
+            #endregion
         }
 
         /// <summary>
