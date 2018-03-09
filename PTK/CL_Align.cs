@@ -65,7 +65,7 @@ namespace PTK
         }
 
         #endregion
-            #region properties
+        #region properties
 
         public string Name { get { return name; } set { name = value; } }
         public int ID { get { return id; } }

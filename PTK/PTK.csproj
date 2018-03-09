@@ -66,19 +66,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Align.cs" />
+    <Compile Include="CL_Align.cs" />
     <Compile Include="Assembly.cs" />
-    <Compile Include="Functions.cs" />
-    <Compile Include="Loads.cs" />
-    <Compile Include="Material.cs" />
-    <Compile Include="Material_properties.cs" />
+    <Compile Include="CL_Functions.cs" />
+    <Compile Include="CL_Loads.cs" />
+    <Compile Include="CL_Material.cs" />
+    <Compile Include="CL_Material_properties.cs" />
     <Compile Include="MyComponent1.cs" />
-    <Compile Include="Node.cs" />
-    <Compile Include="Element.cs" />
+    <Compile Include="CL_Node.cs" />
+    <Compile Include="CL_Element.cs" />
     <Compile Include="ProjectProperties.cs" />
     <Compile Include="PTK_1_4_Alignment_Simple.cs" />
     <Compile Include="PTK_1_5_Forces.cs" />
-    <Compile Include="Forces.cs" />
+    <Compile Include="CL_Forces.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -103,11 +103,11 @@
     <Compile Include="PTK_9_BtlExport.cs" />
     <Compile Include="PTK_old.cs" />
     <Compile Include="PTK_UTIL_1.cs" />
-    <Compile Include="Section.cs" />
+    <Compile Include="CL_Section.cs" />
     <Compile Include="PTK_old2.cs" />
     <Compile Include="PTK_old3.cs" />
-    <Compile Include="Supports.cs" />
-    <Compile Include="TempDummyClass.cs" />
+    <Compile Include="CL_Supports.cs" />
+    <Compile Include="CL_TempDummyClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
