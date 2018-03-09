@@ -185,9 +185,9 @@ namespace PTK
                 IDs.Add(Convert.ToString( nodes[i].ID));
                 PointNodes.Add(nodes[i].Pt3d);
                 string text ="N"+ Convert.ToString(nodes[i].ID)+"_";
-                for (int j = 0; j < nodes[i].ElemsId.Count; j++)
+                for (int j = 0; j < nodes[i].ElemIds.Count; j++)
                 {
-                    text += "E:" +Convert.ToString(nodes[i].ElemsId[j])+" ";
+                    text += "E:" +Convert.ToString(nodes[i].ElemIds[j])+" ";
                 }
                 NeighbourList.Add(text);
 

@@ -12,14 +12,14 @@ using System.Numerics;
 
 namespace PTK
 {
-    public class PTK_old2 : GH_Component
+    public class PTK_UTIL_4 : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the TestD class.
         /// </summary>
-        public PTK_old2()
-          : base("4", "4",
-              "Test component no.4: Decompose Node (Extract Node)",
+        public PTK_UTIL_4()
+          : base("Disassemble Node (PTK)", "DA_N (PTK)",
+              "Disassemble Node (PTK)",
               "PTK", "5_UTIL")
         {
         }
@@ -63,19 +63,18 @@ namespace PTK
             #endregion
 
             #region solve
-            /* foreach (Node n in nodes)
-            for (int i = 0; i < nodes.Count; i++)
+            for (int i=0;i<nodes.Count;i++)
             {
                 points.Add(nodes[i].Pt3d);
                 nodeIds.Add(nodes[i].ID);
+
                 GH_Path path = new GH_Path(i);
                 foreach (int j in nodes[i].ElemIds)
                 {
                     elemIdTree.Add(j, path);
-
                 }
+                
             }
-            */
             #endregion
 
 

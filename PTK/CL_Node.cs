@@ -39,7 +39,7 @@ namespace PTK
 
         #region properties
         public Point3d Pt3d { get { return pt3d; } }
-        public List<int> ElemsId { get { return elemIds; } }
+        public List<int> ElemIds { get { return elemIds; } }
         public double X { get { return x; } }
         public double Y { get { return y; } }
         public double Z { get { return z; } }

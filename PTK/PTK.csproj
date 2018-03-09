@@ -104,7 +104,7 @@
     <Compile Include="PTK_old.cs" />
     <Compile Include="PTK_UTIL_1.cs" />
     <Compile Include="CL_Section.cs" />
-    <Compile Include="PTK_old2.cs" />
+    <Compile Include="PTK_UTIL_4_DisassembleNode.cs" />
     <Compile Include="PTK_UTIL_3_SelectNode.cs" />
     <Compile Include="CL_Supports.cs" />
     <Compile Include="CL_TempDummyClass.cs" />

@@ -5,7 +5,6 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
-using System.Windows.Forms;
 
 namespace PTK
 {
@@ -65,7 +64,6 @@ namespace PTK
                 outNodes.Add(Node.FindNodeById(nodes, nodeIds[i]));
             }
             
-            MessageBox.Show(outNodes.Count.ToString());
             #endregion
 
             #region output
