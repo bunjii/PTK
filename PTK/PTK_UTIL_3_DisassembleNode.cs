@@ -5,16 +5,18 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
+using System.Windows.Forms;
+
 namespace PTK
 {
-    public class PTK_old3 : GH_Component
+    public class PTK_UTIL_3 : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the TestE class.
         /// </summary>
-        public PTK_old3()
-          : base("5", "5",
-              "Test component no.5: Select Node",
+        public PTK_UTIL_3()
+          : base("Disassemble Node (PTK)", "DA_N (PTK)",
+              "Disassemble Node (PTK)",
               "PTK", "5_UTIL")
         {
         }
@@ -62,6 +64,8 @@ namespace PTK
             {
                 outNodes.Add(Node.FindNodeById(nodes, nodeIds[i]));
             }
+            
+            MessageBox.Show(outNodes.Count.ToString());
             #endregion
 
             #region output
