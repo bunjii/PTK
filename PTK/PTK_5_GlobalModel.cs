@@ -50,7 +50,7 @@ namespace PTK
             List<Node> nodes = new List<Node>();
             List<Element> elems = new List<Element>();
             GH_ObjectWrapper wrapAssembly = new GH_ObjectWrapper();
-            Assembly assemble = new Assembly();
+            Assembly assemble;
             #endregion
 
             #region input
@@ -61,12 +61,10 @@ namespace PTK
 
             wrapAssembly.CastTo<Assembly>(out assemble);
 
-            nodes = assemble.Node;
-            elems = assemble.Element;
+            nodes = assemble.Nodes;
+            elems = assemble.Elems;
 
-            Assembly assemble2 = new Assembly();
-            assemble2.Node = nodes;
-            assemble2.Element = elems; 
+            Assembly assemble2 = new Assembly(nodes, elems);
             
             #endregion
 

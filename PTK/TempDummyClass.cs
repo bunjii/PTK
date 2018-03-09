@@ -49,7 +49,8 @@ namespace PTK
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            Assembly Assembly = new Assembly();
+            /*
+            Assembly Assembly;
 
 
             //Unwrapping the data
@@ -57,8 +58,8 @@ namespace PTK
 
 
            
-            List<Node> Node = Assembly.Node;
-            List<Element> Element = Assembly.Element;
+            List<Node> Node = Assembly.Nodes;
+            List<Element> Element = Assembly.Elements;
 
             List<double> Height = new List<double>();
             for (int i = 0; i < Element.Count; i++)
@@ -67,7 +68,7 @@ namespace PTK
             }
 
             DA.SetDataList(0, Height);
-
+            */
         }
 
         /// <summary>

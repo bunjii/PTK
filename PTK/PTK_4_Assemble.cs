@@ -201,9 +201,7 @@ namespace PTK
 
             #region output
 
-            Assembly Assembly = new Assembly();
-            Assembly.Element = elems;
-            Assembly.Node = nodes;
+            Assembly Assembly = new Assembly(nodes, elems);
 
             DA.SetData(0, Assembly);
             DA.SetDataList(1, TempPoint);
