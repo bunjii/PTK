@@ -15,8 +15,8 @@ namespace PTK
         /// Initializes a new instance of the TestE class.
         /// </summary>
         public PTK_UTIL_3()
-          : base("Disassemble Node (PTK)", "DA_N (PTK)",
-              "Disassemble Node (PTK)",
+          : base("Select Node (PTK)", "Sel N (PTK)",
+              "Select Node (PTK)",
               "PTK", "5_UTIL")
         {
         }
