@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
-using System.Threading.Tasks;
+
 
 
 namespace PTK
@@ -130,11 +130,16 @@ namespace PTK
 
         }
 
+
+
+        //THis is the main job! And can not be done in parallell. In other words: everything that happens internally for each member happens in materializer. Everything that interacts happens in this functions.
+        //Making nodes, making relations, etc etc
         public static void Assemble(List<Element> _elems)
         {
             RTree rTree;
             rTree = new RTree();
 
+            //Step 1: GIVE ID and Make rTree
             //The following loop will assign ID to each element and add the Rtree
             for (int i = 0; i < _elems.Count; i++)
             {
@@ -143,28 +148,27 @@ namespace PTK
                 //Adding Curves to rTree
                 Plane tempPlane = new Plane(_elems[i].Crv.PointAtStart, _elems[i].Crv.TangentAtStart);
 
-                Box bound = new Box(tempPlane, new Interval(-100, 100), new Interval(-100, 100), new Interval(0, elems[i].Crv.GetLength()));
+                Box bound = new Box(tempPlane, new Interval(-100, 100), new Interval(-100, 100), new Interval(0, _elems[i].Crv.GetLength()));
                 rTree.Insert(bound.BoundingBox, i);
-
             }
 
+            List < Point3d > tempPoint = new List<Point3d>();
 
-
-            for (int i = 0; i < elems.Count; i++)
+            for (int i = 0; i < _elems.Count; i++)
             {
-                Curve tempcrv = elems[i].Crv;
+                Curve tempcrv = _elems[i].Crv;
                 tempcrv.Domain = new Interval(0, 1);
 
 
-                TempPoint.Add(tempcrv.PointAtEnd);
-                TempPoint.Add(tempcrv.PointAtStart);
+                tempPoint.Add(tempcrv.PointAtEnd);
+                tempPoint.Add(tempcrv.PointAtStart);
 
                 List<Curve> tempCurvesColliding = new List<Curve>();
                 List<int> tempCurvesCollidingID = new List<int>();
 
                 EventHandler<RTreeEventArgs> happening = (object sender, RTreeEventArgs args) =>
                 {
-                    tempCurvesColliding.Add(elems[args.Id].Crv);
+                    tempCurvesColliding.Add(_elems[args.Id].Crv);
                     tempCurvesCollidingID.Add(args.Id);
 
                 };
@@ -192,7 +196,7 @@ namespace PTK
                             if (0.0 < numba && numba < 1.0)
                                 if (0.0 < numbb && numbb < 1.0)
                                 {
-                                    TempPoint.Add(a.PointAt(numba));
+                                    tempPoint.Add(a.PointAt(numba));
                                 }
                         }
                     }
@@ -203,7 +207,7 @@ namespace PTK
                         {
                             for (int k = 0; k < events.Count; k++)
                             {
-                                TempPoint.Add(events[k].PointA);
+                                tempPoint.Add(events[k].PointA);
                             }
                         }
                     }

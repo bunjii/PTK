@@ -9,33 +9,58 @@ namespace PTK
     {
         #region fields
         private int id;
+        static int idCount = 0;
         private string tag="N/A";
         private List<int> ptid;
         private Point3d startpoint;
         private Point3d endpoint; 
         private Curve elemLine;
-        private Section rectSec;
-        private Material mtl;
+        private Section section;
+        private Material material;
         private Forces force;
         private Align align; 
         private List<SubElementStructural> subStructural;
         private int numberOfStructuralLines = 0;
+        private Plane xyPlane;
+        private Plane xzPlane;
+        private Plane yzPlane;
+        Interval iz; //From Centricplanse
+        Interval iy;
+        Interval ix;
+        Rectangle3d crossSectionRectangle;
+        Brep elementGeometry;
+        BoundingBox boundingbox;
+
 
         #endregion
 
         #region constructors
-        public Element(Curve _crv, string _tag, Align _align)
+        public Element(Curve _crv, string _tag, Align _align, Section _section, Material _material)
         {
             elemLine = _crv;
             tag = _tag;
-            id = -999;
+            align = _align;
+            section = _section;
+            material = _material;
             endpoint = _crv.PointAtEnd;
             startpoint = _crv.PointAtStart;
-            //n0id = -999: This one is currently missing, but easy to remake in the AsignNeighbour function
-            //n1id = -999; This one is currently missing, but easy to remake in the AsignNeighbour function
             ptid = new List<int>();
             subStructural = new List<SubElementStructural>();
-            align = _align;
+            initializeCentricPlanes();
+            generateIntervals();
+            generateElementGeometry();
+            
+
+
+
+
+
+            //n0id = -999: This one is currently missing, but easy to remake in the AsignNeighbour function
+            //n1id = -999; This one is currently missing, but easy to remake in the AsignNeighbour function
+
+
+
+
 
         }
         #endregion
@@ -50,12 +75,13 @@ namespace PTK
         }
         //public int N0id { get { return n0id; } set { n0id = value; } } Not working atm. See line 33
         //public int N1id { get { return n1id; } set { n1id = value; } } Not working atm. See line 34
-        public int ID { get { return id; } set { id = value; } }
-        public Section RectSec { get { return rectSec; } set { rectSec = value; } }
-        public Material Mtl { get { return mtl; } set { mtl = value; } }
+        public int ID { get { return id; } }
+        public Section Section { get { return section; } set { section = value; } }
+        public Material Material { get { return material; } set { material = value; } }
         public Forces Force { get { return force; } set { force = value; } }
-        public Align Ali { get { return align; } set { align = value; } }
+        public Align Align { get { return align; } set { align = value; } }
         public List<SubElementStructural> SubStructural { get { return subStructural; } }
+        public Brep ElementGeometry { get { return elementGeometry; } }
 
         #endregion
 
@@ -67,6 +93,12 @@ namespace PTK
             ptid.Add(_ids);
         }
 
+        public void AsignID()
+        {
+            id = idCount;
+            idCount++;
+        }
+
 
         //This function send needed information to the subclass "subStructural"
         public void AddStrctline(Line _structuralline)
@@ -76,67 +108,68 @@ namespace PTK
             numberOfStructuralLines++;
     
         }
-        
 
-        //THIS FUNCTION IS TEMPORARY. The function generates a box or a sweep. This determined by the linearity of the curve. 
-        public Brep MakeBrep()
+        //Making CentricPlanes using offset/rotation information from the align-component
+        private void initializeCentricPlanes()
         {
-
-            Brep Geometri = new Brep();
-            double[] parameter = { 0.0, 2.2 };
-
-             
             Plane tempPlane = new Plane(elemLine.PointAtStart, elemLine.TangentAtStart);
-            Ali.rotationVectorToPoint(elemLine.PointAtStart);
-            Vector3d alignvector = Ali.Rotation;
+            align.rotationVectorToPoint(elemLine.PointAtStart);
+            Vector3d alignvector = align.Rotation;
             //Getting rotation angle
             double angle = Rhino.Geometry.Vector3d.VectorAngle(tempPlane.XAxis, alignvector, tempPlane);
-            
-            tempPlane.Rotate(angle, tempPlane.Normal,tempPlane.Origin);
-            tempPlane.Translate(tempPlane.XAxis * Ali.OffsetY);
-            tempPlane.Translate(tempPlane.YAxis * Ali.OffsetZ);
+
+            tempPlane.Rotate(angle, tempPlane.Normal, tempPlane.Origin);
+            tempPlane.Translate(tempPlane.XAxis * align.OffsetY);
+            tempPlane.Translate(tempPlane.YAxis * align.OffsetZ);
+            yzPlane = tempPlane;
+            xzPlane = new Plane(tempPlane.Origin, tempPlane.ZAxis, tempPlane.YAxis);
+            xyPlane = new Plane(tempPlane.Origin, tempPlane.ZAxis, tempPlane.XAxis);
+
+
+        }
+
+
+        //Generating extrusion/SweepIntervals
+        private void generateIntervals()
+        {
+            double[] parameter = { 0.0, 2.2 };
 
             
 
-
-            Interval iz = new Interval();
-            Interval iy = new Interval();
-            Interval ix = new Interval();
-            
-            double HalfWidth = rectSec.Width / 2;
-            double HalfHeight = rectSec.Height / 2; 
+            double HalfWidth = section.Width / 2;
+            double HalfHeight = section.Height / 2;
 
             iz = new Interval(-HalfHeight, HalfHeight);
             iy = new Interval(-HalfWidth, HalfWidth);
-            ix = new Interval(0,  elemLine.GetLength());
+            ix = new Interval(0, elemLine.GetLength());
+            crossSectionRectangle = new Rectangle3d(yzPlane, iy, iz);
 
 
+        }
+
+        
+        private void generateElementGeometry()
+        {
+            Brep tempgeometry = new Brep();
 
             if (elemLine.IsLinear())
             {
-
-
-
-                Box boxen = new Box(tempPlane, iy, iz, ix);
-                Geometri = boxen.ToBrep();
-                
+                Box boxen = new Box(yzPlane, iy, iz, ix);
+                tempgeometry = boxen.ToBrep();
+                boundingbox = boxen.BoundingBox;
 
             }
             else
             {
                 SweepOneRail tempsweep = new SweepOneRail();
-                Rectangle3d rect = new Rectangle3d(tempPlane, iy, iz);
-                rect.ToPolyline();
                 
-                var sweep = tempsweep.PerformSweep(elemLine, rect.ToNurbsCurve());
-                
-
-                Geometri = sweep[0];
+                var sweep = tempsweep.PerformSweep(elemLine, crossSectionRectangle.ToNurbsCurve());
+                tempgeometry = sweep[0];
+                boundingbox = tempgeometry.GetBoundingBox(yzPlane);
             }
 
 
-
-            return Geometri;
+            elementGeometry = tempgeometry;
         }
 
         //THIS IS THE CLASS THAT STORES DATA OF ALL BEAMELEMENTS. SUB LINES. An element contains one or more sub-elements

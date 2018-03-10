@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
+using System.Threading.Tasks;
 
 using System.Windows.Forms;
 
@@ -70,70 +71,94 @@ namespace PTK
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             #region variables
+
             List<Curve> curves = new List<Curve>();
             List<Point3d> pts = new List<Point3d>();
             List<Element> elems = new List<Element>();
             List<Node> nodes = new List<Node>();
             List<Align> alignList = new List<Align>();
             Align aligner;
-            GH_ObjectWrapper test = new GH_ObjectWrapper();
 
-            #region doing some test
-            test.CastTo<Align>(out aligner);
-            if (aligner == null)
-            {
-                aligner = new Align("", new Vector3d(0, 0, 1), 0, 0);
-            }
-            DA.GetData(4, ref test);
-            #endregion
+
+            
 
             string elemTag = "N/A";
             List<Vector3d> normalVec = new List<Vector3d>();
             GH_ObjectWrapper wrapSec = new GH_ObjectWrapper();
             GH_ObjectWrapper  wrapMat = new GH_ObjectWrapper();
-            List<GH_ObjectWrapper> wrapAli = new List<GH_ObjectWrapper>();
+            GH_ObjectWrapper wrapAlign = new GH_ObjectWrapper();
             GH_ObjectWrapper wrapForc = new GH_ObjectWrapper();
 
-            Section rectSec;
+            Section section;
             Material material;
             Forces forces;
-            // Align aligna; 
+            Align align;
             #endregion
 
             #region input
+            DA.GetData(0, ref elemTag);
             if (!DA.GetDataList(1, curves)) { return; }
             DA.GetData(2, ref wrapSec);
             DA.GetData(3, ref wrapMat);
+            DA.GetData(4, ref wrapAlign);
             DA.GetData(5, ref wrapForc);
-            // DA.GetData(0, ref elemTag);
-            DA.GetData(6, ref elemTag);
+            
             #endregion
 
             #region solve
             //Turning objectwrappers into its respective objects. 
-            wrapSec.CastTo<Section>(out rectSec);
-            wrapForc.CastTo<Forces>(out forces);
+            wrapSec.CastTo<Section>(out section);   
             wrapMat.CastTo<Material>(out material);
-            
-            elemTag = elemTag.Trim();
-            for (int i = 0; i < curves.Count; i++)
+            wrapAlign.CastTo<Align>(out align);
+            wrapForc.CastTo<Forces>(out forces);
+
+
+            //Asigning Default Values if not inputed (correctly)
+            if (section == null)
             {
-                if (!curves[i].IsValid) { return; }
-                Element tempElement = new Element(curves[i], elemTag, aligner);
-                
-                if (rectSec != null)
-                {
-                    tempElement.RectSec = rectSec;
-                    tempElement.Mtl = material;
-                    tempElement.Force = forces;
-                }
-                else
-                {
-                    tempElement.RectSec = new Section("", 100, 100);
-                }
-                
-                elems.Add(tempElement);
+                section = new Section("Untitled", 100, 100);
             }
+            if (forces == null)
+            {
+                forces = new Forces();
+            }
+            if (material == null)
+            {
+                material = new Material("untitlde", 10, new Material_properties("Untitled", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)); //Marcin: Add something generic here
+            }
+            if (align == null)
+            {
+                align = new Align("Untitled", new Vector3d(0, 0, 1), new Vector3d(0, 0, 0));
+            }
+
+
+            elemTag = elemTag.Trim();
+
+            if (curves.Count > 40)
+            {
+                Parallel.For(0, curves.Count, (int i) =>
+                {
+                    elems.Add(new Element(curves[i], elemTag, align, section, material));
+                });
+            }
+
+            //Creating Elements from Curves
+            
+            else
+            {
+                for (int i = 0; i < curves.Count; i++)
+                {
+                    elems.Add(new Element(curves[i], elemTag, align, section, material));
+                }
+
+            }
+
+
+
+            //for (int i = 0; i < curves.Count; i++)
+            //{
+            //    elems.Add(new Element(curves[i], elemTag, align, section, material));
+            //}
             #endregion
 
             #region output

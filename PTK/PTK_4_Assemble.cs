@@ -68,11 +68,12 @@ namespace PTK
         /// </summary>
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and 
         /// to store data in output parameters.</param>
+        
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             Node.ResetIDCount();
             #region variables
-            int elemIdNum = 0;
+
 
             //Assigning lists off objects
             List<Node> nodes = new List<Node>();
@@ -98,11 +99,7 @@ namespace PTK
             }
 
             // DDL "generate Elem ID"  // John: I think the ID-asignment should be done inside the class
-            for (int i = 0; i < elems.Count; i++)
-            {
-                elems[i].ID = elemIdNum;
-                elemIdNum++;
-            }
+
 
             //Adding a list of points.
             //Adding Endpoints
@@ -161,7 +158,7 @@ namespace PTK
             for (int i = 0; i < elems.Count; i++)
             {
 
-                BokseTest.Add(elems[i].MakeBrep());
+                BokseTest.Add(elems[i].ElementGeometry);
                 elementCurves.Add(elems[i].Crv);
                 
                 elementid.Add(elems[i].ID);
