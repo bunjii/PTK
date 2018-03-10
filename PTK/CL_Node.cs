@@ -12,6 +12,7 @@ namespace PTK
         #region fields
         private int id;
         private List<int> elemIds;
+        private List<Element> elems;
         private Point3d pt3d;
         private Plane nodePlane;
         private double x;
@@ -19,6 +20,7 @@ namespace PTK
         private double z;
         private static int idCount = 0;
         int temp;
+        BoundingBox boundingbox; 
         #endregion
 
         #region constructors
@@ -33,12 +35,14 @@ namespace PTK
             nodePlane = new Plane(pt, new Vector3d(0, 0, 1));
             idCount++;
             elemIds = new List<int>();
-            
+            elems = new List<Element>();
+            boundingbox = new BoundingBox(pt, pt);
         }
         #endregion
 
         #region properties
         public Point3d Pt3d { get { return pt3d; } }
+        public BoundingBox BoundingBox { get { return boundingbox; } }
         public List<int> ElemIds { get { return elemIds; } }
         public double X { get { return x; } }
         public double Y { get { return y; } }
@@ -59,6 +63,26 @@ namespace PTK
             }
             temp = ids;
             elemIds.Add(ids);
+        }
+
+        public void AddElements(Element _element)
+        {
+            bool add = true;
+            foreach (Element elem in elems)
+            {
+                if (elem.ID.Equals(_element.ID))
+                    add = false;
+            }
+
+            if (add)
+            {
+                elems.Add(_element);
+            }
+
+
+
+
+            elems.Add(_element);
         }
 
 

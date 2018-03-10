@@ -108,48 +108,14 @@ namespace PTK
             //Removing duplicates
             //Asigning to nodes
             List<Point3d> TempPoint = new List<Point3d>();
-            
 
-            //ADDING NODES
-            //COMMENT JOHN: I thought it was more safe to first create a unique set of points, then assign it as nodes
 
-            //This loop is finding all points and add it to the TempPointList
-            //First by adding end/start point
-            //Then it finds the intersections and add text if 
-            for (int i = 0; i < elems.Count; i++)
-            {
-                TempPoint.Add(elems[i].Crv.PointAtEnd);
-                TempPoint.Add(elems[i].Crv.PointAtStart);
-
-                
-                for (int j = i; j<elems.Count; j++)
-                {
-                    var events = Rhino.Geometry.Intersect.Intersection.CurveCurve(elems[i].Crv, elems[j].Crv, ProjectProperties.tolerances, ProjectProperties.tolerances);
-                    if (events!= null)
-                    {
-                        for (int k =0; k<events.Count; k++)
-                        {
-                            TempPoint.Add(events[k].PointA);
-                        }
-                    }
-                }
-            }
-
-            //Removing all duplicates. With a tolerance. Tolerance is best to be set as low as possible. May be an input. Or one can use the rhino unit tolerance
-            TempPoint = Functions.RemoveDuplicates(TempPoint, 0.001);
-
-            // DDL "generate Node"
-            for (int i = 0; i < TempPoint.Count; i++)
-            {
-                nodes.Add(new Node(TempPoint[i]));
-            }
+            Functions.Assemble(elems, out nodes);
   
             
             List<Brep> BokseTest = new List<Brep>();
             List<Curve> elementCurves = new List<Curve>();
             List<int> elementid = new List<int>();
-
-            Functions.AsignNeighbour(elems, nodes);
             List<Line> strLine = new List<Line>();
             List<String> SubID = new List<String>();
         
@@ -165,11 +131,11 @@ namespace PTK
                 string tempID = Convert.ToString(elems[i].ID);
 
 
-                for (int j = 0; j < elems[i].SubStructural.Count; j++)
-                {
-                    strLine.Add(elems[i].SubStructural[j].StrctrLine);
-                    SubID.Add(tempID + "_" + Convert.ToString(elems[i].SubStructural[j].StrctrlLineID));
-                }
+                //for (int j = 0; j < elems[i].SubStructural.Count; j++)
+                //{
+                //    strLine.Add(elems[i].SubStructural[j].StrctrLine);
+                //    SubID.Add(tempID + "_" + Convert.ToString(elems[i].SubStructural[j].StrctrlLineID));
+                //}
 
             }
 
@@ -201,7 +167,7 @@ namespace PTK
             Assembly Assembly = new Assembly(nodes, elems);
 
             DA.SetData(0, Assembly);
-            DA.SetDataList(1, TempPoint);
+            DA.SetDataList(1, PointNodes);
             DA.SetDataList(2, BokseTest);
             DA.SetDataList(3, IDs);
             DA.SetDataList(4, elementCurves);

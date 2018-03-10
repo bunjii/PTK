@@ -13,6 +13,10 @@ namespace PTK
 {
     public class Functions
     {
+
+
+
+
         //Function that removes duplicate points
         public static List<Point3d> RemoveDuplicates(List<Point3d> ptList, double tolerance)
         {
@@ -134,80 +138,160 @@ namespace PTK
 
         //THis is the main job! And can not be done in parallell. In other words: everything that happens internally for each member happens in materializer. Everything that interacts happens in this functions.
         //Making nodes, making relations, etc etc
-        public static void Assemble(List<Element> _elems)
+        public static void Assemble(List<Element> _elems, out List<Node> _nodes)
         {
-            RTree rTree;
-            rTree = new RTree();
+            List<Node> nodes = new List<Node>();
+            
+            RTree rTreeElements;
+            rTreeElements = new RTree();
 
             //Step 1: GIVE ID and Make rTree
             //The following loop will assign ID to each element and add the Rtree
             for (int i = 0; i < _elems.Count; i++)
             {
                 _elems[i].AsignID();
-
-                //Adding Curves to rTree
-                Plane tempPlane = new Plane(_elems[i].Crv.PointAtStart, _elems[i].Crv.TangentAtStart);
-
-                Box bound = new Box(tempPlane, new Interval(-100, 100), new Interval(-100, 100), new Interval(0, _elems[i].Crv.GetLength()));
-                rTree.Insert(bound.BoundingBox, i);
+                rTreeElements.Insert(_elems[i].BoundingBox, i);
             }
 
-            List < Point3d > tempPoint = new List<Point3d>();
 
+            
+            List < Point3d > tempPoint = new List<Point3d>();
+            RTree rTreeNodes = new RTree();
+
+            //Step 2. Create Adding points
             for (int i = 0; i < _elems.Count; i++)
             {
-                Curve tempcrv = _elems[i].Crv;
-                tempcrv.Domain = new Interval(0, 1);
+                Curve tempCrv= _elems[i].Crv;
+                List<Point3d> testPt = new List<Point3d>();
+                testPt.Add(_elems[i].PointAtStart);
+                testPt.Add(_elems[i].PointAtEnd);
+                bool exists = false;
 
-
-                tempPoint.Add(tempcrv.PointAtEnd);
-                tempPoint.Add(tempcrv.PointAtStart);
-
-                List<Curve> tempCurvesColliding = new List<Curve>();
-                List<int> tempCurvesCollidingID = new List<int>();
-
-                EventHandler<RTreeEventArgs> happening = (object sender, RTreeEventArgs args) =>
+                //The r.TreeNodes.Search will perform this function if it finds existing points(boundingboxes)
+                EventHandler<RTreeEventArgs> nodehappening = (object sender, RTreeEventArgs args) => 
                 {
-                    tempCurvesColliding.Add(_elems[args.Id].Crv);
-                    tempCurvesCollidingID.Add(args.Id);
-
+                    exists = true;
                 };
 
-                rTree.Search(new Sphere(tempcrv.PointAt(0.5), tempcrv.GetLength()), happening);
-
-
-
-
-                for (int j = 0; j < tempCurvesColliding.Count; j++)
+                //Looping through startpoint and endpoint
+                for (int pt =0; pt<testPt.Count; pt++)
                 {
-                    //
+                    BoundingBox tempBoundingBox = new BoundingBox(testPt[pt], testPt[pt]);
+
+                    rTreeNodes.Search(tempBoundingBox, nodehappening);
 
 
-
-                    if (tempcrv.IsLinear() && tempCurvesColliding[j].IsLinear())
+                    // If point does not exists, the point is added to rtreeNodes and a new node is made
+                    // The nodes is also added to the 
+                    // Important: The rTreeNodes ID is the ID of the node
+                    if (!exists)
                     {
-                        Line a = new Line(tempcrv.PointAtEnd, tempcrv.PointAtStart);
-                        Line b = new Line(tempCurvesColliding[j].PointAtStart, tempCurvesColliding[j].PointAtEnd);
+
+                        Node tempNode = new Node(testPt[pt]);     //Creating new node
+                        tempNode.AddElements(_elems[i]);     //Adding current element to the node
+                        nodes.Add(tempNode);                 //Adding the node to the Global NodeList That will be outed
+                        _elems[i].AddNode(tempNode);        //Adding the node to the current element
+                        rTreeNodes.Insert(tempNode.BoundingBox, tempNode.ID);       //Adding a new boundingbox witht he ID of the node 
+                    }
+                }
+                
+
+
+                //The next thing is to check wether the elements are colliding.
+
+
+                tempCrv.Domain = new Interval(0, 1);
+
+ 
+                List<int> tempCurvesMaybeCollidingID = new List<int>();
+
+
+                //The elementHappening add the ID of the element to the tempCurvesMaybeColliding. These are tested to proper collision
+                EventHandler<RTreeEventArgs> elementhappening = (object sender, RTreeEventArgs args) =>
+                {
+                    tempCurvesMaybeCollidingID.Add(args.Id);
+                };
+
+                //Finding elements that are close to the current element [i]. if found: See ElementHapping
+                rTreeElements.Search(new Sphere(tempCrv.PointAt(0.5), tempCrv.GetLength()), elementhappening);
+
+                for (int j = 0; j < tempCurvesMaybeCollidingID.Count; j++)
+                {
+                    Curve testForCollisionCrv = _elems[tempCurvesMaybeCollidingID[j]].Crv; 
+
+                    // if both curves are linear, a simple mathematical intersection is performed. If not a more CPU-consuming geometrical intersection is performed
+                    if (tempCrv.IsLinear() && testForCollisionCrv.IsLinear())   
+                    {
+                        //Curves to line
+                        Line a = new Line(tempCrv.PointAtEnd, tempCrv.PointAtStart);
+                        Line b = new Line(testForCollisionCrv.PointAtStart, testForCollisionCrv.PointAtEnd); 
                         double numba;
                         double numbb;
 
-                        if (Rhino.Geometry.Intersect.Intersection.LineLine(a, b, out numba, out numbb))
+                        if (Rhino.Geometry.Intersect.Intersection.LineLine(a, b, out numba, out numbb))  //Colliding vectors?
                         {
-                            if (0.0 < numba && numba < 1.0)
-                                if (0.0 < numbb && numbb < 1.0)
+                            if (0.0 < numba && numba < 1.0)  //Colliding within parameter for line a?
+                                if (0.0 < numbb && numbb < 1.0) //Colliding within parameter for line b?
                                 {
-                                    tempPoint.Add(a.PointAt(numba));
+                                    Point3d intersectpt = a.PointAt(numba);
+                                    BoundingBox tempBoundingBox = new BoundingBox(intersectpt, intersectpt);
+
+                                    exists = false;
+                                    int existingnodeID = new int();
+
+                                    //The r.TreeNodes.Search will perform this function if it finds existing points(boundingboxes)
+                                    nodehappening = (object sender, RTreeEventArgs args) =>
+                                    {
+                                        exists = true;
+                                        existingnodeID = args.Id;
+                                    };
+
+                                    rTreeNodes.Search(tempBoundingBox, nodehappening);
+                                    Node tempNode; 
+                                    if (!exists)
+                                    {
+                                        tempNode = new Node(intersectpt);
+                                        
+                                    }
+                                    else
+                                    {
+                                        tempNode = nodes[existingnodeID];
+                                    }
+                                    
+                                    tempNode.AddElements(_elems[i]);                                    //Adding current element to the node
+                                    tempNode.AddElements(_elems[tempCurvesMaybeCollidingID[j]]);        //adding testelement to the node
+                                                                                                          
+                                    _elems[i].AddNode(tempNode);                                        //Adding the node to the current element
+                                    _elems[tempCurvesMaybeCollidingID[j]].AddNode(tempNode);            //Adding the node to the testelement
+                                    rTreeNodes.Insert(tempNode.BoundingBox, tempNode.ID);
+
+                                    if (!exists)
+                                    {
+                                        nodes.Add(tempNode);                                             //Adding the node to the Global NodeList That will be outed
+                                    }
+
+                                    
+
+                                    //Adding a new boundingbox witht he ID of the node
                                 }
                         }
                     }
                     else
                     {
-                        var events = Rhino.Geometry.Intersect.Intersection.CurveCurve(tempcrv, tempCurvesColliding[j], ProjectProperties.tolerances, ProjectProperties.tolerances);
+                        var events = Rhino.Geometry.Intersect.Intersection.CurveCurve(tempCrv, testForCollisionCrv, ProjectProperties.tolerances, ProjectProperties.tolerances);
                         if (events != null)
                         {
                             for (int k = 0; k < events.Count; k++)
                             {
-                                tempPoint.Add(events[k].PointA);
+                                Node tempNode = new Node(events[k].PointA);                         //Creating new node
+                                tempNode.AddElements(_elems[i]);                                    //Adding current element to the node
+                                tempNode.AddElements(_elems[tempCurvesMaybeCollidingID[j]]);        //adding testelement to the node
+                                nodes.Add(tempNode);                                                //Adding the node to the Global NodeList That will be outed
+                                _elems[i].AddNode(tempNode);                                        //Adding the node to the current element
+                                _elems[tempCurvesMaybeCollidingID[j]].AddNode(tempNode);            //Adding the node to the testelement
+                                rTreeNodes.Insert(tempNode.BoundingBox, tempNode.ID);
+
+
                             }
                         }
                     }
@@ -215,6 +299,7 @@ namespace PTK
 
                 }
             }
+            _nodes = nodes;
         }
 
 

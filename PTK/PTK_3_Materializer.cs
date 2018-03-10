@@ -134,10 +134,11 @@ namespace PTK
 
             elemTag = elemTag.Trim();
 
-            if (curves.Count > 40)
+            if (curves.Count > 20)
             {
                 Parallel.For(0, curves.Count, (int i) =>
                 {
+                    if (!curves[i].IsValid) { return; }
                     elems.Add(new Element(curves[i], elemTag, align, section, material));
                 });
             }
@@ -148,6 +149,7 @@ namespace PTK
             {
                 for (int i = 0; i < curves.Count; i++)
                 {
+                    if (!curves[i].IsValid) { return; }
                     elems.Add(new Element(curves[i], elemTag, align, section, material));
                 }
 

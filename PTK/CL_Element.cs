@@ -12,9 +12,10 @@ namespace PTK
         static int idCount = 0;
         private string tag="N/A";
         private List<int> ptid;
-        private Point3d startpoint;
-        private Point3d endpoint; 
-        private Curve elemLine;
+        private List<Node> nodes;
+        private Point3d pointAtStart;
+        private Point3d pointAtEnd; 
+        private Curve crv;
         private Section section;
         private Material material;
         private Forces force;
@@ -37,13 +38,14 @@ namespace PTK
         #region constructors
         public Element(Curve _crv, string _tag, Align _align, Section _section, Material _material)
         {
-            elemLine = _crv;
+            nodes = new List<Node>();
+            crv = _crv;
             tag = _tag;
             align = _align;
             section = _section;
             material = _material;
-            endpoint = _crv.PointAtEnd;
-            startpoint = _crv.PointAtStart;
+            pointAtEnd = _crv.PointAtEnd;
+            pointAtStart = _crv.PointAtStart;
             ptid = new List<int>();
             subStructural = new List<SubElementStructural>();
             initializeCentricPlanes();
@@ -66,7 +68,7 @@ namespace PTK
         #endregion
 
         #region properties
-        public Curve Crv{ get{ return elemLine;}}
+        public Curve Crv{ get{ return crv;}}
         public int NumberOfStructuralLines { get { return numberOfStructuralLines; } }
         public string Tag
         {
@@ -82,6 +84,12 @@ namespace PTK
         public Align Align { get { return align; } set { align = value; } }
         public List<SubElementStructural> SubStructural { get { return subStructural; } }
         public Brep ElementGeometry { get { return elementGeometry; } }
+        public BoundingBox BoundingBox { get { return boundingbox; } }
+        public Point3d PointAtStart { get { return pointAtStart; } }
+        public Point3d PointAtEnd { get { return pointAtEnd; } }
+
+
+
 
         #endregion
 
@@ -92,6 +100,24 @@ namespace PTK
         {
             ptid.Add(_ids);
         }
+
+        public void AddNode(Node _node)
+        {
+            bool add = true;
+            foreach(Node node in nodes)
+            {
+                if (_node.ID.Equals(node.ID))
+                    add = false;
+            }
+            
+            if (add)
+            {
+                nodes.Add(_node);
+            }
+
+            
+        }
+
 
         public void AsignID()
         {
@@ -112,8 +138,8 @@ namespace PTK
         //Making CentricPlanes using offset/rotation information from the align-component
         private void initializeCentricPlanes()
         {
-            Plane tempPlane = new Plane(elemLine.PointAtStart, elemLine.TangentAtStart);
-            align.rotationVectorToPoint(elemLine.PointAtStart);
+            Plane tempPlane = new Plane(crv.PointAtStart, crv.TangentAtStart);
+            align.rotationVectorToPoint(crv.PointAtStart);
             Vector3d alignvector = align.Rotation;
             //Getting rotation angle
             double angle = Rhino.Geometry.Vector3d.VectorAngle(tempPlane.XAxis, alignvector, tempPlane);
@@ -141,7 +167,7 @@ namespace PTK
 
             iz = new Interval(-HalfHeight, HalfHeight);
             iy = new Interval(-HalfWidth, HalfWidth);
-            ix = new Interval(0, elemLine.GetLength());
+            ix = new Interval(0, crv.GetLength());
             crossSectionRectangle = new Rectangle3d(yzPlane, iy, iz);
 
 
@@ -152,10 +178,10 @@ namespace PTK
         {
             Brep tempgeometry = new Brep();
 
-            if (elemLine.IsLinear())
+            if (crv.IsLinear())
             {
                 Box boxen = new Box(yzPlane, iy, iz, ix);
-                tempgeometry = boxen.ToBrep();
+                tempgeometry = Brep.CreateFromBox(boxen);
                 boundingbox = boxen.BoundingBox;
 
             }
@@ -163,7 +189,7 @@ namespace PTK
             {
                 SweepOneRail tempsweep = new SweepOneRail();
                 
-                var sweep = tempsweep.PerformSweep(elemLine, crossSectionRectangle.ToNurbsCurve());
+                var sweep = tempsweep.PerformSweep(crv, crossSectionRectangle.ToNurbsCurve());
                 tempgeometry = sweep[0];
                 boundingbox = tempgeometry.GetBoundingBox(yzPlane);
             }
