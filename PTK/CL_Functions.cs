@@ -128,6 +128,91 @@ namespace PTK
 
         }
 
+        public static void Assemble(List<Element> _elems)
+        {
+            RTree rTree;
+            rTree = new RTree();
+
+            //The following loop will assign ID to each element and add the Rtree
+            for (int i = 0; i < _elems.Count; i++)
+            {
+                _elems[i].AsignID();
+
+                //Adding Curves to rTree
+                Plane tempPlane = new Plane(_elems[i].Crv.PointAtStart, _elems[i].Crv.TangentAtStart);
+
+                Box bound = new Box(tempPlane, new Interval(-100, 100), new Interval(-100, 100), new Interval(0, elems[i].Crv.GetLength()));
+                rTree.Insert(bound.BoundingBox, i);
+
+            }
+
+
+
+            for (int i = 0; i < elems.Count; i++)
+            {
+                Curve tempcrv = elems[i].Crv;
+                tempcrv.Domain = new Interval(0, 1);
+
+
+                TempPoint.Add(tempcrv.PointAtEnd);
+                TempPoint.Add(tempcrv.PointAtStart);
+
+                List<Curve> tempCurvesColliding = new List<Curve>();
+                List<int> tempCurvesCollidingID = new List<int>();
+
+                EventHandler<RTreeEventArgs> happening = (object sender, RTreeEventArgs args) =>
+                {
+                    tempCurvesColliding.Add(elems[args.Id].Crv);
+                    tempCurvesCollidingID.Add(args.Id);
+
+                };
+
+                rTree.Search(new Sphere(tempcrv.PointAt(0.5), tempcrv.GetLength()), happening);
+
+
+
+
+                for (int j = 0; j < tempCurvesColliding.Count; j++)
+                {
+                    //
+
+
+
+                    if (tempcrv.IsLinear() && tempCurvesColliding[j].IsLinear())
+                    {
+                        Line a = new Line(tempcrv.PointAtEnd, tempcrv.PointAtStart);
+                        Line b = new Line(tempCurvesColliding[j].PointAtStart, tempCurvesColliding[j].PointAtEnd);
+                        double numba;
+                        double numbb;
+
+                        if (Rhino.Geometry.Intersect.Intersection.LineLine(a, b, out numba, out numbb))
+                        {
+                            if (0.0 < numba && numba < 1.0)
+                                if (0.0 < numbb && numbb < 1.0)
+                                {
+                                    TempPoint.Add(a.PointAt(numba));
+                                }
+                        }
+                    }
+                    else
+                    {
+                        var events = Rhino.Geometry.Intersect.Intersection.CurveCurve(tempcrv, tempCurvesColliding[j], ProjectProperties.tolerances, ProjectProperties.tolerances);
+                        if (events != null)
+                        {
+                            for (int k = 0; k < events.Count; k++)
+                            {
+                                TempPoint.Add(events[k].PointA);
+                            }
+                        }
+                    }
+
+
+                }
+            }
+        }
+
+
+
         public static bool CheckInputValidity (List <int> counts)
         {
             counts.Sort();
