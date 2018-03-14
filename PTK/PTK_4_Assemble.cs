@@ -111,11 +111,13 @@ namespace PTK
 
 
             Functions.Assemble(elems, out nodes);
+            Functions.GenerateStructuralLines(elems);
   
             
             List<Brep> BokseTest = new List<Brep>();
             List<Curve> elementCurves = new List<Curve>();
             List<int> elementid = new List<int>();
+            List<int> ConnectedNodes = new List<int>();
             List<Line> strLine = new List<Line>();
             List<String> SubID = new List<String>();
         
@@ -126,16 +128,16 @@ namespace PTK
 
                 BokseTest.Add(elems[i].ElementGeometry);
                 elementCurves.Add(elems[i].Crv);
-                
+                ConnectedNodes.Add(elems[i].ConnectedNodes);
                 elementid.Add(elems[i].ID);
                 string tempID = Convert.ToString(elems[i].ID);
 
 
-                //for (int j = 0; j < elems[i].SubStructural.Count; j++)
-                //{
-                //    strLine.Add(elems[i].SubStructural[j].StrctrLine);
-                //    SubID.Add(tempID + "_" + Convert.ToString(elems[i].SubStructural[j].StrctrlLineID));
-                //}
+                for (int j = 0; j < elems[i].SubStructural.Count; j++)
+                {
+                    strLine.Add(elems[i].SubStructural[j].StrctrLine);
+                    SubID.Add(tempID + "_" + Convert.ToString(elems[i].SubStructural[j].StrctrlLineID));
+                }
 
             }
 
@@ -172,7 +174,7 @@ namespace PTK
             DA.SetDataList(3, IDs);
             DA.SetDataList(4, elementCurves);
             DA.SetDataList(5, elementid);
-            DA.SetDataList(6, NeighbourList);
+            DA.SetDataList(6, ConnectedNodes);
             DA.SetDataList(7, strLine);
             DA.SetDataList(8, SubID);
             #endregion

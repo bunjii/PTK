@@ -13,6 +13,8 @@ namespace PTK
         private int id;
         private List<int> elemIds;
         private List<Element> elems;
+        private List<double> parameterOfConnectedElements;
+        private int connectedElems;
         private Point3d pt3d;
         private Plane nodePlane;
         private double x;
@@ -36,6 +38,7 @@ namespace PTK
             idCount++;
             elemIds = new List<int>();
             elems = new List<Element>();
+            parameterOfConnectedElements = new List<double>();
             boundingbox = new BoundingBox(pt, pt);
         }
         #endregion
@@ -48,6 +51,9 @@ namespace PTK
         public double Y { get { return y; } }
         public double Z { get { return z; } }
         public int ID { get { return id; } }  //removed the possability to set an ID
+        public int ConnectedElements { get { return connectedElems; } }  //removed the possability to set an ID
+        public List<double> ParameterOfConnectedElements { get { return parameterOfConnectedElements; } }
+
 
         #endregion
 

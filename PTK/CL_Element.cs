@@ -10,16 +10,18 @@ namespace PTK
         #region fields
         private int id;
         static int idCount = 0;
-        private string tag="N/A";
+        private string tag = "N/A";
         private List<int> ptid;
         private List<Node> nodes;
+        private List<double> parameterConnectedNodes;
+        private int connectedNodes = 0;
         private Point3d pointAtStart;
-        private Point3d pointAtEnd; 
+        private Point3d pointAtEnd;
         private Curve crv;
         private Section section;
         private Material material;
         private Forces force;
-        private Align align; 
+        private Align align;
         private List<SubElementStructural> subStructural;
         private int numberOfStructuralLines = 0;
         private Plane xyPlane;
@@ -51,7 +53,8 @@ namespace PTK
             initializeCentricPlanes();
             generateIntervals();
             generateElementGeometry();
-            
+            parameterConnectedNodes = new List<double>();
+
 
 
 
@@ -68,7 +71,7 @@ namespace PTK
         #endregion
 
         #region properties
-        public Curve Crv{ get{ return crv;}}
+        public Curve Crv { get { return crv; } }
         public int NumberOfStructuralLines { get { return numberOfStructuralLines; } }
         public string Tag
         {
@@ -87,6 +90,9 @@ namespace PTK
         public BoundingBox BoundingBox { get { return boundingbox; } }
         public Point3d PointAtStart { get { return pointAtStart; } }
         public Point3d PointAtEnd { get { return pointAtEnd; } }
+        public int ConnectedNodes { get { return connectedNodes; } }
+        public List<double> ParameterConnectedNodes { get { return parameterConnectedNodes; } }
+        public List<Node> Nodes { get { return nodes; } }
 
 
 
@@ -113,6 +119,7 @@ namespace PTK
             if (add)
             {
                 nodes.Add(_node);
+                connectedNodes++;
             }
 
             
@@ -191,7 +198,8 @@ namespace PTK
                 
                 var sweep = tempsweep.PerformSweep(crv, crossSectionRectangle.ToNurbsCurve());
                 tempgeometry = sweep[0];
-                boundingbox = tempgeometry.GetBoundingBox(yzPlane);
+                boundingbox = tempgeometry.GetBoundingBox(Rhino.Geometry.Plane.WorldXY);
+                int test = 0;
             }
 
 
@@ -236,6 +244,7 @@ namespace PTK
             #region properties
             public Line StrctrLine { get { return strctrlLine; } }
             public int StrctrlLineID { get { return strctrlLineID; } }
+            
 
             #endregion
             #region methods

@@ -138,8 +138,12 @@ namespace PTK
             {
                 Parallel.For(0, curves.Count, (int i) =>
                 {
-                    if (!curves[i].IsValid) { return; }
-                    elems.Add(new Element(curves[i], elemTag, align, section, material));
+                    if (curves[i] != null)
+                    {
+                        if (!curves[i].IsValid) { return; }
+                        elems.Add(new Element(curves[i], elemTag, align, section, material));
+                    }
+                    
                 });
             }
 
@@ -149,8 +153,12 @@ namespace PTK
             {
                 for (int i = 0; i < curves.Count; i++)
                 {
-                    if (!curves[i].IsValid) { return; }
-                    elems.Add(new Element(curves[i], elemTag, align, section, material));
+                    if (curves[i] != null)
+                    {
+                        if (!curves[i].IsValid) { return; }
+                        elems.Add(new Element(curves[i], elemTag, align, section, material));
+                    }
+                    
                 }
 
             }

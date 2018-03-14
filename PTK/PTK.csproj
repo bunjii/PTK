@@ -34,14 +34,24 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Grasshopper">
-      <HintPath>..\..\..\..\AppData\Roaming\McNeel\Rhinoceros\5.0\Plug-ins\Grasshopper (b45a29b1-4343-4035-989e-044e8580d9cf)\0.9.76.0\Grasshopper.dll</HintPath>
+    <Reference Include="GH_IO">
+      <HintPath>..\..\Library\GH_IO.dll</HintPath>
+    </Reference>
+    <Reference Include="Grasshopper, Version=1.0.0.20, Culture=neutral, PublicKeyToken=dda4f5ec2cd80803, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Library\Grasshopper.dll</HintPath>
+    </Reference>
+    <Reference Include="karamba">
+      <HintPath>..\..\Library\karamba.dll</HintPath>
     </Reference>
     <Reference Include="referenceKaramba, Version=1.14.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\AppData\Roaming\Grasshopper\Libraries\referenceKaramba.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
       <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="RhinoCommon">
+      <HintPath>..\..\Library\RhinoCommon.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -52,27 +62,17 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="RhinoCommon">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files\Rhinoceros 5 (64-bit)\System\RhinoCommon.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="GH_IO">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\AppData\Roaming\McNeel\Rhinoceros\5.0\Plug-ins\Grasshopper (b45a29b1-4343-4035-989e-044e8580d9cf)\0.9.76.0\GH_IO.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CL_Align.cs" />
     <Compile Include="CL_Assembly.cs" />
+    <Compile Include="CL_Element.cs" />
     <Compile Include="CL_Functions.cs" />
     <Compile Include="CL_Loads.cs" />
     <Compile Include="CL_Material.cs" />
     <Compile Include="CL_Material_properties.cs" />
     <Compile Include="MyComponent1.cs" />
     <Compile Include="CL_Node.cs" />
-    <Compile Include="CL_Element.cs" />
     <Compile Include="ProjectProperties.cs" />
     <Compile Include="PTK_1_4_Alignment_Simple.cs" />
     <Compile Include="PTK_1_5_Forces.cs" />
