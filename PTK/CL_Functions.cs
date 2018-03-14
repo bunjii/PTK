@@ -120,45 +120,7 @@ namespace PTK
 
 
         }
-        public static void AsignNeighbour(List<Element> element, List<Node> Node)
-        {
-            for (int e = 0; e < element.Count; e++) //Element index e       
-            {
-                List<Point3d> pointOnCurves = new List<Point3d>();
-                List<double> parameterTemp = new List<double>();
-
-                for (int n = 0; n < Node.Count; n++)    //Node index: n
-                {
-                    double t;
-                    var temp = element[e].Crv.ClosestPoint(Node[n].Pt3d, out t);
-                    Point3d tmppt = element[e].Crv.PointAt(t);
-                    
-
-                    if (tmppt.DistanceTo(Node[n].Pt3d)<.1)
-                    {
-                        pointOnCurves.Add(tmppt);
-                        parameterTemp.Add(t);
-
-
-
-                        element[e].AddNeighbour(Node[n].ID);
-                        Node[n].AddNeighbour(element[e].ID);
-                        /*
-                        if (Node[e].Pt3d.DistanceTo(element[e].Crv.PointAtEnd) < ProjectProperties.tolerances)
-                        {
-                            element[e].N1id = Node[n].ID;
-                        }
-                        if (Node[n].Pt3d.DistanceTo(element[e].Crv.PointAtStart) < ProjectProperties.tolerances)
-                        {
-                            element[e].N0id = Node[n].ID;
-                        }
-                        */
-
-                    }
-
-          
-
-                }
+        
 
                 
 
