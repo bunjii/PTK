@@ -42,13 +42,7 @@
       <HintPath>..\..\Library\Grasshopper.dll</HintPath>
     </Reference>
     <Reference Include="karamba">
-      <HintPath>..\..\Library\karamba.dll</HintPath>
-    </Reference>
-    <Reference Include="referenceKaramba, Version=1.14.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\AppData\Roaming\Grasshopper\Libraries\referenceKaramba.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <HintPath>..\..\Library\karamba.gha</HintPath>
     </Reference>
     <Reference Include="RhinoCommon">
       <HintPath>..\..\Library\RhinoCommon.dll</HintPath>
