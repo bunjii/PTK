@@ -21,7 +21,7 @@ namespace PTK
         public PTK_UTIL_5()
           : base("Disassemble Element (PTK)", "DA_E (PTK)",
               "Disassemble Element (PTK)",
-              "PTK", "5_UTIL")
+              "PTK", "5_UTIL") 
         {
         }
 
@@ -31,7 +31,9 @@ namespace PTK
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("PTK ELEM", "PTK E", "PTK ELEM", GH_ParamAccess.item);
+            pManager.AddTextParameter("tag", "tag", "", GH_ParamAccess.list);
 
+            pManager[1].Optional = true;
         }
 
         /// <summary>
@@ -45,6 +47,7 @@ namespace PTK
             // pManager.AddIntegerParameter("PTK NODE ID 0", "PTK N0 ID", "PTK NODE ID 0", GH_ParamAccess.list);
             // pManager.AddIntegerParameter("PTK NODE ID 1", "PKT N1 ID", "PTK NODE ID 1", GH_ParamAccess.list);
             pManager.AddGenericParameter("PTK SECTION", "PTK S", "PTK SECTION", GH_ParamAccess.list);
+            pManager.AddPlaneParameter("local yz plane", "yz-plane", "returns local yz plane", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -56,28 +59,59 @@ namespace PTK
             #region variables
             GH_ObjectWrapper wrapElem = new GH_ObjectWrapper();
             List<Element> elems = new List<Element>();
+            List<Element> outElems = new List<Element>();
             List<string> elemTags = new List<string>();
+            List<String> inputTags = new List<string>();
             List<Curve> curves = new List<Curve>();
             List<int> elemids = new List<int>();
             List<int> n0ids = new List<int>();
             List<int> n1ids = new List<int>();
-
+            List<Section> secs = new List<Section>();
+            List<Plane> plns = new List<Plane>();
+            
             #endregion
 
             #region input
             if (!DA.GetData(0, ref wrapElem)) { return;  }
             wrapElem.CastTo<List<Element>>(out elems);
+
+            DA.GetDataList(1, inputTags);
             #endregion
 
             #region solve
-            foreach (Element e in elems)
+            // Detect Elements 
+            if (inputTags.Count == 0)
             {
+                outElems = elems;
+            }
+            else
+            {
+                for (int i=0; i<inputTags.Count; i++)
+                {
+                    inputTags[i] = inputTags[i].Trim();
+                }
+
+                foreach (Element e in elems)
+                {
+                    if (inputTags.Contains(e.Tag))
+                    {
+                        outElems.Add(e);
+                    }
+                }
+            }
+
+            foreach (Element e in outElems)
+            {
+
                 curves.Add(e.Crv);
                 elemTags.Add(e.Tag);
                 elemids.Add(e.ID);
                 // e.SubStructural[0].StrctrLine;
                 //n0ids.Add(e.N0id);
                 //n1ids.Add(e.N1id);
+                secs.Add(e.Section);
+                plns.Add(e.localYZPlane);
+
             }
             #endregion
 
@@ -87,6 +121,8 @@ namespace PTK
             DA.SetDataList(2, elemids);
             // DA.SetDataList(3, n0ids);
             // DA.SetDataList(4, n1ids);
+            DA.SetDataList(3, secs);
+            DA.SetDataList(4, plns);
             #endregion
 
         }

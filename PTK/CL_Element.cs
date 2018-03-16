@@ -27,7 +27,7 @@ namespace PTK
         private Plane xyPlane;
         private Plane xzPlane;
         private Plane yzPlane;
-        Interval iz; //From Centricplanse
+        Interval iz; //From Centricplane
         Interval iy;
         Interval ix;
         Rectangle3d crossSectionRectangle;
@@ -55,53 +55,98 @@ namespace PTK
             generateElementGeometry();
             parameterConnectedNodes = new List<double>();
 
-
-
-
-
-
             //n0id = -999: This one is currently missing, but easy to remake in the AsignNeighbour function
             //n1id = -999; This one is currently missing, but easy to remake in the AsignNeighbour function
-
-
-
-
 
         }
         #endregion
 
         #region properties
-        public Curve Crv { get { return crv; } }
-        public int NumberOfStructuralLines { get { return numberOfStructuralLines; } }
+
+        public Curve Crv
+        {
+            get { return crv; }
+        }
+        public int NumberOfStructuralLines
+        {
+            get { return numberOfStructuralLines; }
+        }
         public string Tag
         {
             get { return tag; }
             set { tag = value; }
         }
+        public Plane localYZPlane
+        {
+            get { return yzPlane; }
+        }
+
         //public int N0id { get { return n0id; } set { n0id = value; } } Not working atm. See line 33
         //public int N1id { get { return n1id; } set { n1id = value; } } Not working atm. See line 34
-        public int ID { get { return id; } }
-        public Section Section { get { return section; } set { section = value; } }
-        public Material Material { get { return material; } set { material = value; } }
-        public Forces Force { get { return force; } set { force = value; } }
-        public Align Align { get { return align; } set { align = value; } }
-        public List<SubElementStructural> SubStructural { get { return subStructural; } }
-        public Brep ElementGeometry { get { return elementGeometry; } }
-        public BoundingBox BoundingBox { get { return boundingbox; } }
-        public Point3d PointAtStart { get { return pointAtStart; } }
-        public Point3d PointAtEnd { get { return pointAtEnd; } }
-        public int ConnectedNodes { get { return connectedNodes; } }
-        public List<double> ParameterConnectedNodes { get { return parameterConnectedNodes; } }
-        public List<Node> Nodes { get { return nodes; } }
 
-
-
+        public int ID
+        {
+            get { return id; }
+        }
+        public Section Section
+        {
+            get { return section; }
+            set { section = value; }
+        }
+        public Material Material
+        {
+            get { return material; }
+            set { material = value; }
+        }
+        public Forces Force
+        {
+            get { return force; }
+            set { force = value; }
+        }
+        public Align Align
+        {
+            get { return align; }
+            set { align = value; }
+        }
+        public List<SubElementStructural> SubStructural
+        {
+            get { return subStructural; }
+        }
+        public Brep ElementGeometry
+        {
+            get { return elementGeometry; }
+        }
+        public BoundingBox BoundingBox
+        {
+            get { return boundingbox; }
+        }
+        public Point3d PointAtStart
+        {
+            get { return pointAtStart; }
+        }
+        public Point3d PointAtEnd
+        {
+            get { return pointAtEnd; }
+        }
+        public int ConnectedNodes
+        {
+            get { return connectedNodes; }
+        }
+        public List<double> ParameterConnectedNodes
+        {
+            get { return parameterConnectedNodes; }
+        }
+        public List<Node> Nodes
+        {
+            get { return nodes; }
+        }
 
         #endregion
 
         #region methods
 
-        //This class add neighbouring  points. The the analysis is done in the function called AsignNeighbour in functions.cs
+
+        //This class add neighbouring  points. The analysis is done in the function called AsignNeighbour in functions.cs
         public void AddNeighbour(int _ids)
         {
             ptid.Add(_ids);
