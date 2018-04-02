@@ -50,7 +50,9 @@ namespace PTK
             pointAtStart = _crv.PointAtStart;
             ptid = new List<int>();
             subStructural = new List<SubElementStructural>();
-            initializeCentricPlanes();
+
+            // initializeCentricPlanes();
+            initializeCentricPlanes2();
             generateIntervals();
             generateElementGeometry();
             parameterConnectedNodes = new List<double>();
@@ -203,6 +205,54 @@ namespace PTK
             xzPlane = new Plane(tempPlane.Origin, tempPlane.ZAxis, tempPlane.YAxis);
             xyPlane = new Plane(tempPlane.Origin, tempPlane.ZAxis, tempPlane.XAxis);
 
+        }
+
+        private void initializeCentricPlanes2()
+        {
+            Vector3d localX = crv.TangentAtStart;
+            Vector3d globalZ = Vector3d.ZAxis;
+
+            // determination of local-y direction
+                // case A: where local X is parallel to global Z. (such as most of the columns)
+
+            Vector3d localY = Vector3d.YAxis; // case A default
+
+                // case B: other than case A. (such as beams or inclined columns)
+            if (Vector3d.Multiply(globalZ, localX) != globalZ.Length * localX.Length)
+            {
+                // localY direction is obtained by the cross product of globalZ and localX.
+                localY = Vector3d.CrossProduct(globalZ, localX);
+            }
+            
+            Plane localXY = new Plane(crv.PointAtStart, localX, localY);
+            Plane localYZ = new Plane(localXY.Origin, localY, localXY.ZAxis);
+
+            // rotation
+            if (align.RotationAngle != 0.0)
+            {
+                double rad = align.RotationAngle * Math.PI / 180; // degree to radian
+                Vector3d axis = localYZ.ZAxis;
+                Point3d origin = localYZ.Origin;
+                Transform transR = Transform.Rotation(rad, axis, origin);
+
+                localXY.Transform(transR);
+                localYZ.Transform(transR);
+
+            }
+
+            // translation
+            if (align.OffsetY != 0.0 | align.OffsetZ != 0.0)
+            {
+                Point3d origin = new Point3d (crv.PointAtStart);
+                Transform transL = Transform.Translation((-1.0) * align.OffsetY * localYZ.XAxis + align.OffsetZ * localYZ.YAxis);
+
+                localXY.Transform(transL);
+                localYZ.Transform(transL);
+            }
+                        
+            xyPlane = localXY;
+            yzPlane = localYZ;
+            xzPlane = new Plane(localXY.Origin, localXY.XAxis, localXY.ZAxis);
 
         }
 

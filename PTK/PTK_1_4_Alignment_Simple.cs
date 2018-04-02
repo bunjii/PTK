@@ -26,7 +26,7 @@ namespace PTK
             pManager.AddTextParameter("AlignmentName", "a", "Alignmentname is optional. One or similiar amount as curve", GH_ParamAccess.item,"Untitled");
             pManager.AddVectorParameter("Global Z-vector", "z", "Direction of the global z(height)-vector", GH_ParamAccess.list,new Vector3d(0,0,1));
             pManager.AddNumberParameter("Offset Local y", "local y", "Offset length local y", GH_ParamAccess.list,0);
-            pManager.AddNumberParameter("Offset Local z", "local y", "Offset length local z", GH_ParamAccess.list,0);
+            pManager.AddNumberParameter("Offset Local z", "local z", "Offset length local z", GH_ParamAccess.list,0);
 
             pManager[0].Optional = true;
             pManager[1].Optional = true;
@@ -39,7 +39,7 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Alignment", "A,", "AlignmentData to be added to materializer", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Alignment", "A", "AlignmentData to be added to materializer", GH_ParamAccess.item);
         }
 
         /// <summary>

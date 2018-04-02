@@ -75,6 +75,7 @@
     <Compile Include="MyComponent1.cs" />
     <Compile Include="CL_Node.cs" />
     <Compile Include="ProjectProperties.cs" />
+    <Compile Include="PTK_1_4b_Alignment_Simple.cs" />
     <Compile Include="PTK_1_4_Alignment_Simple.cs" />
     <Compile Include="PTK_1_5_Forces.cs" />
     <Compile Include="CL_Forces.cs" />
@@ -116,6 +117,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <None Include="Resources\icon_truss.png" />
   </ItemGroup>

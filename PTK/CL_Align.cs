@@ -64,6 +64,15 @@ namespace PTK
             offsetY = _offsetY;
         }
 
+        // DDL added on 2nd Apr for testing purpose.
+        public Align(double _offsetY, double _offsetZ, double _rotationAngle)
+        {
+            offsetY = _offsetY;
+            offsetZ = _offsetZ;
+            rotationangle = _rotationAngle;
+
+        }
+
         #endregion
         #region properties
 
@@ -73,7 +82,11 @@ namespace PTK
         public Vector2d Transformation { get { return transformation; } set { transformation = value; } }
         public double OffsetY { get { return offsetY; } set { offsetY = value; } }
         public double OffsetZ { get { return offsetZ; } set { offsetZ = value; } }
-
+        public double RotationAngle
+        {
+            get { return rotationangle; }
+            set { rotationangle = value; }
+        }
 
         #endregion
         #region methods
