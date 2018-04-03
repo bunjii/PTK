@@ -13,14 +13,6 @@ namespace PTK
 {
     public class Functions
     {
-        
-        
-
-        
-
-
-
-
         //Function that removes duplicate points
         public static List<Point3d> RemoveDuplicates(List<Point3d> ptList, double tolerance)
         {
@@ -28,8 +20,6 @@ namespace PTK
             List<Point3d> newPointList = new List<Point3d>();
             for (int i = 0; i < ptList.Count; i++)
             {
-                
-
                 for (int k = i+1; k<ptList.Count;k++)
                 {
                     double distance = ptList[i].DistanceTo(ptList[k]);
@@ -39,17 +29,11 @@ namespace PTK
                         indexes.Add(k);
                     }
                 }
-
-                
-
-                 
-                
-                     
-
             }
 
             indexes.Sort();
             indexes.Reverse();
+
             //removing duplicates
             List<int> singleindex = new List<int>();
             singleindex = indexes.Distinct().ToList();
@@ -78,12 +62,7 @@ namespace PTK
 
                 List<Point3d> pointtemp = new List<Point3d>();
                 List<double> parameterTemp = element[e].ParameterConnectedNodes;
-
-
-
-
                 
-
                 List<Point3d> points = new List<Point3d>();
 
 
@@ -120,6 +99,7 @@ namespace PTK
 
 
         }
+
         public static void AsignNeighbour(List<Element> element, List<Node> Node)
         {
             for (int e = 0; e < element.Count; e++) //Element index e       
@@ -189,8 +169,10 @@ namespace PTK
 
 
 
-        //THis is the main job! And can not be done in parallell. In other words: everything that happens internally for each member happens in materializer. Everything that interacts happens in this functions.
-        //Making nodes, making relations, etc etc
+        // This is the main job! And can not be done in parallel. 
+        // In other words: everything that happens internally for each member happens in materializer. 
+        // Everything that interacts happens in this functions.
+        // Making nodes, making relations, etc etc
         public static void Assemble(List<Element> _elems, out List<Node> _nodes)
         {
             List<Node> nodes = new List<Node>();

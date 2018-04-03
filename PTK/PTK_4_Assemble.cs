@@ -73,15 +73,12 @@ namespace PTK
         {
             Node.ResetIDCount();
             #region variables
-
-
+            
             //Assigning lists off objects
             List<Node> nodes = new List<Node>();
             List<Element> elems = new List<Element>();
             List<Section> rectSecs = new List<Section>();
-            List<Element> tempElemList = new List<Element>();
             
-
             List<GH_ObjectWrapper> wrapElemList = new List<GH_ObjectWrapper>();
             #endregion
 
@@ -91,28 +88,27 @@ namespace PTK
 
             #region solve
 
-            // DDL "unwrap wrapped element class" and "merge multiple element class"
+            // DDL "unwrap wrapped element class" and "merge multiple element class instance lists"
+            
             for (int i = 0; i < wrapElemList.Count; i++)
             {
+                List<Element> tempElemList = new List<Element>();
                 wrapElemList[i].CastTo<List<Element>>(out tempElemList);
                 elems.AddRange(tempElemList);
             }
 
             // DDL "generate Elem ID"  // John: I think the ID-asignment should be done inside the class
-
-
-            //Adding a list of points.
-            //Adding Endpoints
-            //Adding StartPoints
-            //Adding Intersections
-            //Removing duplicates
-            //Asigning to nodes
-            List<Point3d> TempPoint = new List<Point3d>();
-
+            
+            // Adding a list of points.
+            // Adding Endpoints
+            // Adding StartPoints
+            // Adding Intersections
+            // Removing duplicates
+            // Asigning to nodes
+            // List<Point3d> TempPoint = new List<Point3d>();
 
             Functions.Assemble(elems, out nodes);
             Functions.GenerateStructuralLines(elems);
-  
             
             List<Brep> BokseTest = new List<Brep>();
             List<Curve> elementCurves = new List<Curve>();
@@ -120,19 +116,17 @@ namespace PTK
             List<int> ConnectedNodes = new List<int>();
             List<Line> strLine = new List<Line>();
             List<String> SubID = new List<String>();
-        
-
-            //Testing, making breps
+            
+            // Testing, making breps
             for (int i = 0; i < elems.Count; i++)
             {
-
                 BokseTest.Add(elems[i].ElementGeometry);
                 elementCurves.Add(elems[i].Crv);
                 ConnectedNodes.Add(elems[i].ConnectedNodes);
                 elementid.Add(elems[i].ID);
                 string tempID = Convert.ToString(elems[i].ID);
 
-
+                // making SubID output
                 for (int j = 0; j < elems[i].SubStructural.Count; j++)
                 {
                     strLine.Add(elems[i].SubStructural[j].StrctrLine);
@@ -158,10 +152,7 @@ namespace PTK
 
 
             }
-
             
-
-
             #endregion
 
             #region output

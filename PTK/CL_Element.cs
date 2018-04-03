@@ -241,7 +241,7 @@ namespace PTK
             }
 
             // translation
-            if (align.OffsetY != 0.0 | align.OffsetZ != 0.0)
+            if (align.OffsetY != 0.0 || align.OffsetZ != 0.0)
             {
                 Point3d origin = new Point3d (crv.PointAtStart);
                 Transform transL = Transform.Translation((-1.0) * align.OffsetY * localYZ.XAxis + align.OffsetZ * localYZ.YAxis);
