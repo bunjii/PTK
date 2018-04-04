@@ -23,9 +23,12 @@ namespace PTK
         private Forces force;
         private Align align;
         private List<SubElementStructural> subStructural;
-        private int numberOfStructuralLines = 0;
-        private Plane xyPlane;
-        private Plane xzPlane;
+        static int numberOfStructuralLines = 0;
+
+        // below: with one of the xy- yz- zx- planes being fixed, the others can be calculated. so we can go with less field members.
+        // private Plane xyPlane;
+        // private Plane xzPlane;
+
         private Plane yzPlane;
         Interval iz; //From Centricplane
         Interval iy;
@@ -173,7 +176,7 @@ namespace PTK
         }
 
 
-        public void AsignID()
+        public void AssignID()
         {
             id = idCount;
             idCount++;
@@ -202,8 +205,8 @@ namespace PTK
             tempPlane.Translate(tempPlane.XAxis * align.OffsetY);
             tempPlane.Translate(tempPlane.YAxis * align.OffsetZ);
             yzPlane = tempPlane;
-            xzPlane = new Plane(tempPlane.Origin, tempPlane.ZAxis, tempPlane.YAxis);
-            xyPlane = new Plane(tempPlane.Origin, tempPlane.ZAxis, tempPlane.XAxis);
+            // xzPlane = new Plane(tempPlane.Origin, tempPlane.ZAxis, tempPlane.YAxis);
+            // xyPlane = new Plane(tempPlane.Origin, tempPlane.ZAxis, tempPlane.XAxis);
 
         }
 
@@ -250,9 +253,9 @@ namespace PTK
                 localYZ.Transform(transL);
             }
                         
-            xyPlane = localXY;
+            // xyPlane = localXY;
             yzPlane = localYZ;
-            xzPlane = new Plane(localXY.Origin, localXY.XAxis, localXY.ZAxis);
+            // xzPlane = new Plane(localXY.Origin, localXY.XAxis, localXY.ZAxis);
 
         }
 
@@ -301,7 +304,14 @@ namespace PTK
             elementGeometry = tempgeometry;
         }
 
-        //THIS IS THE CLASS THAT STORES DATA OF ALL BEAMELEMENTS. SUB LINES. An element contains one or more sub-elements
+        public static void ResetIDCount()
+        {
+            idCount = 0;
+            numberOfStructuralLines = 0;
+        }
+
+        // THIS IS THE CLASS THAT STORES DATA OF ALL BEAMELEMENTS. SUB LINES. 
+        // An element contains one or more sub-elements.
         public class SubElementStructural
         {
 

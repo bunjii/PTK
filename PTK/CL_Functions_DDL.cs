@@ -9,156 +9,10 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
-
-
 namespace PTK
 {
-    public class Functions
+    class Functions_DDL
     {
-        //Function that removes duplicate points
-        public static List<Point3d> RemoveDuplicates(List<Point3d> ptList, double tolerance)
-        {
-            List<int> indexes = new List<int>();
-            List<Point3d> newPointList = new List<Point3d>();
-            for (int i = 0; i < ptList.Count; i++)
-            {
-                for (int k = i+1; k<ptList.Count;k++)
-                {
-                    double distance = ptList[i].DistanceTo(ptList[k]);
-
-                    if (distance < tolerance)
-                    {
-                        indexes.Add(k);
-                    }
-                }
-            }
-
-            indexes.Sort();
-            indexes.Reverse();
-
-            //removing duplicates
-            List<int> singleindex = new List<int>();
-            singleindex = indexes.Distinct().ToList();
-            
-            if (singleindex.Count > 0)
-            {
-                for (int j = 0; j < singleindex.Count; j++)
-                {
-                    ptList.RemoveAt(singleindex[j]);
-                }
-            }
-
-
-            return ptList;
-        }
-
-        //Function that assign elements its nodes and nodes its elements
-        //inputing elements, nodes and tolerance
-        //Looping through nodes, looping through members. Checking distance to members
-        //if smaller than projectPropertyTolerances, memberID is added to node, nodeID is added to member
-        public static void GenerateStructuralLines(List<Element> element)
-        {
-            for (int e = 0; e < element.Count; e++) //Element index e       
-            {
-                List<Point3d> pointOnCurves = new List<Point3d>();
-
-                List<Point3d> pointtemp = new List<Point3d>();
-                List<double> parameterTemp = element[e].ParameterConnectedNodes;
-                
-                List<Point3d> points = new List<Point3d>();
-
-
-                for (int i = 0; i < element[e].Nodes.Count; i++)
-                {
-                    points.Add(element[e].Nodes[i].Pt3d);
-                    
-                }
-                
-                var key = parameterTemp.ToArray();
-                var elements = points.ToArray();
-                
-                Array.Sort(elements, key);
-
-                List<Point3d> pt = elements.ToList();
-                
-                for (int i = 1; i < pt.Count; i++)
-                {
-                    Line segment = new Line(pt[i - 1], pt[i]);
-                    element[e].AddStrctline(segment);
-                }
-
-            }
-
-        }
-
-        public static void AsignNeighbour(List<Element> element, List<Node> Node)
-        {
-            for (int e = 0; e < element.Count; e++) //Element index e       
-            {
-                List<Point3d> pointOnCurves = new List<Point3d>();
-                List<double> parameterTemp = new List<double>();
-
-                for (int n = 0; n < Node.Count; n++)    //Node index: n
-                {
-                    double t;
-                    var temp = element[e].Crv.ClosestPoint(Node[n].Pt3d, out t);
-                    Point3d tmppt = element[e].Crv.PointAt(t);
-                    
-
-                    if (tmppt.DistanceTo(Node[n].Pt3d)<.1)
-                    {
-                        pointOnCurves.Add(tmppt);
-                        parameterTemp.Add(t);
-
-
-
-                        element[e].AddNeighbour(Node[n].ID);
-                        Node[n].AddNeighbour(element[e].ID);
-                        /*
-                        if (Node[e].Pt3d.DistanceTo(element[e].Crv.PointAtEnd) < ProjectProperties.tolerances)
-                        {
-                            element[e].N1id = Node[n].ID;
-                        }
-                        if (Node[n].Pt3d.DistanceTo(element[e].Crv.PointAtStart) < ProjectProperties.tolerances)
-                        {
-                            element[e].N0id = Node[n].ID;
-                        }
-                        */
-
-                    }
-
-          
-
-                }
-
-                
-
-                var key = parameterTemp.ToArray();
-                var elements = pointOnCurves.ToArray();
-
-
-
-                
-                Array.Sort(elements,key);
-
-
-                List<Point3d> pt =  elements.ToList();
-                List<double> test = key.ToList();
-
-                for (int i = 1; i < pt.Count; i++)
-                {
-                    Line segment = new Line(pt[i - 1], pt[i]);
-                    element[e].AddStrctline(segment);
-
-
-                }
-
-            }
-
-
-        }
-
-        
         // This is the main job! And can not be done in parallel. 
         // In other words: everything that happens internally for each member happens in materializer. 
         // Everything that interacts happens in this functions.
@@ -166,9 +20,9 @@ namespace PTK
         public static void Assemble(List<Element> _elems, out List<Node> _nodes)
         {
             List<Node> nodes = new List<Node>();
-            
-            RTree rTreeElements;
-            rTreeElements = new RTree();
+
+            // RTree for Elements
+            RTree rTreeElements = new RTree();
 
             //Step 1: GIVE ID and Make rTree
             //The following loop will assign ID to each element and add the Rtree
@@ -177,32 +31,39 @@ namespace PTK
                 _elems[i].AssignID();
                 rTreeElements.Insert(_elems[i].BoundingBox, i);
             }
-            
+
+            // RTree for Nodes
             RTree rTreeNodes = new RTree();
 
             //Step 2. Create Adding points
             for (int i = 0; i < _elems.Count; i++)
             {
-                Curve tempCrv= _elems[i].Crv;
-                List<Point3d> testPt = new List<Point3d>();
-                testPt.Add(_elems[i].PointAtStart);
-                testPt.Add(_elems[i].PointAtEnd);
-                List<Double> tempparameter = new List<double>();
-                tempparameter.Add(0.0);
-                tempparameter.Add(1.0);
+                Curve targetCrv = _elems[i].Crv;
+
+                List<Point3d> endPts = new List<Point3d>();
+
+                endPts.Add(_elems[i].PointAtStart);
+                endPts.Add(_elems[i].PointAtEnd);
+
+                List<Double> tempParam = new List<double>();
+
+                tempParam.Add(0.0);
+                tempParam.Add(1.0);
 
                 bool exists = false;
 
-                // The rTreeNodes.Search will perform this function if it finds existing points (boundingboxes)
-                EventHandler<RTreeEventArgs> nodehappening = 
+                // The rTreeNodes.Search will perform this function 
+                // if it finds existing points (boundingboxes)
+                EventHandler<RTreeEventArgs> nodehappening =
                     (object sender, RTreeEventArgs args) => exists = true;
 
                 // Looping through startpoint and endpoint
-                for (int j = 0; j<testPt.Count; j++)
+                // j = 0,1
+                for (int j = 0; j < endPts.Count; j++)
                 {
                     exists = false;
                     // BoundingBox is one single point in this case.
-                    BoundingBox tempBoundingBox = new BoundingBox(testPt[j], testPt[j]);
+                    BoundingBox tempBoundingBox = new BoundingBox(endPts[j], endPts[j]);
 
                     // from SDK document:
                     // " Searches for items in a bounding box.
@@ -211,7 +72,7 @@ namespace PTK
                     // "nodehappening" will be performed, when items are found.
                     // when detected: exists -> true
                     rTreeNodes.Search(tempBoundingBox, nodehappening);
-                    
+
                     // If point does not exists, the point is added to rtreeNodes and a new node is made
                     // The node is also added to the the node list 
                     // Important: The rTreeNodes ID is the ID of the node
@@ -219,23 +80,23 @@ namespace PTK
                     if (!exists)
                     {
                         // Creating new node
-                        Node tempNode = new Node(testPt[j]);     
+                        Node tempNode = new Node(endPts[j]);
 
                         // Adding current element to the node
                         tempNode.AddElements(_elems[i]);
 
                         //adding the parameter for the connected element 
-                        tempNode.ParameterOfConnectedElements.Add(tempparameter[j]);
+                        tempNode.ParameterOfConnectedElements.Add(tempParam[j]);
 
                         //Adding the node to the Global NodeList That will be outed
                         nodes.Add(tempNode);
 
                         //Adding the node to the current element
-                        _elems[i].AddNode(tempNode);       
-                        
+                        _elems[i].AddNode(tempNode);
+
                         // Adding parameter on the element where the connected node is placed. 
                         // (This will be used for dividing into substructural lines
-                        _elems[i].ParameterConnectedNodes.Add(tempparameter[j]);
+                        _elems[i].ParameterConnectedNodes.Add(tempParam[j]);
 
                         //Adding a new boundingbox with the ID of the node
                         rTreeNodes.Insert(tempNode.BoundingBox, tempNode.ID);
@@ -243,11 +104,11 @@ namespace PTK
                     }
 
                 }
-                
+
 
 
                 // The next thing is to check wether the elements are colliding.
-                tempCrv.Domain = new Interval(0, 1);
+                targetCrv.Domain = new Interval(0, 1);
                 List<int> tempCurvesMaybeCollidingID = new List<int>();
 
                 // The elementHappening add the ID of the element to the tempCurvesMaybeColliding. 
@@ -259,20 +120,20 @@ namespace PTK
 
                 // Finding elements that are close to the current element [i]. 
                 // if found: See Elementhappening
-                rTreeElements.Search(new Sphere(tempCrv.PointAt(0.5), tempCrv.GetLength()), elementhappening);
+                rTreeElements.Search(new Sphere(targetCrv.PointAt(0.5), targetCrv.GetLength()), elementhappening);
 
                 for (int j = 0; j < tempCurvesMaybeCollidingID.Count; j++)
                 {
-                    Curve testForCollisionCrv = _elems[tempCurvesMaybeCollidingID[j]].Crv; 
+                    Curve testForCollisionCrv = _elems[tempCurvesMaybeCollidingID[j]].Crv;
 
                     // If both curves are linear, a simple mathematical intersection is performed. 
                     // If not a more CPU-consuming geometrical intersection is performed.
-                    if (tempCrv.IsLinear() && testForCollisionCrv.IsLinear())
+                    if (targetCrv.IsLinear() && testForCollisionCrv.IsLinear())
                     {
                         //Curves to line
-                        Line a = new Line(tempCrv.PointAtEnd, tempCrv.PointAtStart);
-                        
-                        Line b = new Line(testForCollisionCrv.PointAtStart, testForCollisionCrv.PointAtEnd); 
+                        Line a = new Line(targetCrv.PointAtEnd, targetCrv.PointAtStart);
+
+                        Line b = new Line(testForCollisionCrv.PointAtStart, testForCollisionCrv.PointAtEnd);
                         double numba;   //elems[i]
                         double numbb;   //elems[tempCurvesMaybeCollidingID[j]]
 
@@ -331,22 +192,22 @@ namespace PTK
                                     // Adding parameter of the node
                                     // DDL: need checking if "numba" val is already in the _elem[i]'s PCN list. commented on 3rd Apr.
                                     _elems[i].ParameterConnectedNodes.Add(numba);
-                                   
+
                                     // Adding the node to the testelement                                    
                                     _elems[tempCurvesMaybeCollidingID[j]].AddNode(tempNode);
 
                                     // Adding parameter of the node 
                                     _elems[tempCurvesMaybeCollidingID[j]].ParameterConnectedNodes.Add(numbb);
-                                    
+
 
                                     rTreeNodes.Insert(tempNode.BoundingBox, tempNode.ID);
 
                                     if (!exists)
                                     {
                                         // Adding the node to the Global NodeList That will be outed
-                                        nodes.Add(tempNode);                                             
+                                        nodes.Add(tempNode);
                                     }
-                                    
+
                                     // Adding a new boundingbox with the ID of the node
                                 }
                         }
@@ -354,8 +215,8 @@ namespace PTK
                     else
                     {
 
-                        
-                        var events = Rhino.Geometry.Intersect.Intersection.CurveCurve(tempCrv, testForCollisionCrv, ProjectProperties.tolerances, ProjectProperties.tolerances);
+
+                        var events = Rhino.Geometry.Intersect.Intersection.CurveCurve(targetCrv, testForCollisionCrv, ProjectProperties.tolerances, ProjectProperties.tolerances);
                         if (events != null)
                         {
                             for (int k = 0; k < events.Count; k++)
@@ -421,31 +282,6 @@ namespace PTK
             }
             _nodes = nodes;
         }
-
-
-
-
-
-        public static bool CheckInputValidity (List <int> counts)
-        {
-            counts.Sort();
-            bool valid = true;
-            int Max = counts.Last();
-            
-
-            for (int i = 0; i<counts.Count; i++)
-            {
-                if ( counts[i] != 1 || counts[i] != Max)
-                {
-                    valid = false;
-                    break; 
-                }
-              
-            }
-            return valid; 
-            
-        }
-
 
     }
 }

@@ -69,6 +69,7 @@
     <Compile Include="CL_Assembly.cs" />
     <Compile Include="CL_Element.cs" />
     <Compile Include="CL_Functions.cs" />
+    <Compile Include="CL_Functions_DDL.cs" />
     <Compile Include="CL_Loads.cs" />
     <Compile Include="CL_Material.cs" />
     <Compile Include="CL_Material_properties.cs" />

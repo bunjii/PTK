@@ -26,9 +26,9 @@ namespace PTK
         /// new tabs/panels will automatically be created.
         /// </summary>
         public PTK4_Assemble()
-          : base("2", "2",
+          : base("Assemble(PTK)", "A (PTK)",
               "Assemble",
-              "PTK", "2_ASSEMBLE")
+              "PTK", "Assemble")
         {
         }
 
@@ -72,9 +72,11 @@ namespace PTK
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             Node.ResetIDCount();
+            Element.ResetIDCount();
             #region variables
             
-            //Assigning lists off objects
+            // Assigning lists off objects
+            
             List<Node> nodes = new List<Node>();
             List<Element> elems = new List<Element>();
             List<Section> rectSecs = new List<Section>();
@@ -88,8 +90,8 @@ namespace PTK
 
             #region solve
 
-            // DDL "unwrap wrapped element class" and "merge multiple element class instance lists"
-            
+            // DDL "unwrap wrapped element class" and 
+            // "merge multiple element class instance lists"
             for (int i = 0; i < wrapElemList.Count; i++)
             {
                 List<Element> tempElemList = new List<Element>();
@@ -97,17 +99,25 @@ namespace PTK
                 elems.AddRange(tempElemList);
             }
 
-            // DDL "generate Elem ID"  // John: I think the ID-asignment should be done inside the class
-            
+            // DDL "generate Elem ID"  
+            // -> John: I think the ID-assignment should be done inside the class
+            // -> Bunji: OK!
+
             // Adding a list of points.
             // Adding Endpoints
             // Adding StartPoints
             // Adding Intersections
             // Removing duplicates
             // Asigning to nodes
-            // List<Point3d> TempPoint = new List<Point3d>();
 
+
+            // main functions #1
+            // Functions.Assemble returns "nodes"
+            // Functions_DDL.Assemble(elems, out nodes);
             Functions.Assemble(elems, out nodes);
+
+            // main functions #2
+            // Functions.GenerateStructuralLines returns nodes
             Functions.GenerateStructuralLines(elems);
             
             List<Brep> BokseTest = new List<Brep>();
@@ -116,7 +126,7 @@ namespace PTK
             List<int> ConnectedNodes = new List<int>();
             List<Line> strLine = new List<Line>();
             List<String> SubID = new List<String>();
-            
+
             // Testing, making breps
             for (int i = 0; i < elems.Count; i++)
             {

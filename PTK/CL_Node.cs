@@ -37,22 +37,40 @@ namespace PTK
             nodePlane = new Plane(pt, new Vector3d(0, 0, 1));
             idCount++;
             elemIds = new List<int>();
-            elems = new List<Element>();
+            
             parameterOfConnectedElements = new List<double>();
             boundingbox = new BoundingBox(pt, pt);
+
+            #region obsolete
+            elems = new List<Element>();
+            #endregion
+
         }
         #endregion
 
         #region properties
-        public Point3d Pt3d { get { return pt3d; } }
-        public BoundingBox BoundingBox { get { return boundingbox; } }
-        public List<int> ElemIds { get { return elemIds; } }
+        public Point3d Pt3d
+        {
+            get { return pt3d; }
+        }
+        public BoundingBox BoundingBox
+        {
+            get { return boundingbox; }
+        }
+        public List<int> ElemIds
+        {
+            get { return elemIds; }
+        }
         public double X { get { return x; } }
         public double Y { get { return y; } }
         public double Z { get { return z; } }
-        public int ID { get { return id; } }  //removed the possability to set an ID
+        public int ID { get { return id; } }  //removed the possibility to set an ID
         public int ConnectedElements { get { return connectedElems; } }  //removed the possability to set an ID
-        public List<double> ParameterOfConnectedElements { get { return parameterOfConnectedElements; } }
+
+        public List<double> ParameterOfConnectedElements
+        {
+            get { return parameterOfConnectedElements; }
+        }
 
 
         #endregion
@@ -71,6 +89,7 @@ namespace PTK
             elemIds.Add(ids);
         }
 
+        #region obsolete
         public void AddElements(Element _element)
         {
             bool add = true;
@@ -84,12 +103,16 @@ namespace PTK
             {
                 elems.Add(_element);
             }
-
-
-
-
+            
             elems.Add(_element);
         }
+        #endregion
+
+        public void AddElementID(int _elemID)
+        {
+
+        }
+
 
 
         //are the next functions in use? Probably usefull later when extracting the geometry. 

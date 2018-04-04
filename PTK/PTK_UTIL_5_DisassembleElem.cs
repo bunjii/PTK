@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
+using Grasshopper;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
 
 using Rhino.Geometry;
@@ -48,6 +50,8 @@ namespace PTK
             // pManager.AddIntegerParameter("PTK NODE ID 1", "PKT N1 ID", "PTK NODE ID 1", GH_ParamAccess.list);
             pManager.AddGenericParameter("PTK SECTION", "PTK S", "PTK SECTION", GH_ParamAccess.list);
             pManager.AddPlaneParameter("local yz plane", "yz-plane", "returns local yz plane", GH_ParamAccess.list);
+            pManager.AddNumberParameter("ParameterConnectedNodes", "PCN", "", GH_ParamAccess.tree);
+            pManager.AddBoxParameter("BoundingBox", "BB", "", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -68,7 +72,9 @@ namespace PTK
             List<int> n1ids = new List<int>();
             List<Section> secs = new List<Section>();
             List<Plane> plns = new List<Plane>();
-            
+
+            DataTree<double> pcntr = new DataTree<double>();
+            List<BoundingBox> bbox = new List<BoundingBox>();
             #endregion
 
             #region input
@@ -100,17 +106,27 @@ namespace PTK
                 }
             }
 
-            foreach (Element e in outElems)
+            // foreach (Element e in outElems)
+            for (int i=0; i<outElems.Count;i++)
             {
 
-                curves.Add(e.Crv);
-                elemTags.Add(e.Tag);
-                elemids.Add(e.ID);
+                curves.Add(outElems[i].Crv);
+                elemTags.Add(outElems[i].Tag);
+                elemids.Add(outElems[i].ID);
                 // e.SubStructural[0].StrctrLine;
                 //n0ids.Add(e.N0id);
                 //n1ids.Add(e.N1id);
-                secs.Add(e.Section);
-                plns.Add(e.localYZPlane);
+                secs.Add(outElems[i].Section);
+                plns.Add(outElems[i].localYZPlane);
+
+                GH_Path pth = new GH_Path(i);
+                for (int j = 0; j < outElems[i].ParameterConnectedNodes.Count; j++)
+                {
+                    pcntr.Add(outElems[i].ParameterConnectedNodes[j], pth);
+                }
+
+                bbox.Add(outElems[i].BoundingBox);
+                
 
             }
             #endregion
@@ -123,6 +139,8 @@ namespace PTK
             // DA.SetDataList(4, n1ids);
             DA.SetDataList(3, secs);
             DA.SetDataList(4, plns);
+            DA.SetDataTree(5, pcntr);
+            DA.SetDataList(6, bbox);
             #endregion
 
         }
