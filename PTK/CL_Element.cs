@@ -1,4 +1,6 @@
 ﻿using System;
+
+using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using Rhino.Geometry;
 using System.Linq;
@@ -13,6 +15,7 @@ namespace PTK
         private string tag = "N/A";
         private List<int> ptid;
         private List<Node> nodes;
+        private List<int> nodeIds;
         private List<double> parameterConnectedNodes;
         private int connectedNodes = 0;
         private Point3d pointAtStart;
@@ -44,6 +47,7 @@ namespace PTK
         public Element(Curve _crv, string _tag, Align _align, Section _section, Material _material)
         {
             nodes = new List<Node>();
+            nodeIds = new List<int>();
             crv = _crv;
             tag = _tag;
             align = _align;
@@ -67,6 +71,10 @@ namespace PTK
         #endregion
 
         #region properties
+        public ReadOnlyCollection<int> NodeIds
+        {
+            get { return nodeIds.AsReadOnly(); }
+        }
 
         public Curve Crv
         {
@@ -137,10 +145,14 @@ namespace PTK
         {
             get { return connectedNodes; }
         }
+
+        // the one below should be ReadOnlyCollection
         public List<double> ParameterConnectedNodes
         {
             get { return parameterConnectedNodes; }
         }
+
+
         public List<Node> Nodes
         {
             get { return nodes; }
@@ -149,9 +161,13 @@ namespace PTK
         #endregion
 
         #region methods
+        public void AddNodeId(int _nid)
+        {
+            // if ()
+            nodeIds.Add(_nid);
+        }
 
-
-        //This class add neighbouring  points. The analysis is done in the function called AsignNeighbour in functions.cs
+        //This class add neighbouring points. The analysis is done in the function called AsignNeighbour in functions.cs
         public void AddNeighbour(int _ids)
         {
             ptid.Add(_ids);
@@ -171,8 +187,11 @@ namespace PTK
                 nodes.Add(_node);
                 connectedNodes++;
             }
+        }
 
-            
+        public void AddParameterConnectedNodes(double _param)
+        {
+            parameterConnectedNodes.Add(_param);
         }
 
 
@@ -192,6 +211,7 @@ namespace PTK
     
         }
 
+        #region obsolete
         //Making CentricPlanes using offset/rotation information from the align-component
         private void initializeCentricPlanes()
         {
@@ -209,6 +229,7 @@ namespace PTK
             // xyPlane = new Plane(tempPlane.Origin, tempPlane.ZAxis, tempPlane.XAxis);
 
         }
+        #endregion
 
         private void initializeCentricPlanes2()
         {

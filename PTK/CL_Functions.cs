@@ -110,8 +110,6 @@ namespace PTK
                         pointOnCurves.Add(tmppt);
                         parameterTemp.Add(t);
 
-
-
                         element[e].AddNeighbour(Node[n].ID);
                         Node[n].AddNeighbour(element[e].ID);
                         /*
@@ -124,24 +122,13 @@ namespace PTK
                             element[e].N0id = Node[n].ID;
                         }
                         */
-
                     }
-
-          
-
                 }
-
-                
-
                 var key = parameterTemp.ToArray();
                 var elements = pointOnCurves.ToArray();
-
-
-
                 
                 Array.Sort(elements,key);
-
-
+                
                 List<Point3d> pt =  elements.ToList();
                 List<double> test = key.ToList();
 
@@ -149,13 +136,9 @@ namespace PTK
                 {
                     Line segment = new Line(pt[i - 1], pt[i]);
                     element[e].AddStrctline(segment);
-
-
+                    
                 }
-
             }
-
-
         }
 
         
@@ -244,8 +227,6 @@ namespace PTK
 
                 }
                 
-
-
                 // The next thing is to check wether the elements are colliding.
                 tempCrv.Domain = new Interval(0, 1);
                 List<int> tempCurvesMaybeCollidingID = new List<int>();

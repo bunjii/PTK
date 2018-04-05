@@ -78,7 +78,9 @@ namespace PTK
             // Assigning lists off objects
             
             List<Node> nodes = new List<Node>();
+            RTree rTreeNode = new RTree();
             List<Element> elems = new List<Element>();
+            RTree rTreeElem = new RTree();
             List<Section> rectSecs = new List<Section>();
             
             List<GH_ObjectWrapper> wrapElemList = new List<GH_ObjectWrapper>();
@@ -113,8 +115,12 @@ namespace PTK
 
             // main functions #1
             // Functions.Assemble returns "nodes"
-            // Functions_DDL.Assemble(elems, out nodes);
-            Functions.Assemble(elems, out nodes);
+            Functions_DDL.Assemble(ref elems, ref nodes, ref rTreeElem, ref rTreeNode);
+            // ### Functions.Assemble(elems, out nodes);
+
+            // main functions #1b
+            // Functions.Intersect returns node
+            Functions_DDL.Intersect(ref elems, ref nodes, ref rTreeElem, ref rTreeNode);
 
             // main functions #2
             // Functions.GenerateStructuralLines returns nodes

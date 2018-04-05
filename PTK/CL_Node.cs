@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
@@ -57,26 +58,41 @@ namespace PTK
         {
             get { return boundingbox; }
         }
-        public List<int> ElemIds
+
+        public ReadOnlyCollection<int> ElemIds
         {
-            get { return elemIds; }
+            get { return elemIds.AsReadOnly(); }
+
         }
-        public double X { get { return x; } }
-        public double Y { get { return y; } }
-        public double Z { get { return z; } }
-        public int ID { get { return id; } }  //removed the possibility to set an ID
-        public int ConnectedElements { get { return connectedElems; } }  //removed the possability to set an ID
 
         public List<double> ParameterOfConnectedElements
         {
             get { return parameterOfConnectedElements; }
         }
 
+        /* in the future:
+         
+        public ReadOnlyCollection<double> ParameterOfConnectedElements
+        {
+            get { return parameterOfConnectedElements.AsReadOnly(); }
+        }
+             
+        */
+
+        public double X { get { return x; } }
+        public double Y { get { return y; } }
+        public double Z { get { return z; } }
+        public int ID { get { return id; } }  //removed the possibility to set an ID
+        public int ConnectedElements { get { return connectedElems; } }  //removed the possibility to set an ID
 
         #endregion
 
         #region methods
 
+        public void AddElemId(int _id)
+        {
+            elemIds.Add(_id);
+        }
 
         //Adding neighbours. see the function called AssignNeighbours in function.cs. 
         public void AddNeighbour(int ids)
@@ -88,6 +104,12 @@ namespace PTK
             temp = ids;
             elemIds.Add(ids);
         }
+
+        public void AddParameterOfConnectedElements(double _param)
+        {
+            parameterOfConnectedElements.Add(_param);
+        }
+
 
         #region obsolete
         public void AddElements(Element _element)
@@ -108,14 +130,8 @@ namespace PTK
         }
         #endregion
 
-        public void AddElementID(int _elemID)
-        {
-
-        }
-
-
-
-        //are the next functions in use? Probably usefull later when extracting the geometry. 
+        // Are the next functions in use? 
+        // Probably useful later when extracting the geometry. 
         public bool Equals(Node other)
         {
             if (x == other.X && y == other.Y && z == other.Z)
@@ -127,8 +143,6 @@ namespace PTK
                 return false;
             }
         }
-
-        
 
         public static int FindNodeId(List<Node> _nodes, Point3d _pt)
         {
