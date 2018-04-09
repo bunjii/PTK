@@ -26,7 +26,7 @@ namespace PTK
         /// new tabs/panels will automatically be created.
         /// </summary>
         public PTK4_Assemble()
-          : base("Assemble(PTK)", "A (PTK)",
+          : base("Assemble", "A (PTK)",
               "Assemble",
               "PTK", "Assemble")
         {
@@ -78,9 +78,9 @@ namespace PTK
             // Assigning lists off objects
             
             List<Node> nodes = new List<Node>();
-            RTree rTreeNode = new RTree();
+            RTree rTreeNodes = new RTree();
             List<Element> elems = new List<Element>();
-            RTree rTreeElem = new RTree();
+            RTree rTreeElems = new RTree();
             List<Section> rectSecs = new List<Section>();
             
             List<GH_ObjectWrapper> wrapElemList = new List<GH_ObjectWrapper>();
@@ -100,11 +100,7 @@ namespace PTK
                 wrapElemList[i].CastTo<List<Element>>(out tempElemList);
                 elems.AddRange(tempElemList);
             }
-
-            // DDL "generate Elem ID"  
-            // -> John: I think the ID-assignment should be done inside the class
-            // -> Bunji: OK!
-
+            
             // Adding a list of points.
             // Adding Endpoints
             // Adding StartPoints
@@ -115,12 +111,12 @@ namespace PTK
 
             // main functions #1
             // Functions.Assemble returns "nodes"
-            Functions_DDL.Assemble(ref elems, ref nodes, ref rTreeElem, ref rTreeNode);
+            Functions_DDL.Assemble(ref elems, ref nodes, ref rTreeElems, ref rTreeNodes);
             // ### Functions.Assemble(elems, out nodes);
 
             // main functions #1b
             // Functions.Intersect returns node
-            Functions_DDL.Intersect(ref elems, ref nodes, ref rTreeElem, ref rTreeNode);
+            Functions_DDL.Intersect(ref elems, ref nodes, ref rTreeElems, ref rTreeNodes);
 
             // main functions #2
             // Functions.GenerateStructuralLines returns nodes
