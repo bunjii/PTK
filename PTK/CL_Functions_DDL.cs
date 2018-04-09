@@ -126,34 +126,50 @@ namespace PTK
                     Line target = CurveToLine(targetCrv);
                     Line clash = CurveToLine(clashingCrv);
 
-                    // case 1: curves are linear
-                    // LLXIntersect
+                    // case 1: curves are linear -> LLXIntersect
                     double paramA, paramB;
-
-                    // ### need to add islinear
-                    if (Rhino.Geometry.Intersect.Intersection.LineLine
+                    int nId = new int();
+                    Point3d intersectPt = new Point3d();
+                    // line-line intersect operation.
+                    // be aware of & and && here.
+                    if (targetCrv.IsLinear() && clashingCrv.IsLinear() && Rhino.Geometry.Intersect.Intersection.LineLine
                         (target, clash, out paramA, out paramB, ProjectProperties.tolerances, true)
-                        && (ProjectProperties.tolerances < paramA && paramA < 1 - ProjectProperties.tolerances))
+                        & (ProjectProperties.tolerances < paramA && paramA < 1 - ProjectProperties.tolerances))
                     {
-                        Point3d intersectPt = target.PointAt(paramA);
-                        
+                        intersectPt = target.PointAt(paramA);
+
                         // check if the node exists. 
                         // if yes it returns nId, else it makes node, register to rtree, then it returns nid.
-                        int nId = new int(); 
+                        
                         nId = DetectExistingNode(ref _nodes, ref _rTreeNodes, intersectPt);
                         
-                        // register elemId & its parameter to node
-                        RegisterElemToNode(Node.FindNodeById(_nodes,nId), _elems[i], paramA);
-
-                        // register nodeId & parameter at node to elem
-                        RegisterNodeToElem(ref _elems, Node.FindNodeById(_nodes, nId), i, paramA);
-                        
                     }
-                    // else: at least one of the curves are not linear
-                    // CCXIntersect
-                    else {
+                    // else: at least one of the curves are not linear -> curve-curve intersect
+                    else 
+                    {
+                        var intersect = Rhino.Geometry.Intersect.Intersection.CurveCurve
+                        (targetCrv, clashingCrv, ProjectProperties.tolerances, ProjectProperties.tolerances);
+
+                        // in case there's no intersect, go on with the next loop.
+                        // in case intersect happens at either end of targetCrv, go on with the next loop. 
+                        if (intersect == null || intersect.Count == 0 || 
+                            intersect[0].ParameterA == 0 || intersect[0].ParameterA == 1) continue;
+
+                        // check if the node exists. 
+                        // if yes it returns nId, else it makes node, register to rtree, then it returns nid.
+                        intersectPt = intersect[0].PointA;
+                        paramA = intersect[0].ParameterA;
+
+                        nId = DetectExistingNode(ref _nodes, ref _rTreeNodes, intersectPt);
 
                     }
+
+                    // register elemId & its parameter to node
+                    RegisterElemToNode(Node.FindNodeById(_nodes, nId), _elems[i], paramA);
+
+                    // register nodeId & parameter at node to elem
+                    RegisterNodeToElem(ref _elems, Node.FindNodeById(_nodes, nId), i, paramA);
+
 
                 }
 
@@ -196,7 +212,7 @@ namespace PTK
                 };
 
             // BoundingBox _spotBBox = new BoundingBox(_samplePt, _samplePt); 
-            // Above didn't work out, needing of considering tolerance. comment by DDL 9th Apr.
+            // Above code didn't work out, needing of considering tolerance for BBox. comment by DDL 9th Apr.
             double tol = ProjectProperties.tolerances; 
             BoundingBox _spotBBox = new BoundingBox
                 (_sPt.X-tol,_sPt.Y-tol, _sPt.Z-tol,_sPt.X+tol,_sPt.Y+tol,_sPt.Z+tol);
@@ -206,7 +222,6 @@ namespace PTK
             
             if (!_nodeExists)
             {
-                // MessageBox.Show(_rTreeNodes.Count.ToString() + " : " + _sPt.ToString());
                 Node _newNode = new Node(_sPt);
                 _nodes.Add(_newNode);
                 // register the node to _rTreeNodes

@@ -75,7 +75,7 @@ namespace PTK
             Element.ResetIDCount();
             #region variables
             
-            // Assigning lists off objects
+            // Assigning lists of objects
             
             List<Node> nodes = new List<Node>();
             RTree rTreeNodes = new RTree();
@@ -112,10 +112,9 @@ namespace PTK
             // main functions #1
             // Functions.Assemble returns "nodes"
             Functions_DDL.Assemble(ref elems, ref nodes, ref rTreeElems, ref rTreeNodes);
-            // ### Functions.Assemble(elems, out nodes);
-
+            
             // main functions #1b
-            // Functions.Intersect returns node
+            // Functions.Intersect returns nodes
             Functions_DDL.Intersect(ref elems, ref nodes, ref rTreeElems, ref rTreeNodes);
 
             // main functions #2
