@@ -119,7 +119,7 @@ namespace PTK
 
             // main functions #2
             // Functions.GenerateStructuralLines returns nodes
-            Functions.GenerateStructuralLines(elems);
+            Functions_DDL.GenerateStructuralLines(ref elems, nodes);
 
 
             

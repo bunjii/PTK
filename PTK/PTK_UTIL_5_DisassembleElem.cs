@@ -50,6 +50,7 @@ namespace PTK
             // pManager.AddIntegerParameter("PTK NODE ID 1", "PKT N1 ID", "PTK NODE ID 1", GH_ParamAccess.list);
             pManager.AddGenericParameter("PTK SECTION", "PTK S", "PTK SECTION", GH_ParamAccess.list);
             pManager.AddPlaneParameter("local yz plane", "yz-plane", "returns local yz plane", GH_ParamAccess.list);
+            pManager.AddIntegerParameter("Node ID", "NID", "", GH_ParamAccess.tree);
             pManager.AddNumberParameter("ParameterConnectedNodes", "PCN", "", GH_ParamAccess.tree);
             pManager.AddBoxParameter("BoundingBox", "BB", "", GH_ParamAccess.list);
         }
@@ -75,6 +76,8 @@ namespace PTK
 
             DataTree<double> pcntr = new DataTree<double>();
             List<BoundingBox> bbox = new List<BoundingBox>();
+
+            DataTree<int> nidtr = new DataTree<int>();
             
             #endregion
 
@@ -124,6 +127,7 @@ namespace PTK
                 for (int j = 0; j < outElems[i].ParameterConnectedNodes.Count; j++)
                 {
                     pcntr.Add(outElems[i].ParameterConnectedNodes[j], pth);
+                    nidtr.Add(outElems[i].NodeIds[j], pth);
                 }
 
                 bbox.Add(outElems[i].BoundingBox);
@@ -140,8 +144,9 @@ namespace PTK
             // DA.SetDataList(4, n1ids);
             DA.SetDataList(3, secs);
             DA.SetDataList(4, plns);
-            DA.SetDataTree(5, pcntr);
-            DA.SetDataList(6, bbox);
+            DA.SetDataTree(5, nidtr);
+            DA.SetDataTree(6, pcntr);
+            DA.SetDataList(7, bbox);
             #endregion
 
         }

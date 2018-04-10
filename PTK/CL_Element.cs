@@ -58,7 +58,7 @@ namespace PTK
             ptid = new List<int>();
             subStructural = new List<SubElementStructural>();
 
-            // initializeCentricPlanes();
+            // initializeCentricPlanes(); // replaced by DDL on 2nd April
             initializeCentricPlanes2();
             generateIntervals();
             generateElementGeometry();
@@ -161,9 +161,19 @@ namespace PTK
         #endregion
 
         #region methods
+        /*
+        public static void SortNodeIdsAndParams(ref List<Element> _elems)
+        {
+            foreach (Element _e in _elems)
+            {
+                _e.nodeIds.Sort();
+                _e.parameterConnectedNodes.Sort();
+            }
+        }
+        */
+
         public void AddNodeId(int _nid)
         {
-            // if ()
             nodeIds.Add(_nid);
         }
 
@@ -274,11 +284,10 @@ namespace PTK
                 localYZ.Transform(transL);
             }
                         
-            // xyPlane = localXY;
             yzPlane = localYZ;
-            // xzPlane = new Plane(localXY.Origin, localXY.XAxis, localXY.ZAxis);
-
         }
+
+
 
 
         //Generating extrusion/SweepIntervals
@@ -330,6 +339,7 @@ namespace PTK
             idCount = 0;
             numberOfStructuralLines = 0;
         }
+        #endregion
 
         // THIS IS THE CLASS THAT STORES DATA OF ALL BEAMELEMENTS. SUB LINES. 
         // An element contains one or more sub-elements.
@@ -350,38 +360,33 @@ namespace PTK
             private double my;
             private double mz;
             #endregion
+
             #region constructors
-            
             public SubElementStructural(Line _subLine, int _id)
             {
-                
                 strctrlLine = _subLine;
                 strctrlLineID= _id;
                 subStartPoint = _subLine.From;
                 subEndPoint = _subLine.To;
-                
-                
-                
             }
 
-
-
             #endregion
+
             #region properties
             public Line StrctrLine { get { return strctrlLine; } }
             public int StrctrlLineID { get { return strctrlLineID; } }
             
-
             #endregion
+            
             #region methods
+            public static void ResetSubStrIdCnt()
+            {
+                numberOfStructuralLines = 0;
+            }
             #endregion
-
-
+            
         }
         
-
-            
     }
     
-    }
-#endregion
+}

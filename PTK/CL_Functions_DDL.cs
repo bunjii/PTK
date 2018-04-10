@@ -13,7 +13,6 @@ namespace PTK
 {
     class Functions_DDL
     {
-
         // This is the main job! And can not be done in parallel. 
         // In other words: everything that happens internally for each member happens in materializer. 
         // Everything that interacts happens in this functions.
@@ -33,7 +32,7 @@ namespace PTK
                 List<Point3d> endPts =
                     new List<Point3d>() { _elems[i].PointAtStart, _elems[i].PointAtEnd };
                 
-                for (int j = 0; j < 2; j++) // j<2 as spt & ept
+                for (int j = 0; j < 2; j++) // j < 2 as spt & ept
                 {
                     // check if the node exists. 
                     // if yes it returns nId, else it makes node, register to rtree, then it returns nid.
@@ -80,6 +79,7 @@ namespace PTK
                     double paramA, paramB;
                     int nId = new int();
                     Point3d intersectPt = new Point3d();
+                    bool registerFlag = false;
                     // line-line intersect operation.
                     // be aware of & and && here.
                     if (targetCrv.IsLinear() && clashingCrv.IsLinear() && Rhino.Geometry.Intersect.Intersection.LineLine
@@ -93,11 +93,7 @@ namespace PTK
                         
                         nId = DetectExistingNode(ref _nodes, ref _rTreeNodes, intersectPt);
 
-                        // register elemId & its parameter to node
-                        RegisterElemToNode(Node.FindNodeById(_nodes, nId), _elems[i], paramA);
-
-                        // register nodeId & parameter at node to elem
-                        RegisterNodeToElem(ref _elems, Node.FindNodeById(_nodes, nId), i, paramA);
+                        registerFlag = true;
 
                     }
                     // else: at least one of the curves are not linear -> curve-curve intersect
@@ -118,19 +114,51 @@ namespace PTK
 
                         nId = DetectExistingNode(ref _nodes, ref _rTreeNodes, intersectPt);
 
-                        // register elemId & its parameter to node
-                        RegisterElemToNode(Node.FindNodeById(_nodes, nId), _elems[i], paramA);
-
-                        // register nodeId & parameter at node to elem
-                        RegisterNodeToElem(ref _elems, Node.FindNodeById(_nodes, nId), i, paramA);
+                        registerFlag = true;
 
                     }
-                    
+
+                    if (registerFlag == false) continue;
+
+                    // register elemId & its parameter to node
+                    RegisterElemToNode(Node.FindNodeById(_nodes, nId), _elems[i], paramA);
+
+                    // register nodeId & parameter at node to elem
+                    RegisterNodeToElem(ref _elems, Node.FindNodeById(_nodes, nId), i, paramA);
                 }
 
             }
         }
 
+        public static void GenerateStructuralLines(ref List<Element> _elems, List<Node> _nodes)
+        {
+            for (int i = 0; i < _elems.Count; i++) //Element index i       
+            {
+                List<Point3d> pts = new List<Point3d>();
+                List<double> paramList = _elems[i].ParameterConnectedNodes;
+                
+                for (int j = 0; j < _elems[i].NodeIds.Count; j++)
+                {
+                    pts.Add(Node.FindNodeById(_nodes, _elems[i].NodeIds[j]).Pt3d);
+                }
+                
+                var key = paramList.ToArray();
+                var ptsArray = pts.ToArray();
+                
+                Array.Sort(key,ptsArray);
+
+                // reset substructural id count
+                Element.SubElementStructural.ResetSubStrIdCnt();
+                for (int j = 1; j < ptsArray.Count(); j++)
+                {
+                    Line segment = new Line(ptsArray[j - 1], ptsArray[j]);
+                    // Element.AddStrctline gives subid as well as segment.
+                    _elems[i].AddStrctline(segment);
+                }
+
+            }
+
+        }
 
         private static void RegisterElemToNode(Node _node, Element _elem, double _param)
         {
@@ -140,8 +168,12 @@ namespace PTK
 
         private static void RegisterNodeToElem(ref List<Element> _elems, Node _node, int _i, double _param)
         {
-            _elems[_i].AddNodeId(_node.ID);
-            _elems[_i].AddParameterConnectedNodes(_param);
+            // check if the node id is already registered.
+            if (_elems[_i].NodeIds.Contains(_node.ID) == false)
+            {
+                _elems[_i].AddNodeId(_node.ID);
+                _elems[_i].AddParameterConnectedNodes(_param);
+            }
         }
         
         private static Line CurveToLine(Curve _crv)
