@@ -120,6 +120,8 @@ namespace PTK
             // main functions #2
             // Functions.GenerateStructuralLines returns nodes
             Functions.GenerateStructuralLines(elems);
+
+
             
             List<Brep> BokseTest = new List<Brep>();
             List<Curve> elementCurves = new List<Curve>();

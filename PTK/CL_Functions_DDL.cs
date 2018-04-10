@@ -14,56 +14,6 @@ namespace PTK
     class Functions_DDL
     {
 
-        public static void AssignNeighbour(List<Element> _elems, List<Node> _nodes)
-        {
-            for (int i = 0; i < _elems.Count; i++) //Element index e       
-            {
-                List<Point3d> pointOnCurves = new List<Point3d>();
-                List<double> parameterTemp = new List<double>();
-
-                for (int j = 0; j < _nodes.Count; j++)    //Node index: n
-                {
-                    double t;
-                    var temp = _elems[i].Crv.ClosestPoint(_nodes[j].Pt3d, out t);
-                    Point3d tmpPt = _elems[i].Crv.PointAt(t);
-
-
-                    if (tmpPt.DistanceTo(_nodes[j].Pt3d) < .1)
-                    {
-                        pointOnCurves.Add(tmpPt);
-                        parameterTemp.Add(t);
-
-                        _elems[i].AddNeighbour(_nodes[j].ID);
-                        _nodes[j].AddNeighbour(_elems[i].ID);
-                        /*
-                        if (Node[e].Pt3d.DistanceTo(element[e].Crv.PointAtEnd) < ProjectProperties.tolerances)
-                        {
-                            element[e].N1id = Node[n].ID;
-                        }
-                        if (Node[n].Pt3d.DistanceTo(element[e].Crv.PointAtStart) < ProjectProperties.tolerances)
-                        {
-                            element[e].N0id = Node[n].ID;
-                        }
-                        */
-                    }
-                }
-                var key = parameterTemp.ToArray();
-                var elements = pointOnCurves.ToArray();
-
-                Array.Sort(elements, key);
-
-                List<Point3d> pt = elements.ToList();
-                List<double> test = key.ToList();
-
-                for (int j = 1; j < pt.Count; j++)
-                {
-                    Line segment = new Line(pt[j - 1], pt[j]);
-                    _elems[i].AddStrctline(segment);
-
-                }
-            }
-        }
-
         // This is the main job! And can not be done in parallel. 
         // In other words: everything that happens internally for each member happens in materializer. 
         // Everything that interacts happens in this functions.
@@ -142,7 +92,13 @@ namespace PTK
                         // if yes it returns nId, else it makes node, register to rtree, then it returns nid.
                         
                         nId = DetectExistingNode(ref _nodes, ref _rTreeNodes, intersectPt);
-                        
+
+                        // register elemId & its parameter to node
+                        RegisterElemToNode(Node.FindNodeById(_nodes, nId), _elems[i], paramA);
+
+                        // register nodeId & parameter at node to elem
+                        RegisterNodeToElem(ref _elems, Node.FindNodeById(_nodes, nId), i, paramA);
+
                     }
                     // else: at least one of the curves are not linear -> curve-curve intersect
                     else 
@@ -162,15 +118,14 @@ namespace PTK
 
                         nId = DetectExistingNode(ref _nodes, ref _rTreeNodes, intersectPt);
 
+                        // register elemId & its parameter to node
+                        RegisterElemToNode(Node.FindNodeById(_nodes, nId), _elems[i], paramA);
+
+                        // register nodeId & parameter at node to elem
+                        RegisterNodeToElem(ref _elems, Node.FindNodeById(_nodes, nId), i, paramA);
+
                     }
-
-                    // register elemId & its parameter to node
-                    RegisterElemToNode(Node.FindNodeById(_nodes, nId), _elems[i], paramA);
-
-                    // register nodeId & parameter at node to elem
-                    RegisterNodeToElem(ref _elems, Node.FindNodeById(_nodes, nId), i, paramA);
-
-
+                    
                 }
 
             }

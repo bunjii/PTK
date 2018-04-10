@@ -90,7 +90,7 @@ namespace PTK
             }
 
         }
-
+        /*
         public static void AsignNeighbour(List<Element> element, List<Node> Node)
         {
             for (int e = 0; e < element.Count; e++) //Element index e       
@@ -112,16 +112,16 @@ namespace PTK
 
                         element[e].AddNeighbour(Node[n].ID);
                         Node[n].AddNeighbour(element[e].ID);
-                        /*
-                        if (Node[e].Pt3d.DistanceTo(element[e].Crv.PointAtEnd) < ProjectProperties.tolerances)
-                        {
-                            element[e].N1id = Node[n].ID;
-                        }
-                        if (Node[n].Pt3d.DistanceTo(element[e].Crv.PointAtStart) < ProjectProperties.tolerances)
-                        {
-                            element[e].N0id = Node[n].ID;
-                        }
-                        */
+                        
+                        //if (Node[e].Pt3d.DistanceTo(element[e].Crv.PointAtEnd) < ProjectProperties.tolerances)
+                        //{
+                        //    element[e].N1id = Node[n].ID;
+                        //}
+                        //if (Node[n].Pt3d.DistanceTo(element[e].Crv.PointAtStart) < ProjectProperties.tolerances)
+                        //{
+                        //    element[e].N0id = Node[n].ID;
+                        //}
+                        
                     }
                 }
                 var key = parameterTemp.ToArray();
@@ -140,7 +140,7 @@ namespace PTK
                 }
             }
         }
-
+        */
         
         // This is the main job! And can not be done in parallel. 
         // In other words: everything that happens internally for each member happens in materializer. 
