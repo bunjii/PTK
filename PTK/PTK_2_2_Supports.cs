@@ -59,10 +59,7 @@ namespace PTK
             #endregion
 
 
-            // Support news = new Support(new Point3d(0,0,0), new List<bool> { false,false, false, false,false,false }, new Plane(new Point3d(0, 0, 0), new Vector3d(0,0,1)));
-
-
-
+            
 
             #region input
             DA.GetData(0, ref Tag);
@@ -73,14 +70,15 @@ namespace PTK
             #endregion
 
             #region solve
-            // Supports PTKsupports = new Supports(Tag, lpoint, lrot, ltra);
+            Supports PTKsupports = new Supports(Tag, lpoint, lrot, ltra);
 
-
+            //Karamba.Supports.Support news = new Karamba.Supports.Support(new Point3d(0, 0, 0), new List<bool> { false, false, false, false, false, false }, new Plane(new Point3d(0, 0, 0), new Vector3d(0, 0, 1)));
+            
 
             #endregion
 
             #region output
-            // DA.SetData(0, PTKsupports);
+            DA.SetData(0, PTKsupports);
             // DA.SetData(1, new GH_Support(news));
             #endregion
 
