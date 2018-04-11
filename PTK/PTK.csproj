@@ -89,6 +89,7 @@
     <Compile Include="PTKInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PTK_3_Materializer.cs" />
+    <Compile Include="PTK_4_1_KarambaAssemble.cs" />
     <Compile Include="PTK_4_Assemble.cs" />
     <Compile Include="PTK_1_2_1_Material_load.cs" />
     <Compile Include="PTK_1_2_1_Material_properties.cs" />
