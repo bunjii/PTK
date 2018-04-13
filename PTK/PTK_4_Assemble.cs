@@ -51,6 +51,8 @@ namespace PTK
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddGenericParameter("Assembly", "A", "AssemblyObjectContaining the whole project", GH_ParamAccess.item);
+
+            // outputs below just checking purposes. should be removed before release. 
             pManager.AddPointParameter("Point", "", "", GH_ParamAccess.list);
             pManager.AddBrepParameter("Breptest", "", "", GH_ParamAccess.list);
             pManager.AddTextParameter("ID", "", "", GH_ParamAccess.list);
@@ -59,8 +61,7 @@ namespace PTK
             pManager.AddTextParameter("Neighbours", "", "", GH_ParamAccess.list);
             pManager.AddLineParameter("Lines", "", "", GH_ParamAccess.list);
             pManager.AddTextParameter("SubID", "", "", GH_ParamAccess.list);
-
-
+            
         }
 
         /// <summary>
@@ -78,10 +79,11 @@ namespace PTK
             // Assigning lists of objects
             
             List<Node> nodes = new List<Node>();
-            RTree rTreeNodes = new RTree();
             List<Element> elems = new List<Element>();
+            List<Material> mats = new List<Material>();
+            List<Section> secs = new List<Section>();
+            RTree rTreeNodes = new RTree();
             RTree rTreeElems = new RTree();
-            List<Section> rectSecs = new List<Section>();
             
             List<GH_ObjectWrapper> wrapElemList = new List<GH_ObjectWrapper>();
             #endregion
@@ -101,27 +103,25 @@ namespace PTK
                 elems.AddRange(tempElemList);
             }
             
-            // Adding a list of points.
-            // Adding Endpoints
-            // Adding StartPoints
-            // Adding Intersections
-            // Removing duplicates
-            // Asigning to nodes
-
-
             // main functions #1
             // Functions.Assemble returns "nodes"
             Functions_DDL.Assemble(ref elems, ref nodes, ref rTreeElems, ref rTreeNodes);
             
             // main functions #1b
             // Functions.Intersect returns nodes
-            Functions_DDL.Intersect(ref elems, ref nodes, ref rTreeElems, ref rTreeNodes);
+            Functions_DDL.SolveIntersection(ref elems, ref nodes, ref rTreeElems, ref rTreeNodes);
 
             // main functions #2
             // Functions.GenerateStructuralLines returns nodes
             Functions_DDL.GenerateStructuralLines(ref elems, nodes);
 
+            // main functions #3
+            // extract material information from elements
+            Functions_DDL.RegisterMaterials(elems, ref mats);
 
+            // main functions #4
+            // extract cross-section informations from elements
+            Functions_DDL.RegisterSections();
             
             List<Brep> BokseTest = new List<Brep>();
             List<Curve> elementCurves = new List<Curve>();
@@ -153,7 +153,6 @@ namespace PTK
             List<string> NeighbourList = new List<string>();
             for (int i = 0; i < nodes.Count; i++)
             {
-
                 IDs.Add(Convert.ToString( nodes[i].ID));
                 PointNodes.Add(nodes[i].Pt3d);
                 string text ="N"+ Convert.ToString(nodes[i].ID)+"_";
@@ -162,15 +161,14 @@ namespace PTK
                     text += "E:" +Convert.ToString(nodes[i].ElemIds[j])+" ";
                 }
                 NeighbourList.Add(text);
-
-
+                
             }
             
             #endregion
 
             #region output
 
-            Assembly Assembly = new Assembly(nodes, elems);
+            Assembly Assembly = new Assembly(nodes, elems, mats, secs);
 
             DA.SetData(0, Assembly);
             DA.SetDataList(1, PointNodes);
@@ -182,10 +180,7 @@ namespace PTK
             DA.SetDataList(7, strLine);
             DA.SetDataList(8, SubID);
             #endregion
-
-
-
-
+            
         }
 
 

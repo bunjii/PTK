@@ -14,7 +14,7 @@ namespace PTK
         private int id;
         private List<int> elemIds;
         private List<Element> elems;
-        private List<double> parameterOfConnectedElements;
+        private List<double> elemParams;
         private int connectedElems;
         private Point3d pt3d;
         private Plane nodePlane;
@@ -38,8 +38,8 @@ namespace PTK
             nodePlane = new Plane(pt, new Vector3d(0, 0, 1));
             idCount++;
             elemIds = new List<int>();
-            
-            parameterOfConnectedElements = new List<double>();
+
+            elemParams = new List<double>();
             boundingbox = new BoundingBox(pt, pt);
 
             #region obsolete
@@ -65,16 +65,16 @@ namespace PTK
 
         }
 
-        public List<double> ParameterOfConnectedElements
+        public List<double> ElemParams // ParameterOfConnectedElements
         {
-            get { return parameterOfConnectedElements; }
+            get { return elemParams; }
         }
 
         /* in the future:
          
-        public ReadOnlyCollection<double> ParameterOfConnectedElements
+        public ReadOnlyCollection<double> ElemParams
         {
-            get { return parameterOfConnectedElements.AsReadOnly(); }
+            get { return elemParams.AsReadOnly(); }
         }
              
         */
@@ -105,9 +105,9 @@ namespace PTK
             elemIds.Add(ids);
         }
 
-        public void AddParameterOfConnectedElements(double _param)
+        public void AddElemParams(double _param)
         {
-            parameterOfConnectedElements.Add(_param);
+            elemParams.Add(_param);
         }
 
 

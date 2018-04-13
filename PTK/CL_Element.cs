@@ -16,7 +16,7 @@ namespace PTK
         private List<int> ptid;
         private List<Node> nodes;
         private List<int> nodeIds;
-        private List<double> parameterConnectedNodes;
+        private List<double> nodeParams;
         private int connectedNodes = 0;
         private Point3d pointAtStart;
         private Point3d pointAtEnd;
@@ -62,7 +62,7 @@ namespace PTK
             initializeCentricPlanes2();
             generateIntervals();
             generateElementGeometry();
-            parameterConnectedNodes = new List<double>();
+            nodeParams = new List<double>();
 
             //n0id = -999: This one is currently missing, but easy to remake in the AsignNeighbour function
             //n1id = -999; This one is currently missing, but easy to remake in the AsignNeighbour function
@@ -147,9 +147,9 @@ namespace PTK
         }
 
         // the one below should be ReadOnlyCollection
-        public List<double> ParameterConnectedNodes
+        public List<double> NodeParams
         {
-            get { return parameterConnectedNodes; }
+            get { return nodeParams; }
         }
 
 
@@ -161,17 +161,6 @@ namespace PTK
         #endregion
 
         #region methods
-        /*
-        public static void SortNodeIdsAndParams(ref List<Element> _elems)
-        {
-            foreach (Element _e in _elems)
-            {
-                _e.nodeIds.Sort();
-                _e.parameterConnectedNodes.Sort();
-            }
-        }
-        */
-
         public void AddNodeId(int _nid)
         {
             nodeIds.Add(_nid);
@@ -199,9 +188,9 @@ namespace PTK
             }
         }
 
-        public void AddParameterConnectedNodes(double _param)
+        public void AddNodeParams(double _param)
         {
-            parameterConnectedNodes.Add(_param);
+            nodeParams.Add(_param);
         }
 
 

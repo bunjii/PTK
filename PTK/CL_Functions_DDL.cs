@@ -48,7 +48,7 @@ namespace PTK
             } // for (int i = 0; i < _elems.Count; i++)
         }
         
-        public static void Intersect(ref List<Element> _elems, ref List<Node> _nodes, ref RTree _rTreeElems, ref RTree _rTreeNodes)
+        public static void SolveIntersection(ref List<Element> _elems, ref List<Node> _nodes, ref RTree _rTreeElems, ref RTree _rTreeNodes)
         {
             // check if the elements are potentially colliding by checking curves' boundary boxes.
             for (int i = 0; i < _elems.Count; i++)
@@ -96,7 +96,7 @@ namespace PTK
                         registerFlag = true;
 
                     }
-                    // else: at least one of the curves are not linear -> curve-curve intersect
+                    // case 2: at least one of the curves are not linear -> curve-curve intersect
                     else 
                     {
                         var intersect = Rhino.Geometry.Intersect.Intersection.CurveCurve
@@ -135,7 +135,7 @@ namespace PTK
             for (int i = 0; i < _elems.Count; i++) //Element index i       
             {
                 List<Point3d> pts = new List<Point3d>();
-                List<double> paramList = _elems[i].ParameterConnectedNodes;
+                List<double> paramList = _elems[i].NodeParams;
                 
                 for (int j = 0; j < _elems[i].NodeIds.Count; j++)
                 {
@@ -155,15 +155,24 @@ namespace PTK
                     // Element.AddStrctline gives subid as well as segment.
                     _elems[i].AddStrctline(segment);
                 }
-
             }
+        }
+
+        public static void RegisterMaterials(List<Element> _elems, ref List<Material> _mats)
+        {
 
         }
+
+        public static void RegisterSections()
+        {
+            
+        }
+
 
         private static void RegisterElemToNode(Node _node, Element _elem, double _param)
         {
             _node.AddElemId(_elem.ID);
-            _node.AddParameterOfConnectedElements(_param);
+            _node.AddElemParams(_param);
         }
 
         private static void RegisterNodeToElem(ref List<Element> _elems, Node _node, int _i, double _param)
@@ -172,7 +181,7 @@ namespace PTK
             if (_elems[_i].NodeIds.Contains(_node.ID) == false)
             {
                 _elems[_i].AddNodeId(_node.ID);
-                _elems[_i].AddParameterConnectedNodes(_param);
+                _elems[_i].AddNodeParams(_param);
             }
         }
         

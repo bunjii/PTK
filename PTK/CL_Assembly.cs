@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,8 @@ namespace PTK
         #region fields
         private List<Node> nodes;
         private List<Element> elems;
+        private List<Material> mats;
+        private List<Section> secs;
         #endregion
 
         #region constructors
@@ -18,6 +21,13 @@ namespace PTK
         {
             nodes = _nodes;
             elems = _elems;
+        }
+        public Assembly(List<Node> _nodes, List<Element> _elems, List<Material> _mats, List<Section> _secs)
+        {
+            nodes = _nodes;
+            elems = _elems;
+            mats = _mats;
+            secs = _secs;
         }
         #endregion
 
@@ -32,10 +42,20 @@ namespace PTK
             get { return elems; }
             set { elems = value; }
         }
+        public List<Material> Mats
+        {
+            get { return mats; }
+            set { mats = value; }
+        }
+        public List<Section> Secs
+        {
+            get { return secs; }
+            set { secs = value; }
+        }
         #endregion
 
         #region methods
         #endregion
-        
+
     }
 }
