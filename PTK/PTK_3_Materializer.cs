@@ -39,12 +39,9 @@ namespace PTK
             pManager.AddGenericParameter("Material", "MT", "Add Material-component here",GH_ParamAccess.item);
             pManager.AddGenericParameter("Align", "A", "Describes the alignment of the member. (Rotation and offset)", GH_ParamAccess.item);
             pManager.AddGenericParameter("Forces", "F", "Add Forces-component here", GH_ParamAccess.item);
-
             pManager.AddTextParameter("Tags", "T", "Add tags to the structure here. Tags are individual to each element", GH_ParamAccess.tree);
             pManager.AddIntegerParameter("Priority", "P", "Add a integer value that defines the priority of the member", GH_ParamAccess.list);
-
             
-
             pManager[0].Optional = true;
             pManager[2].Optional = true;
             pManager[3].Optional = true;
@@ -78,10 +75,7 @@ namespace PTK
             List<Node> nodes = new List<Node>();
             List<Align> alignList = new List<Align>();
             Align aligner;
-
-
             
-
             string elemTag = "N/A";
             List<Vector3d> normalVec = new List<Vector3d>();
             GH_ObjectWrapper wrapSec = new GH_ObjectWrapper();
@@ -113,7 +107,7 @@ namespace PTK
             wrapForc.CastTo<Forces>(out forces);
 
 
-            //Asigning Default Values if not inputed (correctly)
+            //Assigning Default Values if not inputed (correctly)
             if (section == null)
             {
                 section = new Section("Untitled", 100, 100);
@@ -124,7 +118,7 @@ namespace PTK
             }
             if (material == null)
             {
-                material = new Material("untitlde", 10, new Material_properties("Untitled", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)); //Marcin: Add something generic here
+                material = new Material("untitled", 10, new Material_properties("Untitled", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)); //Marcin: Add something generic here
             }
             if (align == null)
             {
@@ -162,13 +156,7 @@ namespace PTK
                 }
 
             }
-
-
-
-            //for (int i = 0; i < curves.Count; i++)
-            //{
-            //    elems.Add(new Element(curves[i], elemTag, align, section, material));
-            //}
+            
             #endregion
 
             #region output

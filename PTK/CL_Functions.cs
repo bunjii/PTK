@@ -63,7 +63,7 @@ namespace PTK
                 List<Point3d> pointOnCurves = new List<Point3d>();
 
                 List<Point3d> pointtemp = new List<Point3d>();
-                List<double> parameterTemp = element[e].ParameterConnectedNodes;
+                List<double> parameterTemp = element[e].NodeParams;
                 
                 List<Point3d> points = new List<Point3d>();
 
@@ -208,7 +208,7 @@ namespace PTK
                         tempNode.AddElements(_elems[i]);
 
                         //adding the parameter for the connected element 
-                        tempNode.ParameterOfConnectedElements.Add(tempparameter[j]);
+                        tempNode.ElemParams.Add(tempparameter[j]);
 
                         //Adding the node to the Global NodeList That will be outed
                         nodes.Add(tempNode);
@@ -218,7 +218,7 @@ namespace PTK
                         
                         // Adding parameter on the element where the connected node is placed. 
                         // (This will be used for dividing into substructural lines
-                        _elems[i].ParameterConnectedNodes.Add(tempparameter[j]);
+                        _elems[i].NodeParams.Add(tempparameter[j]);
 
                         //Adding a new boundingbox with the ID of the node
                         rTreeNodes.Insert(tempNode.BoundingBox, tempNode.ID);
@@ -300,8 +300,8 @@ namespace PTK
                                     // Adding current element to the node
                                     tempNode.AddElements(_elems[i]);
 
-                                    tempNode.ParameterOfConnectedElements.Add(numba);
-                                    tempNode.ParameterOfConnectedElements.Add(numbb);
+                                    tempNode.ElemParams.Add(numba);
+                                    tempNode.ElemParams.Add(numbb);
 
                                     // Adding testelement to the node
                                     tempNode.AddElements(_elems[tempCurvesMaybeCollidingID[j]]);
@@ -311,13 +311,13 @@ namespace PTK
 
                                     // Adding parameter of the node
                                     // DDL: need checking if "numba" val is already in the _elem[i]'s PCN list. commented on 3rd Apr.
-                                    _elems[i].ParameterConnectedNodes.Add(numba);
+                                    _elems[i].NodeParams.Add(numba);
                                    
                                     // Adding the node to the testelement                                    
                                     _elems[tempCurvesMaybeCollidingID[j]].AddNode(tempNode);
 
                                     // Adding parameter of the node 
-                                    _elems[tempCurvesMaybeCollidingID[j]].ParameterConnectedNodes.Add(numbb);
+                                    _elems[tempCurvesMaybeCollidingID[j]].NodeParams.Add(numbb);
                                     
 
                                     rTreeNodes.Insert(tempNode.BoundingBox, tempNode.ID);
@@ -375,16 +375,16 @@ namespace PTK
                                 }
 
                                 tempNode.AddElements(_elems[i]);                                    //Adding current element to the node
-                                tempNode.ParameterOfConnectedElements.Add(evente.ParameterA);
-                                tempNode.ParameterOfConnectedElements.Add(evente.ParameterB);
+                                tempNode.ElemParams.Add(evente.ParameterA);
+                                tempNode.ElemParams.Add(evente.ParameterB);
 
                                 tempNode.AddElements(_elems[tempCurvesMaybeCollidingID[j]]);        //adding testelement to the node
 
 
                                 _elems[i].AddNode(tempNode);                                                            //Adding the node to the current element
-                                _elems[i].ParameterConnectedNodes.Add(evente.ParameterA);                                          //Adding parameter of the node
+                                _elems[i].NodeParams.Add(evente.ParameterA);                                          //Adding parameter of the node
                                 _elems[tempCurvesMaybeCollidingID[j]].AddNode(tempNode);                             //Adding the node to the testelement
-                                _elems[tempCurvesMaybeCollidingID[j]].ParameterConnectedNodes.Add(evente.ParameterB);           //Adding parameter of the node
+                                _elems[tempCurvesMaybeCollidingID[j]].NodeParams.Add(evente.ParameterB);           //Adding parameter of the node
                                 rTreeNodes.Insert(tempNode.BoundingBox, tempNode.ID);
 
                                 if (!exists)

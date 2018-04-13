@@ -42,8 +42,8 @@ namespace PTK
             pManager.AddNumberParameter("G r,g,mean", "Grgmean", "Charasteric bending strentgh", GH_ParamAccess.item, 65 );
             pManager.AddNumberParameter("G r,g,05", "Grg05", "Charasteric bending strentgh", GH_ParamAccess.item, 54);
 
-            pManager.AddNumberParameter("Q g,k", "Qgk", "Charasteric bending strentgh", GH_ParamAccess.item, 385);
-            pManager.AddNumberParameter("Q g,meam", "Qgmean" , "Charasteric bending strentgh", GH_ParamAccess.item, 420);
+            pManager.AddNumberParameter("Rho g,k", "Rhogk", "Charasteric bending strentgh", GH_ParamAccess.item, 385);
+            pManager.AddNumberParameter("Rho g,meam", "Rhogmean" , "Charasteric bending strentgh", GH_ParamAccess.item, 420);
 
 
         }
@@ -65,10 +65,14 @@ namespace PTK
             #region variables
             string MaterialName = "N/A";
 
-        // for glulam according LIMTREBOKA
+            // for glulam according LIMTREBOKA
             double fmgk = new double() ;
             double ft0gk = new double();
             double ft90gk = new double();
+
+            double fc0gk = new double();
+            double fc90gk = new double();
+
             double fvgk = new double();
             double frgk = new double();
 
@@ -82,8 +86,8 @@ namespace PTK
             double Gtgmean = new double();
             double Grg05 = new double();
 
-            double Qgk = new double();
-            double Qgmean = new double();
+            double Rhogk = new double();
+            double Rhogmean = new double();
             #endregion
 
             #region input
@@ -91,45 +95,53 @@ namespace PTK
             if (!DA.GetData(1, ref fmgk)) { return; }
             if (!DA.GetData(2, ref ft0gk)) { return; }
             if (!DA.GetData(3, ref ft90gk)) { return; }
-            if (!DA.GetData(4, ref fvgk)) { return; }
-            if (!DA.GetData(5, ref frgk)) { return; }
+            if (!DA.GetData(4, ref fc0gk)) { return; }
+            if (!DA.GetData(5, ref fc90gk)) { return; }
+            if (!DA.GetData(6, ref fvgk)) { return; }
+            if (!DA.GetData(7, ref frgk)) { return; }
 
-            if (!DA.GetData(6, ref E0gmean)) { return; }
-            if (!DA.GetData(7, ref E0g05)) { return; }
-            if (!DA.GetData(8, ref E90gmean)) { return; }
-            if (!DA.GetData(9, ref E90g05)) { return; }
+            if (!DA.GetData(8, ref E0gmean)) { return; }
+            if (!DA.GetData(9, ref E0g05)) { return; }
+            if (!DA.GetData(10, ref E90gmean)) { return; }
+            if (!DA.GetData(11, ref E90g05)) { return; }
 
-            if (!DA.GetData(10, ref Ggmean)) { return; }
-            if (!DA.GetData(11, ref Gg05)) { return; }
-            if (!DA.GetData(12, ref Gtgmean)) { return; }
-            if (!DA.GetData(1, ref Grg05)) { return; }
+            if (!DA.GetData(12, ref Ggmean)) { return; }
+            if (!DA.GetData(13, ref Gg05)) { return; }
+            if (!DA.GetData(14, ref Gtgmean)) { return; }
+            if (!DA.GetData(15, ref Grg05)) { return; }
 
-            if (!DA.GetData(1, ref Qgk)) { return; }
-            if (!DA.GetData(1, ref Qgmean)) { return; }
+            if (!DA.GetData(16, ref Rhogk)) { return; }
+            if (!DA.GetData(17, ref Rhogmean)) { return; }
             #endregion
 
             #region solve
             Material_properties Material_prop = new Material_properties(
-             MaterialName   ,
-             fmgk ,
-             ft0gk ,
-             ft90gk ,
-             fvgk ,
-             frgk, 
+                MaterialName,
+                fmgk,
 
-             E0gmean,
-             E0g05,
-             E90gmean,
-             E90g05,
+                ft0gk,
+                ft90gk,
              
-             Ggmean,
-             Gg05,
-             Gtgmean,
-             Grg05,
+                fc0gk,
+                fc90gk,
+             
+                fvgk,
+                frgk, 
 
-             Qgk,
-             Qgmean   
-                );
+                E0gmean,
+                E0g05,
+                E90gmean,
+                E90g05,
+             
+                Ggmean,
+                Gg05,
+                Gtgmean,
+                Grg05,
+
+                Rhogk,
+                Rhogmean   
+            
+            );
             
 
             #endregion

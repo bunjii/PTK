@@ -13,9 +13,9 @@ namespace PTK
         /// Initializes a new instance of the PTK_Util_2_Disassemble class.
         /// </summary>
         public PTK_UTIL_2_Disassemble()
-          : base("Disassemble (PTK)", "DA (PTK)",
+          : base("Disassemble", "DA (PTK)",
               "Disassemble PTK Assemble Model",
-              "PTK", "5_UTIL")
+              "PTK", "UTIL")
         {
         }
 
@@ -33,7 +33,8 @@ namespace PTK
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddGenericParameter("PTK NODE", "PTK N", "PTK NODE", GH_ParamAccess.item);
-            pManager.AddGenericParameter("PTK ELEM", "PTK E", "PTK NODE", GH_ParamAccess.item);
+            pManager.AddGenericParameter("PTK ELEM", "PTK E", "PTK ELEM", GH_ParamAccess.item);
+            // pManager.AddGenericParameter("PTK MAT", "PTK M", "PTK MAT", GH_ParamAccess.item);
         }
 
         /// <summary>

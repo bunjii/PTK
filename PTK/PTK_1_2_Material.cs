@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
@@ -24,11 +25,9 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("MaterialName","MN", "Name the material", GH_ParamAccess.item,"UntitledMaterial");      //We should add default values here.
-            pManager.AddIntegerParameter("MaterialID", "MId", "ID of the material", GH_ParamAccess.item,0);    //We should add default values here.
+            pManager.AddTextParameter("MaterialName","MN", "Name the material", GH_ParamAccess.item, "UntitledMaterial");      //We should add default values here.
+            pManager.AddIntegerParameter("MaterialID", "MId", "ID of the material", GH_ParamAccess.item, -999);    //We should add default values here.
             pManager.AddGenericParameter("Properties", "Pro", "Add strutural properties here", GH_ParamAccess.item);    //We should add default values here.
-
-           
 
         }
 
@@ -48,28 +47,29 @@ namespace PTK
         {
             #region variables
             string materialName = "N/A";
-            int materailId = 0;
-
+            int matId = -99;
             Material_properties properties ;
+            GH_ObjectWrapper wrapProp = new GH_ObjectWrapper();
+
             #endregion
-            GH_ObjectWrapper wrapprop = new GH_ObjectWrapper();
 
             #region input
             DA.GetData(0, ref materialName);
-            if (!DA.GetData(1, ref materailId)) { return; }
-            if (!DA.GetData(2, ref wrapprop)) { return; }
+            DA.GetData(1, ref matId);
+            if (!DA.GetData(2, ref wrapProp)) { return; }
+            wrapProp.CastTo <Material_properties>(out properties);
 
-            wrapprop.CastTo <Material_properties>(out properties);
             #endregion
 
             #region solve
-            Material outMaterial = new Material(materialName, materailId, properties);
-            
-
+            // MessageBox.Show(properties.Fmgk.ToString()); // Fmgk = 24
+            Material outMaterial = new Material(properties); // (materialName, matId, properties);
+            // MessageBox.Show(outMaterial.Properties.Fmgk.ToString()); Fmgk = 24
             #endregion
 
             #region output
             DA.SetData(0, outMaterial);
+
             #endregion
 
         }

@@ -8,7 +8,7 @@ using Grasshopper.Kernel.Types;
 
 using Rhino.Geometry;
 
-using System.Numerics;
+// using System.Numerics;
 
 namespace PTK
 {
@@ -18,9 +18,9 @@ namespace PTK
         /// Initializes a new instance of the TestD class.
         /// </summary>
         public PTK_UTIL_4()
-          : base("Disassemble Node (PTK)", "DA_N (PTK)",
+          : base("Disassemble Node", "DA_N (PTK)",
               "Disassemble Node (PTK)",
-              "PTK", "5_UTIL")
+              "PTK", "UTIL")
         {
         }
 
@@ -73,10 +73,8 @@ namespace PTK
                 {
                     elemIdTree.Add(j, path);
                 }
-                
             }
             #endregion
-
 
             #region output
             DA.SetDataList(0, points);

@@ -160,7 +160,10 @@ namespace PTK
 
         public static void RegisterMaterials(List<Element> _elems, ref List<Material> _mats)
         {
+            foreach (Element e in _elems)
+            {
 
+            }
         }
 
         public static void RegisterSections()
@@ -168,6 +171,7 @@ namespace PTK
             
         }
 
+        // ### below: private functions ###
 
         private static void RegisterElemToNode(Node _node, Element _elem, double _param)
         {

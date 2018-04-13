@@ -21,9 +21,9 @@ namespace PTK
         /// Initializes a new instance of the TestC class.
         /// </summary>
         public PTK_UTIL_5()
-          : base("Disassemble Element (PTK)", "DA_E (PTK)",
+          : base("Disassemble Element", "DA_E (PTK)",
               "Disassemble Element (PTK)",
-              "PTK", "5_UTIL") 
+              "PTK", "UTIL") 
         {
         }
 
@@ -124,9 +124,9 @@ namespace PTK
                 plns.Add(outElems[i].localYZPlane);
 
                 GH_Path pth = new GH_Path(i);
-                for (int j = 0; j < outElems[i].ParameterConnectedNodes.Count; j++)
+                for (int j = 0; j < outElems[i].NodeParams.Count; j++)
                 {
-                    pcntr.Add(outElems[i].ParameterConnectedNodes[j], pth);
+                    pcntr.Add(outElems[i].NodeParams[j], pth);
                     nidtr.Add(outElems[i].NodeIds[j], pth);
                 }
 

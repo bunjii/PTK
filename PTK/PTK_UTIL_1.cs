@@ -12,9 +12,9 @@ namespace PTK
         /// Initializes a new instance of the PTK_UTIL_1 class.
         /// </summary>
         public PTK_UTIL_1()
-          : base("GENERATE GEOMETRY", "GEOMETRY",
+          : base("Generate Geometry", "Geom (PTK)",
               "Generating Mesh or Brep Geometry",
-              "PTK", "5_UTIL")
+              "PTK", "UTIL")
         {
         }
 

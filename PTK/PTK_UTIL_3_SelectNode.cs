@@ -14,9 +14,9 @@ namespace PTK
         /// Initializes a new instance of the TestE class.
         /// </summary>
         public PTK_UTIL_3()
-          : base("Select Node (PTK)", "Sel N (PTK)",
+          : base("Select Node", "Sel N (PTK)",
               "Select Node (PTK)",
-              "PTK", "5_UTIL")
+              "PTK", "UTIL")
         {
         }
 

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Grasshopper.Kernel.Data;
@@ -27,7 +29,6 @@ namespace PTK
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddTextParameter("MaterialName", "MN", "Name the material", GH_ParamAccess.item, "GL26c");      //We should add default values here.
-
             pManager.AddTextParameter("Load data", "dataTree", "Load data tree with properties", GH_ParamAccess.tree);
 
 
@@ -56,6 +57,10 @@ namespace PTK
             double fmgk = new double();
             double ft0gk = new double();
             double ft90gk = new double();
+
+            double fc0gk = new double();
+            double fc90gk = new double();
+
             double fvgk = new double();
             double frgk = new double();
 
@@ -69,13 +74,15 @@ namespace PTK
             double Gtgmean = new double();
             double Grg05 = new double();
 
-            double Qgk = new double();
-            double Qgmean = new double();
-            #endregion
+            // double Qgk = new double();
+            // double Qgmean = new double();
 
+            double rhogk = new double();
+            double rhogmean = new double();
             
-           GH_Structure<GH_String> Tree = new GH_Structure<GH_String>();
+            GH_Structure<GH_String> Tree = new GH_Structure<GH_String>();
             List<string> nlist = new List<string>();
+            #endregion
 
             #region input
             DA.GetData(0, ref MaterialName) ;
@@ -83,54 +90,57 @@ namespace PTK
             #endregion
            
             
-            #region sorting
-
-
-            for (int k = 0; k < Tree.get_Branch(0).Count; k++)
+            #region sorve
+            for (int i = 0; i < Tree.get_Branch(0).Count; i++)
             {
-                GH_Path pth = new GH_Path(k);
+                GH_Path pth = new GH_Path(i);
                 
-                
-                if (MaterialName == Tree.get_Branch(0)[k].ToString() )
+                // obtain material properties with the matching "MN"
+                if (MaterialName == Tree.get_Branch(0)[i].ToString() )
                 {
-                    //B = Tree.get_Branch(0)[k];
-                    for (int kk = 1; kk < Tree.Branches.Count(); kk++)
+                    for (int j = 1; j < Tree.Branches.Count(); j++)
                     {
-                        nlist.Add(Tree.get_Branch(kk)[k].ToString());
+                        nlist.Add(Tree.get_Branch(j)[i].ToString());
                     }
-
                 }
-                
             }
+            
 
-            #endregion
+            fmgk= double.Parse(nlist[0]);
+            ft0gk = double.Parse(nlist[1]);
+            ft90gk = double.Parse(nlist[2]);
 
-            double.Parse(nlist[0]);
-             fmgk= double.Parse(nlist[0]);
-            ft0gk = double.Parse(nlist[0]);
-            ft90gk = double.Parse(nlist[0]);
-            fvgk = double.Parse(nlist[0]);
-            frgk = double.Parse(nlist[0]);
+            fc0gk = double.Parse(nlist[3]);
+            fc90gk = double.Parse(nlist[4]);
 
-            E0gmean = double.Parse(nlist[0]);
-            E0g05 = double.Parse(nlist[0]);
-            E90gmean = double.Parse(nlist[0]);
-            E90g05 = double.Parse(nlist[0]);
+            fvgk = double.Parse(nlist[5]);
+            frgk = double.Parse(nlist[6]);
 
-            Ggmean = double.Parse(nlist[0]);
-            Gg05 = double.Parse(nlist[0]);
-            Gtgmean = double.Parse(nlist[0]);
-            Grg05 = double.Parse(nlist[0]);
+            E0gmean = double.Parse(nlist[7]);
+            E0g05 = double.Parse(nlist[8]);
+            E90gmean = double.Parse(nlist[9]);
+            E90g05 = double.Parse(nlist[10]);
 
-            Qgk = double.Parse(nlist[0]);
-            Qgmean = double.Parse(nlist[0]);
+            Ggmean = double.Parse(nlist[11]);
+            Gg05 = double.Parse(nlist[12]);
+            Gtgmean = double.Parse(nlist[13]);
+            Grg05 = double.Parse(nlist[14]);
 
-            #region solve
-            Material_properties Material_prop = new Material_properties(
+            // Qgk = double.Parse(nlist[0]);
+            // Qgmean = double.Parse(nlist[0]);
+
+            rhogk = double.Parse(nlist[15]);
+            rhogmean = double.Parse(nlist[16]);
+            
+            Material_properties matProp = new Material_properties(
              MaterialName,
              fmgk,
              ft0gk,
              ft90gk,
+
+             fc0gk,
+             fc90gk,
+
              fvgk,
              frgk,
 
@@ -144,15 +154,20 @@ namespace PTK
              Gtgmean,
              Grg05,
 
-             Qgk,
-             Qgmean
+             // Qgk,
+             // Qgmean,
+
+             rhogk,
+             rhogmean
                 );
 
 
             #endregion
+            
+            // MessageBox.Show(matProp.Fmgk.ToString());//0 -> 24
 
             #region output
-            DA.SetData(0, Material_prop);
+            DA.SetData(0, matProp);
             DA.SetDataList(1, nlist);
             #endregion
 
