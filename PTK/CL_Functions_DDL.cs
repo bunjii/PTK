@@ -171,6 +171,24 @@ namespace PTK
             
         }
 
+        public static string ConvertCommaToPeriodDecimal(string _txt, bool _reverse = false)
+        {
+            char[] _charList;
+            string _resultString = "";
+
+            _charList = _txt.ToCharArray();
+            foreach (char _c in _charList)
+            {
+                char tmpC;
+                if (_reverse == false && _c == ',') tmpC = '.';
+                else if (_reverse == true && _c == '.') tmpC = ',';
+                else tmpC = _c;
+                _resultString += tmpC;
+            }
+
+            return _resultString;
+        }
+
         // ### below: private functions ###
 
         private static void RegisterElemToNode(Node _node, Element _elem, double _param)

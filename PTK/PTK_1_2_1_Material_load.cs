@@ -81,6 +81,7 @@ namespace PTK
             double rhogmean = new double();
             
             GH_Structure<GH_String> Tree = new GH_Structure<GH_String>();
+
             List<string> nlist = new List<string>();
             #endregion
 
@@ -88,25 +89,62 @@ namespace PTK
             DA.GetData(0, ref MaterialName) ;
             DA.GetDataTree(1, out Tree ) ;
             #endregion
-           
-            
-            #region sorve
+
+
+            #region solve
+            // check locale: "comma" or "period"
+            string decimalSeparator = ProjectProperties.FindDecimalSeparator();
+            bool comma = false, period = false; // to check if text contains comma or period.
+             
+            // registering materials
             for (int i = 0; i < Tree.get_Branch(0).Count; i++)
             {
                 GH_Path pth = new GH_Path(i);
-                
+
+                // if MaterialName doesn't match, move on to next loop.
+                if (MaterialName != Tree.get_Branch(0)[i].ToString())
+                    continue;
+
                 // obtain material properties with the matching "MN"
-                if (MaterialName == Tree.get_Branch(0)[i].ToString() )
+                for (int j = 1; j < Tree.Branches.Count(); j++)
                 {
-                    for (int j = 1; j < Tree.Branches.Count(); j++)
-                    {
-                        nlist.Add(Tree.get_Branch(j)[i].ToString());
-                    }
+                    string txt = Tree.get_Branch(j)[i].ToString();
+                    nlist.Add(txt);
+                    if (txt.Contains(",")) comma = true;
+                    else if (txt.Contains(".")) period = true;
                 }
             }
             
+            // comma, period decimal conversion
+            for (int i=0;i<nlist.Count;i++)
+            {
+                bool convert = false;
+                string convertedTxt = "";
 
-            fmgk= double.Parse(nlist[0]);
+                if (decimalSeparator == "comma")
+                {
+                    if (period == false) continue;
+
+                    // if csv includes "period", it needs treatment
+                    convertedTxt = Functions_DDL.ConvertCommaToPeriodDecimal(nlist[i], true);
+                }
+                else if (decimalSeparator == "period")
+                {
+                    if (comma == false) continue;
+
+                    // if csv includes "comma", it needs treatment
+                    convertedTxt = Functions_DDL.ConvertCommaToPeriodDecimal(nlist[i]);
+                }
+                else
+                {
+                    // exception
+                    convertedTxt = nlist[i];
+                }
+
+                nlist[i] = convertedTxt;
+            }
+            
+            fmgk = double.Parse(nlist[0]);
             ft0gk = double.Parse(nlist[1]);
             ft90gk = double.Parse(nlist[2]);
 
