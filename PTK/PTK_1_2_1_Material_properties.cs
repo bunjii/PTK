@@ -44,8 +44,7 @@ namespace PTK
 
             pManager.AddNumberParameter("Rho g,k", "Rhogk", "Charasteric bending strentgh", GH_ParamAccess.item, 385);
             pManager.AddNumberParameter("Rho g,meam", "Rhogmean" , "Charasteric bending strentgh", GH_ParamAccess.item, 420);
-
-
+            
         }
 
         /// <summary>
@@ -115,7 +114,7 @@ namespace PTK
             #endregion
 
             #region solve
-            Material_properties Material_prop = new Material_properties(
+            MatProps Material_prop = new MatProps(
                 MaterialName,
                 fmgk,
 

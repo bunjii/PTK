@@ -169,8 +169,8 @@ namespace PTK
 
             rhogk = double.Parse(nlist[15]);
             rhogmean = double.Parse(nlist[16]);
-            
-            Material_properties matProp = new Material_properties(
+
+            MatProps matProp = new MatProps(
              MaterialName,
              fmgk,
              ft0gk,

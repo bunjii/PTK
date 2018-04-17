@@ -38,6 +38,7 @@ namespace PTK
         {
             pManager.AddTextParameter("Material Name", "Mat Name", "", GH_ParamAccess.list);
             pManager.AddTextParameter("Material Properties", "Mat Prop","", GH_ParamAccess.tree);
+            pManager.AddTextParameter("Matprop Hash", "MP Hash", "", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -55,6 +56,8 @@ namespace PTK
 
             List<string> matNames = new List<string>();
             DataTree<double> matPropTree = new DataTree<double>();
+
+            List<string> matHashes = new List<string>();
             #endregion
 
             #region input
@@ -71,7 +74,7 @@ namespace PTK
             }
             for (int i = 0; i<mats.Count;i++)
             {
-                Material_properties mp = mats[i].Properties;
+                MatProps mp = mats[i].Properties;
 
                 matNames.Add(mp.MaterialName);
                 GH_Path path = new GH_Path(i);
@@ -98,12 +101,14 @@ namespace PTK
                     mp.Rhogmean
                 };
                 matPropTree.AddRange(props, path);
+                matHashes.Add(mats[i].Properties.TxtHash);
             }
             #endregion
 
             #region output
             DA.SetDataList(0, matNames);
             DA.SetDataTree(1, matPropTree);
+            DA.SetDataList(2, matHashes);
             #endregion
         }
 

@@ -118,7 +118,7 @@ namespace PTK
             }
             if (material == null)
             {
-                material = new Material("untitled", 10, new Material_properties("Untitled", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)); //Marcin: Add something generic here
+                material = new Material("untitled", 10, new MatProps("Untitled", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)); //Marcin: Add something generic here
             }
             if (align == null)
             {

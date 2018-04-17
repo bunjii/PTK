@@ -160,9 +160,15 @@ namespace PTK
 
         public static void RegisterMaterials(List<Element> _elems, ref List<Material> _mats)
         {
+            List<string> _hashList = new List<string>();
             foreach (Element e in _elems)
             {
-
+                Material elemMat = e.Material;
+                string hash = elemMat.Properties.TxtHash;
+                if (_hashList.Contains(hash)) continue;
+                
+                _mats.Add(e.Material);
+                _hashList.Add(hash);
             }
         }
 

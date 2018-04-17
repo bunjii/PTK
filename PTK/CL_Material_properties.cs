@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Security.Cryptography; // needed to create hash
 
 namespace PTK
 {
-    public class Material_properties
+    public class MatProps
     {
 
         #region fields
@@ -38,7 +39,7 @@ namespace PTK
         #endregion
 
         #region constructors
-        public Material_properties(
+        public MatProps(
             string _materialName,
             double _fmgk,
             double _ft0gk,
@@ -82,8 +83,8 @@ namespace PTK
             rhogk = _rhogk;          // density
             rhogmean = _rhogmean;    // density
 
-            txtHash += _fmgk.ToString() + _ft0gk;
-            
+            txtHash = CreateHash(this);
+
         }
         #endregion
 
@@ -108,11 +109,34 @@ namespace PTK
         // public double QQgmean { get { return Qgmean; } set { Qgmean = value; } }
         public double Rhogk { get { return rhogk; } set { rhogk = value; } }
         public double Rhogmean { get { return rhogmean; } set { rhogmean = value; } }
-        
+        public string TxtHash { get { return txtHash; } }
         #endregion
 
         #region methods
+        private static string CreateHash(MatProps _m)
+        {
+            string _key = "";
 
+            _key += _m.Fmgk + _m.Ft0gk + _m.Ft90gk + _m.Fc0gk + _m.Fc90gk + _m.Fvgk + _m.Frgk
+                + _m.EE0gmean + _m.EE0g05 + _m.EE90gmean + _m.EE90g05
+                + _m.GGgmean + _m.GGg05 + _m.GGrgmean + _m.GGrg05 + _m.Rhogk + _m.Rhogmean;
+
+            byte[] _byteVal = Encoding.UTF8.GetBytes(_key);
+
+            // create SHA256 value
+            SHA256 _sha256val = new SHA256CryptoServiceProvider();
+            byte[] _hashVal = _sha256val.ComputeHash(_byteVal);
+
+            // byte -> string
+            StringBuilder _hashedTxt = new StringBuilder();
+            for (int i = 0; i < _hashVal.Length; i++)
+            {
+                _hashedTxt.Append(_hashVal[i].ToString("X2"));
+            }
+
+            // var _sha256
+            return _hashedTxt.ToString();
+        }
         #endregion
     }
 }

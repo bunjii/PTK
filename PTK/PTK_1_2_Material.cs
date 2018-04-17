@@ -48,7 +48,7 @@ namespace PTK
             #region variables
             string materialName = "N/A";
             int matId = -99;
-            Material_properties properties ;
+            MatProps matprops ;
             GH_ObjectWrapper wrapProp = new GH_ObjectWrapper();
 
             #endregion
@@ -57,14 +57,12 @@ namespace PTK
             DA.GetData(0, ref materialName);
             DA.GetData(1, ref matId);
             if (!DA.GetData(2, ref wrapProp)) { return; }
-            wrapProp.CastTo <Material_properties>(out properties);
+            wrapProp.CastTo <MatProps>(out matprops);
 
             #endregion
 
             #region solve
-            // MessageBox.Show(properties.Fmgk.ToString()); // Fmgk = 24
-            Material outMaterial = new Material(properties); // (materialName, matId, properties);
-            // MessageBox.Show(outMaterial.Properties.Fmgk.ToString()); Fmgk = 24
+            Material outMaterial = new Material(matprops); // (materialName, matId, properties);
             #endregion
 
             #region output
