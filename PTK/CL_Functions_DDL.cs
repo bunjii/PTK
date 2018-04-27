@@ -158,13 +158,15 @@ namespace PTK
             }
         }
 
-        public static void RegisterMaterials(List<Element> _elems, ref List<Material> _mats)
+        public static void RegisterMaterials(ref List<Element> _elems, ref List<Material> _mats)
         {
             List<string> _hashList = new List<string>();
             foreach (Element e in _elems)
             {
-                Material elemMat = e.Material;
-                string hash = elemMat.Properties.TxtHash;
+                Material _elemMat = e.Material;
+                string hash = _elemMat.Properties.TxtHash;
+
+                // if the hash values coincide, go to next loop. 
                 if (_hashList.Contains(hash)) continue;
                 
                 _mats.Add(e.Material);

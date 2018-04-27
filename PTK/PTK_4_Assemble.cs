@@ -117,7 +117,7 @@ namespace PTK
 
             // main functions #3
             // extract material information from elements
-            Functions_DDL.RegisterMaterials(elems, ref mats);
+            Functions_DDL.RegisterMaterials(ref elems, ref mats);
 
             // main functions #4
             // extract cross-section informations from elements

@@ -14,7 +14,7 @@ namespace PTK
         static int idCount = 0;
         private string tag = "N/A";
         private List<int> ptid;
-        private List<Node> nodes;
+        // private List<Node> nodes;
         private List<int> nodeIds;
         private List<double> nodeParams;
         private int connectedNodes = 0;
@@ -46,7 +46,7 @@ namespace PTK
         #region constructors
         public Element(Curve _crv, string _tag, Align _align, Section _section, Material _material)
         {
-            nodes = new List<Node>();
+            // nodes = new List<Node>();
             nodeIds = new List<int>();
             crv = _crv;
             tag = _tag;
@@ -152,12 +152,12 @@ namespace PTK
             get { return nodeParams; }
         }
 
-
+        /*
         public List<Node> Nodes
         {
             get { return nodes; }
         }
-
+        */
         #endregion
 
         #region methods
@@ -171,7 +171,7 @@ namespace PTK
         {
             ptid.Add(_ids);
         }
-
+        /*
         public void AddNode(Node _node)
         {
             bool add = true;
@@ -187,7 +187,7 @@ namespace PTK
                 connectedNodes++;
             }
         }
-
+        */
         public void AddNodeParams(double _param)
         {
             nodeParams.Add(_param);

@@ -84,9 +84,10 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_Model(), "outModel", 
-                "outModel", "Assembled Karamba Model", GH_ParamAccess.item);
+            // pManager.RegisterParam(new Param_Model(), "outModel", 
+            //     "outModel", "Assembled Karamba Model", GH_ParamAccess.item);
             pManager.AddParameter(new Param_Element(), "element", "element", "", GH_ParamAccess.list);
+            pManager.AddParameter(new Param_FemMaterial(), "material", "material", "", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -103,6 +104,7 @@ namespace PTK
             Assembly assemble;
             List<Node> nodes = new List<Node>();
             List<Element> elems = new List<Element>();
+            List<Material> mats = new List<Material>();
             // List<Karamba.Elements.GH_Element> karamBeam = new List<GH_Element>();
             Karamba.Materials.GH_FemMaterial karamMat = new Karamba.Materials.GH_FemMaterial();
             List<Line> lines = new List<Line>();
@@ -120,20 +122,39 @@ namespace PTK
 
             nodes = assemble.Nodes;
             elems = assemble.Elems;
+            mats = assemble.Mats;
 
             Karamba.Models.Model model = in_gh_model.Value;
 
-            List<GrassElement> gElems = new List<GrassElement>();
+            List<GrassElement> grElems = new List<GrassElement>();
 
             for (int i = 0; i < elems.Count; i++)
             {
                 Point3d sPt = elems[i].PointAtStart;
                 Point3d ePt = elems[i].PointAtEnd;
-                gElems.Add(new GrassBeam(sPt, ePt));
+                grElems.Add(new GrassBeam(sPt, ePt));
             }
 
             List<FemMaterial> kMat = new List<FemMaterial>();
 
+            for (int i = 0; i < grElems.Count; i++)
+            {
+
+            }
+            string kMFamily;
+            string kMName;
+            double kME;
+            double kMG;
+            double kMGamma;
+            double kMFy;
+            double kMAlphaT;
+
+
+
+
+
+
+            /*
             model = (Karamba.Models.Model)model.Clone();
             model.cloneElements();
             model.cloneNodes();
@@ -153,13 +174,14 @@ namespace PTK
             List<Karamba.Supports.Support> supports = model.supports;
             List<ElemSet> bsets = model.beamsets;
             Dictionary<int, GravityLoad> gl = model.gravities;
+            */
 
             // ???
             // model.
-            ItemSelector sel = new ItemSelector();
-            IdManager iman = new IdManager();
+            // ItemSelector sel = new ItemSelector();
+            // IdManager iman = new IdManager();
             ///
-
+            /*
             int numLC = model.numLC;
 
             Karamba.Models.Model newModel = new Karamba.Models.Model();
@@ -170,7 +192,7 @@ namespace PTK
                 newModel.add(v);
                 // newmodel.nodes.Add(v);
             }
-            
+            */
             // add material
             /*
             MessageBox.Show(materials.Count.ToString());
@@ -186,7 +208,7 @@ namespace PTK
                 newmodel.crosecs.Add(s);
             }
             */
-
+            /*
             // add elements
             foreach (Karamba.Elements.ModelElement e in elements)
             {
@@ -206,12 +228,13 @@ namespace PTK
 
 
             newModel.gravities = gl;
-
+            */
             // newmodel.buildFEModel();
-
+            /*
             Karamba.Models.Model nM =
                 new Karamba.Models.Model(vertices, materials, crosecs,
                elements, ploads, pmass, mloads, eloads, supports, bsets, gl, sel, iman, numLC);
+            */
 
             /*
                 = new Karamba.Models.Model(vertices, materials, crosecs,
@@ -270,16 +293,17 @@ namespace PTK
             #endregion
 
             #region output
-            GH_Model outModel = new GH_Model(nM);
+            // GH_Model outModel = new GH_Model(nM);
+
             List<GH_Element> gElem = new List<GH_Element>();
-            foreach (GrassElement ge in gElems)
+            foreach (GrassElement ge in grElems)
             {
                 GH_Element ghe = new GH_Element(ge);
                 gElem.Add(ghe);
             }
             
-            DA.SetData(0, outModel);
-            DA.SetDataList(1, gElem);
+            // DA.SetData(0, outModel);
+            DA.SetDataList(0, gElem);
             #endregion
         }
 

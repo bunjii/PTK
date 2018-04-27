@@ -56,6 +56,7 @@ namespace PTK
         //inputing elements, nodes and tolerance
         //Looping through nodes, looping through members. Checking distance to members
         //if smaller than projectPropertyTolerances, memberID is added to node, nodeID is added to member
+        /*
         public static void GenerateStructuralLines(List<Element> element)
         {
             for (int e = 0; e < element.Count; e++) //Element index e       
@@ -90,6 +91,8 @@ namespace PTK
             }
 
         }
+        */
+
         /*
         public static void AsignNeighbour(List<Element> element, List<Node> Node)
         {
@@ -141,11 +144,12 @@ namespace PTK
             }
         }
         */
-        
+
         // This is the main job! And can not be done in parallel. 
         // In other words: everything that happens internally for each member happens in materializer. 
         // Everything that interacts happens in this functions.
         // Making nodes, making relations, etc etc
+        /*
         public static void Assemble(List<Element> _elems, out List<Node> _nodes)
         {
             List<Node> nodes = new List<Node>();
@@ -402,11 +406,8 @@ namespace PTK
             }
             _nodes = nodes;
         }
-
-
-
-
-
+        */
+        
         public static bool CheckInputValidity (List <int> counts)
         {
             counts.Sort();
