@@ -118,7 +118,8 @@ namespace PTK
             }
             if (material == null)
             {
-                material = new Material("untitled", 10, new MatProps("Untitled", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)); //Marcin: Add something generic here
+                // material = new Material("untitled", 10, new MatProps("Untitled", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)); //Marcin: Add something generic here
+                material = new Material(new MatProps("Untitled", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
             }
             if (align == null)
             {
@@ -128,6 +129,7 @@ namespace PTK
 
             elemTag = elemTag.Trim();
 
+            // trial multi-threading by john, need to understand this.
             if (curves.Count > 20)
             {
                 Parallel.For(0, curves.Count, (int i) =>
@@ -142,24 +144,22 @@ namespace PTK
             }
 
             //Creating Elements from Curves
-            
             else
             {
                 for (int i = 0; i < curves.Count; i++)
                 {
-                    if (curves[i] != null)
-                    {
-                        if (!curves[i].IsValid) { return; }
-                        elems.Add(new Element(curves[i], elemTag, align, section, material));
-                    }
-                    
-                }
+                    if (curves[i] == null) continue;
+                    if (!curves[i].IsValid) continue;
 
+                    elems.Add(new Element(curves[i], elemTag, align, section, material));
+                    // MessageBox.Show(elems[elems.Count-1].MatId.ToString());
+                }
             }
-            
+
             #endregion
 
             #region output
+
             DA.SetData(0, elems);
             #endregion
         }

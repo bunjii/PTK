@@ -39,6 +39,7 @@ namespace PTK
             pManager.AddTextParameter("Material Name", "Mat Name", "", GH_ParamAccess.list);
             pManager.AddTextParameter("Material Properties", "Mat Prop","", GH_ParamAccess.tree);
             pManager.AddTextParameter("Matprop Hash", "MP Hash", "", GH_ParamAccess.list);
+            pManager.AddIntegerParameter("Element Ids", "Elem Ids", "", GH_ParamAccess.tree);
         }
 
         /// <summary>
@@ -49,6 +50,7 @@ namespace PTK
         {
             #region variables
             GH_ObjectWrapper wrapMat = new GH_ObjectWrapper();
+
             // in case the component is connected to somewhere after Assemble.
             List<Material> mats = new List<Material>();
             // in case the component is connected directly to Material.
@@ -56,6 +58,8 @@ namespace PTK
 
             List<string> matNames = new List<string>();
             DataTree<double> matPropTree = new DataTree<double>();
+
+            DataTree<int> elemIdsTree = new DataTree<int>();
 
             List<string> matHashes = new List<string>();
             #endregion
@@ -102,6 +106,23 @@ namespace PTK
                 };
                 matPropTree.AddRange(props, path);
                 matHashes.Add(mats[i].Properties.TxtHash);
+
+                List<int> elemIdLst = new List<int>();
+                
+                if (mats[i].ElemIds == null)
+                {
+                    MessageBox.Show("elem Ids are null");
+                    continue;
+                }
+                
+                for (int j = 0; j < mats[i].ElemIds.Count; j++)
+                {
+                    elemIdLst.Add(mats[i].ElemIds[j]);
+
+                }
+
+                elemIdsTree.AddRange(elemIdLst, path);
+                
             }
             #endregion
 
@@ -109,6 +130,7 @@ namespace PTK
             DA.SetDataList(0, matNames);
             DA.SetDataTree(1, matPropTree);
             DA.SetDataList(2, matHashes);
+            DA.SetDataTree(3, elemIdsTree);
             #endregion
         }
 

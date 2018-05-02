@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,17 +14,12 @@ namespace PTK
 {
     class Functions_DDL
     {
-        // This is the main job! And can not be done in parallel. 
-        // In other words: everything that happens internally for each member happens in materializer. 
-        // Everything that interacts happens in this functions.
-        // Making nodes, making relations, etc etc
         public static void Assemble(ref List<Element> _elems, ref List<Node> _nodes, ref RTree _rTreeElems, ref RTree _rTreeNodes)
         {
-            
             // Give Id and Make RTree for elements
             for (int i = 0; i < _elems.Count; i++)
             {
-                _elems[i].AssignID();
+                _elems[i].AssignID(); // assigning element id
                 _rTreeElems.Insert(_elems[i].BoundingBox, i);
             }
             
@@ -135,7 +131,7 @@ namespace PTK
             for (int i = 0; i < _elems.Count; i++) //Element index i       
             {
                 List<Point3d> pts = new List<Point3d>();
-                List<double> paramList = _elems[i].NodeParams;
+                List<double> paramList = _elems[i].NodeParams.ToList();
                 
                 for (int j = 0; j < _elems[i].NodeIds.Count; j++)
                 {
@@ -152,7 +148,7 @@ namespace PTK
                 for (int j = 1; j < ptsArray.Count(); j++)
                 {
                     Line segment = new Line(ptsArray[j - 1], ptsArray[j]);
-                    // Element.AddStrctline gives subid as well as segment.
+                    // be aware that Element.AddStrctline gives subid as well as segment.
                     _elems[i].AddStrctline(segment);
                 }
             }
@@ -161,16 +157,42 @@ namespace PTK
         public static void RegisterMaterials(ref List<Element> _elems, ref List<Material> _mats)
         {
             List<string> _hashList = new List<string>();
+            int matIdCnt = 0;
+
             foreach (Element e in _elems)
             {
                 Material _elemMat = e.Material;
                 string hash = _elemMat.Properties.TxtHash;
 
-                // if the hash values coincide, go to next loop. 
-                if (_hashList.Contains(hash)) continue;
+                // if the hash values coincide, add existent matId. 
+                if (_hashList.Contains(hash))
+                {
+                    
+                    int _numLst = _hashList.IndexOf(hash);
+                    e.MatId = _mats[_numLst].Id;
+
+                    // add element id into material instance
+                    _mats[_numLst].AddElemId(e.Id);
+                    // MessageBox.Show(e.Id.ToString());
+
+                }
+                // else: register material and assign matId.
+                else
+                {
+                    // assign id to material
+                    e.Material.Id = matIdCnt;
+                    // assign material id to element
+                    e.MatId = matIdCnt;
+                    // register material and its hash value
+                    _mats.Add(e.Material);
+                    _hashList.Add(hash);
+
+                    // add element id into material instance
+                    _mats[_mats.Count - 1].AddElemId(e.Id);
+                    // MessageBox.Show(e.Id.ToString());
+                    matIdCnt++;
+                }
                 
-                _mats.Add(e.Material);
-                _hashList.Add(hash);
             }
         }
 
@@ -201,7 +223,7 @@ namespace PTK
 
         private static void RegisterElemToNode(Node _node, Element _elem, double _param)
         {
-            _node.AddElemId(_elem.ID);
+            _node.AddElemId(_elem.Id);
             _node.AddElemParams(_param);
         }
 

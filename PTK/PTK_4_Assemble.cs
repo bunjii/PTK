@@ -136,8 +136,8 @@ namespace PTK
                 BokseTest.Add(elems[i].ElementGeometry);
                 elementCurves.Add(elems[i].Crv);
                 ConnectedNodes.Add(elems[i].ConnectedNodes);
-                elementid.Add(elems[i].ID);
-                string tempID = Convert.ToString(elems[i].ID);
+                elementid.Add(elems[i].Id);
+                string tempID = Convert.ToString(elems[i].Id);
 
                 // making SubID output
                 for (int j = 0; j < elems[i].SubStructural.Count; j++)

@@ -65,19 +65,17 @@ namespace PTK
 
         }
 
+        /*
         public List<double> ElemParams // ParameterOfConnectedElements
         {
             get { return elemParams; }
         }
-
-        /* in the future:
+        */        
          
         public ReadOnlyCollection<double> ElemParams
         {
             get { return elemParams.AsReadOnly(); }
         }
-             
-        */
 
         public double X { get { return x; } }
         public double Y { get { return y; } }
@@ -107,7 +105,7 @@ namespace PTK
 
         public void AddElemParams(double _param)
         {
-            elemParams.Add(_param);
+            this.elemParams.Add(_param);
         }
 
 
@@ -117,7 +115,7 @@ namespace PTK
             bool add = true;
             foreach (Element elem in elems)
             {
-                if (elem.ID.Equals(_element.ID))
+                if (elem.Id.Equals(_element.Id))
                     add = false;
             }
 
@@ -130,7 +128,7 @@ namespace PTK
         }
         #endregion
 
-        // Are the next functions in use? 
+        // Are the next functions in use? -> yes, i intend to use them.
         // Probably useful later when extracting the geometry. 
         public bool Equals(Node other)
         {

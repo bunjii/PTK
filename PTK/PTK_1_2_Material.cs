@@ -47,7 +47,7 @@ namespace PTK
         {
             #region variables
             string materialName = "N/A";
-            int matId = -99;
+            int matId = -999;
             MatProps matprops ;
             GH_ObjectWrapper wrapProp = new GH_ObjectWrapper();
 
@@ -63,6 +63,7 @@ namespace PTK
 
             #region solve
             Material outMaterial = new Material(matprops); // (materialName, matId, properties);
+            outMaterial.MatName = matprops.MaterialName;
             #endregion
 
             #region output

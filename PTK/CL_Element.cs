@@ -13,7 +13,7 @@ namespace PTK
         private int id;
         static int idCount = 0;
         private string tag = "N/A";
-        private List<int> ptid;
+        private List<int> ptId;
         // private List<Node> nodes;
         private List<int> nodeIds;
         private List<double> nodeParams;
@@ -23,6 +23,7 @@ namespace PTK
         private Curve crv;
         private Section section;
         private Material material;
+        private int matId;
         private Forces force;
         private Align align;
         private List<SubElementStructural> subStructural;
@@ -55,7 +56,8 @@ namespace PTK
             material = _material;
             pointAtEnd = _crv.PointAtEnd;
             pointAtStart = _crv.PointAtStart;
-            ptid = new List<int>();
+            ptId = new List<int>();
+            matId = -999;
             subStructural = new List<SubElementStructural>();
 
             // initializeCentricPlanes(); // replaced by DDL on 2nd April
@@ -74,6 +76,12 @@ namespace PTK
         public ReadOnlyCollection<int> NodeIds
         {
             get { return nodeIds.AsReadOnly(); }
+        }
+
+        public int MatId
+        {
+            get { return matId; }
+            set { matId = value; }
         }
 
         public Curve Crv
@@ -97,7 +105,7 @@ namespace PTK
         //public int N0id { get { return n0id; } set { n0id = value; } } Not working atm. See line 33
         //public int N1id { get { return n1id; } set { n1id = value; } } Not working atm. See line 34
 
-        public int ID
+        public int Id
         {
             get { return id; }
         }
@@ -146,12 +154,17 @@ namespace PTK
             get { return connectedNodes; }
         }
 
-        // the one below should be ReadOnlyCollection
-        public List<double> NodeParams
-        {
-            get { return nodeParams; }
-        }
+        // this should be ReadOnlyCollection
+        // public List<double> NodeParams
+        // {
+        //     get { return nodeParams; }
+        // }
 
+        public ReadOnlyCollection<double> NodeParams
+        {
+            get { return nodeParams.AsReadOnly(); }
+        }
+        
         /*
         public List<Node> Nodes
         {
@@ -169,7 +182,7 @@ namespace PTK
         //This class add neighbouring points. The analysis is done in the function called AsignNeighbour in functions.cs
         public void AddNeighbour(int _ids)
         {
-            ptid.Add(_ids);
+            ptId.Add(_ids);
         }
         /*
         public void AddNode(Node _node)
@@ -208,6 +221,14 @@ namespace PTK
             subStructural.Add(new SubElementStructural(_structuralline, numberOfStructuralLines));
             numberOfStructuralLines++;
     
+        }
+
+        public static Element FindElemById(List<Element> _elems, int _eid)
+        {
+            Element tempElem;
+            tempElem = _elems.Find(e => e.Id == _eid);
+
+            return tempElem; 
         }
 
         #region obsolete
@@ -276,9 +297,6 @@ namespace PTK
             yzPlane = localYZ;
         }
 
-
-
-
         //Generating extrusion/SweepIntervals
         private void generateIntervals()
         {
@@ -293,11 +311,9 @@ namespace PTK
             iy = new Interval(-HalfWidth, HalfWidth);
             ix = new Interval(0, crv.GetLength());
             crossSectionRectangle = new Rectangle3d(yzPlane, iy, iz);
-
-
+            
         }
 
-        
         private void generateElementGeometry()
         {
             Brep tempgeometry = new Brep();

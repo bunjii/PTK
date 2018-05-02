@@ -70,12 +70,13 @@ namespace PTK
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("PTK Assembly", "PTK A", "PTK Assembly", GH_ParamAccess.item);
-            pManager.AddParameter(new Param_FemMaterial(), "karamMat", "karamMat", "", GH_ParamAccess.item);
-            pManager.AddParameter(new Param_Model(), "karamMdl", "karamMdl", "", GH_ParamAccess.item);
+            // pManager.AddParameter(new Param_FemMaterial(), "karamMat", "karamMat", "", GH_ParamAccess.item);
+            // pManager.AddParameter(new Param_Model(), "karamMdl", "karamMdl", "", GH_ParamAccess.item);
             // pManager.AddLineParameter("lines", "lines", "", GH_ParamAccess.list);
             // pManager.AddParameter(new Param_Model(), "karamM", "karamM", "", GH_ParamAccess.item);
 
-            pManager[2].Optional = true;
+            // pManager[1].Optional = true;
+            // pManager[2].Optional = true;
 
         }
 
@@ -105,15 +106,16 @@ namespace PTK
             List<Node> nodes = new List<Node>();
             List<Element> elems = new List<Element>();
             List<Material> mats = new List<Material>();
+
             // List<Karamba.Elements.GH_Element> karamBeam = new List<GH_Element>();
-            Karamba.Materials.GH_FemMaterial karamMat = new Karamba.Materials.GH_FemMaterial();
-            List<Line> lines = new List<Line>();
+            // Karamba.Materials.GH_FemMaterial karamMat = new Karamba.Materials.GH_FemMaterial();
+            // List<Line> lines = new List<Line>();
             #endregion
 
             #region input
             if (!DA.GetData(0, ref wrapAssembly)) { return; }
-            if (!DA.GetData(1, ref karamMat)) { return; }
-            if (!DA.GetData(2, ref in_gh_model)) { return; }
+            // if (!DA.GetData(1, ref karamMat)) { return; }
+            // if (!DA.GetData(2, ref in_gh_model)) { return; }
             #endregion
 
             #region solve
@@ -123,37 +125,59 @@ namespace PTK
             nodes = assemble.Nodes;
             elems = assemble.Elems;
             mats = assemble.Mats;
-
-            Karamba.Models.Model model = in_gh_model.Value;
-
+            
+            // Elem for Karamba Assemble
             List<GrassElement> grElems = new List<GrassElement>();
-
             for (int i = 0; i < elems.Count; i++)
             {
-                Point3d sPt = elems[i].PointAtStart;
-                Point3d ePt = elems[i].PointAtEnd;
-                grElems.Add(new GrassBeam(sPt, ePt));
+                for (int j=0; j<elems[i].SubStructural.Count;j++)
+                {
+                    Point3d sPt = elems[i].SubStructural[j].StrctrLine.From;
+                    Point3d ePt = elems[i].SubStructural[j].StrctrLine.To;
+                    GrassBeam gb = new GrassBeam(sPt, ePt);
+                    gb.id = elems[i].Tag;
+                    grElems.Add(gb);
+                }
             }
 
+            // Material for Karamba Assemble
             List<FemMaterial> kMat = new List<FemMaterial>();
-
-            for (int i = 0; i < grElems.Count; i++)
+            for (int i = 0; i < mats.Count; i++)
             {
+                if (mats[i].ElemIds.Count == 0)
+                {
+                    continue;
+                }
 
+                FemMaterial fMat = new FemMaterial();
+
+                string kMFamily = "Wood";
+                string kMName = mats[i].MatName;
+                double kME = mats[i].Properties.EE0gmean;
+                double kMG = mats[i].Properties.GGgmean;
+                double kMGamma = mats[i].Properties.Rhogmean;
+                double kMFy = mats[i].Properties.Fmgk;
+                double kMAlphaT = 5.00E-06; // temporal value. need to be confirmed.
+
+                fMat.setMaterialProperties(kMFamily, kMName, kME, kMG, kMGamma, kMFy, kMAlphaT);
+
+                // associating Element Tag to a karamba Material
+                // be aware of duplication 
+                List<string> tagLst = new List<string>();
+                for (int j = 0; j < mats[i].ElemIds.Count; j++)
+                {
+                    string elemTag = Element.FindElemById(elems, mats[i].ElemIds[j]).Tag;
+
+                    if (tagLst.Contains(elemTag)) continue;
+
+                    tagLst.Add(elemTag);
+                    fMat.AddBeamId(elemTag);
+                }
+                
+                kMat.Add(fMat);
             }
-            string kMFamily;
-            string kMName;
-            double kME;
-            double kMG;
-            double kMGamma;
-            double kMFy;
-            double kMAlphaT;
 
-
-
-
-
-
+            
             /*
             model = (Karamba.Models.Model)model.Clone();
             model.cloneElements();
@@ -301,9 +325,16 @@ namespace PTK
                 GH_Element ghe = new GH_Element(ge);
                 gElem.Add(ghe);
             }
+
+            List<GH_FemMaterial> gMat = new List<GH_FemMaterial>();
+            foreach (FemMaterial fm in kMat)
+            {
+                GH_FemMaterial ghm = new GH_FemMaterial(fm);
+                gMat.Add(ghm);
+            }
             
-            // DA.SetData(0, outModel);
             DA.SetDataList(0, gElem);
+            DA.SetDataList(1, gMat);
             #endregion
         }
 
