@@ -22,6 +22,7 @@ namespace PTK
         private Point3d pointAtEnd;
         private Curve crv;
         private Section section;
+        private int secId;
         private Material material;
         private int matId;
         private Forces force;
@@ -58,6 +59,7 @@ namespace PTK
             pointAtStart = _crv.PointAtStart;
             ptId = new List<int>();
             matId = -999;
+            secId = -999;
             subStructural = new List<SubElementStructural>();
 
             // initializeCentricPlanes(); // replaced by DDL on 2nd April
@@ -82,6 +84,12 @@ namespace PTK
         {
             get { return matId; }
             set { matId = value; }
+        }
+
+        public int SecId
+        {
+            get { return secId; }
+            set { secId = value; }
         }
 
         public Curve Crv

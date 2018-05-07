@@ -1,7 +1,9 @@
-﻿using System;
+﻿// alphanumerical order for namespaces please
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Security.Cryptography; // needed to create hash
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -31,8 +33,9 @@ namespace PTK
                 for (int j = 0; j < 2; j++) // j < 2 as spt & ept
                 {
                     // check if the node exists. 
-                    // if yes it returns nId, else it makes node, register to rtree, then it returns nid.
-                    int nId = DetectExistingNode(ref _nodes, ref _rTreeNodes, endPts[j]);
+                    // if yes it returns nId, 
+                    // else it makes node, register to rtree, then it returns nid.
+                    int nId = DetectOrCreateNode(ref _nodes, ref _rTreeNodes, endPts[j]);
 
                     // register elemId & its parameter to node
                     RegisterElemToNode(Node.FindNodeById(_nodes, nId), _elems[i], (double) j);
@@ -41,7 +44,7 @@ namespace PTK
                     RegisterNodeToElem(ref _elems, Node.FindNodeById(_nodes, nId), i, (double) j);
 
                 } // end for (int j = 0; j < 2; j++)
-            } // for (int i = 0; i < _elems.Count; i++)
+            } // end for (int i = 0; i < _elems.Count; i++)
         }
         
         public static void SolveIntersection(ref List<Element> _elems, ref List<Node> _nodes, ref RTree _rTreeElems, ref RTree _rTreeNodes)
@@ -86,8 +89,7 @@ namespace PTK
 
                         // check if the node exists. 
                         // if yes it returns nId, else it makes node, register to rtree, then it returns nid.
-                        
-                        nId = DetectExistingNode(ref _nodes, ref _rTreeNodes, intersectPt);
+                        nId = DetectOrCreateNode(ref _nodes, ref _rTreeNodes, intersectPt);
 
                         registerFlag = true;
 
@@ -108,7 +110,7 @@ namespace PTK
                         intersectPt = intersect[0].PointA;
                         paramA = intersect[0].ParameterA;
 
-                        nId = DetectExistingNode(ref _nodes, ref _rTreeNodes, intersectPt);
+                        nId = DetectOrCreateNode(ref _nodes, ref _rTreeNodes, intersectPt);
 
                         registerFlag = true;
 
@@ -157,48 +159,76 @@ namespace PTK
         public static void RegisterMaterials(ref List<Element> _elems, ref List<Material> _mats)
         {
             List<string> _hashList = new List<string>();
-            int matIdCnt = 0;
+            int _matIdCnt = 0;
 
             foreach (Element e in _elems)
             {
                 Material _elemMat = e.Material;
-                string hash = _elemMat.Properties.TxtHash;
+                string _hash = _elemMat.Properties.TxtHash;
 
                 // if the hash values coincide, add existent matId. 
-                if (_hashList.Contains(hash))
+                if (_hashList.Contains(_hash))
                 {
-                    
-                    int _numLst = _hashList.IndexOf(hash);
+                    int _numLst = _hashList.IndexOf(_hash);
                     e.MatId = _mats[_numLst].Id;
 
                     // add element id into material instance
                     _mats[_numLst].AddElemId(e.Id);
-                    // MessageBox.Show(e.Id.ToString());
-
                 }
                 // else: register material and assign matId.
                 else
                 {
                     // assign id to material
-                    e.Material.Id = matIdCnt;
+                    e.Material.Id = _matIdCnt;
                     // assign material id to element
-                    e.MatId = matIdCnt;
+                    e.MatId = _matIdCnt;
                     // register material and its hash value
                     _mats.Add(e.Material);
-                    _hashList.Add(hash);
+                    _hashList.Add(_hash);
 
                     // add element id into material instance
                     _mats[_mats.Count - 1].AddElemId(e.Id);
-                    // MessageBox.Show(e.Id.ToString());
-                    matIdCnt++;
+                    _matIdCnt++;
                 }
-                
             }
         }
 
-        public static void RegisterSections()
+        public static void RegisterSections(ref List<Element> _elems, ref List<Section> _secs)
         {
-            
+            List<string> _hashList = new List<string>();
+            int _secIdCnt = 0;
+
+            foreach (Element e in _elems)
+            {
+                Section _elemSec = e.Section;
+                string _hash = _elemSec.TxtHash;
+
+                // if the hash values coincides, add existent secId.
+                if (_hashList.Contains(_hash))
+                {
+                    int _numLst = _hashList.IndexOf(_hash);
+                    e.SecId = _secs[_numLst].Id;
+
+                    // add element id into section instance
+                    _secs[_numLst].AddElemId(e.Id);
+                }
+                // else: register section and assign secId.
+                else
+                {
+                    // assign id to section
+                    e.Section.Id = _secIdCnt;
+                    // assign section id to element
+                    e.SecId = _secIdCnt;
+                    // register section and its hash value
+                    _secs.Add(e.Section);
+                    _hashList.Add(_hash);
+
+                    // add element id into material instance
+                    _secs[_secs.Count - 1].AddElemId(e.Id);
+                    _secIdCnt++;
+                }
+            }
+
         }
 
         public static string ConvertCommaToPeriodDecimal(string _txt, bool _reverse = false)
@@ -217,6 +247,25 @@ namespace PTK
             }
 
             return _resultString;
+        }
+
+        public static string CreateHash(string _str)
+        {
+
+            byte[] _byteVal = Encoding.UTF8.GetBytes(_str);
+
+            // create SHA256 value
+            SHA256 _sha256val = new SHA256CryptoServiceProvider();
+            byte[] _hashVal = _sha256val.ComputeHash(_byteVal);
+
+            // byte -> string
+            StringBuilder _hashedTxt = new StringBuilder();
+            for (int i = 0; i < _hashVal.Length; i++)
+            {
+                _hashedTxt.Append(_hashVal[i].ToString("X2"));
+            }
+            
+            return _hashedTxt.ToString();
         }
 
         // ### below: private functions ###
@@ -245,7 +294,7 @@ namespace PTK
             return result;
         }
 
-        private static int DetectExistingNode(ref List<Node> _nodes, ref RTree _rTreeNodes, Point3d _sPt)
+        private static int DetectOrCreateNode(ref List<Node> _nodes, ref RTree _rTreeNodes, Point3d _sPt)
         {
             // check if the node exists.
             int _nId = new int();

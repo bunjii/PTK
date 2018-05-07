@@ -35,6 +35,7 @@ namespace PTK
             pManager.AddGenericParameter("PTK NODE", "PTK N", "PTK NODE", GH_ParamAccess.item);
             pManager.AddGenericParameter("PTK ELEM", "PTK E", "PTK ELEM", GH_ParamAccess.item);
             pManager.AddGenericParameter("PTK MAT", "PTK M", "PTK MAT", GH_ParamAccess.item);
+            pManager.AddGenericParameter("PTK SEC", "PTK S", "PTK SEC", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -49,6 +50,7 @@ namespace PTK
             List<Node> nodes = new List<Node>();
             List<Element> elems = new List<Element>();
             List<Material> mats = new List<Material>();
+            List<Section> secs = new List<Section>();
             #endregion
 
             #region input
@@ -60,12 +62,14 @@ namespace PTK
             nodes = assemble.Nodes;
             elems = assemble.Elems;
             mats = assemble.Mats;
+            secs = assemble.Secs;
             #endregion
 
             #region output
             DA.SetData(0, nodes);
             DA.SetData(1, elems);
             DA.SetData(2, mats);
+            DA.SetData(3, secs);
             #endregion
         }
 

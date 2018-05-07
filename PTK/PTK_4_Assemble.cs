@@ -107,21 +107,23 @@ namespace PTK
             // Functions.Assemble returns "nodes"
             Functions_DDL.Assemble(ref elems, ref nodes, ref rTreeElems, ref rTreeNodes);
             
-            // main functions #1b
+            // main functions #2
             // Functions.Intersect returns nodes
             Functions_DDL.SolveIntersection(ref elems, ref nodes, ref rTreeElems, ref rTreeNodes);
 
-            // main functions #2
+            // main functions #3
             // Functions.GenerateStructuralLines returns nodes
             Functions_DDL.GenerateStructuralLines(ref elems, nodes);
 
-            // main functions #3
+            // main functions #4
             // extract material information from elements
             Functions_DDL.RegisterMaterials(ref elems, ref mats);
 
-            // main functions #4
+            // main functions #5
             // extract cross-section informations from elements
-            Functions_DDL.RegisterSections();
+            Functions_DDL.RegisterSections(ref elems, ref secs);
+
+            
             
             List<Brep> BokseTest = new List<Brep>();
             List<Curve> elementCurves = new List<Curve>();

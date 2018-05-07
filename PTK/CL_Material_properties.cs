@@ -1,10 +1,11 @@
-﻿using System;
+﻿// alphanumerical order for namespaces please
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography; // needed to create hash
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Security.Cryptography; // needed to create hash
 
 namespace PTK
 {
@@ -83,7 +84,7 @@ namespace PTK
             rhogk = _rhogk;          // density
             rhogmean = _rhogmean;    // density
 
-            txtHash = CreateHash(this);
+            txtHash = CreateHashFromMP(this);
 
         }
         #endregion
@@ -113,7 +114,7 @@ namespace PTK
         #endregion
 
         #region methods
-        private static string CreateHash(MatProps _m)
+        private static string CreateHashFromMP(MatProps _m)
         {
             string _key = "";
 
@@ -121,21 +122,7 @@ namespace PTK
                 + _m.EE0gmean + _m.EE0g05 + _m.EE90gmean + _m.EE90g05
                 + _m.GGgmean + _m.GGg05 + _m.GGrgmean + _m.GGrg05 + _m.Rhogk + _m.Rhogmean;
 
-            byte[] _byteVal = Encoding.UTF8.GetBytes(_key);
-
-            // create SHA256 value
-            SHA256 _sha256val = new SHA256CryptoServiceProvider();
-            byte[] _hashVal = _sha256val.ComputeHash(_byteVal);
-
-            // byte -> string
-            StringBuilder _hashedTxt = new StringBuilder();
-            for (int i = 0; i < _hashVal.Length; i++)
-            {
-                _hashedTxt.Append(_hashVal[i].ToString("X2"));
-            }
-
-            // var _sha256
-            return _hashedTxt.ToString();
+            return Functions_DDL.CreateHash(_key);
         }
         #endregion
     }

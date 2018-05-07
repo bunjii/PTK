@@ -107,7 +107,7 @@ namespace PTK
                 matPropTree.AddRange(props, path);
                 matHashes.Add(mats[i].Properties.TxtHash);
 
-                List<int> elemIdLst = new List<int>();
+                List<int> _elemIdLst = new List<int>();
                 
                 if (mats[i].ElemIds == null)
                 {
@@ -117,11 +117,11 @@ namespace PTK
                 
                 for (int j = 0; j < mats[i].ElemIds.Count; j++)
                 {
-                    elemIdLst.Add(mats[i].ElemIds[j]);
+                    _elemIdLst.Add(mats[i].ElemIds[j]);
 
                 }
 
-                elemIdsTree.AddRange(elemIdLst, path);
+                elemIdsTree.AddRange(_elemIdLst, path);
                 
             }
             #endregion

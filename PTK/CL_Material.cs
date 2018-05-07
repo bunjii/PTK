@@ -1,17 +1,17 @@
-﻿using System;
+﻿// alphanumerical order for namespaces please
+using System;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Karamba.Loads ;
+// using Karamba.Loads ;
 
 namespace PTK
 {
     public class Material
     {
-
         #region fields
         private string materialName;
         private int id;
@@ -62,8 +62,7 @@ namespace PTK
         #region methods
         public void AddElemId(int elemId)
         {
-            // this.elemIds.Add(elemId);
-            elemIds.Add(elemId);
+            this.elemIds.Add(elemId);
         }
         public static Material FindMatById(List<Material> _mats, int _mid)
         {

@@ -70,13 +70,6 @@ namespace PTK
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("PTK Assembly", "PTK A", "PTK Assembly", GH_ParamAccess.item);
-            // pManager.AddParameter(new Param_FemMaterial(), "karamMat", "karamMat", "", GH_ParamAccess.item);
-            // pManager.AddParameter(new Param_Model(), "karamMdl", "karamMdl", "", GH_ParamAccess.item);
-            // pManager.AddLineParameter("lines", "lines", "", GH_ParamAccess.list);
-            // pManager.AddParameter(new Param_Model(), "karamM", "karamM", "", GH_ParamAccess.item);
-
-            // pManager[1].Optional = true;
-            // pManager[2].Optional = true;
 
         }
 
@@ -85,9 +78,8 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            // pManager.RegisterParam(new Param_Model(), "outModel", 
-            //     "outModel", "Assembled Karamba Model", GH_ParamAccess.item);
             pManager.AddParameter(new Param_Element(), "element", "element", "", GH_ParamAccess.list);
+            pManager.AddParameter(new Param_CrossSection(), "cro-sec", "cro-sec", "", GH_ParamAccess.list);
             pManager.AddParameter(new Param_FemMaterial(), "material", "material", "", GH_ParamAccess.list);
         }
 
@@ -106,16 +98,12 @@ namespace PTK
             List<Node> nodes = new List<Node>();
             List<Element> elems = new List<Element>();
             List<Material> mats = new List<Material>();
-
-            // List<Karamba.Elements.GH_Element> karamBeam = new List<GH_Element>();
-            // Karamba.Materials.GH_FemMaterial karamMat = new Karamba.Materials.GH_FemMaterial();
-            // List<Line> lines = new List<Line>();
+            List<Section> secs = new List<Section>();
             #endregion
 
             #region input
             if (!DA.GetData(0, ref wrapAssembly)) { return; }
-            // if (!DA.GetData(1, ref karamMat)) { return; }
-            // if (!DA.GetData(2, ref in_gh_model)) { return; }
+
             #endregion
 
             #region solve
@@ -125,6 +113,7 @@ namespace PTK
             nodes = assemble.Nodes;
             elems = assemble.Elems;
             mats = assemble.Mats;
+            secs = assemble.Secs;
             
             // Elem for Karamba Assemble
             List<GrassElement> grElems = new List<GrassElement>();
@@ -136,11 +125,19 @@ namespace PTK
                     Point3d ePt = elems[i].SubStructural[j].StrctrLine.To;
                     GrassBeam gb = new GrassBeam(sPt, ePt);
                     gb.id = elems[i].Tag;
+
+                    // sets the orientation of the element:
+                    gb.x_ori = elems[i].localYZPlane.ZAxis;
+                    gb.z_ori = elems[i].localYZPlane.YAxis;
+                    
                     grElems.Add(gb);
                 }
             }
 
             // Material for Karamba Assemble
+            // Unit conversion:
+            // E,G,f: N/mm2 -> kN/cm2 (x 1000)
+            // rho: kg/m3 -> kN/m3 (x 0.1)
             List<FemMaterial> kMat = new List<FemMaterial>();
             for (int i = 0; i < mats.Count; i++)
             {
@@ -151,13 +148,13 @@ namespace PTK
 
                 FemMaterial fMat = new FemMaterial();
 
-                string kMFamily = "Wood";
+                string kMFamily = "Wood";       // tentatively "Wood"
                 string kMName = mats[i].MatName;
-                double kME = mats[i].Properties.EE0gmean;
-                double kMG = mats[i].Properties.GGgmean;
-                double kMGamma = mats[i].Properties.Rhogmean;
-                double kMFy = mats[i].Properties.Fmgk;
-                double kMAlphaT = 5.00E-06; // temporal value. need to be confirmed.
+                double kME = 1000 * mats[i].Properties.EE0gmean;
+                double kMG = 1000 * mats[i].Properties.GGgmean;
+                double kMGamma = 0.1 * mats[i].Properties.Rhogmean;
+                double kMFy = 1000 * mats[i].Properties.Fmgk;
+                double kMAlphaT = 5.00E-06;     // temporal value for general wood. might need be confirmed.
 
                 fMat.setMaterialProperties(kMFamily, kMName, kME, kMG, kMGamma, kMFy, kMAlphaT);
 
@@ -171,170 +168,64 @@ namespace PTK
                     if (tagLst.Contains(elemTag)) continue;
 
                     tagLst.Add(elemTag);
+                    // associate element Tag (PTK) to beam Id (Karamba)
                     fMat.AddBeamId(elemTag);
                 }
-                
                 kMat.Add(fMat);
             }
 
-            
-            /*
-            model = (Karamba.Models.Model)model.Clone();
-            model.cloneElements();
-            model.cloneNodes();
-            model.clonePointLoads();
-            model.cloneSupportPosition();
-            model.cloneVertexPosition();
-            model.deepCloneFEModel();
-
-            List<Karamba.Nodes.Node> vertices = model.nodes;
-            List<FemMaterial> materials = model.materials;
-            List<CroSec> crosecs = model.crosecs;
-            List<Karamba.Elements.ModelElement> elements = model.elems;
-            List<PointLoad> ploads = model.ploads;
-            List<PointMass> pmass = model.pmass;
-            List<MeshLoad> mloads = model.mloads;
-            List<ElementLoad> eloads = model.eloads;
-            List<Karamba.Supports.Support> supports = model.supports;
-            List<ElemSet> bsets = model.beamsets;
-            Dictionary<int, GravityLoad> gl = model.gravities;
-            */
-
-            // ???
-            // model.
-            // ItemSelector sel = new ItemSelector();
-            // IdManager iman = new IdManager();
-            ///
-            /*
-            int numLC = model.numLC;
-
-            Karamba.Models.Model newModel = new Karamba.Models.Model();
-            // feb.Model febmodel = new feb.Model();
-            // add nodes
-            foreach (Karamba.Nodes.Node v in vertices)
+            // cross-sections for Karamba Assemble
+            List<CroSec> kCroSec = new List<CroSec>();
+            for (int i = 0; i < secs.Count; i++)
             {
-                newModel.add(v);
-                // newmodel.nodes.Add(v);
+                // in case there is no element attached to the section, continue to next loop.
+                if (secs[i].ElemIds.Count == 0) continue;
+
+                CroSec cSec = new CroSec_Trapezoid("Trapezoid", secs[i].SectionName, "", 
+                    secs[i].Height*100, secs[i].Width*100, secs[i].Width*100); // or CroSec_Trapezoid()?
+
+                List<string> tagLst = new List<string>();
+                for (int j = 0; j < secs[i].ElemIds.Count; j++)
+                {
+                    string elemTag = Element.FindElemById(elems, secs[i].ElemIds[j]).Tag;
+
+                    if (tagLst.Contains(elemTag)) continue;
+
+                    tagLst.Add(elemTag);
+                    cSec.AddElemId(elemTag);
+                }
+                kCroSec.Add(cSec);
             }
-            */
-            // add material
-            /*
-            MessageBox.Show(materials.Count.ToString());
-            foreach (FemMaterial m in materials)
-            {
-                MessageBox.Show(m.E.ToString());
-                newmodel.materials.Add(m);
-            }
-            
-            // add cross-sections
-            foreach (CroSec s in crosecs)
-            {
-                newmodel.crosecs.Add(s);
-            }
-            */
-            /*
-            // add elements
-            foreach (Karamba.Elements.ModelElement e in elements)
-            {
-
-                newModel.elems.Add(e);
-            }
-            
-            
-            // add boundary conditions
-            foreach (Karamba.Supports.Support s in supports)
-            {
-                // newmodel.supports.Add(s);
-                // newmodel.
-                // newmodel.supports.Add(s);
-                // s.addTo(newmodel, newmodel.febmodel);
-            }
-
-
-            newModel.gravities = gl;
-            */
-            // newmodel.buildFEModel();
-            /*
-            Karamba.Models.Model nM =
-                new Karamba.Models.Model(vertices, materials, crosecs,
-               elements, ploads, pmass, mloads, eloads, supports, bsets, gl, sel, iman, numLC);
-            */
-
-            /*
-                = new Karamba.Models.Model(vertices, materials, crosecs,
-               elements, ploads, pmass, mloads, eloads, supports, bsets, gl, sel, iman, numLC);
-            */
-
-            // string tmp = "";
-            /*
-            for (int i = 0; i < model.gravities.Count; i++)
-            {
-                tmp += model.gravities[i].ToString() + ', ';
-            }
-            */
-            // tmp += model.gravities[0].toString(); // + ", " + model.gravities[1].toString();
-            // MessageBox.Show(model.gravities.Count.ToString());
-
-            /*
-            // 
-
-            foreach (KeyValuePair<int, Karamba.Loads.GravityLoad> item in model.gravities)
-            {
-                
-                MessageBox.Show($"{item.Key} {item.Value.force.ToString()}, "); 
-            }
-            */
-
-            // MessageBox.Show(model.element_selector..ToString());
-
-
-
-            // Karamba.Elements.ModelBeam 
-            /*
-             * 
-            public Model(
-
-	        List<Node> _vertices,               // model.nodes;
-	        List<FemMaterial> _materials,       // model.materials;
-	        List<CroSec> _crosecs,              // model.crosecs;
-	            List<ModelElement> _elems,      // model.elems;
-	        List<PointLoad> _point_loads,       // model.ploads;
-	        List<PointMass> _point_masses,      // model.pmass;
-	        List<MeshLoad> _mesh_loads,         // model.mloads;
-	        List<ElementLoad> _element_loads,   // model.eloads;
-	        List<Support> _supports,            // model.supports;
-	        List<ElemSet> bsets,                // model.beamsets;
-	        Dictionary<int, GravityLoad> g,     // model.gravities;
-
-	        ItemSelector elem_id2elem_ind,      // model.element_selector// ?? 
-	        IdManager id_map,                   // ??
-	        int numLC                           // model.numLC;
-            )
- 
-            */
-
 
             #endregion
 
             #region output
             // GH_Model outModel = new GH_Model(nM);
 
-            List<GH_Element> gElem = new List<GH_Element>();
+            List<GH_Element> gElemLst = new List<GH_Element>();
             foreach (GrassElement ge in grElems)
             {
                 GH_Element ghe = new GH_Element(ge);
-                gElem.Add(ghe);
+                gElemLst.Add(ghe);
             }
 
-            List<GH_FemMaterial> gMat = new List<GH_FemMaterial>();
+            List<GH_FemMaterial> gMatLst = new List<GH_FemMaterial>();
             foreach (FemMaterial fm in kMat)
             {
                 GH_FemMaterial ghm = new GH_FemMaterial(fm);
-                gMat.Add(ghm);
+                gMatLst.Add(ghm);
+            }
+
+            List<GH_CrossSection> gCSLst = new List<GH_CrossSection>();
+            foreach (CroSec cs in kCroSec)
+            {
+                GH_CrossSection gcs = new GH_CrossSection(cs);
+                gCSLst.Add(gcs);
             }
             
-            DA.SetDataList(0, gElem);
-            DA.SetDataList(1, gMat);
+            DA.SetDataList(0, gElemLst);
+            DA.SetDataList(1, gCSLst);
+            DA.SetDataList(2, gMatLst);
             #endregion
         }
 
