@@ -132,26 +132,28 @@ namespace PTK
         {
             for (int i = 0; i < _elems.Count; i++) //Element index i       
             {
-                List<Point3d> pts = new List<Point3d>();
+                List<Point3d> segmentPts = new List<Point3d>();
                 List<double> paramList = _elems[i].NodeParams.ToList();
                 
                 for (int j = 0; j < _elems[i].NodeIds.Count; j++)
                 {
-                    pts.Add(Node.FindNodeById(_nodes, _elems[i].NodeIds[j]).Pt3d);
+                    segmentPts.Add(Node.FindNodeById(_nodes, _elems[i].NodeIds[j]).Pt3d);
                 }
                 
                 var key = paramList.ToArray();
-                var ptsArray = pts.ToArray();
+                var ptsArray = segmentPts.ToArray();
                 
-                Array.Sort(key,ptsArray);
+                Array.Sort(key, ptsArray);
 
-                // reset substructural id count
+                // reset substructural id count and structural lines
                 Element.SubElementStructural.ResetSubStrIdCnt();
-                for (int j = 1; j < ptsArray.Count(); j++)
+                _elems[i].ClrStrctLine();
+
+                for (int j = 1; j < ptsArray.Count(); j++) // j starting with #1
                 {
                     Line segment = new Line(ptsArray[j - 1], ptsArray[j]);
                     // be aware that Element.AddStrctline gives subid as well as segment.
-                    _elems[i].AddStrctline(segment);
+                    _elems[i].AddStrctLine(segment);
                 }
             }
         }

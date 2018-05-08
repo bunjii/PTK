@@ -137,10 +137,19 @@ namespace PTK
             get { return align; }
             set { align = value; }
         }
+
+        public ReadOnlyCollection<SubElementStructural> SubStructural
+        {
+            get { return subStructural.AsReadOnly(); }
+        }
+
+        /*
         public List<SubElementStructural> SubStructural
         {
             get { return subStructural; }
         }
+        */
+
         public Brep ElementGeometry
         {
             get { return elementGeometry; }
@@ -223,12 +232,16 @@ namespace PTK
 
 
         //This function send needed information to the subclass "subStructural"
-        public void AddStrctline(Line _structuralline)
+        public void AddStrctLine(Line _structuralline)
         { 
-
-            subStructural.Add(new SubElementStructural(_structuralline, numberOfStructuralLines));
+            this.subStructural.Add(new SubElementStructural(_structuralline, numberOfStructuralLines));
             numberOfStructuralLines++;
     
+        }
+
+        public void ClrStrctLine()
+        {
+            this.subStructural.Clear();
         }
 
         public static Element FindElemById(List<Element> _elems, int _eid)

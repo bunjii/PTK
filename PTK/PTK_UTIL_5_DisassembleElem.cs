@@ -43,7 +43,7 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddCurveParameter("Curve", "Lines", "Lines", GH_ParamAccess.list);
+            pManager.AddCurveParameter("Curve", "Curve", "Curve", GH_ParamAccess.list);
             pManager.AddTextParameter("Tag", "Tag", "Tag", GH_ParamAccess.list);
             pManager.AddIntegerParameter("PTK ELEM ID", "PTK E ID", "PTK ELEM ID", GH_ParamAccess.list);
             // pManager.AddIntegerParameter("PTK NODE ID 0", "PTK N0 ID", "PTK NODE ID 0", GH_ParamAccess.list);
@@ -54,6 +54,7 @@ namespace PTK
             pManager.AddNumberParameter("ParameterConnectedNodes", "PCN", "", GH_ParamAccess.tree);
             pManager.AddBoxParameter("BoundingBox", "BB", "", GH_ParamAccess.list);
             pManager.AddIntegerParameter("Mat ID", "MID", "Material ID", GH_ParamAccess.list);
+            pManager.AddLineParameter("Structural Lines", "STR LNS", "Structural Lines", GH_ParamAccess.tree);
         }
 
         /// <summary>
@@ -80,6 +81,7 @@ namespace PTK
 
             DataTree<int> nidTr = new DataTree<int>();
             DataTree<double> pcnTr = new DataTree<double>();
+            DataTree<Line> lines = new DataTree<Line>();
             #endregion
 
             #region input
@@ -131,6 +133,11 @@ namespace PTK
                     pcnTr.Add(outElems[i].NodeParams[j], pth);
                     nidTr.Add(outElems[i].NodeIds[j], pth);
                 }
+                
+                for (int j=0; j< outElems[i].SubStructural.Count; j++)
+                {
+                    lines.Add(outElems[i].SubStructural[j].StrctrLine, pth);
+                }
 
                 bbox.Add(outElems[i].BoundingBox);
             }
@@ -148,6 +155,7 @@ namespace PTK
             DA.SetDataTree(6, pcnTr);
             DA.SetDataList(7, bbox);
             DA.SetDataList(8, mids);
+            DA.SetDataTree(9, lines);
             #endregion
 
         }

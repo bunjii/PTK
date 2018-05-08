@@ -138,6 +138,7 @@ namespace PTK
                     {
                         if (!curves[i].IsValid) { return; }
                         elems.Add(new Element(curves[i], elemTag, align, section, material));
+                        
                     }
                     
                 });
@@ -153,6 +154,7 @@ namespace PTK
 
                     elems.Add(new Element(curves[i], elemTag, align, section, material));
                     // MessageBox.Show(elems[elems.Count-1].MatId.ToString());
+
                 }
             }
 
@@ -161,6 +163,7 @@ namespace PTK
             #region output
 
             DA.SetData(0, elems);
+            // elems.Clear();
             #endregion
         }
 
