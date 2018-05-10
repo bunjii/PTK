@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PTK
 {
-    public class ProjectProperties
+    public class ProjectProps
     {
         #region fields
         static public double tolerances = 0.001;

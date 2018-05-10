@@ -54,7 +54,7 @@ namespace PTK
 
             #region solve
             Brep[] slashed;
-            slashed = Brep.CreateBooleanDifference(brepA, brepB, ProjectProperties.tolerances);
+            slashed = Brep.CreateBooleanDifference(brepA, brepB, ProjectProps.tolerances);
             #endregion
 
             #region output

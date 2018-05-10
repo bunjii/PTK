@@ -16,7 +16,7 @@ using Rhino.Geometry;
 namespace PTK
 {
    
-    public class PTK4_Assemble : GH_Component
+    public class PTK_4_Assemble : GH_Component
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public 
@@ -25,8 +25,8 @@ namespace PTK
         /// Subcategory the panel. If you use non-existing tab or panel names, 
         /// new tabs/panels will automatically be created.
         /// </summary>
-        public PTK4_Assemble()
-          : base("Assemble", "A (PTK)",
+        public PTK_4_Assemble()
+          : base("Assemble (PTK)", "Assemble",
               "Assemble",
               "PTK", "Assemble")
         {
@@ -37,10 +37,10 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Element", "E(PTK)", "Add elements here", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Supports", "Sup(PTK)", "Add Supports here", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Loads", "L(PTK)", "Add Loads here", GH_ParamAccess.list);
-            pManager.AddTextParameter("Priority", "Priority", "Priority", GH_ParamAccess.item, "");
+            pManager.AddGenericParameter("Element", "E (PTK)", "Add elements here", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Supports", "Sup (PTK)", "Add Supports here", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Loads", "L (PTK)", "Add Loads here", GH_ParamAccess.list);
+            pManager.AddTextParameter("Priority txt", "Priority", "Priority", GH_ParamAccess.item, "");
 
             pManager[1].Optional = true;
             pManager[2].Optional = true;
@@ -52,7 +52,7 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Assembly", "A(PTK)", "Assembled project data", GH_ParamAccess.item);
+            pManager.AddGenericParameter("PTK Assembly", "A (PTK)", "Assembled project data", GH_ParamAccess.item);
 
             // outputs below just checking purposes. should be removed before release. 
             /*

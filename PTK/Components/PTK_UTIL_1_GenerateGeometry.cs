@@ -108,7 +108,7 @@ namespace PTK
                     {
                         SweepOneRail tempsweep = new SweepOneRail();
                         var sweep = tempsweep.PerformSweep(e.Crv, crossSectionRectangle.ToNurbsCurve());
-                        oneBeamGeom = sweep[0].CapPlanarHoles(ProjectProperties.tolerances);
+                        oneBeamGeom = sweep[0].CapPlanarHoles(ProjectProps.tolerances);
                         boundingbox = oneBeamGeom.GetBoundingBox(Rhino.Geometry.Plane.WorldXY);
                     }
 

@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace PTK
 {
-    public class PTK3_Materializer : GH_Component
+    public class PTK_3_Materializer : GH_Component
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public 
@@ -21,10 +21,10 @@ namespace PTK
         /// </summary>
         /// 
         
-        public PTK3_Materializer()
-          : base("Materializer", "MT",
-              "This component materializes curves. This based on cross-sections, material and alignments",
-              "PTK", "1_INPUT")
+        public PTK_3_Materializer()
+          : base("Materializer (PTK)", "Materialzer",
+              "creates a beam element.",
+              "PTK", "Materialize")
         {
         }
 
@@ -33,13 +33,13 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Add name of the group here", GH_ParamAccess.item, "Untitled");
-            pManager.AddCurveParameter("Curves", "Crv", "Add element-curves that shall be materalized", GH_ParamAccess.list);
-            pManager.AddGenericParameter("CrossSection", "CS", "Add the cross-section componentt here", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Material", "MT", "Add Material-component here",GH_ParamAccess.item);
-            pManager.AddGenericParameter("Align", "A", "Describes the alignment of the member. (Rotation and offset)", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Forces", "F", "Add Forces-component here", GH_ParamAccess.item);
-            pManager.AddTextParameter("Tags", "T", "Add tags to the structure here. Tags are individual to each element", GH_ParamAccess.tree);
+            pManager.AddTextParameter("tag", "tag", "Add tags to the structure here.", GH_ParamAccess.item, "Untitled");
+            pManager.AddCurveParameter("curve", "crv", "Add curves that shall be materalized", GH_ParamAccess.list);
+            pManager.AddGenericParameter("PTK Cross Section", "CS (PTK)", "Add the cross-section componentt here", GH_ParamAccess.item);
+            pManager.AddGenericParameter("PTK Material", "Mat (PTK)", "Add Material-component here",GH_ParamAccess.item);
+            pManager.AddGenericParameter("PTK Align", "Aln (PTK)", "Describes the alignment of the member. (Rotation and offset)", GH_ParamAccess.item);
+            pManager.AddGenericParameter("PTK Force", "F (PTK)", "Add Forces-component here", GH_ParamAccess.item);
+            // pManager.AddTextParameter("Tags", "T", "Add tags to the structure here. Tags are individual to each element", GH_ParamAccess.tree);
             // pManager.AddIntegerParameter("Priority", "P", "Add a integer value that defines the priority of the member", GH_ParamAccess.list);
             
             pManager[0].Optional = true;
@@ -47,7 +47,7 @@ namespace PTK
             pManager[3].Optional = true;
             pManager[4].Optional = true;
             pManager[5].Optional = true;
-            pManager[6].Optional = true;
+            // pManager[6].Optional = true;
             // pManager[7].Optional = true;
 
         }
@@ -57,7 +57,7 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Element", "E", "The output from the Materializer are elements", GH_ParamAccess.item);
+            pManager.AddGenericParameter("PTK Element", "E (PTK)", "PTK Elements", GH_ParamAccess.item);
         }
 
         /// <summary>

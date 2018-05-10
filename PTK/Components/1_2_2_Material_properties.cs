@@ -5,15 +5,15 @@ using System;
 
 namespace PTK
 {
-    public class PTK_1_2_1_Material_properties : GH_Component
+    public class PTK_1_2_2_Material_Props : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the MyComponent1 class.
         /// </summary>
-        public PTK_1_2_1_Material_properties()
-          : base("1_2_1_Material_properties", "MTp",
-              "Add material properties here",
-              "PTK", "Materializer")
+        public PTK_1_2_2_Material_Props()
+          : base("Material Properties (PTK)", "MP",
+              "creates material properties",
+              "PTK", "Materialize")
         {
         }
 
@@ -22,28 +22,28 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("MaterialName", "MN", "Name the material", GH_ParamAccess.item, "GL26C");      //We should add default values here.
+            pManager.AddTextParameter("MaterialName", "MatName", "names Material.", GH_ParamAccess.item, "GL26C");      //We should add default values here.
 
-            pManager.AddNumberParameter("f m,g,k", "fmgk", "Charasteric bending strentgh", GH_ParamAccess.item, 26 );
-            pManager.AddNumberParameter("f t,0,g,k", "ft0gk", "Charasteric bending strentgh", GH_ParamAccess.item, 19 );
-            pManager.AddNumberParameter("f t,90,g,k", "ft90gk", "Charasteric bending strentgh", GH_ParamAccess.item, 0.5 );
-            pManager.AddNumberParameter("f c,0,g,k", "fc0gk", "Charasteric bending strentgh", GH_ParamAccess.item, 23.5 );
-            pManager.AddNumberParameter("f c,90,g,k", "fc90gk", "Charasteric bending strentgh", GH_ParamAccess.item, 2.5 );
-            pManager.AddNumberParameter("f v,g,k", "fvgk", "Charasteric bending strentgh", GH_ParamAccess.item, 3.5 );
-            pManager.AddNumberParameter("f r,g,k", "frgk", "Charasteric bending strentgh", GH_ParamAccess.item, 1.2 );
+            pManager.AddNumberParameter("f m,g,k", "fmgk", "in [N/mm2]", GH_ParamAccess.item, 26 );
+            pManager.AddNumberParameter("f t,0,g,k", "ft0gk", "in [N/mm2]", GH_ParamAccess.item, 19 );
+            pManager.AddNumberParameter("f t,90,g,k", "ft90gk", "in [N/mm2]", GH_ParamAccess.item, 0.5 );
+            pManager.AddNumberParameter("f c,0,g,k", "fc0gk", "in [N/mm2]", GH_ParamAccess.item, 23.5 );
+            pManager.AddNumberParameter("f c,90,g,k", "fc90gk", "in [N/mm2]", GH_ParamAccess.item, 2.5 );
+            pManager.AddNumberParameter("f v,g,k", "fvgk", "in [N/mm2]", GH_ParamAccess.item, 3.5 );
+            pManager.AddNumberParameter("f r,g,k", "frgk", "in [N/mm2]", GH_ParamAccess.item, 1.2 );
 
-            pManager.AddNumberParameter("E 0,g,mean", "E0gmean", "Charasteric bending strentgh", GH_ParamAccess.item, 12000 );
-            pManager.AddNumberParameter("E 0,g,05", "E0g05", "Charasteric bending strentgh", GH_ParamAccess.item, 10000 );
-            pManager.AddNumberParameter("E 90,g,mean", "E90gmean", "Charasteric bending strentgh", GH_ParamAccess.item, 300 );
-            pManager.AddNumberParameter("E 90,g,05", "E90g05", "Charasteric bending strentgh", GH_ParamAccess.item, 250);
+            pManager.AddNumberParameter("E 0,g,mean", "E0gmean", "in [N/mm2]", GH_ParamAccess.item, 12000 );
+            pManager.AddNumberParameter("E 0,g,05", "E0g05", "in [N/mm2]", GH_ParamAccess.item, 10000 );
+            pManager.AddNumberParameter("E 90,g,mean", "E90gmean", "in [N/mm2]", GH_ParamAccess.item, 300 );
+            pManager.AddNumberParameter("E 90,g,05", "E90g05", "in [N/mm2]", GH_ParamAccess.item, 250);
 
-            pManager.AddNumberParameter("G g,mean", "Ggmean", "Charasteric bending strentgh", GH_ParamAccess.item, 650 );
-            pManager.AddNumberParameter("G g,05", "Gg05", "Charasteric bending strentgh", GH_ParamAccess.item, 542 );
-            pManager.AddNumberParameter("G r,g,mean", "Grgmean", "Charasteric bending strentgh", GH_ParamAccess.item, 65 );
-            pManager.AddNumberParameter("G r,g,05", "Grg05", "Charasteric bending strentgh", GH_ParamAccess.item, 54);
+            pManager.AddNumberParameter("G g,mean", "Ggmean", "in [N/mm2]", GH_ParamAccess.item, 650 );
+            pManager.AddNumberParameter("G g,05", "Gg05", "in [N/mm2]", GH_ParamAccess.item, 542 );
+            pManager.AddNumberParameter("G r,g,mean", "Grgmean", "in [N/mm2]", GH_ParamAccess.item, 65 );
+            pManager.AddNumberParameter("G r,g,05", "Grg05", "in [N/mm2]", GH_ParamAccess.item, 54);
 
-            pManager.AddNumberParameter("Rho g,k", "Rhogk", "Charasteric bending strentgh", GH_ParamAccess.item, 385);
-            pManager.AddNumberParameter("Rho g,meam", "Rhogmean" , "Charasteric bending strentgh", GH_ParamAccess.item, 420);
+            pManager.AddNumberParameter("Rho g,k", "Rhogk", "in [kg/m3]", GH_ParamAccess.item, 385);
+            pManager.AddNumberParameter("Rho g,meam", "Rhogmean" , "in [kg/m3]", GH_ParamAccess.item, 420);
             
         }
 
@@ -52,7 +52,8 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Material", "M", "MaterialData to be connected with MaterializerComponent", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Material Properties (PTK)", "MP (PTK)",
+                "Material Property (PTK) data to be connected to a Material (PTK) component", GH_ParamAccess.item);
         }
 
         /// <summary>

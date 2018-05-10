@@ -82,8 +82,8 @@ namespace PTK
                     // line-line intersect operation.
                     // be aware of & and && here.
                     if (targetCrv.IsLinear() && clashingCrv.IsLinear() && Rhino.Geometry.Intersect.Intersection.LineLine
-                        (target, clash, out paramA, out paramB, ProjectProperties.tolerances, true)
-                        & (ProjectProperties.tolerances < paramA && paramA < 1 - ProjectProperties.tolerances))
+                        (target, clash, out paramA, out paramB, ProjectProps.tolerances, true)
+                        & (ProjectProps.tolerances < paramA && paramA < 1 - ProjectProps.tolerances))
                     {
                         intersectPt = target.PointAt(paramA);
 
@@ -98,7 +98,7 @@ namespace PTK
                     else 
                     {
                         var intersect = Rhino.Geometry.Intersect.Intersection.CurveCurve
-                        (targetCrv, clashingCrv, ProjectProperties.tolerances, ProjectProperties.tolerances);
+                        (targetCrv, clashingCrv, ProjectProps.tolerances, ProjectProps.tolerances);
 
                         // in case there's no intersect, go on with the next loop.
                         // in case intersect happens at either end of targetCrv, go on with the next loop. 
@@ -343,7 +343,7 @@ namespace PTK
                             continue;     // if I am more prioritized than my counterpart, no need of processing.
                         } 
                         */
-                        Brep[] _slashedBreps = Brep.CreateBooleanDifference(_relvBrep[j], _relvBrep[k], ProjectProperties.tolerances);
+                        Brep[] _slashedBreps = Brep.CreateBooleanDifference(_relvBrep[j], _relvBrep[k], ProjectProps.tolerances);
                         if (_slashedBreps == null) continue;
                         if (_slashedBreps.Count() == 0) continue;
 
@@ -421,7 +421,7 @@ namespace PTK
 
             // BoundingBox _spotBBox = new BoundingBox(_samplePt, _samplePt); 
             // Above code didn't work out, needing of considering tolerance for BBox. comment by DDL 9th Apr.
-            double tol = ProjectProperties.tolerances; 
+            double tol = ProjectProps.tolerances; 
             BoundingBox _spotBBox = new BoundingBox
                 (_sPt.X-tol,_sPt.Y-tol, _sPt.Z-tol,_sPt.X+tol,_sPt.Y+tol,_sPt.Z+tol);
 

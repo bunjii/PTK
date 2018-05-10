@@ -11,15 +11,15 @@ using Grasshopper.Kernel.Data;
 
 namespace PTK
 {
-    public class PTK_1_2_1_Material_load : GH_Component
+    public class PTK_1_2_1_LoadMatProps : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the MyComponent1 class.
         /// </summary>
-        public PTK_1_2_1_Material_load()
-          : base("1_2_1_Material_load", "MTp",
-              "Load material properties from tree here",
-              "PTK", "Materializer")
+        public PTK_1_2_1_LoadMatProps()
+          : base("Load Material Properties (PTK)", "Load MP",
+              "loads material properties from Tree.",
+              "PTK", "Materialize")
         {
         }
 
@@ -28,10 +28,9 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("MaterialName", "MN", "Name the material", GH_ParamAccess.item, "GL26c");      //We should add default values here.
-            pManager.AddTextParameter("Load data", "dataTree", "Load data tree with properties", GH_ParamAccess.tree);
-
-
+            pManager.AddTextParameter("Material Name", "MatName", "names Material.", GH_ParamAccess.item, "GL26c");      //We should add default values here.
+            pManager.AddTextParameter("Load data", "dataTree", "Load data tree with properties.", GH_ParamAccess.tree);
+            
         }
 
         /// <summary>
@@ -39,9 +38,8 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Material", "M", "MaterialData to be connected with MaterializerComponent", GH_ParamAccess.item);
-
-            pManager.AddTextParameter("Properties list", "List", "List of timber properties", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Material Properties (PTK)", "MP (PTK)", "Material Property (PTK) data to be connected to a Material (PTK) component", GH_ParamAccess.item);
+            pManager.AddTextParameter("Material Properties text", "MP txt", "Text output of Material Properties (PTK)", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -93,7 +91,7 @@ namespace PTK
 
             #region solve
             // check locale: "comma" or "period"
-            string decimalSeparator = ProjectProperties.FindDecimalSeparator();
+            string decimalSeparator = ProjectProps.FindDecimalSeparator();
             bool comma = false, period = false; // to check if text contains comma or period.
              
             // registering materials

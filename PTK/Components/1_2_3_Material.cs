@@ -8,15 +8,15 @@ using Rhino.Geometry;
 
 namespace PTK
 {
-    public class PTK_1_2_Material : GH_Component
+    public class PTK_1_2_3_Material : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the MyComponent1 class.
         /// </summary>
-        public PTK_1_2_Material()
-          : base("Material", "MT",
-              "Add materialdata here",
-              "PTK", "Materializer")
+        public PTK_1_2_3_Material()
+          : base("Material (PTK)", "Mat",
+              "creates a Material",
+              "PTK", "Materialize")
         {
         }
 
@@ -25,7 +25,7 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("MaterialName","MN", "Name the material", GH_ParamAccess.item, "UntitledMaterial");      //We should add default values here.
+            pManager.AddTextParameter("MaterialName","MN", "Names the material", GH_ParamAccess.item, "UntitledMaterial");      //We should add default values here.
             pManager.AddIntegerParameter("MaterialID", "MId", "ID of the material", GH_ParamAccess.item, -999);    //We should add default values here.
             pManager.AddGenericParameter("Properties", "Pro", "Add strutural properties here", GH_ParamAccess.item);    //We should add default values here.
 

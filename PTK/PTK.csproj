@@ -65,21 +65,21 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\CL_Align.cs" />
-    <Compile Include="Classes\CL_Assembly.cs" />
-    <Compile Include="Classes\CL_Element.cs" />
-    <Compile Include="Classes\CL_Functions.cs" />
-    <Compile Include="Classes\CL_Functions_DDL.cs" />
-    <Compile Include="Classes\CL_Loads.cs" />
-    <Compile Include="Classes\CL_Material.cs" />
-    <Compile Include="Classes\CL_Material_properties.cs" />
-    <Compile Include="Classes\CL_Node.cs" />
+    <Compile Include="Classes\Align.cs" />
+    <Compile Include="Classes\Assembly.cs" />
+    <Compile Include="Classes\Element.cs" />
+    <Compile Include="Classes\Functions.cs" />
+    <Compile Include="Classes\Functions_DDL.cs" />
+    <Compile Include="Classes\Loads.cs" />
+    <Compile Include="Classes\Material.cs" />
+    <Compile Include="Classes\MatProps.cs" />
+    <Compile Include="Classes\Node.cs" />
     <Compile Include="Components\SandBoxComponent.cs" />
-    <Compile Include="Classes\ProjectProperties.cs" />
+    <Compile Include="Classes\ProjectProps.cs" />
     <Compile Include="Components\PTK_1_4b_Alignment_Simple.cs" />
     <Compile Include="Components\PTK_1_4_Alignment_Simple.cs" />
     <Compile Include="Components\PTK_1_5_Forces.cs" />
-    <Compile Include="Classes\CL_Forces.cs" />
+    <Compile Include="Classes\Forces.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -88,12 +88,12 @@
     <Compile Include="Components\PTK_1_3_RectangularCrossection.cs" />
     <Compile Include="PTKInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Components\PTK_3_Materializer.cs" />
+    <Compile Include="Components\3_Materializer.cs" />
     <Compile Include="Components\PTK_4_1_KarambaAssemble.cs" />
-    <Compile Include="Components\PTK_4_Assemble.cs" />
-    <Compile Include="Components\PTK_1_2_1_Material_load.cs" />
-    <Compile Include="Components\PTK_1_2_1_Material_properties.cs" />
-    <Compile Include="Components\PTK_1_2_Material.cs" />
+    <Compile Include="Components\4_Assemble.cs" />
+    <Compile Include="Components\1_2_1_LoadMatProps.cs" />
+    <Compile Include="Components\1_2_2_Material_properties.cs" />
+    <Compile Include="Components\1_2_3_Material.cs" />
     <Compile Include="Components\PTK_2_1_Loads.cs" />
     <Compile Include="Components\PTK_2_2_Supports.cs" />
     <Compile Include="Components\PTK_5_GlobalModel.cs" />
@@ -106,11 +106,10 @@
     <Compile Include="Components\PTK_UTIL_6_DisassembleMaterial.cs" />
     <Compile Include="Components\PTK_UTIL_5_DisassembleElem.cs" />
     <Compile Include="Components\PTK_UTIL_1_GenerateGeometry.cs" />
-    <Compile Include="Classes\CL_Section.cs" />
+    <Compile Include="Classes\Section.cs" />
     <Compile Include="Components\PTK_UTIL_4_DisassembleNode.cs" />
     <Compile Include="Components\PTK_UTIL_3_SelectNode.cs" />
-    <Compile Include="Classes\CL_Supports.cs" />
-    <Compile Include="Classes\CL_TempDummyClass.cs" />
+    <Compile Include="Classes\Supports.cs" />
     <Compile Include="Components\PTK_UTIL_2_Disassemble.cs" />
     <Compile Include="Components\PTK_UTIL_7_DisassembleSection.cs" />
   </ItemGroup>
