@@ -19,6 +19,12 @@ namespace PTK
             nodes = _nodes;
             elems = _elems;
         }
+
+        public Assembly()
+        {
+
+        }
+
         #endregion
 
         #region properties

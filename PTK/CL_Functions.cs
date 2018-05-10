@@ -14,11 +14,6 @@ namespace PTK
     public class Functions
     {
         
-        
-
-        
-
-
 
 
         //Function that removes duplicate points
@@ -122,7 +117,7 @@ namespace PTK
         }
           
 
-                
+                /*
 
                 var key = parameterTemp.ToArray();
                 var elements = pointOnCurves.ToArray();
@@ -144,10 +139,7 @@ namespace PTK
 
                 }
 
-            }
-
-
-        }
+    */
 
 
 

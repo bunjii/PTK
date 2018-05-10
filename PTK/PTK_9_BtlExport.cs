@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 using Grasshopper.Kernel;
 using Rhino.Geometry;
+using System.Xml;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace PTK
 {
@@ -41,6 +44,58 @@ namespace PTK
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            bool enable = false;
+            Assembly assembly = new Assembly();
+
+            DA.GetData(2, ref enable);
+            DA.GetData(0, ref assembly);
+
+            if (enable)
+            {
+                //Initializing the parts
+                ProjectTypeParts Parts = new ProjectTypeParts();
+
+                for (int i = 0; i < assembly.Elems.Count; i++)
+                {
+                    Parts.Part.Add(assembly.Elems[i].BTLPart);
+                }
+                    
+                //Initializing the project
+                ProjectType Project = new ProjectType();
+                Project.Parts = Parts;
+                Project.Name = "PTK";
+                Project.Architect = "JOHNBUNJIMarcin";
+                Project.Comment = "YeaaaahhH! Finally. ";
+
+
+                //Initializing the file;
+
+                BTLx BTLx = new BTLx();
+
+                BTLx.Project = Project;
+                BTLx.Language = "Norsk";
+
+
+                // Create a new XmlSerializer instance with the type of the test class
+                XmlSerializer SerializerObj = new XmlSerializer(typeof(BTLx));
+
+                // Create a new file stream to write the serialized object to a file
+                TextWriter WriteFileStream = new StreamWriter(@"C:\Users\Lokaladm\Desktop\Teste\test.btlx");
+                SerializerObj.Serialize(WriteFileStream, BTLx);
+                WriteFileStream.Close();
+
+            }
+
+
+
+
+
+
+
+            
+
+
+
         }
 
         /// <summary>

@@ -1,0 +1,2248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns="http://www.design2machine.com" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.design2machine.com" elementFormDefault="qualified">
+	<!-- ================================================================== -->
+	<!--BTLx 1.0-->
+	<!--first published on 06.05.2015-->
+	<!--last changed on 08.01.2016-->
+	<!--this schema can be found at http://www.design2machine.com/btlx/btlx_10.xsd-->
+	<!-- ================================================================== -->
+	<!--Please note: all dimensional measures are in millimeters, all angular measures are in degrees-->
+	<!-- ================================================================== -->
+	<!--Corrections-->
+	<!--08.01.2016: ColourType: corrected data type (from xs:byte to xs:unsignedByte)-->
+	<!-- ================================================================== -->
+	<xs:element name="BTLx">
+		<xs:annotation>
+			<xs:documentation>Root element for BTLx data</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="FileHistory" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="InitialExportProgram" type="ProgramInfoType" minOccurs="0"/>
+							<xs:element name="EditingProgram" type="ProgramInfoType" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Project" type="ProjectType"/>
+			</xs:sequence>
+			<xs:attribute name="Version" use="required">
+				<xs:annotation>
+					<xs:documentation>e.g. 1.0 or 1.0.2</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="1.0"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="Language" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>language shortcut in compliance with ISO 639-1</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="ProjectType">
+		<xs:annotation>
+			<xs:documentation>Definition of a complete project</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="UserAttributes" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence maxOccurs="unbounded">
+						<xs:element name="UserAttribute" type="UserAttributeType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Rawparts" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence maxOccurs="unbounded">
+						<xs:element name="Rawpart" type="RawPartType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Parts" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence maxOccurs="unbounded">
+						<xs:element name="Part" type="PartType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Composites" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Modules" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence maxOccurs="unbounded">
+									<xs:element name="Module" type="CompositeModuleType"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="Layers" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence maxOccurs="unbounded">
+									<xs:element name="Layer" type="CompositeLayerType"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="Elements" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence maxOccurs="unbounded">
+									<xs:element name="Element" type="CompositeElementType"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="ElementCharges" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence maxOccurs="unbounded">
+									<xs:element name="ElementCharge" type="CompositeElementChargeType"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="Name" type="xs:string" use="required"/>
+		<xs:attribute name="Number" type="xs:string"/>
+		<xs:attribute name="GUID" type="GUIDType"/>
+		<xs:attribute name="Section" type="xs:string"/>
+		<xs:attribute name="ListName" type="xs:string"/>
+		<xs:attribute name="Customer" type="xs:string"/>
+		<xs:attribute name="Architect" type="xs:string"/>
+		<xs:attribute name="Editor" type="xs:string"/>
+		<xs:attribute name="DeliveryDate" type="xs:date">
+			<xs:annotation>
+				<xs:documentation>in compliance with ISO 8601</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="SourceFile" type="xs:string"/>
+		<xs:attribute name="ProcessingQuality" type="ProcessingQualityType" default="automatic"/>
+		<xs:attribute name="Recess" type="RecessType" default="automatic"/>
+		<xs:attribute name="Comment" type="xs:string"/>
+	</xs:complexType>
+	<!---->
+	<!-- ================================================================== -->
+	<!--component definitions-->
+	<!-- ================================================================== -->
+	<xs:complexType name="ComponentType" abstract="true">
+		<xs:annotation>
+			<xs:documentation>Definition of a component</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Transformations" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence maxOccurs="unbounded">
+						<xs:element name="Transformation" type="ReferenceType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Outlines" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence maxOccurs="3">
+						<xs:element name="Outline">
+							<xs:complexType>
+								<xs:complexContent>
+									<xs:extension base="OutlineType"/>
+								</xs:complexContent>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="UserAttributes" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence maxOccurs="unbounded">
+						<xs:element name="UserAttribute" type="UserAttributeType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Colour" type="ColourType" minOccurs="0"/>
+			<xs:element name="PartOffset" type="PartOffsetType" minOccurs="0"/>
+			<xs:element name="GrainDirection" minOccurs="0">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="CoordinateType">
+							<xs:attribute name="Align" type="BooleanType" use="required"/>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ReferenceSide" minOccurs="0">
+				<xs:complexType>
+					<xs:attribute name="Side" type="RefSideType" use="required"/>
+					<xs:attribute name="Align" type="BooleanType" use="required"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="MaterialClass" type="MaterialClassType" minOccurs="0"/>
+			<xs:element name="UserReferencePlanes" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence maxOccurs="unbounded">
+						<xs:element name="UserReferencePlane" type="UserReferencePlaneType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Processings" minOccurs="0">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="ProcessingsType">
+							<xs:sequence minOccurs="0" maxOccurs="unbounded">
+								<xs:element name="ProcessingGroup" type="ProcessingGroupType"/>
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="Count" default="1">
+			<xs:simpleType>
+				<xs:restriction base="xs:int">
+					<xs:minInclusive value="1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="Length" type="xs:double" use="required"/>
+		<xs:attribute name="Width" type="xs:double" use="required"/>
+		<xs:attribute name="Height" type="xs:double" use="required"/>
+		<xs:attribute name="SingleMemberNumber" type="xs:unsignedInt"/>
+		<xs:attribute name="AssemblyNumber" type="xs:string"/>
+		<xs:attribute name="OrderNumber" type="xs:unsignedInt"/>
+		<xs:attribute name="Designation" type="xs:string"/>
+		<xs:attribute name="Annotation" type="xs:string"/>
+		<xs:attribute name="Storey" type="xs:string"/>
+		<xs:attribute name="StoreyType" type="StoreyType"/>
+		<xs:attribute name="Group" type="xs:string"/>
+		<xs:attribute name="Package" type="xs:string"/>
+		<xs:attribute name="Material" type="xs:string"/>
+		<xs:attribute name="TimberGrade" type="xs:string"/>
+		<xs:attribute name="QualityGrade" type="xs:string"/>
+		<xs:attribute name="PlaningLength" type="xs:double" use="optional"/>
+		<xs:attribute name="StartOffset" type="xs:double" use="optional"/>
+		<xs:attribute name="EndOffset" type="xs:double" use="optional"/>
+		<xs:attribute name="Weight" type="xs:double"/>
+		<xs:attribute name="ProcessingQuality" type="ProcessingQualityType"/>
+		<xs:attribute name="Recess" type="RecessType"/>
+		<xs:attribute name="ElementNumber" type="xs:string"/>
+		<xs:attribute name="Layer" type="xs:int"/>
+		<xs:attribute name="ModuleNumber" type="xs:string"/>
+		<xs:attribute name="Comment" type="xs:string"/>
+	</xs:complexType>
+	<xs:complexType name="PartType">
+		<xs:annotation>
+			<xs:documentation>Definition of a part</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ComponentType">
+				<xs:sequence>
+					<xs:element name="Camber" type="CamberType" minOccurs="0"/>
+					<xs:element name="Alignment" type="AlignmentType" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="RawPartType">
+		<xs:annotation>
+			<xs:documentation>Definition of a rawpart</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ComponentType">
+				<xs:sequence minOccurs="0">
+					<xs:element name="PartRefs" minOccurs="0">
+						<xs:complexType>
+							<xs:sequence maxOccurs="unbounded">
+								<xs:element name="PartRef" type="ReferenceType"/>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="Camber" type="CamberType" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CompositeModuleType">
+		<xs:annotation>
+			<xs:documentation>Definition of a module</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ComponentType">
+				<xs:sequence minOccurs="0">
+					<xs:element name="PartRefs" minOccurs="0">
+						<xs:complexType>
+							<xs:sequence maxOccurs="unbounded">
+								<xs:element name="PartRef" type="ReferenceType"/>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CompositeLayerType">
+		<xs:annotation>
+			<xs:documentation>Definition of a layer</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="CompositeModuleType">
+				<xs:sequence>
+					<xs:element name="ModuleRefs" minOccurs="0">
+						<xs:complexType>
+							<xs:sequence maxOccurs="unbounded">
+								<xs:element name="ModuleRef" type="ReferenceType"/>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CompositeElementType">
+		<xs:annotation>
+			<xs:documentation>Definition of a element</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="CompositeLayerType">
+				<xs:sequence>
+					<xs:element name="LayerRefs" minOccurs="0">
+						<xs:complexType>
+							<xs:sequence maxOccurs="unbounded">
+								<xs:element name="LayerRef" type="ReferenceType"/>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CompositeElementChargeType">
+		<xs:annotation>
+			<xs:documentation>Definition of a elementcharge</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="CompositeElementType">
+				<xs:sequence>
+					<xs:element name="ElementRefs" minOccurs="0">
+						<xs:complexType>
+							<xs:sequence maxOccurs="unbounded">
+								<xs:element name="ElementRef" type="ReferenceType"/>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<!---->
+	<!-- ================================================================== -->
+	<!--ProcessingType definitions-->
+	<!-- ================================================================== -->
+	<xs:complexType name="ProcessingBaseType" abstract="true">
+		<xs:annotation>
+			<xs:documentation>Definition of a machining to be executed on the superior part </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="UserAttributes" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence maxOccurs="unbounded">
+						<xs:element name="UserAttribute" type="UserAttributeType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="Name" type="xs:string" use="required"/>
+		<xs:attribute name="Process" type="BooleanType" default="yes"/>
+		<xs:attribute name="ProcessingQuality" type="ProcessingQualityType"/>
+		<xs:attribute name="Recess" type="RecessType"/>
+		<xs:attribute name="Priority" type="xs:int" default="0"/>
+		<xs:attribute name="ProcessID" type="xs:unsignedInt"/>
+		<xs:attribute name="Comment" type="xs:string"/>
+	</xs:complexType>
+	<xs:complexType name="ProcessingType" abstract="true">
+		<xs:annotation>
+			<xs:documentation>Definition of a machining to be executed on the superior part </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingBaseType">
+				<xs:attribute name="ReferencePlaneID" use="required">
+					<xs:annotation>
+						<xs:documentation>can refer to a global reference plane (1-6) or a user defined reference plane (100-)</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:unsignedInt">
+							<xs:minInclusive value="1"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ProcessingsType" abstract="true">
+		<xs:annotation>
+			<xs:documentation>Definition of a machining to be executed on the superior part </xs:documentation>
+		</xs:annotation>
+		<xs:choice maxOccurs="unbounded">
+			<xs:element name="JackRafterCut" type="JackRafterCutType"/>
+			<xs:element name="LongitudinalCut" type="LongitudinalCutType"/>
+			<xs:element name="DoubleCut" type="DoubleCutType"/>
+			<xs:element name="RidgeValleyCut" type="RidgeValleyCutType"/>
+			<xs:element name="SawCut" type="SawCutType"/>
+			<xs:element name="Slot" type="SlotType"/>
+			<xs:element name="BirdsMouth" type="BirdsMouthType"/>
+			<xs:element name="HipValleyRafterNotch" type="HipValleyRafterNotchType"/>
+			<xs:element name="Lap" type="LapType"/>
+			<xs:element name="LogHouseHalfLap" type="LogHouseHalfLapType"/>
+			<xs:element name="FrenchRidgeLap" type="FrenchRidgeLapType"/>
+			<xs:element name="Chamfer" type="ChamferType"/>
+			<xs:element name="LogHouseJoint" type="LogHouseJointType"/>
+			<xs:element name="LogHouseFront" type="LogHouseFrontType"/>
+			<xs:element name="Pocket" type="PocketType"/>
+			<xs:element name="Drilling" type="DrillingType"/>
+			<xs:element name="Tenon" type="TenonType"/>
+			<xs:element name="Mortise" type="MortiseType"/>
+			<xs:element name="House" type="HouseType"/>
+			<xs:element name="HouseMortise" type="HouseMortiseType"/>
+			<xs:element name="DovetailTenon" type="DovetailTenonType"/>
+			<xs:element name="DovetailMortise" type="DovetailMortiseType"/>
+			<xs:element name="Marking" type="MarkingType"/>
+			<xs:element name="Text" type="TextType"/>
+			<xs:element name="SimpleScarf" type="SimpleScarfType"/>
+			<xs:element name="ScarfJoint" type="ScarfJointType"/>
+			<xs:element name="StepJoint" type="StepJointType"/>
+			<xs:element name="StepJointNotch" type="StepJointNotchType"/>
+			<xs:element name="ProfileFront" type="ProfileFrontType"/>
+			<xs:element name="ProfileCambered" type="ProfileCamberedType"/>
+			<xs:element name="RoundArch" type="RoundArchType"/>
+			<xs:element name="Planing" type="PlaningType"/>
+			<xs:element name="ProfileHead" type="ProfileHeadType"/>
+			<xs:element name="Sphere" type="SphereType"/>
+			<xs:element name="TriangleCut" type="TriangleCutType"/>
+			<xs:element name="TyroleanDovetail" type="TyroleanDovetailType"/>
+			<xs:element name="Dovetail" type="DovetailType"/>
+			<xs:element name="FreeContour" type="FreeContourType"/>
+			<xs:element name="SawContour" type="SawContourType"/>
+			<xs:element name="MillContour" type="MillContourType"/>
+			<xs:element name="NailContour" type="NailContourType"/>
+			<xs:element name="PenContour" type="PenContourType"/>
+			<xs:element name="GlueArea" type="GlueAreaType"/>
+			<xs:element name="PlaningArea" type="PlaningAreaType"/>
+			<xs:element name="PlasterArea" type="PlasterAreaType"/>
+			<xs:element name="LockoutArea" type="LockoutAreaType"/>
+			<xs:element name="Variant" type="VariantType"/>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="ProcessingGroupType" abstract="true">
+		<xs:annotation>
+			<xs:documentation> Defintion of a group of processings</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="Processings" type="ProcessingsType"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<!---->
+	<!-- ================================================================== -->
+	<!--Processing defintions-->
+	<!-- ================================================================== -->
+	<xs:complexType name="JackRafterCutType">
+		<xs:annotation>
+			<xs:documentation>Defintion of a jackrafter cut</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="Orientation" type="OrientationType"/>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="StartY" type="WidthType" default="0.0" minOccurs="0"/>
+					<xs:element name="StartDepth" type="WidthType" default="0.0" minOccurs="0"/>
+					<xs:element name="Angle" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="Inclination" type="AngleType" default="90.0" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="LongitudinalCutType">
+		<xs:annotation>
+			<xs:documentation>Definition of a longitudinal cut</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="StartY" type="WidthType" default="20.0" minOccurs="0"/>
+					<xs:element name="Inclination" type="Inclination2Type" default="45.0" minOccurs="0"/>
+					<xs:element name="StartLimited" type="BooleanType" default="no" minOccurs="0"/>
+					<xs:element name="EndLimited" type="BooleanType" default="no" minOccurs="0"/>
+					<xs:element name="Length" type="LengthType" default="0.0" minOccurs="0"/>
+					<xs:element name="DepthLimited" type="BooleanType" default="no" minOccurs="0"/>
+					<xs:element name="Depth" type="WidthType" default="0.0" minOccurs="0"/>
+					<xs:element name="AngleStart" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="AngleEnd" type="AngleType" default="90.0" minOccurs="0"/>
+				</xs:sequence>
+				<xs:attribute name="ToolPosition" type="ToolPositionType" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="DoubleCutType">
+		<xs:annotation>
+			<xs:documentation>Defintion of a double cut</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="Orientation" type="OrientationType"/>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="StartY" type="WidthNType" default="50.0" minOccurs="0"/>
+					<xs:element name="Angle1" type="AngleType" default="45.0" minOccurs="0"/>
+					<xs:element name="Inclination1" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="Angle2" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="Inclination2" type="AngleType" default="90.0" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="RidgeValleyCutType">
+		<xs:annotation>
+			<xs:documentation>Definition of a ridge/valley cut</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="StartY" type="WidthType" default="50.0" minOccurs="0"/>
+					<xs:element name="StartDepth" type="WidthType" default="0.0" minOccurs="0"/>
+					<xs:element name="InclinationRefSide" type="InclinationType" default="45.0" minOccurs="0"/>
+					<xs:element name="InclinationOppSide" type="InclinationType" default="45.0" minOccurs="0"/>
+					<xs:element name="StartLimited" type="BooleanType" default="no" minOccurs="0"/>
+					<xs:element name="EndLimited" type="BooleanType" default="no" minOccurs="0"/>
+					<xs:element name="Length" type="LengthType" default="0.0" minOccurs="0"/>
+					<xs:element name="AngleRefStart" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="AngleRefEnd" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="AngleOppStart" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="AngleOppEnd" type="AngleType" default="90.0" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="SawCutType">
+		<xs:annotation>
+			<xs:documentation>Defintion of a saw cut</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="StartY" type="WidthNType" default="0.0" minOccurs="0"/>
+					<xs:element name="StartDepth" type="WidthNType" default="0.0" minOccurs="0"/>
+					<xs:element name="Angle" type="Angle2Type" default="90.0" minOccurs="0"/>
+					<xs:element name="Inclination" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="Bevel" type="InclinationType" default="0.0" minOccurs="0"/>
+					<xs:element name="Length" type="LengthType" default="100.0" minOccurs="0"/>
+					<xs:element name="Depth" type="WidthType" default="50.0" minOccurs="0"/>
+				</xs:sequence>
+				<xs:attribute name="ToolPosition" type="ToolPositionType" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="SlotType">
+		<xs:annotation>
+			<xs:documentation>Definition of a slot</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="Orientation" type="OrientationType"/>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="StartY" type="WidthNType" default="0.0" minOccurs="0"/>
+					<xs:element name="StartDepth" type="WidthType" default="0.0" minOccurs="0"/>
+					<xs:element name="Angle" type="Inclination2Type" default="0.0" minOccurs="0"/>
+					<xs:element name="Inclination" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="Length" type="LengthType" default="200.0" minOccurs="0"/>
+					<xs:element name="Depth" type="WidthType" default="100.0" minOccurs="0"/>
+					<xs:element name="Thickness" type="WidthType" default="10.0" minOccurs="0"/>
+					<xs:element name="AngleRefPoint" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="AngleOppPoint" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="AddAngleOppPoint" type="AngleNType" default="0.0" minOccurs="0"/>
+					<xs:element name="MachiningLimits" type="MachiningLimitType" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="BirdsMouthType">
+		<xs:annotation>
+			<xs:documentation>Definition of a birds mouth</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="Orientation" type="OrientationType"/>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="StartY" type="WidthNType" default="0.0" minOccurs="0"/>
+					<xs:element name="StartDepth" type="WidthType" default="20.0" minOccurs="0"/>
+					<xs:element name="Angle" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="Inclination1" type="Angle2Type" default="45.0" minOccurs="0"/>
+					<xs:element name="Inclination2" type="Angle2Type" default="135.0" minOccurs="0"/>
+					<xs:element name="Depth" type="WidthType" default="20.0" minOccurs="0"/>
+					<xs:element name="Width" type="WidthType" default="0.0" minOccurs="0"/>
+					<xs:element name="WidthCounterPartLimited" type="BooleanType" default="no" minOccurs="0"/>
+					<xs:element name="WidthCounterPart" type="WidthType" default="120.0" minOccurs="0"/>
+					<xs:element name="HeightCounterPartLimited" type="BooleanType" default="no" minOccurs="0"/>
+					<xs:element name="HeightCounterPart" type="WidthType" default="120.0" minOccurs="0"/>
+					<xs:element name="FaceLimitedFront" type="BooleanType" default="no" minOccurs="0"/>
+					<xs:element name="FaceLimitedBack" type="BooleanType" default="no" minOccurs="0"/>
+					<xs:element name="LeadAngleParallel" type="BooleanType" default="yes" minOccurs="0"/>
+					<xs:element name="LeadAngle" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="LeadInclinationParallel" type="BooleanType" default="yes" minOccurs="0"/>
+					<xs:element name="LeadInclination" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="RafterNailHole" type="BooleanType" default="no" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="HipValleyRafterNotchType">
+		<xs:annotation>
+			<xs:documentation>Definition of a hip or valley rafter notch</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="Orientation" type="OrientationType"/>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="StartY" type="WidthNType" default="0.0" minOccurs="0"/>
+					<xs:element name="StartDepth" type="WidthType" default="20.0" minOccurs="0"/>
+					<xs:element name="AngleRefEdge" type="AngleType" default="45.0" minOccurs="0"/>
+					<xs:element name="AngleOppEdge" type="AngleType" default="45.0" minOccurs="0"/>
+					<xs:element name="Inclination" type="Angle2Type" default="30.0" minOccurs="0"/>
+					<xs:element name="WidthCounterPartRefEdgeLimited" type="BooleanType" default="no" minOccurs="0"/>
+					<xs:element name="WidthCounterPartRefEdge" type="WidthType" default="120.0" minOccurs="0"/>
+					<xs:element name="WidthCounterPartOppEdgeLimited" type="BooleanType" default="no" minOccurs="0"/>
+					<xs:element name="WidthCounterPartOppEdge" type="WidthType" default="120.0" minOccurs="0"/>
+					<xs:element name="RafterNailHole" type="BooleanType" default="no" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="LapType">
+		<xs:annotation>
+			<xs:documentation>Definition of a lap</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="Orientation" type="OrientationType"/>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="StartY" type="WidthNType" default="0.0" minOccurs="0"/>
+					<xs:element name="Angle" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="Inclination" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="Slope" type="InclinationType" default="0.0" minOccurs="0"/>
+					<xs:element name="Length" type="LengthType" default="100.0" minOccurs="0"/>
+					<xs:element name="Width" type="WidthType" default="50.0" minOccurs="0"/>
+					<xs:element name="Depth" type="WidthNType" default="40.0" minOccurs="0"/>
+					<xs:element name="LeadAngleParallel" type="BooleanType" default="yes" minOccurs="0"/>
+					<xs:element name="LeadAngle" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="LeadInclinationParallel" type="BooleanType" default="yes" minOccurs="0"/>
+					<xs:element name="LeadInclination" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="MachiningLimits" type="MachiningLimitType" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="LogHouseHalfLapType">
+		<xs:annotation>
+			<xs:documentation>Definition of a log house half lap </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="Orientation" type="OrientationType"/>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="Angle" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="Length" type="WidthType" default="120.0" minOccurs="0"/>
+					<xs:element name="DepthRefSide" type="WidthType" default="20.0" minOccurs="0"/>
+					<xs:element name="DepthOppSide" type="WidthType" default="20.0" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="FrenchRidgeLapType">
+		<xs:annotation>
+			<xs:documentation>Definition of a french ridge lap</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="Orientation" type="OrientationType"/>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="Angle" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="RefPosition" type="EdgePositionType" default="refedge" minOccurs="0"/>
+					<xs:element name="Drillhole" type="BooleanType" default="no" minOccurs="0"/>
+					<xs:element name="DrillholeDiam" type="LengthSType" default="0.0" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ChamferType">
+		<xs:annotation>
+			<xs:documentation>Definition of a chamfer</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingBaseType">
+				<xs:sequence>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="StartLimited" type="BooleanType" default="no" minOccurs="0"/>
+					<xs:element name="EndLimited" type="BooleanType" default="no" minOccurs="0"/>
+					<xs:element name="Length" type="LengthType" default="0.0" minOccurs="0"/>
+					<xs:element name="Depth" default="1.0" minOccurs="0">
+						<xs:simpleType>
+							<xs:restriction base="xs:double">
+								<xs:minInclusive value="0.0"/>
+								<xs:maxInclusive value="100.0"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="ChamferEdge12" type="BooleanType" default="yes" minOccurs="0"/>
+					<xs:element name="ChamferEdge23" type="BooleanType" default="yes" minOccurs="0"/>
+					<xs:element name="ChamferEdge34" type="BooleanType" default="yes" minOccurs="0"/>
+					<xs:element name="ChamferEdge41" type="BooleanType" default="yes" minOccurs="0"/>
+					<xs:element name="ChamferExit" type="ChamferExitType" default="orthogonal" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="LogHouseJointType">
+		<xs:annotation>
+			<xs:documentation>Definition of a log house joint</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="SideLapsLimited" type="BooleanType" default="no" minOccurs="0"/>
+					<xs:element name="DepthSideLaps" type="WidthType" minOccurs="0"/>
+					<xs:element name="LapPosition" type="LogLapPositionType" default="symmetric" minOccurs="0"/>
+					<xs:element name="LengthRefSide" type="WidthType" default="100.0" minOccurs="0"/>
+					<xs:element name="DepthRefSide" type="WidthType" default="10.0" minOccurs="0"/>
+					<xs:element name="LengthOppSide" type="WidthType" default="100.0" minOccurs="0"/>
+					<xs:element name="DepthOppSide" type="WidthType" default="10.0" minOccurs="0"/>
+					<xs:element name="LengthRefEdge" type="WidthType" default="100.0" minOccurs="0"/>
+					<xs:element name="DepthRefEdge" type="WidthType" default="10.0" minOccurs="0"/>
+					<xs:element name="LengthOppEdge" type="WidthType" default="100.0" minOccurs="0"/>
+					<xs:element name="DepthOppEdge" type="WidthType" default="10.0" minOccurs="0"/>
+					<xs:element name="Drillhole" type="BooleanType" default="no" minOccurs="0"/>
+					<xs:element name="ArcRefEdgeStart" type="BooleanType" default="no" minOccurs="0"/>
+					<xs:element name="ArcRefEdgeEnd" type="BooleanType" default="no" minOccurs="0"/>
+					<xs:element name="ArcOppEdgeStart" type="BooleanType" default="no" minOccurs="0"/>
+					<xs:element name="ArcOppEdgeEnd" type="BooleanType" default="no" minOccurs="0"/>
+					<xs:element name="ArcRadius" type="WidthType" default="120.0" minOccurs="0"/>
+					<xs:element name="ArcDepth" type="WidthNType" default="60.0" minOccurs="0"/>
+					<xs:element name="ArcCenter" type="WidthType" default="120.0" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="LogHouseFrontType">
+		<xs:annotation>
+			<xs:documentation>Definition of a log house front joint</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="Orientation" type="OrientationType"/>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="StartDepth" type="WidthType" default="20.0" minOccurs="0"/>
+					<xs:element name="Angle" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="Length" type="WidthType" default="120.0" minOccurs="0"/>
+					<xs:element name="DepthRefEdge" type="WidthType" default="20.0" minOccurs="0"/>
+					<xs:element name="DepthOppEdge" type="WidthType" default="20.0" minOccurs="0"/>
+					<xs:element name="RefSideOnly" type="BooleanType" default="no" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="PocketType">
+		<xs:annotation>
+			<xs:documentation>Definition of a pocket</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="StartY" type="WidthNType" default="0.0" minOccurs="0"/>
+					<xs:element name="StartDepth" type="WidthNType" default="0.0" minOccurs="0"/>
+					<xs:element name="Angle" type="AngleNType" default="0.0" minOccurs="0"/>
+					<xs:element name="Inclination" type="AngleNType" default="0.0" minOccurs="0"/>
+					<xs:element name="Slope" type="AngleNType" default="0.0" minOccurs="0"/>
+					<xs:element name="Length" type="LengthType" default="200.0" minOccurs="0"/>
+					<xs:element name="Width" type="WidthType" default="50.0" minOccurs="0"/>
+					<xs:element name="InternalAngle" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="TiltRefSide" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="TiltEndSide" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="TiltOppSide" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="TiltStartSide" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="MachiningLimits" type="MachiningLimitType" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="DrillingType">
+		<xs:annotation>
+			<xs:documentation>Definition of a drilling</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="StartY" type="WidthNType" default="0.0" minOccurs="0"/>
+					<xs:element name="Angle" type="Angle3Type" default="0" minOccurs="0"/>
+					<xs:element name="Inclination" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="DepthLimited" type="BooleanType" default="no" minOccurs="0"/>
+					<xs:element name="Depth" type="WidthType" default="50.0" minOccurs="0"/>
+					<xs:element name="Diameter" type="DiameterType" default="20.0" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TenonType">
+		<xs:annotation>
+			<xs:documentation>Definition of a tenon</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="Orientation" type="OrientationType"/>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="StartY" type="WidthNType" default="50.0" minOccurs="0"/>
+					<xs:element name="StartDepth" type="WidthNType" default="50.0" minOccurs="0"/>
+					<xs:element name="Angle" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="Inclination" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="Rotation" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="LengthLimitedTop" type="BooleanType" default="yes" minOccurs="0"/>
+					<xs:element name="LengthLimitedBottom" type="BooleanType" default="yes" minOccurs="0"/>
+					<xs:element name="Length" type="WidthType" default="80.0" minOccurs="0"/>
+					<xs:element name="Width" type="LengthSType" default="40.0" minOccurs="0"/>
+					<xs:element name="Height" type="LengthSType" default="40.0" minOccurs="0"/>
+					<xs:element name="Shape" type="TenonShapeType" default="automatic" minOccurs="0"/>
+					<xs:element name="ShapeRadius" type="LengthSType" default="20.0" minOccurs="0"/>
+					<xs:element name="Chamfer" type="BooleanType" default="no" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="MortiseType">
+		<xs:annotation>
+			<xs:documentation>Definition of a mortise</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="StartY" type="WidthNType" default="50.0" minOccurs="0"/>
+					<xs:element name="StartDepth" type="WidthType" default="0.0" minOccurs="0"/>
+					<xs:element name="Angle" type="Angle2NType" default="0.0" minOccurs="0"/>
+					<xs:element name="Inclination" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="Slope" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="LengthLimitedTop" type="BooleanType" default="yes" minOccurs="0"/>
+					<xs:element name="LengthLimitedBottom" type="BooleanType" default="yes" minOccurs="0"/>
+					<xs:element name="Length" type="WidthType" default="80.0" minOccurs="0"/>
+					<xs:element name="Width" type="LengthSType" default="40.0" minOccurs="0"/>
+					<xs:element name="Depth" type="LengthSType" default="40.0" minOccurs="0"/>
+					<xs:element name="Shape" type="TenonShapeType" default="automatic" minOccurs="0"/>
+					<xs:element name="ShapeRadius" type="LengthSType" default="20.0" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="HouseType">
+		<xs:annotation>
+			<xs:documentation>Definition of a house</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="TenonType">
+				<xs:choice minOccurs="0">
+					<xs:element name="Tenon" type="TenonType"/>
+					<xs:element name="DovetailTenon" type="DovetailTenonType"/>
+				</xs:choice>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="HouseMortiseType">
+		<xs:annotation>
+			<xs:documentation>Definition of a house mortise</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="MortiseType">
+				<xs:choice minOccurs="0">
+					<xs:element name="Mortise" type="MortiseType"/>
+					<xs:element name="DovetailMortise" type="DovetailMortiseType"/>
+				</xs:choice>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="DovetailTenonType">
+		<xs:annotation>
+			<xs:documentation>Definition of a dovetail tenon</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="Orientation" type="OrientationType"/>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="StartY" type="WidthNType" default="50.0" minOccurs="0"/>
+					<xs:element name="StartDepth" type="WidthNType" default="50.0" minOccurs="0"/>
+					<xs:element name="Angle" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="Inclination" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="Rotation" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="LengthLimitedTop" type="BooleanType" default="yes" minOccurs="0"/>
+					<xs:element name="LengthLimitedBottom" type="BooleanType" default="yes" minOccurs="0"/>
+					<xs:element name="Length" type="WidthType" default="80.0" minOccurs="0"/>
+					<xs:element name="Width" type="LengthSType" default="40.0" minOccurs="0"/>
+					<xs:element name="Height" type="LengthSType" default="28.0" minOccurs="0"/>
+					<xs:element name="ConeAngle" minOccurs="0">
+						<xs:simpleType>
+							<xs:restriction base="xs:double">
+								<xs:minInclusive value="0.0"/>
+								<xs:maxInclusive value="30.0"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="UseFlankAngle" type="BooleanType" default="no" minOccurs="0"/>
+					<xs:element name="FlankAngle" default="15.0" minOccurs="0">
+						<xs:simpleType>
+							<xs:restriction base="xs:double">
+								<xs:minInclusive value="5"/>
+								<xs:maxInclusive value="35"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="Shape" type="TenonShapeType" default="automatic" minOccurs="0"/>
+					<xs:element name="ShapeRadius" type="LengthSType" default="20.0" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="DovetailMortiseType">
+		<xs:annotation>
+			<xs:documentation>Definition of a dovetail mortise</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="StartY" type="WidthNType" default="50.0" minOccurs="0"/>
+					<xs:element name="StartDepth" type="WidthType" default="0.0" minOccurs="0"/>
+					<xs:element name="Angle" type="Angle2NType" default="0.0" minOccurs="0"/>
+					<xs:element name="Inclination" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="Slope" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="LimitationTop" type="LimitationTopType" default="limited" minOccurs="0"/>
+					<xs:element name="LengthLimitedBottom" type="BooleanType" default="yes" minOccurs="0"/>
+					<xs:element name="Length" type="WidthType" default="80.0" minOccurs="0"/>
+					<xs:element name="Width" type="LengthSType" default="40.0" minOccurs="0"/>
+					<xs:element name="Depth" type="LengthSType" default="28.0" minOccurs="0"/>
+					<xs:element name="ConeAngle" minOccurs="0">
+						<xs:simpleType>
+							<xs:restriction base="xs:double">
+								<xs:minInclusive value="0.0"/>
+								<xs:maxInclusive value="30.0"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="UseFlankAngle" type="BooleanType" default="no" minOccurs="0"/>
+					<xs:element name="FlankAngle" default="15.0" minOccurs="0">
+						<xs:simpleType>
+							<xs:restriction base="xs:double">
+								<xs:minInclusive value="5"/>
+								<xs:maxInclusive value="35"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="Shape" type="TenonShapeType" default="automatic" minOccurs="0"/>
+					<xs:element name="ShapeRadius" type="LengthSType" default="20.0" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="MarkingType">
+		<xs:annotation>
+			<xs:documentation>Definition of a marking</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="StartY" type="WidthNType" default="0.0" minOccurs="0"/>
+					<xs:element name="Angle" type="Angle2NType" default="0" minOccurs="0"/>
+					<xs:element name="LengthLimited" type="BooleanType" default="no" minOccurs="0"/>
+					<xs:element name="Length" type="WidthType" default="20.0" minOccurs="0"/>
+					<xs:element name="Width" type="WidthType" default="100.0" minOccurs="0"/>
+					<xs:element name="InteriorAngle" type="AngleType" default="90.0" minOccurs="0"/>
+					<xs:element name="Style" type="MarkingStyleType" default="single" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TextType">
+		<xs:annotation>
+			<xs:documentation>Definition of a text</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="StartY" type="WidthNType" default="0.0" minOccurs="0"/>
+					<xs:element name="Angle" type="Angle2NType" default="0" minOccurs="0"/>
+					<xs:element name="AlignmentVertical" type="AlignmentVerticalType" default="bottom" minOccurs="0"/>
+					<xs:element name="AlignmentHorizontal" type="AlignmentHorizontalType" default="left" minOccurs="0"/>
+					<xs:element name="AlignmentMultiline" type="AlignmentHorizontalType" default="left" minOccurs="0"/>
+					<xs:element name="StackedMarking" type="BooleanType" default="no" minOccurs="0"/>
+					<xs:element name="TextHeightAuto" type="BooleanType" default="yes" minOccurs="0"/>
+					<xs:element name="TextHeight" type="WidthType" default="20.0" minOccurs="0"/>
+					<xs:sequence maxOccurs="unbounded">
+						<xs:element name="Text" type="xs:string"/>
+					</xs:sequence>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="SimpleScarfType">
+		<xs:annotation>
+			<xs:documentation>Definition of a simple scarf</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="Orientation" type="OrientationType"/>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="Length" type="WidthType" default="200.0" minOccurs="0"/>
+					<xs:element name="DepthRefSide" type="WidthType" default="20.0" minOccurs="0"/>
+					<xs:element name="DepthOppSide" type="WidthType" default="20.0" minOccurs="0"/>
+					<xs:element name="NumDrillHole" default="0" minOccurs="0">
+						<xs:simpleType>
+							<xs:restriction base="xs:byte">
+								<xs:minInclusive value="0"/>
+								<xs:maxInclusive value="2"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="DrillHoleDiam1" type="LengthSType" default="20.0" minOccurs="0"/>
+					<xs:element name="DrillHoleDiam2" type="LengthSType" default="20.0" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ScarfJointType">
+		<xs:annotation>
+			<xs:documentation>Definition of a scarf joint</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="Orientation" type="OrientationType"/>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="Inclination" type="Inclination3Type" minOccurs="0"/>
+					<xs:element name="LapLength" type="WidthType" default="100.0" minOccurs="0"/>
+					<xs:element name="LapDepth" type="WidthType" default="20.0" minOccurs="0"/>
+					<xs:element name="Length" type="WidthType" default="200.0" minOccurs="0"/>
+					<xs:element name="DepthOppSide" type="WidthType" default="20.0" minOccurs="0"/>
+					<xs:element name="ScarfShape" type="ScarfShapeType" default="refside" minOccurs="0"/>
+					<xs:element name="NumDrillHole" default="0" minOccurs="0">
+						<xs:simpleType>
+							<xs:restriction base="xs:byte">
+								<xs:minInclusive value="0"/>
+								<xs:maxInclusive value="2"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="DrillHoleDiam1" type="LengthSType" default="20.0" minOccurs="0"/>
+					<xs:element name="DrillHoleDiam2" type="LengthSType" default="20.0" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="StepJointType">
+		<xs:annotation>
+			<xs:documentation>Definition of a step joint</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="Orientation" type="OrientationType"/>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="StrutInclination" type="AngleType" minOccurs="0"/>
+					<xs:element name="StepDepth" type="WidthType" default="20.0" minOccurs="0"/>
+					<xs:element name="HeelDepth" type="WidthType" default="20.0" minOccurs="0"/>
+					<xs:element name="StepShape" type="StepShapeType" default="double" minOccurs="0"/>
+					<xs:element name="Tenon" type="BooleanType" default="no" minOccurs="0"/>
+					<xs:element name="TenonWidth" type="LengthSType" default="40.0" minOccurs="0"/>
+					<xs:element name="TenonHeight" type="LengthSType" default="40.0" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="StepJointNotchType">
+		<xs:annotation>
+			<xs:documentation>Definition of a step joint notch</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="Orientation" type="OrientationType"/>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="StartY" type="WidthNType" default="0.0" minOccurs="0"/>
+					<xs:element name="StrutInclination" type="AngleType" minOccurs="0"/>
+					<xs:element name="NotchLimited" type="BooleanType" default="no" minOccurs="0"/>
+					<xs:element name="NotchWidth" type="WidthType" default="20.0" minOccurs="0"/>
+					<xs:element name="StepDepth" type="WidthType" default="20.0" minOccurs="0"/>
+					<xs:element name="HeelDepth" type="WidthType" default="20.0" minOccurs="0"/>
+					<xs:element name="StrutHeight" type="WidthType" default="200.0" minOccurs="0"/>
+					<xs:element name="StepShape" type="StepShapeType" default="double" minOccurs="0"/>
+					<xs:element name="Mortise" type="BooleanType" default="no" minOccurs="0"/>
+					<xs:element name="MortiseWidth" type="LengthSType" default="40.0" minOccurs="0"/>
+					<xs:element name="MortiseHeight" type="LengthSType" default="40.0" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="PlaningType">
+		<xs:annotation>
+			<xs:documentation>Definition of a planing</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingBaseType">
+				<xs:sequence>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="Length" type="LengthType" default="0.0" minOccurs="0"/>
+					<xs:element name="Depth" default="1.0" minOccurs="0">
+						<xs:simpleType>
+							<xs:restriction base="xs:double">
+								<xs:minInclusive value="0.0"/>
+								<xs:maxInclusive value="50.0"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="StartLimited" type="BooleanType" default="no" minOccurs="0"/>
+					<xs:element name="EndLimited" type="BooleanType" default="no" minOccurs="0"/>
+					<xs:element name="PlaneSide1" type="BooleanType" default="yes" minOccurs="0"/>
+					<xs:element name="PlaneSide2" type="BooleanType" default="yes" minOccurs="0"/>
+					<xs:element name="PlaneSide3" type="BooleanType" default="yes" minOccurs="0"/>
+					<xs:element name="PlaneSide4" type="BooleanType" default="yes" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ProfileFrontType">
+		<xs:annotation>
+			<xs:documentation>Definition of a profile front</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="Orientation" type="OrientationType"/>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="ArcShape" type="ArcShapeType" default="convex" minOccurs="0"/>
+					<xs:element name="Depth" type="LengthSType" default="0.0" minOccurs="0"/>
+					<xs:element name="StartRotation" type="Inclination2Type" default="0.0" minOccurs="0"/>
+					<xs:element name="Rotation1" type="Angle2Type" default="90.0" minOccurs="0"/>
+					<xs:element name="Radius1" type="LengthSType" default="250.0" minOccurs="0"/>
+					<xs:element name="Rotation2" type="Angle2Type" default="90.0" minOccurs="0"/>
+					<xs:element name="Radius2" type="LengthSType" default="250.0" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ProfileCamberedType">
+		<xs:annotation>
+			<xs:documentation>Definition of a profile head cambered</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="Orientation" type="OrientationType"/>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="Length" type="LengthType" default="0.0" minOccurs="0"/>
+					<xs:element name="StartDepth" type="LengthSType" default="40.0" minOccurs="0"/>
+					<xs:element name="MaxDepth" type="LengthSType" default="60.0" minOccurs="0"/>
+					<xs:element name="MinDepth" type="LengthSType" default="10.0" minOccurs="0"/>
+					<xs:element name="EndDepth" type="LengthSType" default="40.0" minOccurs="0"/>
+					<xs:element name="Premill" type="PremillType" default="angular" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="RoundArchType">
+		<xs:annotation>
+			<xs:documentation>Definition of a round arch</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="Length" type="LengthType" default="500.0" minOccurs="0"/>
+					<xs:element name="Camber" type="LengthSType" default="30.0" minOccurs="0"/>
+					<xs:element name="ArcShape" type="ArcShapeType" default="concave" minOccurs="0"/>
+					<xs:element name="Premill" type="PremillType" default="angular" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ProfileHeadType">
+		<xs:annotation>
+			<xs:documentation>Definition of a profile head</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="Orientation" type="OrientationType"/>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="Arc1">
+						<xs:complexType>
+							<xs:complexContent>
+								<xs:extension base="ProfileArcType"/>
+							</xs:complexContent>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="Arc2" type="ProfileArcType" minOccurs="0"/>
+					<xs:element name="LapLength" type="LengthSType" default="10.0" minOccurs="0"/>
+					<xs:element name="LapHeight" type="LengthSType" default="10.0" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="SphereType">
+		<xs:annotation>
+			<xs:documentation>Definition of a sphere</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="Orientation" type="OrientationType"/>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="StartY" type="WidthNType" default="60.0" minOccurs="0"/>
+					<xs:element name="StartDepth" type="WidthNType" default="60.0" minOccurs="0"/>
+					<xs:element name="Length" type="WidthType" default="50.0" minOccurs="0"/>
+					<xs:element name="Radius" type="WidthType" default="50.0" minOccurs="0"/>
+					<xs:element name="StartOffset" type="WidthType" default="0.0" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TriangleCutType">
+		<xs:annotation>
+			<xs:documentation>Definition of a triangle cut</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="StartY" type="WidthNType" default="60.0" minOccurs="0"/>
+					<xs:element name="StartDepth" type="WidthNType" default="60.0" minOccurs="0"/>
+					<xs:element name="Normal1X" type="WidthNType" default="1.0" minOccurs="0"/>
+					<xs:element name="Normal1Y" type="WidthNType" default="0.0" minOccurs="0"/>
+					<xs:element name="Normal1Z" type="WidthNType" default="0.0" minOccurs="0"/>
+					<xs:element name="Normal2X" type="WidthNType" default="1.0" minOccurs="0"/>
+					<xs:element name="Normal2Y" type="WidthNType" default="0.0" minOccurs="0"/>
+					<xs:element name="Normal2Z" type="WidthNType" default="0.0" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TyroleanDovetailType">
+		<xs:annotation>
+			<xs:documentation>Definition of a tyrolean dovetail</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="Orientation" type="OrientationType"/>
+					<xs:element name="CutOff" type="BooleanType" default="no" minOccurs="0"/>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="StartY" type="WidthType" default="30.0" minOccurs="0"/>
+					<xs:element name="StartDepth" type="WidthNType" default="50.0" minOccurs="0"/>
+					<xs:element name="Angle" type="AngleType" minOccurs="0"/>
+					<xs:element name="Slope" minOccurs="0">
+						<xs:simpleType>
+							<xs:restriction base="xs:double">
+								<xs:minInclusive value="0.0"/>
+								<xs:maxInclusive value="45.0"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="Length" type="WidthType" default="150.0" minOccurs="0"/>
+					<xs:element name="RebateLength" type="WidthType" default="10.0" minOccurs="0"/>
+					<xs:element name="Height" type="WidthType" default="60" minOccurs="0"/>
+					<xs:element name="LapPosition" type="EdgePositionType" default="refedge" minOccurs="0"/>
+					<xs:element name="LapExit" type="LapExitType" default="mitre" minOccurs="0"/>
+					<xs:element name="Shape" type="TyroleanDovetailShapeType" default="angular" minOccurs="0"/>
+					<xs:element name="ProcessSide" type="ProcessSideType" default="both" minOccurs="0"/>
+					<xs:choice minOccurs="0">
+						<xs:element name="Frosch" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="Width" type="WidthType"/>
+									<xs:element name="Depth" type="WidthType"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="Klingschrot" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="Radius" type="WidthType"/>
+									<xs:element name="ArcLength" type="WidthType"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:choice>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="DovetailType">
+		<xs:annotation>
+			<xs:documentation>Definition of a dovetail</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="Orientation" type="OrientationType"/>
+					<xs:element name="CutOff" type="BooleanType" default="no" minOccurs="0"/>
+					<xs:element name="StartX" type="LengthPosType" default="0.0" minOccurs="0"/>
+					<xs:element name="StartY" type="WidthType" default="30.0" minOccurs="0"/>
+					<xs:element name="StartDepth" type="WidthNType" default="50.0" minOccurs="0"/>
+					<xs:element name="Slope" minOccurs="0">
+						<xs:simpleType>
+							<xs:restriction base="xs:double">
+								<xs:minInclusive value="0.0"/>
+								<xs:maxInclusive value="45.0"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="Length" type="WidthType" default="150.0" minOccurs="0"/>
+					<xs:element name="RebateLength" type="WidthType" default="10.0" minOccurs="0"/>
+					<xs:element name="HeightRefSide" type="WidthType" default="60" minOccurs="0"/>
+					<xs:element name="HeightOppSide" type="WidthType" default="30.0" minOccurs="0"/>
+					<xs:element name="LapPosition" type="EdgePositionType" default="refedge" minOccurs="0"/>
+					<xs:element name="LapExit" type="LapExitType" default="mitre" minOccurs="0"/>
+					<xs:element name="Shape" type="DovetailShapeType" default="european" minOccurs="0"/>
+					<xs:element name="ProcessSide" type="ProcessSideType" default="both" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="VariantType">
+		<xs:annotation>
+			<xs:documentation>Definition of a variant</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="Orientation" type="OrientationType" minOccurs="0"/>
+					<xs:element name="CutOff" type="BooleanType" default="no" minOccurs="0"/>
+					<xs:element name="StartX" type="LengthPosType" minOccurs="0"/>
+					<xs:element name="StartY" type="LengthPosType" minOccurs="0"/>
+					<xs:element name="StartDepth" type="LengthPosType" minOccurs="0"/>
+					<xs:sequence minOccurs="0" maxOccurs="unbounded">
+						<xs:element name="VariantParameter" type="VariantParameterType"/>
+					</xs:sequence>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<!---->
+	<!-- ================================================================== -->
+	<!--Contour definitions-->
+	<!-- ================================================================== -->
+	<xs:complexType name="PointType">
+		<xs:annotation>
+			<xs:documentation>Defintion of a contour point</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="CoordinateType"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="LineType">
+		<xs:annotation>
+			<xs:documentation>Definition of a contour line</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="EndPoint" type="CoordinateType"/>
+		</xs:sequence>
+		<xs:attribute name="Inclination" type="InclinationType"/>
+		<xs:attribute name="NailSpacing" type="xs:double"/>
+		<xs:attribute name="Recess" type="ContourRecessType"/>
+		<xs:attribute name="Process" type="BooleanType"/>
+	</xs:complexType>
+	<xs:complexType name="ArcType">
+		<xs:annotation>
+			<xs:documentation>Definition of a contour arc</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="LineType">
+				<xs:sequence>
+					<xs:element name="PointOnArc" type="CoordinateType"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<!---->
+	<xs:complexType name="SimpleContourType">
+		<xs:annotation>
+			<xs:documentation>Defintion of a simple contour (one point and multiple lines and arcs)</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="StartPoint" type="PointType"/>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element name="Line" type="LineType"/>
+				<xs:element name="Arc" type="ArcType"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DualContourType">
+		<xs:annotation>
+			<xs:documentation>Definiton of a dual contour (one contour and one associated contour)</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="PrincipalContour" type="SimpleContourType"/>
+			<xs:element name="AssociatedContour" type="SimpleContourType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="BaseContourType">
+		<xs:annotation>
+			<xs:documentation>Defintion of a base contour (either a contour or a contour with associated contour)</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="Contour" type="SimpleContourType"/>
+			<xs:element name="DualContour" type="DualContourType"/>
+		</xs:choice>
+		<xs:attribute name="Process" type="BooleanType" default="no"/>
+	</xs:complexType>
+	<!---->
+	<xs:complexType name="OutlineType">
+		<xs:annotation>
+			<xs:documentation>Defintion of an outline</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="BaseContourType">
+				<xs:sequence minOccurs="0">
+					<xs:element name="Apertures">
+						<xs:complexType>
+							<xs:sequence maxOccurs="unbounded">
+								<xs:element name="Aperture" type="BaseContourType"/>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+				<xs:attribute name="ReferencePlaneID" use="required">
+					<xs:simpleType>
+						<xs:restriction base="xs:unsignedInt">
+							<xs:minInclusive value="1"/>
+							<xs:maxInclusive value="6"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="FreeContourType">
+		<xs:annotation>
+			<xs:documentation>Defintion of a free contour</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:choice>
+					<xs:element name="Contour">
+						<xs:complexType>
+							<xs:complexContent>
+								<xs:extension base="SimpleContourType">
+									<xs:attribute name="DepthBounded" type="BooleanType" default="no"/>
+									<xs:attribute name="Depth" default="0.0">
+										<xs:simpleType>
+											<xs:restriction base="xs:double">
+												<xs:minInclusive value="0.0"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+									<xs:attribute name="Inclination" type="InclinationType" default="0.0"/>
+								</xs:extension>
+							</xs:complexContent>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="DualContour" type="DualContourType"/>
+				</xs:choice>
+				<xs:attribute name="ToolID" type="xs:unsignedInt"/>
+				<xs:attribute name="CounterSink" type="BooleanType" default="no"/>
+				<xs:attribute name="ToolPosition" type="ToolPositionType" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="SawContourType">
+		<xs:annotation>
+			<xs:documentation>Defintion of a saw contour</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:choice>
+					<xs:element name="Contour">
+						<xs:complexType>
+							<xs:complexContent>
+								<xs:extension base="SimpleContourType">
+									<xs:attribute name="DepthBounded" type="BooleanType" default="no"/>
+									<xs:attribute name="Depth" default="0.0">
+										<xs:simpleType>
+											<xs:restriction base="xs:double">
+												<xs:minInclusive value="0.0"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+									<xs:attribute name="Inclination" type="InclinationType" default="0.0"/>
+								</xs:extension>
+							</xs:complexContent>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="DualContour" type="DualContourType"/>
+				</xs:choice>
+				<xs:attribute name="ToolID" type="xs:unsignedInt"/>
+				<xs:attribute name="ToolPosition" type="ToolPositionType" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="MillContourType">
+		<xs:annotation>
+			<xs:documentation>Defintion of a mill contour</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:choice>
+					<xs:element name="Contour">
+						<xs:complexType>
+							<xs:complexContent>
+								<xs:extension base="SimpleContourType">
+									<xs:attribute name="DepthBounded" type="BooleanType" default="no"/>
+									<xs:attribute name="Depth" default="0.0">
+										<xs:simpleType>
+											<xs:restriction base="xs:double">
+												<xs:minInclusive value="0.0"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+									<xs:attribute name="Inclination" type="InclinationType" default="0.0"/>
+								</xs:extension>
+							</xs:complexContent>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="DualContour" type="DualContourType"/>
+				</xs:choice>
+				<xs:attribute name="ToolID" type="xs:unsignedInt"/>
+				<xs:attribute name="CounterSink" type="BooleanType" default="no"/>
+				<xs:attribute name="ToolPosition" type="ToolPositionType" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="NailContourType">
+		<xs:annotation>
+			<xs:documentation>Defintion of a nail contour</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="Contour" type="SimpleContourType"/>
+				</xs:sequence>
+				<xs:attribute name="ToolID" type="xs:unsignedInt"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="PenContourType">
+		<xs:annotation>
+			<xs:documentation>Defintion of a pen contour</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="Contour" type="SimpleContourType"/>
+				</xs:sequence>
+				<xs:attribute name="ToolID" type="xs:unsignedInt"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="GlueAreaType">
+		<xs:annotation>
+			<xs:documentation>Defintion of a glue area</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="Contour" type="SimpleContourType"/>
+				</xs:sequence>
+				<xs:attribute name="ToolID" type="xs:unsignedInt"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="PlaningAreaType">
+		<xs:annotation>
+			<xs:documentation>Defintion of a planing area</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="Contour">
+						<xs:complexType>
+							<xs:complexContent>
+								<xs:extension base="SimpleContourType">
+									<xs:attribute name="Depth" type="xs:double"/>
+								</xs:extension>
+							</xs:complexContent>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+				<xs:attribute name="ToolID" type="xs:unsignedInt"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="PlasterAreaType">
+		<xs:annotation>
+			<xs:documentation>Defintion of a plaster area</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="Contour">
+						<xs:complexType>
+							<xs:complexContent>
+								<xs:extension base="SimpleContourType">
+									<xs:attribute name="Thickness" type="xs:double"/>
+								</xs:extension>
+							</xs:complexContent>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+				<xs:attribute name="ToolID" type="xs:unsignedInt"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="LockoutAreaType">
+		<xs:annotation>
+			<xs:documentation>Defintion of a lockout area</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ProcessingType">
+				<xs:sequence>
+					<xs:element name="Contour" type="SimpleContourType"/>
+				</xs:sequence>
+				<xs:attribute name="ForMilling" type="BooleanType" default="yes"/>
+				<xs:attribute name="ForSawing" type="BooleanType" default="yes"/>
+				<xs:attribute name="ForNailing" type="BooleanType" default="yes"/>
+				<xs:attribute name="ForGlueing" type="BooleanType" default="yes"/>
+				<xs:attribute name="ForPlaning" type="BooleanType" default="yes"/>
+				<xs:attribute name="ForPlastering" type="BooleanType" default="yes"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<!---->
+	<!-- ================================================================== -->
+	<!--basic type definitions-->
+	<!-- ================================================================== -->
+	<xs:simpleType name="GUIDType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Representation of a GUID, generally the id of an element</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="\{[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}\}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ProcessingQualityType">
+		<xs:annotation>
+			<xs:documentation>Quality of a processing (automatic, visible, fast)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="automatic"/>
+			<xs:enumeration value="visible"/>
+			<xs:enumeration value="fast"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="RecessType">
+		<xs:annotation>
+			<xs:documentation>Recess of a processing (automatic, manual)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="automatic"/>
+			<xs:enumeration value="manual"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ToolPositionType">
+		<xs:annotation>
+			<xs:documentation>Position of the tool (left, center, right)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="left"/>
+			<xs:enumeration value="center"/>
+			<xs:enumeration value="right"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="OrientationType">
+		<xs:annotation>
+			<xs:documentation>Orientation of a processing (start, end)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="start"/>
+			<xs:enumeration value="end"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="EdgePositionType">
+		<xs:annotation>
+			<xs:documentation>Position on the reference side (refedge, oppedge)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="refedge"/>
+			<xs:enumeration value="oppedge"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="StoreyType">
+		<xs:annotation>
+			<xs:documentation>Type of the storey (none, ceiling, roof, wall)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value=""/>
+			<xs:enumeration value="ceiling"/>
+			<xs:enumeration value="roof"/>
+			<xs:enumeration value="wall"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="EndType">
+		<xs:annotation>
+			<xs:documentation>Type of the separating cut (rectangular, angled, double) </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="rectangularCut"/>
+			<xs:enumeration value="angledCut"/>
+			<xs:enumeration value="doubleCut"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="LocationType">
+		<xs:annotation>
+			<xs:documentation>Type of the location of a wall beam (top/bottom rail, horizontal, vertical, angled element)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="bottomRail"/>
+			<xs:enumeration value="topRail"/>
+			<xs:enumeration value="bottomRailAngled"/>
+			<xs:enumeration value="topRailAngled"/>
+			<xs:enumeration value="horizontalComponent"/>
+			<xs:enumeration value="verticalComponent"/>
+			<xs:enumeration value="angledComponent"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="MaterialGroupType">
+		<xs:annotation>
+			<xs:documentation>Type of the material (for wall construction)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="batten"/>
+			<xs:enumeration value="cladding"/>
+			<xs:enumeration value="massiveTimber"/>
+			<xs:enumeration value="membrane"/>
+			<xs:enumeration value="gypsumBoard"/>
+			<xs:enumeration value="gypsumFibre"/>
+			<xs:enumeration value="insulation"/>
+			<xs:enumeration value="sheetComponent"/>
+			<xs:enumeration value="facadePanel"/>
+			<xs:enumeration value="profiledPanel"/>
+			<xs:enumeration value="plaster"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="BooleanType">
+		<xs:annotation>
+			<xs:documentation>(yes, no)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="yes"/>
+			<xs:enumeration value="no"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="RefSideType">
+		<xs:annotation>
+			<xs:documentation>Standard reference side of the component (1-4)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:int">
+			<xs:minInclusive value="1"/>
+			<xs:maxInclusive value="4"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ContourRecessType">
+		<xs:annotation>
+			<xs:documentation>Type of recess for the contour (automatic, noPassOver, passOverStart, passOverEnd, passOverAll)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="automatic"/>
+			<xs:enumeration value="noPassOver"/>
+			<xs:enumeration value="passOverStart"/>
+			<xs:enumeration value="passOverEnd"/>
+			<xs:enumeration value="passOverAll"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AngleType">
+		<xs:annotation>
+			<xs:documentation> (0.1 ... 179.9)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:double">
+			<xs:minInclusive value="0.1"/>
+			<xs:maxInclusive value="179.9"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AngleNType">
+		<xs:annotation>
+			<xs:documentation> (-179.9 ... 179.9)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:double">
+			<xs:minInclusive value="-179.9"/>
+			<xs:maxInclusive value="179.9"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Angle2Type">
+		<xs:annotation>
+			<xs:documentation> (0.0 ... 180.0)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:double">
+			<xs:minInclusive value="0.0"/>
+			<xs:maxInclusive value="180.0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Angle2NType">
+		<xs:annotation>
+			<xs:documentation> (-180.0 ... 180.0)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:double">
+			<xs:minInclusive value="-180.0"/>
+			<xs:maxInclusive value="180.0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Angle3Type">
+		<xs:annotation>
+			<xs:documentation> (0.0 ... 360.0)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:double">
+			<xs:minInclusive value="0.0"/>
+			<xs:maxInclusive value="360.0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="InclinationType">
+		<xs:annotation>
+			<xs:documentation>(-89.9 ... 89.9)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:double">
+			<xs:minInclusive value="-89.9"/>
+			<xs:maxInclusive value="89.9"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Inclination2Type">
+		<xs:annotation>
+			<xs:documentation>(-90.0 ... 90.0)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:double">
+			<xs:minInclusive value="-90.0"/>
+			<xs:maxInclusive value="90.0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Inclination3Type">
+		<xs:annotation>
+			<xs:documentation>(0.0 ... 90.0)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:double">
+			<xs:minInclusive value="0.0"/>
+			<xs:maxInclusive value="90.0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="LengthPosType">
+		<xs:annotation>
+			<xs:documentation> (-100000.0 ... 100000.0)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:double">
+			<xs:minInclusive value="-100000.0"/>
+			<xs:maxInclusive value="100000.0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="LengthType">
+		<xs:annotation>
+			<xs:documentation> (0.0 ... 100000.0)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:double">
+			<xs:minInclusive value="0.0"/>
+			<xs:maxInclusive value="100000.0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="LengthSType">
+		<xs:annotation>
+			<xs:documentation> (0.0 ... 1000.0)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:double">
+			<xs:minInclusive value="0.0"/>
+			<xs:maxInclusive value="1000.0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="WidthType">
+		<xs:annotation>
+			<xs:documentation> (0.0 ... 50000.0)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:double">
+			<xs:minInclusive value="0.0"/>
+			<xs:maxInclusive value="50000.0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="WidthNType">
+		<xs:annotation>
+			<xs:documentation> (-50000.0 ... 50000.0)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:double">
+			<xs:minInclusive value="-50000.0"/>
+			<xs:maxInclusive value="50000.0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="DiameterType">
+		<xs:annotation>
+			<xs:documentation> (0.0 ... 1000.0)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:double">
+			<xs:minInclusive value="0.0"/>
+			<xs:maxInclusive value="1000.0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ContourType">
+		<xs:annotation>
+			<xs:documentation>Type of the contour (freeContour, sawContour, ...) not used</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="freeContour"/>
+			<xs:enumeration value="sawContour"/>
+			<xs:enumeration value="millContour"/>
+			<xs:enumeration value="penContour"/>
+			<xs:enumeration value="nailContour"/>
+			<xs:enumeration value="glueArea"/>
+			<xs:enumeration value="planningArea"/>
+			<xs:enumeration value="plasterArea"/>
+			<xs:enumeration value="lockoutArea"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ArcShapeType">
+		<xs:annotation>
+			<xs:documentation>Shape of a profile arc (convex, concave)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="convex"/>
+			<xs:enumeration value="concave"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PremillType">
+		<xs:annotation>
+			<xs:documentation>Shape the profile cambered premill (round, angular)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="round"/>
+			<xs:enumeration value="angular"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ChamferExitType">
+		<xs:annotation>
+			<xs:documentation>Shape the chamfer exit (orthogonal, angular, round)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="orthogonal"/>
+			<xs:enumeration value="angular"/>
+			<xs:enumeration value="round"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="LapExitType">
+		<xs:annotation>
+			<xs:documentation>Shape the lap exit (none, mitre, rebate)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="none"/>
+			<xs:enumeration value="mitre"/>
+			<xs:enumeration value="rebate"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ProcessSideType">
+		<xs:annotation>
+			<xs:documentation>Sides for the processing (both, refside, oppside)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="both"/>
+			<xs:enumeration value="refside"/>
+			<xs:enumeration value="oppside"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TyroleanDovetailShapeType">
+		<xs:annotation>
+			<xs:documentation>Shape of the tyrolean dovetail (angular, straight)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="angular"/>
+			<xs:enumeration value="straight"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="DovetailShapeType">
+		<xs:annotation>
+			<xs:documentation>Shape of the dovetail (european, american)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="european"/>
+			<xs:enumeration value="american"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="LogLapPositionType">
+		<xs:annotation>
+			<xs:documentation>Position of the laps (symmetric, forward, backward)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="symmetric"/>
+			<xs:enumeration value="forward"/>
+			<xs:enumeration value="backward"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AlignmentVerticalType">
+		<xs:annotation>
+			<xs:documentation>Alignment of a text (bottom, center, top)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="bottom"/>
+			<xs:enumeration value="center"/>
+			<xs:enumeration value="top"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AlignmentHorizontalType">
+		<xs:annotation>
+			<xs:documentation>Alignment of a text (left, center, right)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="left"/>
+			<xs:enumeration value="center"/>
+			<xs:enumeration value="right"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ScarfShapeType">
+		<xs:annotation>
+			<xs:documentation>Shape of a scarf (refside, baseside, classic)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="refside"/>
+			<xs:enumeration value="baseside"/>
+			<xs:enumeration value="classic"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="StepShapeType">
+		<xs:annotation>
+			<xs:documentation>Shape of a step joint (double, step, heel, taperedheel)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="double"/>
+			<xs:enumeration value="step"/>
+			<xs:enumeration value="heel"/>
+			<xs:enumeration value="taperedheel"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TenonShapeType">
+		<xs:annotation>
+			<xs:documentation>Shape of a tenon, mortise or house (automatic, square, round, rounded, radius)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="automatic"/>
+			<xs:enumeration value="square"/>
+			<xs:enumeration value="round"/>
+			<xs:enumeration value="rounded"/>
+			<xs:enumeration value="radius"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="LimitationTopType">
+		<xs:annotation>
+			<xs:documentation>Limitation of a dovetail mortise at the top (limited, unlimited, pocket)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="limited"/>
+			<xs:enumeration value="unlimited"/>
+			<xs:enumeration value="pocket"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="MarkingStyleType">
+		<xs:annotation>
+			<xs:documentation>Style of a marking (single, double, square)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="single"/>
+			<xs:enumeration value="double"/>
+			<xs:enumeration value="square"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<!---->
+	<!-- ================================================================== -->
+	<!--complex type definitions-->
+	<!-- ================================================================== -->
+	<xs:complexType name="ProgramInfoType">
+		<xs:annotation>
+			<xs:documentation>Information about the program that exports/modifies the data</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="CompanyName" type="xs:string"/>
+		<xs:attribute name="ProgramName" type="xs:string"/>
+		<xs:attribute name="ProgramVersion" type="xs:string"/>
+		<xs:attribute name="ComputerName" type="xs:string"/>
+		<xs:attribute name="UserName" type="xs:string"/>
+		<xs:attribute name="FileName" type="xs:string"/>
+		<xs:attribute name="Date" type="xs:date">
+			<xs:annotation>
+				<xs:documentation>in compliance with ISO 8601</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="Time" type="xs:time"/>
+		<xs:attribute name="Comment" type="xs:string"/>
+	</xs:complexType>
+	<xs:complexType name="CoordinateType">
+		<xs:annotation>
+			<xs:documentation>Definition of a vector or point</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="X" type="xs:double" use="required"/>
+		<xs:attribute name="Y" type="xs:double" use="required"/>
+		<xs:attribute name="Z" type="xs:double" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="CoordinateSystemType">
+		<xs:annotation>
+			<xs:documentation>Definition of a local coordinate system</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ReferencePoint" type="CoordinateType"/>
+			<xs:element name="XVector" type="CoordinateType"/>
+			<xs:element name="YVector" type="CoordinateType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ReferenceType">
+		<xs:annotation>
+			<xs:documentation>defines the placement of a component in a superior component or of a ProcessingType in a part.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Position" type="CoordinateSystemType"/>
+		</xs:sequence>
+		<xs:attribute name="GUID" type="GUIDType" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="UserReferencePlaneType">
+		<xs:annotation>
+			<xs:documentation>Definition of a user reference plane (in relation to the part coordinate system)</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Position" type="CoordinateSystemType"/>
+		</xs:sequence>
+		<xs:attribute name="ID" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:unsignedInt">
+					<xs:minInclusive value="100"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="UserAttributeType">
+		<xs:annotation>
+			<xs:documentation>Definition of a user-defined attribute </xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="Name" type="xs:string" use="required"/>
+		<xs:attribute name="Value" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ColourType">
+		<xs:annotation>
+			<xs:documentation>Definition of a colour (red, green, blue, transparency)</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="Red" type="xs:unsignedByte" use="required"/>
+		<xs:attribute name="Green" type="xs:unsignedByte" use="required"/>
+		<xs:attribute name="Blue" type="xs:unsignedByte" use="required"/>
+		<xs:attribute name="Transparency" type="xs:unsignedByte" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="AlignmentType">
+		<xs:annotation>
+			<xs:documentation>Definition of an alignment in a wall</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="Location" type="LocationType" use="required"/>
+		<xs:attribute name="Endtype" type="EndType" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="MaterialClassType">
+		<xs:annotation>
+			<xs:documentation>Definition of a material</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="Group" type="MaterialGroupType" use="required"/>
+		<xs:attribute name="Specification" type="xs:string"/>
+	</xs:complexType>
+	<xs:complexType name="PartOffsetType">
+		<xs:annotation>
+			<xs:documentation>Definition of a part offset</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="FlushSide" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:byte">
+					<xs:minInclusive value="1"/>
+					<xs:maxInclusive value="4"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="OffsetSide1" type="xs:double" default="0.0"/>
+		<xs:attribute name="OffsetSide2" type="xs:double" default="0.0"/>
+		<xs:attribute name="OffsetSide3" type="xs:double" default="0.0"/>
+		<xs:attribute name="OffsetSide4" type="xs:double" default="0.0"/>
+	</xs:complexType>
+	<xs:complexType name="MachiningLimitType">
+		<xs:annotation>
+			<xs:documentation>Definition of the limited faces of a processing</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="FaceLimitedStart" type="BooleanType" use="optional" default="yes"/>
+		<xs:attribute name="FaceLimitedEnd" type="BooleanType" use="optional" default="yes"/>
+		<xs:attribute name="FaceLimitedFront" type="BooleanType" use="optional" default="yes"/>
+		<xs:attribute name="FaceLimitedBack" type="BooleanType" use="optional" default="yes"/>
+		<xs:attribute name="FaceLimitedTop" type="BooleanType" use="optional" default="no"/>
+		<xs:attribute name="FaceLimitedBottom" type="BooleanType" use="optional" default="yes"/>
+	</xs:complexType>
+	<xs:complexType name="CamberType">
+		<xs:annotation>
+			<xs:documentation>Defintion of a camber</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="ReferencePlaneID" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:unsignedInt">
+					<xs:minInclusive value="1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="StartingPoint" type="xs:double" use="required"/>
+		<xs:attribute name="EndPoint" type="xs:double" use="required"/>
+		<xs:attribute name="CamberPoint" type="xs:double" use="required"/>
+		<xs:attribute name="Camber" type="xs:double" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ProfileArcType">
+		<xs:annotation>
+			<xs:documentation>Defintion of a profile arc</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="QuarterArc">
+				<xs:complexType>
+					<xs:attribute name="Radius" type="LengthSType" default="50.0"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Segment">
+				<xs:complexType>
+					<xs:attribute name="Length" type="LengthSType" default="50.0"/>
+					<xs:attribute name="Height" type="LengthSType" default="50.0"/>
+					<xs:attribute name="Camber" type="LengthSType" default="50.0"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+		<xs:attribute name="ArcShape" type="ArcShapeType" default="convex"/>
+		<xs:attribute name="LapLength" type="LengthSType" default="10.0"/>
+		<xs:attribute name="LapHeight" type="LengthSType" default="10.0"/>
+		<xs:attribute name="Displacement" type="LengthSType" default="10.0"/>
+	</xs:complexType>
+	<xs:complexType name="VariantParameterType">
+		<xs:annotation>
+			<xs:documentation>Definition of a parameter in a variant</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="Value" type="LengthPosType" minOccurs="0"/>
+			<xs:element name="StringValue" type="xs:string" minOccurs="0"/>
+		</xs:choice>
+		<xs:attribute name="Name" type="xs:string" use="required"/>
+	</xs:complexType>
+	<!-- ================================================================== -->
+	<!--end of definitions-->
+	<!-- ================================================================== -->
+</xs:schema>

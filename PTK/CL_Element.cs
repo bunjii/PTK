@@ -18,6 +18,7 @@ namespace PTK
         private Point3d pointAtStart;
         private Point3d pointAtEnd;
         private Curve crv;
+        private double length;
         private Section section;
         private Material material;
         private Forces force;
@@ -33,6 +34,8 @@ namespace PTK
         Rectangle3d crossSectionRectangle;
         Brep elementGeometry;
         BoundingBox boundingbox;
+        PartType btlPart;
+
 
 
         #endregion
@@ -54,11 +57,40 @@ namespace PTK
             generateIntervals();
             generateElementGeometry();
             parameterConnectedNodes = new List<double>();
+            length = crv.GetLength();
+
+
+            //BTL Spesific
+
+            PartType tempPart = new PartType();
+            CoordinateSystemType CoordinateSystem = new CoordinateSystemType();   //Initializing the coordinate system of a part
+            PointType Point = new PointType();  //the point of a part
+
+            Plane btlPlane = yzPlane;
 
 
 
+            CoordinateSystem.XVector.X = btlPlane.ZAxis.X;
+            CoordinateSystem.XVector.Y = btlPlane.ZAxis.Y;
+            CoordinateSystem.XVector.Z = btlPlane.ZAxis.Z;
+            CoordinateSystem.YVector.X = btlPlane.XAxis.X;
+            CoordinateSystem.YVector.Y = btlPlane.XAxis.Y;
+            CoordinateSystem.YVector.Z = btlPlane.XAxis.Z;
+            CoordinateSystem.ReferencePoint.X = btlPlane.OriginX;
+            CoordinateSystem.ReferencePoint.Y = btlPlane.OriginY;
+            CoordinateSystem.ReferencePoint.Z = btlPlane.OriginZ;
 
+            ReferenceType Reference = new ReferenceType();
+            Reference.Position = CoordinateSystem;
+            Reference.GUID = "Haleluja";
 
+            tempPart.Transformations.Transformation.Add(Reference);
+
+            tempPart.Length = length;
+            tempPart.Width = section.Width;
+            tempPart.Height = section.Height;
+
+            btlPart = tempPart;
 
             //n0id = -999: This one is currently missing, but easy to remake in the AsignNeighbour function
             //n1id = -999; This one is currently missing, but easy to remake in the AsignNeighbour function
@@ -90,9 +122,11 @@ namespace PTK
         public BoundingBox BoundingBox { get { return boundingbox; } }
         public Point3d PointAtStart { get { return pointAtStart; } }
         public Point3d PointAtEnd { get { return pointAtEnd; } }
+        public double Length { get { return length; } }
         public int ConnectedNodes { get { return connectedNodes; } }
         public List<double> ParameterConnectedNodes { get { return parameterConnectedNodes; } }
         public List<Node> Nodes { get { return nodes; } }
+        public PartType BTLPart { get { return btlPart; } }
 
 
 

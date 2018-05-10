@@ -62,8 +62,10 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="btlx_10.Designer.cs" />
     <Compile Include="CL_Align.cs" />
     <Compile Include="CL_Assembly.cs" />
     <Compile Include="CL_Element.cs" />
@@ -115,6 +117,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="btlx_10.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
     <None Include="Resources\icon_truss.png" />
   </ItemGroup>
