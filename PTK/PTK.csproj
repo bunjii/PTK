@@ -75,6 +75,7 @@
     <Compile Include="CL_Material_properties.cs" />
     <Compile Include="MyComponent1.cs" />
     <Compile Include="CL_Node.cs" />
+    <Compile Include="SandBoxComponent.cs" />
     <Compile Include="ProjectProperties.cs" />
     <Compile Include="PTK_1_4b_Alignment_Simple.cs" />
     <Compile Include="PTK_1_4_Alignment_Simple.cs" />
@@ -105,7 +106,7 @@
     <Compile Include="PTK_9_BtlExport.cs" />
     <Compile Include="PTK_UTIL_6_DisassembleMaterial.cs" />
     <Compile Include="PTK_UTIL_5_DisassembleElem.cs" />
-    <Compile Include="PTK_UTIL_1.cs" />
+    <Compile Include="PTK_UTIL_1_GenerateGeometry.cs" />
     <Compile Include="CL_Section.cs" />
     <Compile Include="PTK_UTIL_4_DisassembleNode.cs" />
     <Compile Include="PTK_UTIL_3_SelectNode.cs" />

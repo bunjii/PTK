@@ -37,12 +37,14 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Element", "E", "Add elements here", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Supports", "S", "Add Supports here", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Loads", "L", "Add Loads here", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Element", "E(PTK)", "Add elements here", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Supports", "Sup(PTK)", "Add Supports here", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Loads", "L(PTK)", "Add Loads here", GH_ParamAccess.list);
+            pManager.AddTextParameter("Priority", "Priority", "Priority", GH_ParamAccess.item, "");
 
             pManager[1].Optional = true;
             pManager[2].Optional = true;
+            pManager[3].Optional = true;
         }
 
         /// <summary>
@@ -50,9 +52,10 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Assembly", "A", "AssemblyObjectContaining the whole project", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Assembly", "A(PTK)", "Assembled project data", GH_ParamAccess.item);
 
             // outputs below just checking purposes. should be removed before release. 
+            /*
             pManager.AddPointParameter("Point", "", "", GH_ParamAccess.list);
             pManager.AddBrepParameter("Breptest", "", "", GH_ParamAccess.list);
             pManager.AddTextParameter("ID", "", "", GH_ParamAccess.list);
@@ -60,7 +63,8 @@ namespace PTK
             pManager.AddNumberParameter("CenterCurve", "", "", GH_ParamAccess.list);
             pManager.AddTextParameter("Neighbours", "", "", GH_ParamAccess.list);
             pManager.AddLineParameter("Lines", "", "", GH_ParamAccess.list);
-            pManager.AddTextParameter("SubID", "", "", GH_ParamAccess.list);
+            */
+            // pManager.AddTextParameter("SubID", "", "", GH_ParamAccess.list);
             
         }
 
@@ -75,13 +79,14 @@ namespace PTK
             Node.ResetIDCount();
             Element.ResetIDCount();
             #region variables
-            
+
             // Assigning lists of objects
-            
+            string priorityTxt = "";
             List<Node> nodes = new List<Node>();
             List<Element> elems = new List<Element>();
             List<Material> mats = new List<Material>();
             List<Section> secs = new List<Section>();
+            // List<string> priorities = new List<string>();
             RTree rTreeNodes = new RTree();
             RTree rTreeElems = new RTree();
             
@@ -90,6 +95,7 @@ namespace PTK
 
             #region input
             if (!DA.GetDataList(0, wrapElemList)) { return; }
+            if (!DA.GetData(3, ref priorityTxt )) { return; }
             #endregion
 
             #region solve
@@ -123,33 +129,39 @@ namespace PTK
             // extract cross-section informations from elements
             Functions_DDL.RegisterSections(ref elems, ref secs);
 
+            // main function #6
+            // register priorities to element
+            Functions_DDL.RegisterPriority(ref elems, priorityTxt);
             
-            
+            /* has moved to PTK_UTIL_1_GenerateGeometry 
+             * & PTK_UTIL_5_DisassembleElement
             List<Brep> BokseTest = new List<Brep>();
             List<Curve> elementCurves = new List<Curve>();
             List<int> elementid = new List<int>();
             List<int> ConnectedNodes = new List<int>();
+            
             List<Line> strLine = new List<Line>();
             List<String> SubID = new List<String>();
 
             // Testing, making breps
             for (int i = 0; i < elems.Count; i++)
             {
+                has moved to PTK_UTIL_1_GenerateGeometry
                 BokseTest.Add(elems[i].ElementGeometry);
                 elementCurves.Add(elems[i].Crv);
                 ConnectedNodes.Add(elems[i].ConnectedNodes);
                 elementid.Add(elems[i].Id);
-                string tempID = Convert.ToString(elems[i].Id);
+                
 
+                string tempID = Convert.ToString(elems[i].Id);
+                
                 // making SubID output
                 for (int j = 0; j < elems[i].SubStructural.Count; j++)
                 {
                     strLine.Add(elems[i].SubStructural[j].StrctrLine);
                     SubID.Add(tempID + "_" + Convert.ToString(elems[i].SubStructural[j].StrctrlLineID));
                 }
-
             }
-
             List<string> IDs = new List<string>();
             List<Point3d> PointNodes = new List<Point3d>();
             List<string> NeighbourList = new List<string>();
@@ -163,9 +175,9 @@ namespace PTK
                     text += "E:" +Convert.ToString(nodes[i].ElemIds[j])+" ";
                 }
                 NeighbourList.Add(text);
-                
             }
-            
+            */
+
             #endregion
 
             #region output
@@ -173,14 +185,14 @@ namespace PTK
             Assembly Assembly = new Assembly(nodes, elems, mats, secs);
 
             DA.SetData(0, Assembly);
-            DA.SetDataList(1, PointNodes);
-            DA.SetDataList(2, BokseTest);
-            DA.SetDataList(3, IDs);
-            DA.SetDataList(4, elementCurves);
-            DA.SetDataList(5, elementid);
-            DA.SetDataList(6, ConnectedNodes);
-            DA.SetDataList(7, strLine);
-            DA.SetDataList(8, SubID);
+            // DA.SetDataList(1, PointNodes);
+            // DA.SetDataList(2, BokseTest);
+            // DA.SetDataList(3, IDs);
+            // DA.SetDataList(4, elementCurves);
+            // DA.SetDataList(5, elementid);
+            // DA.SetDataList(6, ConnectedNodes);
+            // DA.SetDataList(7, strLine);
+            // DA.SetDataList(1, SubID);
             #endregion
             
         }

@@ -49,6 +49,8 @@ namespace PTK
             #region variables
             List<Node> nodes = new List<Node>();
             List<Element> elems = new List<Element>();
+            List<Material> mats = new List<Material>();
+            List<Section> secs = new List<Section>();
             GH_ObjectWrapper wrapAssembly = new GH_ObjectWrapper();
             Assembly assemble;
             #endregion
@@ -63,13 +65,15 @@ namespace PTK
 
             nodes = assemble.Nodes;
             elems = assemble.Elems;
+            mats = assemble.Mats;
+            secs = assemble.Secs;
 
-            Assembly assemble2 = new Assembly(nodes, elems);
+            Assembly outAssemble = new Assembly(nodes, elems, mats, secs);
             
             #endregion
 
             #region output
-            DA.SetData(0, assemble2);
+            DA.SetData(0, outAssemble);
 
             #endregion
 

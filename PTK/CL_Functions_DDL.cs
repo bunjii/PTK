@@ -132,16 +132,18 @@ namespace PTK
         {
             for (int i = 0; i < _elems.Count; i++) //Element index i       
             {
-                List<Point3d> segmentPts = new List<Point3d>();
-                List<double> paramList = _elems[i].NodeParams.ToList();
+                List<Point3d> _segmentPts = new List<Point3d>();
+                List<double> _paramList = _elems[i].NodeParams.ToList();
                 
                 for (int j = 0; j < _elems[i].NodeIds.Count; j++)
                 {
-                    segmentPts.Add(Node.FindNodeById(_nodes, _elems[i].NodeIds[j]).Pt3d);
+                    Node _tempNode = Node.FindNodeById(_nodes, _elems[i].NodeIds[j]);
+
+                    _segmentPts.Add(_tempNode.Pt3d);
                 }
                 
-                var key = paramList.ToArray();
-                var ptsArray = segmentPts.ToArray();
+                var key = _paramList.ToArray();
+                var ptsArray = _segmentPts.ToArray();
                 
                 Array.Sort(key, ptsArray);
 
@@ -151,9 +153,9 @@ namespace PTK
 
                 for (int j = 1; j < ptsArray.Count(); j++) // j starting with #1
                 {
-                    Line segment = new Line(ptsArray[j - 1], ptsArray[j]);
+                    Line _segment = new Line(ptsArray[j - 1], ptsArray[j]);
                     // be aware that Element.AddStrctline gives subid as well as segment.
-                    _elems[i].AddStrctLine(segment);
+                    _elems[i].AddStrctLine(_segment);
                 }
             }
         }
@@ -233,6 +235,35 @@ namespace PTK
 
         }
 
+        public static void RegisterPriority(ref List<Element> _elems, string _priorityTxt)
+        {
+            // priority: 0 (highest priority) to bigger integer (lower priority)
+
+            if (_priorityTxt != "")
+            {
+                // make a priority list out of the text input
+                List<string> _prLst = new List<string>();
+                _prLst = _priorityTxt.Split(',').ToList();
+                for (int i = 0; i < _prLst.Count; i++)
+                {
+                    _prLst[i] = _prLst[i].Trim();
+                }
+
+                for (int i = 0; i < _elems.Count; i++)
+                {
+                    _elems[i].Priority = _prLst.IndexOf(_elems[i].Tag);
+                }
+            }
+            else // in case the list is disconnected.
+            {
+                for (int i = 0; i < _elems.Count; i++)
+                {
+                    _elems[i].Priority = -999;
+                }
+            }
+
+        }
+
         public static string ConvertCommaToPeriodDecimal(string _txt, bool _reverse = false)
         {
             char[] _charList;
@@ -270,20 +301,98 @@ namespace PTK
             return _hashedTxt.ToString();
         }
 
+        public static List<Brep> OperatePriority(List<Node> _nodes, List<Element> _elems, ref List<Brep> _breps)
+        {
+            List<Brep> _outBreps = new List<Brep>(_breps);
+
+            // looping through Node by Node
+            for (int i = 0; i < _nodes.Count; i++)
+            {
+                List<int> _nElemIds = _nodes[i].ElemIds.ToList();
+                List<int> _priority = new List<int>();
+                List<Brep> _relvBrep = new List<Brep>();    // "relevant Breps"
+                List<int> _brepElemId = new List<int>();
+                
+                // for each element
+                for (int j = 0; j < _nElemIds.Count; j++)
+                {
+                    _priority.Add(Element.FindElemById(_elems, _nElemIds[j]).Priority);
+
+                    _brepElemId.Add(_nElemIds[j]);
+                    _relvBrep.Add(_outBreps[_nElemIds[j]]);
+                }
+                
+                // looping through each element at the node for cutting
+                for (int j = 0; j < _relvBrep.Count; j++)
+                {
+                    for (int k = 0; k < _relvBrep.Count; k++)
+                    {
+                        // I am a Brep named _relvBrep[j]. I will be cut when _relvBrep[k] is more prioritized.
+                        if (j == k) continue;
+                        /*
+                        {
+                            MessageBox.Show(j + " = " + k);
+                            continue;
+                        }
+                        */
+                        if (_priority[j] <= _priority[k]) continue;
+                        /*
+                        {
+                            MessageBox.Show("less prioritized: nid= "+i+" , eid= "+_nElemIds[j]
+                                + " , counter eid = " + _nElemIds[k] );
+                            continue;     // if I am more prioritized than my counterpart, no need of processing.
+                        } 
+                        */
+                        Brep[] _slashedBreps = Brep.CreateBooleanDifference(_relvBrep[j], _relvBrep[k], ProjectProperties.tolerances);
+                        if (_slashedBreps == null) continue;
+                        if (_slashedBreps.Count() == 0) continue;
+
+                        List<double> _totalEdgeLength = new List<double>();
+                        for (int l = 0; l < _slashedBreps.Count(); l++)
+                        {
+                            Curve[] _edgeCrvs = _slashedBreps[l].DuplicateEdgeCurves();
+                            
+                            double _length = 0.0;
+                            foreach (Curve _c in _edgeCrvs) _length += _c.GetLength();
+
+                            _totalEdgeLength.Add(_length);
+                            
+                        }
+
+                        double[] _totalEdgeLengthArray = _totalEdgeLength.ToArray();
+                        Array.Sort(_totalEdgeLengthArray, _slashedBreps);
+
+                        Brep _slashed = _slashedBreps[_slashedBreps.Count() - 1];
+                        _relvBrep[j] = _slashed;
+                        _outBreps[_brepElemId[j]] = _slashed;
+
+                    } // end for (int k = 0; k < _relvBrep.Count; k++)
+                } // end for (int j = 0; j < _relvBrep.Count; j++)
+            } // end for (int i = 0; i < _nodes.Count; i++)
+
+            return _outBreps;
+        }
+
         // ### below: private functions ###
 
         private static void RegisterElemToNode(Node _node, Element _elem, double _param)
         {
-            _node.AddElemId(_elem.Id);
-            _node.AddElemParams(_param);
+            // check if the elem id is already registered, 
+            // and if not, register elem and elemparam to node.
+            if (_node.ElemIds.Contains(_elem.Id) == false)
+            {
+                _node.AddElemId(_elem.Id);
+                _node.AddElemParams(_param);
+            }
         }
 
         private static void RegisterNodeToElem(ref List<Element> _elems, Node _node, int _i, double _param)
         {
-            // check if the node id is already registered.
-            if (_elems[_i].NodeIds.Contains(_node.ID) == false)
+            // check if the node id is already registered, 
+            // and if not, register node and nodeparam to elem
+            if (_elems[_i].NodeIds.Contains(_node.Id) == false)
             {
-                _elems[_i].AddNodeId(_node.ID);
+                _elems[_i].AddNodeId(_node.Id);
                 _elems[_i].AddNodeParams(_param);
             }
         }
@@ -324,9 +433,9 @@ namespace PTK
                 Node _newNode = new Node(_sPt);
                 _nodes.Add(_newNode);
                 // register the node to _rTreeNodes
-                _rTreeNodes.Insert(_newNode.BoundingBox, _newNode.ID);
+                _rTreeNodes.Insert(_newNode.BoundingBox, _newNode.Id);
                 // obtain nId
-                _nId = _newNode.ID;
+                _nId = _newNode.Id;
             }
 
             return _nId;

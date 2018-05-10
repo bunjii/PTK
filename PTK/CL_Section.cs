@@ -56,6 +56,14 @@ namespace PTK
         {
             this.elemIds.Add(elemId);
         }
+
+        public static Section FindSecById(List<Section> _secs, int _sid)
+        {
+            Section tempSec;
+            tempSec = _secs.Find(s => s.Id == _sid);
+
+            return tempSec;
+        }
         #endregion
     }
 

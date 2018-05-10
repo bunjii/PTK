@@ -40,7 +40,7 @@ namespace PTK
             pManager.AddGenericParameter("Align", "A", "Describes the alignment of the member. (Rotation and offset)", GH_ParamAccess.item);
             pManager.AddGenericParameter("Forces", "F", "Add Forces-component here", GH_ParamAccess.item);
             pManager.AddTextParameter("Tags", "T", "Add tags to the structure here. Tags are individual to each element", GH_ParamAccess.tree);
-            pManager.AddIntegerParameter("Priority", "P", "Add a integer value that defines the priority of the member", GH_ParamAccess.list);
+            // pManager.AddIntegerParameter("Priority", "P", "Add a integer value that defines the priority of the member", GH_ParamAccess.list);
             
             pManager[0].Optional = true;
             pManager[2].Optional = true;
@@ -48,7 +48,7 @@ namespace PTK
             pManager[4].Optional = true;
             pManager[5].Optional = true;
             pManager[6].Optional = true;
-            pManager[7].Optional = true;
+            // pManager[7].Optional = true;
 
         }
 
@@ -74,14 +74,14 @@ namespace PTK
             List<Element> elems = new List<Element>();
             List<Node> nodes = new List<Node>();
             List<Align> alignList = new List<Align>();
-            Align aligner;
+            // Align aligner;
             
             string elemTag = "N/A";
             List<Vector3d> normalVec = new List<Vector3d>();
             GH_ObjectWrapper wrapSec = new GH_ObjectWrapper();
             GH_ObjectWrapper  wrapMat = new GH_ObjectWrapper();
             GH_ObjectWrapper wrapAlign = new GH_ObjectWrapper();
-            GH_ObjectWrapper wrapForc = new GH_ObjectWrapper();
+            GH_ObjectWrapper wrapForce = new GH_ObjectWrapper();
 
             Section section;
             Material material;
@@ -95,7 +95,7 @@ namespace PTK
             DA.GetData(2, ref wrapSec);
             DA.GetData(3, ref wrapMat);
             DA.GetData(4, ref wrapAlign);
-            DA.GetData(5, ref wrapForc);
+            DA.GetData(5, ref wrapForce);
             
             #endregion
 
@@ -104,28 +104,19 @@ namespace PTK
             wrapSec.CastTo<Section>(out section);   
             wrapMat.CastTo<Material>(out material);
             wrapAlign.CastTo<Align>(out align);
-            wrapForc.CastTo<Forces>(out forces);
+            wrapForce.CastTo<Forces>(out forces);
 
 
             //Assigning Default Values if not inputed (correctly)
-            if (section == null)
-            {
-                section = new Section("Untitled", 100, 100);
-            }
-            if (forces == null)
-            {
-                forces = new Forces();
-            }
+            if (section == null) section = new Section("Untitled", 100, 100);
+            if (forces == null) forces = new Forces();
             if (material == null)
             {
                 // material = new Material("untitled", 10, new MatProps("Untitled", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)); //Marcin: Add something generic here
-                material = new Material(new MatProps("Untitled", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
+                material = new Material(
+                    new MatProps("Untitled", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
             }
-            if (align == null)
-            {
-                align = new Align("Untitled", new Vector3d(0, 0, 1), new Vector3d(0, 0, 0));
-            }
-
+            if (align == null) align = new Align("Untitled", new Vector3d(0, 0, 1), new Vector3d(0, 0, 0));
 
             elemTag = elemTag.Trim();
 

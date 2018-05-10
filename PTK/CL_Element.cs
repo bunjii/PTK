@@ -28,20 +28,26 @@ namespace PTK
         private Forces force;
         private Align align;
         private List<SubElementStructural> subStructural;
+        private int priority;
         static int numberOfStructuralLines = 0;
 
-        // below: with one of the xy- yz- zx- planes being fixed, the others can be calculated. so we can go with less field members.
+        // below: with one of the xy- yz- zx- planes being fixed, 
+        // the others can be calculated. 
+        // so we can go with less field members.
         // private Plane xyPlane;
         // private Plane xzPlane;
-
         private Plane yzPlane;
+        
+        // below has moved to PTK_UTIL_1_GenerateGeometry
         Interval iz; //From Centricplane
         Interval iy;
         Interval ix;
         Rectangle3d crossSectionRectangle;
         Brep elementGeometry;
-        BoundingBox boundingbox;
+        //
 
+        BoundingBox boundingbox;
+        
 
         #endregion
 
@@ -60,12 +66,14 @@ namespace PTK
             ptId = new List<int>();
             matId = -999;
             secId = -999;
+            priority = -999;
             subStructural = new List<SubElementStructural>();
 
-            // initializeCentricPlanes(); // replaced by DDL on 2nd April
-            initializeCentricPlanes2();
-            generateIntervals();
-            generateElementGeometry();
+            // initializeCentricPlanes();   // replaced by DDL on 2nd April
+            InitializeCentricPlanes2();
+            GenerateIntervals();            
+            GenerateElementGeometry(); 
+
             nodeParams = new List<double>();
 
             //n0id = -999: This one is currently missing, but easy to remake in the AsignNeighbour function
@@ -137,6 +145,11 @@ namespace PTK
             get { return align; }
             set { align = value; }
         }
+        public int Priority
+        {
+            get { return priority; }
+            set { priority = value; }
+        }
 
         public ReadOnlyCollection<SubElementStructural> SubStructural
         {
@@ -149,11 +162,12 @@ namespace PTK
             get { return subStructural; }
         }
         */
-
+        
         public Brep ElementGeometry
         {
             get { return elementGeometry; }
         }
+        
         public BoundingBox BoundingBox
         {
             get { return boundingbox; }
@@ -251,7 +265,7 @@ namespace PTK
 
             return tempElem; 
         }
-
+        
         #region obsolete
         //Making CentricPlanes using offset/rotation information from the align-component
         private void initializeCentricPlanes()
@@ -272,13 +286,14 @@ namespace PTK
         }
         #endregion
 
-        private void initializeCentricPlanes2()
+        private void InitializeCentricPlanes2()
         {
             Vector3d localX = crv.TangentAtStart;
             Vector3d globalZ = Vector3d.ZAxis;
 
             // determination of local-y direction
-                // case A: where local X is parallel to global Z. (such as most of the columns)
+                // case A: where local X is parallel to global Z.
+                // (such as most of the columns)
 
             Vector3d localY = Vector3d.YAxis; // case A default
 
@@ -318,13 +333,12 @@ namespace PTK
             yzPlane = localYZ;
         }
 
-        //Generating extrusion/SweepIntervals
-        private void generateIntervals()
+        // has moved to PTK_UTIL1_GenerateGeometry
+        // Generating extrusion/SweepIntervals
+        private void GenerateIntervals()
         {
             double[] parameter = { 0.0, 2.2 };
-
             
-
             double HalfWidth = section.Width / 2;
             double HalfHeight = section.Height / 2;
 
@@ -332,10 +346,9 @@ namespace PTK
             iy = new Interval(-HalfWidth, HalfWidth);
             ix = new Interval(0, crv.GetLength());
             crossSectionRectangle = new Rectangle3d(yzPlane, iy, iz);
-            
         }
 
-        private void generateElementGeometry()
+        private void GenerateElementGeometry()
         {
             Brep tempgeometry = new Brep();
 
@@ -355,10 +368,9 @@ namespace PTK
                 boundingbox = tempgeometry.GetBoundingBox(Rhino.Geometry.Plane.WorldXY);
                 int test = 0;
             }
-
-
             elementGeometry = tempgeometry;
         }
+        
 
         public static void ResetIDCount()
         {

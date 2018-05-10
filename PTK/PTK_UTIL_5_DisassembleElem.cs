@@ -55,6 +55,8 @@ namespace PTK
             pManager.AddBoxParameter("BoundingBox", "BB", "", GH_ParamAccess.list);
             pManager.AddIntegerParameter("Mat ID", "MID", "Material ID", GH_ParamAccess.list);
             pManager.AddLineParameter("Structural Lines", "STR LNS", "Structural Lines", GH_ParamAccess.tree);
+            pManager.AddTextParameter("Sub IDs", "Sub IDs", "Sub IDs", GH_ParamAccess.tree);
+            pManager.AddIntegerParameter("Priority", "Priority", "Priority", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -68,7 +70,7 @@ namespace PTK
             List<Element> elems = new List<Element>();
             List<Element> outElems = new List<Element>();
             List<string> elemTags = new List<string>();
-            List<String> inputTags = new List<string>();
+            List<string> inputTags = new List<string>();
             List<Curve> curves = new List<Curve>();
             List<int> elemids = new List<int>();
             // List<int> n0ids = new List<int>();
@@ -76,12 +78,14 @@ namespace PTK
             List<Section> secs = new List<Section>();
             List<Plane> plns = new List<Plane>();
             List<int> mids = new List<int>();
+            List<int> priority = new List<int>();
             
             List<BoundingBox> bbox = new List<BoundingBox>();
 
             DataTree<int> nidTr = new DataTree<int>();
             DataTree<double> pcnTr = new DataTree<double>();
-            DataTree<Line> lines = new DataTree<Line>();
+            DataTree<Line> lineTr = new DataTree<Line>();
+            DataTree<string> subidTr = new DataTree<string>(); 
             #endregion
 
             #region input
@@ -90,8 +94,6 @@ namespace PTK
 
             DA.GetDataList(1, inputTags);
             #endregion
-            // MessageBox.Show(elems[0].MatId.ToString());
-            // MessageBox.Show(elems[0].localYZPlane.ToString());
 
             #region solve
             // Detect Elements 
@@ -124,8 +126,8 @@ namespace PTK
                 //n1ids.Add(e.N1id);
                 secs.Add(outElems[i].Section);
                 plns.Add(outElems[i].localYZPlane);
-
                 mids.Add(outElems[i].MatId);
+                priority.Add(outElems[i].Priority);
 
                 GH_Path pth = new GH_Path(i);
                 for (int j = 0; j < outElems[i].NodeParams.Count; j++)
@@ -136,7 +138,9 @@ namespace PTK
                 
                 for (int j=0; j< outElems[i].SubStructural.Count; j++)
                 {
-                    lines.Add(outElems[i].SubStructural[j].StrctrLine, pth);
+                    lineTr.Add(outElems[i].SubStructural[j].StrctrLine, pth);
+                    subidTr.Add(outElems[i].Id.ToString() + "_" 
+                        + outElems[i].SubStructural[j].StrctrlLineID.ToString(), pth);
                 }
 
                 bbox.Add(outElems[i].BoundingBox);
@@ -155,9 +159,10 @@ namespace PTK
             DA.SetDataTree(6, pcnTr);
             DA.SetDataList(7, bbox);
             DA.SetDataList(8, mids);
-            DA.SetDataTree(9, lines);
+            DA.SetDataTree(9, lineTr);
+            DA.SetDataTree(10, subidTr);
+            DA.SetDataList(11, priority);
             #endregion
-
         }
 
         /// <summary>

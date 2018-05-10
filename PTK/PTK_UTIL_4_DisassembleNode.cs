@@ -30,6 +30,9 @@ namespace PTK
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("PTK NODE", "PTK N", "PTK NODE", GH_ParamAccess.item);
+            pManager.AddTextParameter("PTK NODE ID", "PTK N ID", "Node IDs to be disassembled.", GH_ParamAccess.list);
+
+            pManager[1].Optional = true;
         }
 
         /// <summary>
@@ -51,25 +54,49 @@ namespace PTK
             #region variables
             GH_ObjectWrapper wrapNode = new GH_ObjectWrapper();
             List<Node> nodes = new List<Node>();
-
-            List<Point3d> points = new List<Point3d>();
+            List<Node> outNodes = new List<Node>();
+            List<string> inputIdsTxt = new List<string>();
             List<int> nodeIds = new List<int>();
+            List<Point3d> points = new List<Point3d>();
             DataTree<int> elemIdTree = new DataTree<int>();
             #endregion
 
             #region input
             if (!DA.GetData(0, ref wrapNode)) { return; }
             wrapNode.CastTo<List<Node>>(out nodes);
+            DA.GetDataList(1, inputIdsTxt);
             #endregion
 
             #region solve
-            for (int i=0;i<nodes.Count;i++)
+            if (inputIdsTxt.Count == 0) outNodes = nodes;
+            else
             {
-                points.Add(nodes[i].Pt3d);
-                nodeIds.Add(nodes[i].ID);
+                for (int i = 0; i < inputIdsTxt.Count; i++)
+                {
+                    inputIdsTxt[i] = inputIdsTxt[i].Trim();
+                }
 
-                GH_Path path = new GH_Path(i);
-                foreach (int j in nodes[i].ElemIds)
+                foreach (Node n in nodes)
+                {
+                    if (!inputIdsTxt.Contains(n.Id.ToString())) continue;
+
+                    outNodes.Add(n);
+                }
+
+            }
+
+
+            for (int i=0;i<outNodes.Count;i++)
+            {
+                points.Add(outNodes[i].Pt3d);
+                nodeIds.Add(outNodes[i].Id);
+
+                GH_Path path;
+
+                if (inputIdsTxt.Count == 0) path = new GH_Path(i);
+                else path = new GH_Path(int.Parse(inputIdsTxt[i]));
+
+                foreach (int j in outNodes[i].ElemIds)
                 {
                     elemIdTree.Add(j, path);
                 }

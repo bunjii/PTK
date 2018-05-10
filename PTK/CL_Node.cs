@@ -80,7 +80,7 @@ namespace PTK
         public double X { get { return x; } }
         public double Y { get { return y; } }
         public double Z { get { return z; } }
-        public int ID { get { return id; } }  //removed the possibility to set an ID
+        public int Id { get { return id; } }  //removed the possibility to set an ID
         public int ConnectedElements { get { return connectedElems; } }  //removed the possibility to set an ID
 
         #endregion
@@ -145,17 +145,17 @@ namespace PTK
         public static int FindNodeId(List<Node> _nodes, Point3d _pt)
         {
             int tempId = -999;
-            tempId = _nodes.Find(n => n.Pt3d == _pt).ID;
+            tempId = _nodes.Find(n => n.Pt3d == _pt).Id;
 
             return tempId;
         }
 
         public static Node FindNodeById(List<Node> _nodes, int _nid)
         {
-            Node tempNode;
-            tempNode = _nodes.Find(n => n.ID == _nid);
+            Node _tempNode;
+            _tempNode = _nodes.Find(n => n.Id == _nid);
 
-            return tempNode;
+            return _tempNode;
         }
 
         public static void ResetIDCount()

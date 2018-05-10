@@ -55,10 +55,10 @@ namespace PTK
 
             #region input
             if (!DA.GetData(0, ref wrapAssembly)) { return; }
+            wrapAssembly.CastTo<Assembly>(out assemble);
             #endregion
 
             #region solve
-            wrapAssembly.CastTo<Assembly>(out assemble);
             nodes = assemble.Nodes;
             elems = assemble.Elems;
             mats = assemble.Mats;

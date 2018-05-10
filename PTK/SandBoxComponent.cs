@@ -6,15 +6,15 @@ using Rhino.Geometry;
 
 namespace PTK
 {
-    public class PTK_UTIL_1 : GH_Component
+    public class SandBoxComponent : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the PTK_UTIL_1 class.
+        /// Initializes a new instance of the MyComponent2 class.
         /// </summary>
-        public PTK_UTIL_1()
-          : base("Generate Geometry", "Geom (PTK)",
-              "Generating Mesh or Brep Geometry",
-              "PTK", "UTIL")
+        public SandBoxComponent()
+          : base("Sandbox", "Sandbox",
+              "Sandbox",
+              "PTK", "Sandbox")
         {
         }
 
@@ -23,9 +23,8 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK INPUT", "PTK IN", "PTK DATA INPUT", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("IsMesh", "IsMesh", "IsMesh", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("IsBrep", "IsBrep", "IsBrep", GH_ParamAccess.item);
+            pManager.AddBrepParameter("BrepA", "BrepA", "", GH_ParamAccess.item);
+            pManager.AddBrepParameter("BrepB", "BrepB", "", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -33,8 +32,7 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddBrepParameter("BREP", "BREP", "BREP", GH_ParamAccess.list);
-            pManager.AddMeshParameter("MESH", "MESH", "MESH", GH_ParamAccess.list);
+            pManager.AddBrepParameter("result", "result", "result", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -43,6 +41,27 @@ namespace PTK
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+
+            #region variables
+            Brep brepA = new Brep();
+            Brep brepB = new Brep();
+            #endregion
+
+            #region input
+            DA.GetData(0, ref brepA);
+            DA.GetData(1, ref brepB);
+            #endregion
+
+            #region solve
+            Brep[] slashed;
+            slashed = Brep.CreateBooleanDifference(brepA, brepB, ProjectProperties.tolerances);
+            #endregion
+
+            #region output
+            DA.SetDataList(0, slashed);
+            #endregion
+
+
         }
 
         /// <summary>
@@ -54,8 +73,7 @@ namespace PTK
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return PTK.Properties.Resources.icontest14;
-
+                return null;
             }
         }
 
@@ -64,7 +82,7 @@ namespace PTK
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("38eb4f7f-a3bc-4563-8ebe-dd37784db737"); }
+            get { return new Guid("94be282e-5f98-4970-bad1-d2193c34f47f"); }
         }
     }
 }
