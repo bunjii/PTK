@@ -14,7 +14,7 @@ namespace PTK
         public PTK_8_FeasibleCheck()
           : base("FEASIBILITY CHECK", "IsFeasible",
               "FEASIBILITY CHECK",
-              "PTK", "4_DETAIL")
+              "PTK", "Structure")
         {
         }
 
@@ -23,7 +23,7 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK INPUT", "PTK IN", "PTK DATA INPUT", GH_ParamAccess.item);
+            pManager.AddGenericParameter("PTK Assembly", "A (PTK)", "PTK DATA INPUT", GH_ParamAccess.item);
 
         }
 

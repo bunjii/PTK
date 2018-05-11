@@ -74,44 +74,44 @@
     <Compile Include="Classes\Material.cs" />
     <Compile Include="Classes\MatProps.cs" />
     <Compile Include="Classes\Node.cs" />
-    <Compile Include="Components\SandBoxComponent.cs" />
     <Compile Include="Classes\ProjectProps.cs" />
-    <Compile Include="Components\PTK_1_4b_Alignment_Simple.cs" />
-    <Compile Include="Components\PTK_1_4_Alignment_Simple.cs" />
-    <Compile Include="Components\PTK_1_5_Forces.cs" />
+    <Compile Include="Components\9_2_FinishedModel.cs" />
+    <Compile Include="Components\1_4_Alignment_Simple.cs" />
+    <Compile Include="Components\1_5_Forces.cs" />
     <Compile Include="Classes\Forces.cs" />
+    <Compile Include="Components\4_3_DimensioningMembers.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Components\PTK_1_3_RectangularCrossection.cs" />
+    <Compile Include="Components\1_3_RectangularCrossection.cs" />
     <Compile Include="PTKInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Components\3_Materializer.cs" />
-    <Compile Include="Components\PTK_4_1_KarambaAssemble.cs" />
-    <Compile Include="Components\4_Assemble.cs" />
+    <Compile Include="Components\3_1_Materializer.cs" />
+    <Compile Include="Components\4_2_KarambaExport.cs" />
+    <Compile Include="Components\4_1_Assemble.cs" />
     <Compile Include="Components\1_2_1_LoadMatProps.cs" />
     <Compile Include="Components\1_2_2_Material_properties.cs" />
-    <Compile Include="Components\1_2_3_Material.cs" />
-    <Compile Include="Components\PTK_2_1_Loads.cs" />
-    <Compile Include="Components\PTK_2_2_Supports.cs" />
-    <Compile Include="Components\PTK_5_GlobalModel.cs" />
-    <Compile Include="Components\PTK_6_1_Detailing.cs" />
-    <Compile Include="Components\PTK_6_DetailModel.cs" />
-    <Compile Include="Components\PTK_7_1_LocalAnalysis.cs" />
-    <Compile Include="Components\PTK_7_StrSummarize.cs" />
-    <Compile Include="Components\PTK_8_FeasibleCheck.cs" />
-    <Compile Include="Components\PTK_9_BtlExport.cs" />
-    <Compile Include="Components\PTK_UTIL_6_DisassembleMaterial.cs" />
-    <Compile Include="Components\PTK_UTIL_5_DisassembleElem.cs" />
-    <Compile Include="Components\PTK_UTIL_1_GenerateGeometry.cs" />
+    <Compile Include="Components\1_1_Material.cs" />
+    <Compile Include="Components\2_1_Loads.cs" />
+    <Compile Include="Components\2_2_Supports.cs" />
+    <Compile Include="Components\5_1_GlobalModel.cs" />
+    <Compile Include="Components\6_1_Detailing.cs" />
+    <Compile Include="Components\6_2_DetailModel.cs" />
+    <Compile Include="Components\7_2_LocalAnalysis.cs" />
+    <Compile Include="Components\7_1_StrSummarize.cs" />
+    <Compile Include="Components\8_1_FeasibleCheck.cs" />
+    <Compile Include="Components\9_1_BtlExport.cs" />
+    <Compile Include="Components\U_6_DisassembleMaterial.cs" />
+    <Compile Include="Components\U_5_DisassembleElem.cs" />
+    <Compile Include="Components\U_1_GenerateGeometry.cs" />
     <Compile Include="Classes\Section.cs" />
-    <Compile Include="Components\PTK_UTIL_4_DisassembleNode.cs" />
-    <Compile Include="Components\PTK_UTIL_3_SelectNode.cs" />
+    <Compile Include="Components\U_4_DisassembleNode.cs" />
+    <Compile Include="Components\U_3_SelectNode.cs" />
     <Compile Include="Classes\Supports.cs" />
-    <Compile Include="Components\PTK_UTIL_2_Disassemble.cs" />
-    <Compile Include="Components\PTK_UTIL_7_DisassembleSection.cs" />
+    <Compile Include="Components\U_2_Disassemble.cs" />
+    <Compile Include="Components\U_7_DisassembleSection.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

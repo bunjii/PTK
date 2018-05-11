@@ -5,17 +5,18 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
+
 namespace PTK
 {
-    public class PTK_UTIL_2_Disassemble : GH_Component
+    public class PTK_U_3 : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the PTK_Util_2_Disassemble class.
+        /// Initializes a new instance of the TestE class.
         /// </summary>
-        public PTK_UTIL_2_Disassemble()
-          : base("Disassemble", "DA (PTK)",
-              "Disassemble PTK Assemble Model",
-              "PTK", "UTIL")
+        public PTK_U_3()
+          : base("Select Node (PTK)", "Sel Node",
+              "Select Node (PTK)",
+              "PTK", "Utility")
         {
         }
 
@@ -24,7 +25,9 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK Assembly", "PTK A", "PTK Assembly", GH_ParamAccess.item);
+            pManager.AddGenericParameter("PTK NODE", "N (PTK)", "PTK NODE", GH_ParamAccess.item);
+            pManager.AddIntegerParameter("PTK NODE ID", "N (PTK) ID", "PTK NODE ID", GH_ParamAccess.list);
+            
         }
 
         /// <summary>
@@ -32,10 +35,7 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK NODE", "PTK N", "PTK NODE", GH_ParamAccess.item);
-            pManager.AddGenericParameter("PTK ELEM", "PTK E", "PTK ELEM", GH_ParamAccess.item);
-            pManager.AddGenericParameter("PTK MAT", "PTK M", "PTK MAT", GH_ParamAccess.item);
-            pManager.AddGenericParameter("PTK SEC", "PTK S", "PTK SEC", GH_ParamAccess.item);
+            pManager.AddGenericParameter("PTK NODE", "N (PTK)", "PTK NODE", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -45,31 +45,29 @@ namespace PTK
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             #region variables
-            GH_ObjectWrapper wrapAssembly = new GH_ObjectWrapper();
-            Assembly assemble;
+            GH_ObjectWrapper wrapNode = new GH_ObjectWrapper();
             List<Node> nodes = new List<Node>();
-            List<Element> elems = new List<Element>();
-            List<Material> mats = new List<Material>();
-            List<Section> secs = new List<Section>();
+            List<int> nodeIds = new List<int>();
+            List<Node> outNodes = new List<Node>();
             #endregion
 
             #region input
-            if (!DA.GetData(0, ref wrapAssembly)) { return; }
-            wrapAssembly.CastTo<Assembly>(out assemble);
+            if (!DA.GetData(0, ref wrapNode)) { return; }
+            wrapNode.CastTo<List<Node>>(out nodes);
+            if (!DA.GetDataList(1, nodeIds)) { return; }
             #endregion
 
             #region solve
-            nodes = assemble.Nodes;
-            elems = assemble.Elems;
-            mats = assemble.Mats;
-            secs = assemble.Secs;
+            // foreach (Node n in nodes)
+            for (int i = 0; i < nodeIds.Count; i++)
+            {
+                outNodes.Add(Node.FindNodeById(nodes, nodeIds[i]));
+            }
+            
             #endregion
 
             #region output
-            DA.SetData(0, nodes);
-            DA.SetData(1, elems);
-            DA.SetData(2, mats);
-            DA.SetData(3, secs);
+            DA.SetData(0, outNodes);
             #endregion
         }
 
@@ -82,7 +80,7 @@ namespace PTK
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return PTK.Properties.Resources.icontest2;
+                return PTK.Properties.Resources.icon_truss;
             }
         }
 
@@ -91,7 +89,7 @@ namespace PTK
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("807ac401-b08a-4702-8328-84b152af5724"); }
+            get { return new Guid("d9fab058-b10a-459e-8cb9-8afe2d3a90d3"); }
         }
     }
 }

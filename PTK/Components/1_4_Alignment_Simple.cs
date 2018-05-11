@@ -6,15 +6,15 @@ using Rhino.Geometry;
 
 namespace PTK
 {
-    public class PTK_1_4b_Alignment_Simple : GH_Component
+    public class PTK_1_4_Alignment_Simple : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the PTK1_4_Alignment class.
         /// </summary>
-        public PTK_1_4b_Alignment_Simple()
-          : base("Alignment", "Align (PTK)",
-              "Test Component for Align Simple",
-              "PTK", "Materializer")
+        public PTK_1_4_Alignment_Simple()
+          : base("Alignment (PTK)", "Align",
+              "Simple Alignment",
+              "PTK", "Materialize")
         {
         }
 
@@ -24,9 +24,9 @@ namespace PTK
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             
-            pManager.AddNumberParameter("Offset Local y", "local y", "Offset length local y", GH_ParamAccess.item, 0.0);
-            pManager.AddNumberParameter("Offset Local z", "local z", "Offset length local z", GH_ParamAccess.item, 0.0);
-            pManager.AddNumberParameter("Angle", "Angle", "Rotational angle in degree", GH_ParamAccess.item, 0.0);
+            pManager.AddNumberParameter("offset Local y", "local y", "Offset length[mm] local y", GH_ParamAccess.item, 0.0);
+            pManager.AddNumberParameter("offset Local z", "local z", "Offset length[mm] local z", GH_ParamAccess.item, 0.0);
+            pManager.AddNumberParameter("angle", "angle", "Rotational angle in degree", GH_ParamAccess.item, 0.0);
 
             pManager[0].Optional = true;
             pManager[1].Optional = true;

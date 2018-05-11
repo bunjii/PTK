@@ -11,15 +11,15 @@ using Rhino.Geometry;
 
 namespace PTK
 {
-    public class PTK_UTIL_7_DisassembleSection : GH_Component
+    public class PTK_U_7_DisassembleSection : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the PTK_UTIL_7_DisassembleSection class.
         /// </summary>
-        public PTK_UTIL_7_DisassembleSection()
-          : base("Disassemble Section", "DA_S (PTK)",
+        public PTK_U_7_DisassembleSection()
+          : base("Disassemble Section (PTK)", "X Section",
               "Disassemble Section (PTK)",
-              "PTK", "UTIL")
+              "PTK", "Utility")
         {
         }
 
@@ -28,7 +28,7 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK SECTION", "PTK S", "PTK SECTION", GH_ParamAccess.item);
+            pManager.AddGenericParameter("PTK SECTION", "S (PTK)", "PTK SECTION", GH_ParamAccess.item);
         }
 
         /// <summary>

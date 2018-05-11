@@ -12,15 +12,15 @@ using Rhino.Geometry;
 
 namespace PTK
 {
-    public class PTK_UTIL_4 : GH_Component
+    public class PTK_U_4 : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the TestD class.
         /// </summary>
-        public PTK_UTIL_4()
-          : base("Disassemble Node", "DA_N (PTK)",
+        public PTK_U_4()
+          : base("Disassemble PTK Node", "X Node",
               "Disassemble Node (PTK)",
-              "PTK", "UTIL")
+              "PTK", "Utility")
         {
         }
 
@@ -29,8 +29,8 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK NODE", "PTK N", "PTK NODE", GH_ParamAccess.item);
-            pManager.AddTextParameter("PTK NODE ID", "PTK N ID", "Node IDs to be disassembled.", GH_ParamAccess.list);
+            pManager.AddGenericParameter("PTK NODE", "N (PTK)", "PTK NODE", GH_ParamAccess.item);
+            pManager.AddTextParameter("PTK NODE ID", "N (PTK) ID", "Node IDs to be disassembled.", GH_ParamAccess.list);
 
             pManager[1].Optional = true;
         }
@@ -40,9 +40,9 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddPointParameter("Points", "Points", "Points", GH_ParamAccess.list);
-            pManager.AddIntegerParameter("PTK NODE ID", "PTK N ID", "PTK NODE ID", GH_ParamAccess.list);
-            pManager.AddIntegerParameter("PTK NODE ELEM ID", "PTK N E ID", "PTK NODE ELEM ID", GH_ParamAccess.tree);
+            pManager.AddPointParameter("points", "pts", "points", GH_ParamAccess.list);
+            pManager.AddIntegerParameter("PTK NODE ID", "N (PTK) ID", "PTK NODE ID", GH_ParamAccess.list);
+            pManager.AddIntegerParameter("PTK NODE ELEM ID", "N (PTK) EID", "PTK NODE ELEM ID", GH_ParamAccess.tree);
         }
 
         /// <summary>

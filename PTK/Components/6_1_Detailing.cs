@@ -6,15 +6,15 @@ using Rhino.Geometry;
 
 namespace PTK
 {
-    public class PTK1_5_Forces : GH_Component
+    public class PTK_6_1_Detailing : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the Forces class.
+        /// Initializes a new instance of the PTK_C_07 class.
         /// </summary>
-        public PTK1_5_Forces()
-          : base("Forces", "F",
-              "Adding forces here if data allready is provided ",
-              "Category", "Subcategory")
+        public PTK_6_1_Detailing()
+          : base("DETAIL A (PTK)", "DETAIL A",
+              "DETAIL A",
+              "PTK", "Detail")
         {
         }
 
@@ -23,12 +23,8 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddNumberParameter("FX", "FX", "Add FX", GH_ParamAccess.tree, 0);   //Should be tree, cause more than force pr element
-            pManager.AddNumberParameter("FX", "FX", "Add FX", GH_ParamAccess.tree, 0);
-            pManager.AddNumberParameter("FX", "FX", "Add FX", GH_ParamAccess.tree, 0);
-            pManager.AddNumberParameter("FX", "FX", "Add FX", GH_ParamAccess.tree, 0);
-            pManager.AddNumberParameter("FX", "FX", "Add FX", GH_ParamAccess.tree, 0);
-            pManager.AddNumberParameter("FX", "FX", "Add FX", GH_ParamAccess.tree, 0);
+            pManager.AddGenericParameter("PTK Assembly", "A (PTK)", "PTK DATA INPUT", GH_ParamAccess.item);
+            pManager.AddGenericParameter("SEL NODE", "SEL NODE", "PTK LOGIC OF MAKING DETAILS", GH_ParamAccess.item);
 
         }
 
@@ -37,7 +33,8 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Forces", "F", "Forces to be added to Materializer", GH_ParamAccess.item);
+            pManager.AddGenericParameter("PTK LOGIC", "LOGIC (PTK)", "LOGIC (PTK)", GH_ParamAccess.item);
+
         }
 
         /// <summary>
@@ -57,7 +54,8 @@ namespace PTK
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return PTK.Properties.Resources.icontest3;
+                return PTK.Properties.Resources.icontest1;
+
             }
         }
 
@@ -66,7 +64,7 @@ namespace PTK
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("76a606c9-f75b-4c7f-a30e-02baf83adb53"); }
+            get { return new Guid("d8643dc4-2a9f-4573-920f-4e808275b29b"); }
         }
     }
 }

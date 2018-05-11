@@ -14,9 +14,9 @@ namespace PTK
         /// Initializes a new instance of the PTK_UTIL_1 class.
         /// </summary>
         public PTK_UTIL_1()
-          : base("Generate Geometry", "Geom (PTK)",
+          : base("Generate Geometry (PTK)", "Geometry",
               "Generating Mesh or Brep Geometry",
-              "PTK", "UTIL")
+              "PTK", "Utility")
         {
         }
 
@@ -25,7 +25,7 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK Assembly", "PTK A", "Input PTK Assembly", GH_ParamAccess.item);
+            pManager.AddGenericParameter("PTK Assembly", "A (PTK)", "Input PTK Assembly", GH_ParamAccess.item);
             pManager.AddBooleanParameter("IsMesh", "IsMesh", "IsMesh", GH_ParamAccess.item, false);
             pManager.AddBooleanParameter("IsBrep", "IsBrep", "IsBrep", GH_ParamAccess.item, false);
 

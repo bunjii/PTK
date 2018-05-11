@@ -16,9 +16,9 @@ namespace PTK
         /// Initializes a new instance of the MyComponent1 class.
         /// </summary>
         public PTK_2_2_Supports()
-          : base("Supports (PTK)", "PTK_2_2_Supports",
+          : base("Supports (PTK)", "Supports",
               "Add supports here",
-              "PTK", "2_Inputs")
+              "PTK", "Structure")
         {
         }
 
@@ -27,11 +27,11 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Tag", "Tag", "Tag", GH_ParamAccess.item, "0");      //We should add default values here.
-            pManager.AddIntegerParameter("LoadCase", "LC", "Load case", GH_ParamAccess.item, 0);    //We should add default values here.
-            pManager.AddPointParameter("PointLoad", "Pt", "Point to which load will be assigned", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("Rotations", "Rot", "Rotations Rx,Ry,Rz", GH_ParamAccess.list, new List < bool > { false, false, false });
-            pManager.AddBooleanParameter("Translations", "Tra", "Translatons Tx,Ty,Tz", GH_ParamAccess.list, new List<bool> { false, false, false });
+            pManager.AddTextParameter("tag", "tag", "tag", GH_ParamAccess.item, "0");      //We should add default values here.
+            pManager.AddIntegerParameter("Load Case", "LC", "Load case", GH_ParamAccess.item, 0);    //We should add default values here.
+            pManager.AddPointParameter("Point Load", "pt", "Point to which load will be assigned", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("Rotations", "rot", "Rotations Rx,Ry,Rz", GH_ParamAccess.list, new List < bool > { false, false, false });
+            pManager.AddBooleanParameter("Translations", "tra", "Translatons Tx,Ty,Tz", GH_ParamAccess.list, new List<bool> { false, false, false });
 
         }
 
@@ -40,7 +40,7 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Supports", "S", "Support data to be send to Assembler(PTK)", GH_ParamAccess.item);
+            pManager.AddGenericParameter("PTK Supports", "S (PTK)", "Support data to be send to Assembler(PTK)", GH_ParamAccess.item);
             // pManager.RegisterParam(new Param_Support(), "supportK", "SK", "Support data to be send to Assembler(Karamba)");
         }
 

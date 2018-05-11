@@ -6,15 +6,15 @@ using Rhino.Geometry;
 
 namespace PTK
 {
-    public class PTK_7_StrSummarize : GH_Component
+    public class PTK_1_5_Forces : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the PTK_C_04 class.
+        /// Initializes a new instance of the Forces class.
         /// </summary>
-        public PTK_7_StrSummarize()
-          : base("STRUCTURE SUMMARISE", "STR SUM",
-              "Summarizing Structure",
-              "PTK", "4_DETAIL")
+        public PTK_1_5_Forces()
+          : base("Force (PTK)", "Force",
+              "Adding forces here if data allready is provided ",
+              "PTK", "Structure")
         {
         }
 
@@ -23,7 +23,12 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK INPUT", "PTK IN", "PTK DATA INPUT", GH_ParamAccess.item);
+            pManager.AddNumberParameter("FX", "FX", "Add FX", GH_ParamAccess.tree, 0);   //Should be tree, cause more than force pr element
+            pManager.AddNumberParameter("FX", "FX", "Add FX", GH_ParamAccess.tree, 0);
+            pManager.AddNumberParameter("FX", "FX", "Add FX", GH_ParamAccess.tree, 0);
+            pManager.AddNumberParameter("FX", "FX", "Add FX", GH_ParamAccess.tree, 0);
+            pManager.AddNumberParameter("FX", "FX", "Add FX", GH_ParamAccess.tree, 0);
+            pManager.AddNumberParameter("FX", "FX", "Add FX", GH_ParamAccess.tree, 0);
 
         }
 
@@ -32,8 +37,7 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK OUTPUT", "PTK OUT", "PTK OUTPUT", GH_ParamAccess.item);
-
+            pManager.AddGenericParameter("PTK Force", "F (PTK)", "Forces to be added to Materializer", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -53,7 +57,7 @@ namespace PTK
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return PTK.Properties.Resources.icontest2;
+                return PTK.Properties.Resources.icontest3;
             }
         }
 
@@ -62,7 +66,7 @@ namespace PTK
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("a5f449bf-12d6-4019-8bbe-19a6bb01f280"); }
+            get { return new Guid("76a606c9-f75b-4c7f-a30e-02baf83adb53"); }
         }
     }
 }

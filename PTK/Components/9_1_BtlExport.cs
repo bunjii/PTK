@@ -6,15 +6,15 @@ using Rhino.Geometry;
 
 namespace PTK
 {
-    public class PTK_7_1_LocalAnalysis : GH_Component
+    public class PTK_9_BtlExport : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the PTK_C_03 class.
+        /// Initializes a new instance of the PTK_C_06 class.
         /// </summary>
-        public PTK_7_1_LocalAnalysis()
-          : base("Local Analysis", "Local Analysis",
-              "Local Analysis",
-              "PTK", "4_DETAIL")
+        public PTK_9_BtlExport()
+          : base("BTL EXPORTER (PTK)", "Export BTL",
+              "Exporting BTL file to the designated location",
+              "PTK", "Assemble")
         {
         }
 
@@ -23,8 +23,9 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK INPUT", "PTK IN", "PTK DATA INPUT", GH_ParamAccess.item);
-
+            pManager.AddGenericParameter("PTK Assembly", "A (PTK)", "PTK DATA INPUT", GH_ParamAccess.item);
+            pManager.AddTextParameter("File Path", "Path", "FILE LOCATION OF EXPORTED BTL FILE", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("Enable?", "Enable?", "ENABLE EXPORTING?", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -32,8 +33,6 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK OUTPUT", "PTK OUT", "PTK OUTPUT", GH_ParamAccess.item);
-
         }
 
         /// <summary>
@@ -53,7 +52,8 @@ namespace PTK
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return PTK.Properties.Resources.icontest14;
+                return PTK.Properties.Resources.icontest4;
+
             }
         }
 
@@ -62,7 +62,7 @@ namespace PTK
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("9b623fe7-191b-4163-800c-2cb85fef0c2b"); }
+            get { return new Guid("a638c80f-bcd6-4ecd-a075-9dc9a9c73a98"); }
         }
     }
 }

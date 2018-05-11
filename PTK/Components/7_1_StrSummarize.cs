@@ -2,20 +2,19 @@
 using System.Collections.Generic;
 
 using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
 namespace PTK
 {
-    public class PTK_6_DetailModel : GH_Component
+    public class PTK_7_StrSummarize : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the PTK_C_02 class.
+        /// Initializes a new instance of the PTK_C_04 class.
         /// </summary>
-        public PTK_6_DetailModel()
-          : base("Detail Model (PTK)", "DM (PTK)",
-              "This is to combine detail logic to PTK Class",
-              "PTK", "4_DETAIL")
+        public PTK_7_StrSummarize()
+          : base("Structural Report (PTK)", "Str Report",
+              "Summarizing Structure",
+              "PTK", "Structure")
         {
         }
 
@@ -24,8 +23,7 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK Assembly", "PTK A", "PTK Assembly", GH_ParamAccess.item);
-            // pManager.AddGenericParameter("PTK LOGIC", "PTK LOGIC", "COLLECTIONS OF DETAIL SELECTIONS", GH_ParamAccess.item);
+            pManager.AddGenericParameter("PTK Assembly", "A (PTK)", "PTK DATA INPUT", GH_ParamAccess.item);
 
         }
 
@@ -34,7 +32,8 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK Assembly", "PTK A", "PTK Assembly", GH_ParamAccess.item);
+            // pManager.AddGenericParameter("PTK OUTPUT", "PTK OUT", "PTK OUTPUT", GH_ParamAccess.item);
+
         }
 
         /// <summary>
@@ -43,31 +42,7 @@ namespace PTK
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            #region variables
-            List<Node> nodes = new List<Node>();
-            List<Element> elems = new List<Element>();
-            GH_ObjectWrapper wrapAssembly = new GH_ObjectWrapper();
-            Assembly assemble;
-            #endregion
 
-            #region input
-            if (!DA.GetData(0, ref wrapAssembly)) { return; }
-            #endregion
-
-            #region solve
-
-            wrapAssembly.CastTo<Assembly>(out assemble);
-
-            nodes = assemble.Nodes;
-            elems = assemble.Elems;
-
-            Assembly assemble2 = new Assembly(nodes, elems);
-
-            #endregion
-
-            #region output
-            DA.SetData(0, assemble2);
-            #endregion
         }
 
         /// <summary>
@@ -79,7 +54,7 @@ namespace PTK
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return PTK.Properties.Resources.icontest14;
+                return PTK.Properties.Resources.icontest2;
             }
         }
 
@@ -88,7 +63,7 @@ namespace PTK
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("6b0f9e23-3c7b-4ecd-8f8a-f3f3d3487703"); }
+            get { return new Guid("a5f449bf-12d6-4019-8bbe-19a6bb01f280"); }
         }
     }
 }

@@ -14,16 +14,16 @@ using Rhino.Geometry;
 
 namespace PTK
 {
-    public class PTK_UTIL_5 : GH_Component
+    public class PTK_U_5 : GH_Component
     {
 
         /// <summary>
         /// Initializes a new instance of the TestC class.
         /// </summary>
-        public PTK_UTIL_5()
-          : base("Disassemble Element", "DA_E (PTK)",
+        public PTK_U_5()
+          : base("Disassemble Element (PTK)", "X Element",
               "Disassemble Element (PTK)",
-              "PTK", "UTIL") 
+              "PTK", "Utility") 
         {
         }
 
@@ -32,7 +32,7 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK ELEM", "PTK E", "PTK ELEM", GH_ParamAccess.item);
+            pManager.AddGenericParameter("PTK ELEM", "E (PTK)", "PTK ELEM", GH_ParamAccess.item);
             pManager.AddTextParameter("tag", "tag", "", GH_ParamAccess.list);
 
             pManager[1].Optional = true;

@@ -2,19 +2,20 @@
 using System.Collections.Generic;
 
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
 namespace PTK
 {
-    public class SandBoxComponent : GH_Component
+    public class PTK_6_2_DetailModel : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the MyComponent2 class.
+        /// Initializes a new instance of the PTK_C_02 class.
         /// </summary>
-        public SandBoxComponent()
-          : base("Sandbox", "Sandbox",
-              "Sandbox",
-              "PTK", "Sandbox")
+        public PTK_6_2_DetailModel()
+          : base("Detail Model (PTK)", "Detailed",
+              "This is to combine detail logic to PTK Class",
+              "PTK", "Assemble")
         {
         }
 
@@ -23,8 +24,10 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddBrepParameter("BrepA", "BrepA", "", GH_ParamAccess.item);
-            pManager.AddBrepParameter("BrepB", "BrepB", "", GH_ParamAccess.item);
+            pManager.AddGenericParameter("PTK Assembly", "A (PTK)", "PTK Assembly", GH_ParamAccess.item);
+            pManager.AddGenericParameter("PTK LOGIC", "LOGIC (PTK)", "COLLECTIONS OF DETAIL SELECTIONS", GH_ParamAccess.list);
+
+            pManager[1].Optional = true;
         }
 
         /// <summary>
@@ -32,7 +35,7 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddBrepParameter("result", "result", "result", GH_ParamAccess.list);
+            pManager.AddGenericParameter("PTK Assembly", "A (PTK)", "PTK Assembly", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -41,26 +44,36 @@ namespace PTK
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-
             #region variables
-            Brep brepA = new Brep();
-            Brep brepB = new Brep();
+            List<Node> nodes = new List<Node>();
+            List<Element> elems = new List<Element>();
+            List<Material> mats = new List<Material>();
+            List<Section> secs = new List<Section>();
+            GH_ObjectWrapper wrapAssembly = new GH_ObjectWrapper();
+            Assembly assemble;
             #endregion
 
             #region input
-            DA.GetData(0, ref brepA);
-            DA.GetData(1, ref brepB);
+            if (!DA.GetData(0, ref wrapAssembly)) { return; }
             #endregion
 
             #region solve
-            Brep[] slashed;
-            slashed = Brep.CreateBooleanDifference(brepA, brepB, ProjectProps.tolerances);
+
+            wrapAssembly.CastTo<Assembly>(out assemble);
+
+            nodes = assemble.Nodes;
+            elems = assemble.Elems;
+            mats = assemble.Mats;
+            secs = assemble.Secs;
+
+            Assembly outAssemble = new Assembly(nodes, elems, mats, secs);
+
             #endregion
 
             #region output
-            DA.SetDataList(0, slashed);
-            #endregion
+            DA.SetData(0, outAssemble);
 
+            #endregion
 
         }
 
@@ -73,7 +86,7 @@ namespace PTK
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return null;
+                return PTK.Properties.Resources.icontest14;
             }
         }
 
@@ -82,7 +95,7 @@ namespace PTK
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("94be282e-5f98-4970-bad1-d2193c34f47f"); }
+            get { return new Guid("6b0f9e23-3c7b-4ecd-8f8a-f3f3d3487703"); }
         }
     }
 }

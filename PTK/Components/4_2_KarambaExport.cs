@@ -52,15 +52,15 @@ using Karamba.Utilities.UIWidgets.switcher;
 
 namespace PTK
 {
-    public class PTK_4_1_KarambaAssemble : GH_Component
+    public class PTK_4_2_KarambaExport : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the PTK_4_1_KarambaAssemble class.
         /// </summary>
-        public PTK_4_1_KarambaAssemble()
-          : base("KarambaAssemble", "Karamba A (PTK)",
+        public PTK_4_2_KarambaExport()
+          : base("Karamba Export (PTK)", "Karamba Export",
               "Creates Model information of Karamba",
-              "PTK", "Assemble")
+              "PTK", "Structure")
         {
         }
 
@@ -69,7 +69,7 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK Assembly", "PTK A", "PTK Assembly", GH_ParamAccess.item);
+            pManager.AddGenericParameter("PTK Assembly", "A (PTK)", "PTK Assembly", GH_ParamAccess.item);
 
         }
 
@@ -78,9 +78,9 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddParameter(new Param_Element(), "element", "element", "", GH_ParamAccess.list);
-            pManager.AddParameter(new Param_CrossSection(), "cro-sec", "cro-sec", "", GH_ParamAccess.list);
-            pManager.AddParameter(new Param_FemMaterial(), "material", "material", "", GH_ParamAccess.list);
+            pManager.AddParameter(new Param_Element(), "Elem", "Elem", "", GH_ParamAccess.list);
+            pManager.AddParameter(new Param_CrossSection(), "Cross section", "CroSec", "", GH_ParamAccess.list);
+            pManager.AddParameter(new Param_FemMaterial(), "Material", "Material", "", GH_ParamAccess.list);
         }
 
         /// <summary>

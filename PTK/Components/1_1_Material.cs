@@ -1,25 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
-using Karamba.Models;
-using Karamba.Elements;
-
-
 namespace PTK
 {
-    public class PTK_5_GlobalModel : GH_Component
+    public class PTK_1_1_Material : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the PTK_C_01 class.
+        /// Initializes a new instance of the MyComponent1 class.
         /// </summary>
-        public PTK_5_GlobalModel()
-          : base("Global Model (PTK)", "GM (PTK)",
-              "Combine PTK class and Karamba Analysis Data",
-              "PTK", "4_DETAIL")
+        public PTK_1_1_Material()
+          : base("Material (PTK)", "Mat",
+              "creates a Material",
+              "PTK", "Materialize")
         {
         }
 
@@ -28,7 +25,10 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK Assembly", "PTK A", "PTK Assembly", GH_ParamAccess.item);
+            pManager.AddTextParameter("MaterialName","MN", "Names the material", GH_ParamAccess.item, "UntitledMaterial");      //We should add default values here.
+            pManager.AddIntegerParameter("MaterialID", "MId", "ID of the material", GH_ParamAccess.item, -999);    //We should add default values here.
+            pManager.AddGenericParameter("Material Properties(PTK)", "MP(PTK)", "Add material properties here", GH_ParamAccess.item);    //We should add default values here.
+
         }
 
         /// <summary>
@@ -36,8 +36,7 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK Assembly", "PTK A", "PTK Assembly", GH_ParamAccess.item);
-            pManager.AddLineParameter("lines", "lines", "lines", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Material", "M (PTK)", "MaterialData to be connected with Materializer Component", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -47,33 +46,28 @@ namespace PTK
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             #region variables
-            List<Node> nodes = new List<Node>();
-            List<Element> elems = new List<Element>();
-            List<Material> mats = new List<Material>();
-            List<Section> secs = new List<Section>();
-            GH_ObjectWrapper wrapAssembly = new GH_ObjectWrapper();
-            Assembly assemble;
+            string materialName = "N/A";
+            int matId = -999;
+            MatProps matprops ;
+            GH_ObjectWrapper wrapProp = new GH_ObjectWrapper();
+
             #endregion
 
             #region input
-            if (!DA.GetData(0, ref wrapAssembly)) { return; }
+            DA.GetData(0, ref materialName);
+            DA.GetData(1, ref matId);
+            if (!DA.GetData(2, ref wrapProp)) { return; }
+            wrapProp.CastTo <MatProps>(out matprops);
+
             #endregion
 
             #region solve
-
-            wrapAssembly.CastTo<Assembly>(out assemble);
-
-            nodes = assemble.Nodes;
-            elems = assemble.Elems;
-            mats = assemble.Mats;
-            secs = assemble.Secs;
-
-            Assembly outAssemble = new Assembly(nodes, elems, mats, secs);
-            
+            Material outMaterial = new Material(matprops); // (materialName, matId, properties);
+            outMaterial.MatName = matprops.MaterialName;
             #endregion
 
             #region output
-            DA.SetData(0, outAssemble);
+            DA.SetData(0, outMaterial);
 
             #endregion
 
@@ -88,7 +82,7 @@ namespace PTK
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return PTK.Properties.Resources.icontest13;
+                return PTK.Properties.Resources.icontest10;
             }
         }
 
@@ -97,7 +91,7 @@ namespace PTK
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("3cf82ec9-1233-4aa7-b233-a467fcf8c41b"); }
+            get { return new Guid("911bef7b-feea-46d8-abe9-f686d11b9c41"); }
         }
     }
 }
