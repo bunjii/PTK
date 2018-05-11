@@ -14,7 +14,7 @@ namespace PTK
         public PTK_1_5_Forces()
           : base("Force (PTK)", "Force",
               "Adding forces here if data allready is provided ",
-              "PTK", "Structure")
+              CommonProps.category, "Structure")
         {
         }
 

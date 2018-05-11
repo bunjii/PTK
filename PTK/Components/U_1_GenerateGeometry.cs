@@ -16,7 +16,7 @@ namespace PTK
         public PTK_UTIL_1()
           : base("Generate Geometry (PTK)", "Geometry",
               "Generating Mesh or Brep Geometry",
-              "PTK", "Utility")
+              CommonProps.category, "Utility")
         {
         }
 
@@ -108,7 +108,7 @@ namespace PTK
                     {
                         SweepOneRail tempsweep = new SweepOneRail();
                         var sweep = tempsweep.PerformSweep(e.Crv, crossSectionRectangle.ToNurbsCurve());
-                        oneBeamGeom = sweep[0].CapPlanarHoles(ProjectProps.tolerances);
+                        oneBeamGeom = sweep[0].CapPlanarHoles(CommonProps.tolerances);
                         boundingbox = oneBeamGeom.GetBoundingBox(Rhino.Geometry.Plane.WorldXY);
                     }
 

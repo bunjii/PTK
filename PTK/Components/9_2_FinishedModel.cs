@@ -16,7 +16,7 @@ namespace PTK.Components
         public PTK_9_2_FinishedModel()
           : base("Finished Model (PTK)", "Finished",
               "Description",
-              "PTK", "Assemble")
+              CommonProps.category, "Assemble")
         {
         }
 

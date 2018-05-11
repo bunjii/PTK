@@ -15,7 +15,7 @@ namespace PTK
         public PTK_U_2_Disassemble()
           : base("Disassemble (PTK)", "Disassemble",
               "Disassemble PTK Assemble Model",
-              "PTK", "Utility")
+              CommonProps.category, "Utility")
         {
         }
 

@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace PTK
 {
-    public class ProjectProps
+    public class CommonProps
     {
         #region fields
-        static public double tolerances = 0.001;
+        public const double tolerances = 0.001;
+        public const string category = "PTK";
+        // public const string 
         #endregion
 
         #region constructors

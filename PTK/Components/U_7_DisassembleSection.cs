@@ -19,7 +19,7 @@ namespace PTK
         public PTK_U_7_DisassembleSection()
           : base("Disassemble Section (PTK)", "X Section",
               "Disassemble Section (PTK)",
-              "PTK", "Utility")
+              CommonProps.category, "Utility")
         {
         }
 

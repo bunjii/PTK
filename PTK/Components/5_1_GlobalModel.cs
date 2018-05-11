@@ -19,7 +19,7 @@ namespace PTK
         public PTK_5_GlobalModel()
           : base("Global Model (PTK)", "Global",
               "Combine PTK class and Karamba Analysis Data",
-              "PTK", "Assemble")
+              CommonProps.category, "Assemble")
         {
         }
 

@@ -19,7 +19,7 @@ namespace PTK
         public PTK_U_6_DisassembleMaterial()
           : base("Disassemble Material (PTK)", "X Material",
               "Disassemble Material (PTK)",
-              "PTK", "Utility")
+              CommonProps.category, "Utility")
         {
         }
 

@@ -22,9 +22,9 @@ namespace PTK
         /// 
         
         public PTK_3_Materializer()
-          : base("Materializer (PTK)", "Materialzer",
+          : base("Materializer (PTK)", "Materializer",
               "creates a beam element.",
-              "PTK", "Materialize")
+              CommonProps.category, "Materialize")
         {
         }
 
@@ -39,16 +39,12 @@ namespace PTK
             pManager.AddGenericParameter("PTK Material", "Mat (PTK)", "Add Material-component here",GH_ParamAccess.item);
             pManager.AddGenericParameter("PTK Align", "Aln (PTK)", "Describes the alignment of the member. (Rotation and offset)", GH_ParamAccess.item);
             pManager.AddGenericParameter("PTK Force", "F (PTK)", "Add Forces-component here", GH_ParamAccess.item);
-            // pManager.AddTextParameter("Tags", "T", "Add tags to the structure here. Tags are individual to each element", GH_ParamAccess.tree);
-            // pManager.AddIntegerParameter("Priority", "P", "Add a integer value that defines the priority of the member", GH_ParamAccess.list);
             
             pManager[0].Optional = true;
             pManager[2].Optional = true;
             pManager[3].Optional = true;
             pManager[4].Optional = true;
             pManager[5].Optional = true;
-            // pManager[6].Optional = true;
-            // pManager[7].Optional = true;
 
         }
 

@@ -14,7 +14,7 @@ namespace PTK
         public PTK_6_1_Detailing()
           : base("DETAIL A (PTK)", "DETAIL A",
               "DETAIL A",
-              "PTK", "Detail")
+              CommonProps.category, "Detail")
         {
         }
 

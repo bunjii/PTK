@@ -16,7 +16,7 @@ namespace PTK
         public PTK_U_3()
           : base("Select Node (PTK)", "Sel Node",
               "Select Node (PTK)",
-              "PTK", "Utility")
+              CommonProps.category, "Utility")
         {
         }
 

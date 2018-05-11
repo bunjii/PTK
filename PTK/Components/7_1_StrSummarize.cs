@@ -14,7 +14,7 @@ namespace PTK
         public PTK_7_StrSummarize()
           : base("Structural Report (PTK)", "Str Report",
               "Summarizing Structure",
-              "PTK", "Structure")
+              CommonProps.category, "Structure")
         {
         }
 

@@ -14,7 +14,7 @@ namespace PTK
         public PTK_9_BtlExport()
           : base("BTL EXPORTER (PTK)", "Export BTL",
               "Exporting BTL file to the designated location",
-              "PTK", "Assemble")
+              CommonProps.category, "Assemble")
         {
         }
 

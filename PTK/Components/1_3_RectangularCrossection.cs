@@ -15,7 +15,7 @@ namespace PTK
         public PTK_1_3_RectangularCrossection()
           : base("Rectangular CrossSection (PTK)", "Rectangular",
               "CrossSection is being generated based on width, height, alignment and height-direction ",
-              "PTK", "Materialize")
+              CommonProps.category, "Materialize")
         {
         }
 

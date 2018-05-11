@@ -14,7 +14,7 @@ namespace PTK
         public PTK_1_4_Alignment_Simple()
           : base("Alignment (PTK)", "Align",
               "Simple Alignment",
-              "PTK", "Materialize")
+              CommonProps.category, "Materialize")
         {
         }
 

@@ -16,7 +16,7 @@ namespace PTK
         public PTK_1_1_Material()
           : base("Material (PTK)", "Mat",
               "creates a Material",
-              "PTK", "Materialize")
+              CommonProps.category, "Materialize")
         {
         }
 

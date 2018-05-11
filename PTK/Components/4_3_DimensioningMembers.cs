@@ -14,7 +14,7 @@ namespace PTK.Components
         public PTK_4_3_DimensioningMembers()
           : base("Dimensioning Members", "Dimensioning",
               "Description",
-              "PTK", "Structure")
+              CommonProps.category, "Structure")
         {
         }
 

@@ -28,7 +28,7 @@ namespace PTK
         public PTK_4_Assemble()
           : base("Assemble (PTK)", "Assemble",
               "Assemble",
-              "PTK", "Assemble")
+              CommonProps.category, "Assemble")
         {
         }
 

@@ -20,7 +20,7 @@ namespace PTK
         public PTK_U_4()
           : base("Disassemble PTK Node", "X Node",
               "Disassemble Node (PTK)",
-              "PTK", "Utility")
+              CommonProps.category, "Utility")
         {
         }
 

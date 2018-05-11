@@ -14,7 +14,7 @@ namespace PTK
         public PTK_8_FeasibleCheck()
           : base("FEASIBILITY CHECK", "IsFeasible",
               "FEASIBILITY CHECK",
-              "PTK", "Structure")
+              CommonProps.category, "Structure")
         {
         }
 

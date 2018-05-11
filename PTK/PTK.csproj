@@ -56,6 +56,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Numerics.Vectors, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -63,6 +64,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Align.cs" />
@@ -74,18 +76,29 @@
     <Compile Include="Classes\Material.cs" />
     <Compile Include="Classes\MatProps.cs" />
     <Compile Include="Classes\Node.cs" />
-    <Compile Include="Classes\ProjectProps.cs" />
+    <Compile Include="Classes\CommonProps.cs" />
     <Compile Include="Components\9_2_FinishedModel.cs" />
     <Compile Include="Components\1_4_Alignment_Simple.cs" />
     <Compile Include="Components\1_5_Forces.cs" />
     <Compile Include="Classes\Forces.cs" />
     <Compile Include="Components\4_3_DimensioningMembers.cs" />
+    <Compile Include="Forms\F01_Supports.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\F01_Supports.Designer.cs">
+      <DependentUpon>F01_Supports.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Components\1_3_RectangularCrossection.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="PTKInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Components\3_1_Materializer.cs" />
@@ -114,13 +127,21 @@
     <Compile Include="Components\U_7_DisassembleSection.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\F01_Supports.resx">
+      <DependentUpon>F01_Supports.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Resources\icon_truss.png" />
   </ItemGroup>
   <ItemGroup>

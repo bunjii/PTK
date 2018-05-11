@@ -15,7 +15,7 @@ namespace PTK
             public PTK_2_1_Loads()
               : base("Loads (PTK)", "Loads",
                   "Add loads here",
-                  "PTK", "Structure")
+                  CommonProps.category, "Structure")
             {
             }
 

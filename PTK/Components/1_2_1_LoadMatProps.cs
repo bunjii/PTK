@@ -19,7 +19,7 @@ namespace PTK
         public PTK_1_2_1_LoadMatProps()
           : base("Load Material Properties (PTK)", "Load MP",
               "loads material properties from Tree.",
-              "PTK", "Materialize")
+              CommonProps.category, "Materialize")
         {
         }
 
@@ -91,7 +91,7 @@ namespace PTK
 
             #region solve
             // check locale: "comma" or "period"
-            string decimalSeparator = ProjectProps.FindDecimalSeparator();
+            string decimalSeparator = CommonProps.FindDecimalSeparator();
             bool comma = false, period = false; // to check if text contains comma or period.
              
             // registering materials
