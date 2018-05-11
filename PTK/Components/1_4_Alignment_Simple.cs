@@ -62,7 +62,7 @@ namespace PTK
             #endregion
 
             #region solve
-            Align Simple = new Align(offsetY, offsetZ, rotationAngle);
+            Align Simple = new Align(offsetY/1000, offsetZ/1000, rotationAngle);
 
             #endregion
 
