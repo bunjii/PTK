@@ -18,6 +18,7 @@ namespace PTK
               "creates a Material",
               CommonProps.category, "Materialize")
         {
+            Message = "";
         }
 
         /// <summary>
@@ -67,6 +68,7 @@ namespace PTK
             #endregion
 
             #region output
+            Message = outMaterial.MatName;
             DA.SetData(0, outMaterial);
 
             #endregion

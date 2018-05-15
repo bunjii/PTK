@@ -77,11 +77,13 @@
     <Compile Include="Classes\MatProps.cs" />
     <Compile Include="Classes\Node.cs" />
     <Compile Include="Classes\CommonProps.cs" />
+    <Compile Include="Components\2_2_Supports_DDL.cs" />
     <Compile Include="Components\9_2_FinishedModel.cs" />
     <Compile Include="Components\1_4_Alignment_Simple.cs" />
     <Compile Include="Components\1_5_Forces.cs" />
     <Compile Include="Classes\Forces.cs" />
     <Compile Include="Components\4_3_DimensioningMembers.cs" />
+    <Compile Include="Components\SandBox.cs" />
     <Compile Include="Forms\F01_Supports.cs">
       <SubType>Form</SubType>
     </Compile>

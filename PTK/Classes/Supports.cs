@@ -9,7 +9,7 @@ namespace PTK
         #region fields
         private string supports_tag;
         private int supports_id;
-
+        private int lcase;
         private Point3d supports_point;
         private List<bool> rotations;
         private List<bool> translations;
@@ -17,7 +17,8 @@ namespace PTK
         #endregion
 
         #region constructors
-        public Supports(string _supports_tag, Point3d _supports_point, List<bool> _rotations, List<bool> _translations)
+        public Supports(string _supports_tag, Point3d _supports_point, 
+            List<bool> _rotations, List<bool> _translations)
         {
             supports_tag = _supports_tag; // inheriting  Class
             supports_id = -999; // inheriting  Class
@@ -40,7 +41,21 @@ namespace PTK
         #endregion
 
         #region methods
+        public static bool[] StringToArray(string _boolStr)
+        {
+            bool[] _returnArray = new bool[6];
+            char[] _tempChar;
+            _tempChar = _boolStr.ToCharArray();
+            for (int i = 0; i < 6; i++)
+            {
+                bool _tempBool;
+                if (_tempChar[i] == '0') _tempBool = false;
+                else _tempBool = true;
+                _returnArray[i] = _tempBool;
+            }
 
+            return _returnArray;
+        }
         #endregion
     }
 }

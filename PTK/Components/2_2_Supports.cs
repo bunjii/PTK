@@ -6,6 +6,7 @@ using Rhino.Geometry;
 
 using Karamba.Supports;
 using System.Windows.Forms;
+using GH_IO.Serialization;
 // using Karamba;
 
 namespace PTK
@@ -13,6 +14,11 @@ namespace PTK
 
     public class PTK_2_2_Supports : GH_Component
     {
+        
+        private string boolSupString = "";
+        private bool[] boolSupArray = { false, false, false, false, false, false }; // six degrees of freedom
+        
+
         /// <summary>
         /// Initializes a new instance of the MyComponent1 class.
         /// </summary>
@@ -21,6 +27,7 @@ namespace PTK
               "Add supports here",
               CommonProps.category, "Structure")
         {
+            Message = "PTK";
         }
 
         /// <summary>
@@ -30,10 +37,13 @@ namespace PTK
         {
             // pManager.AddTextParameter("tag", "tag", "tag", GH_ParamAccess.item, "0");      //We should add default values here.
             pManager.AddIntegerParameter("Load Case", "LC", "Load case", GH_ParamAccess.item, 0);    //We should add default values here.
-            pManager.AddPointParameter("Point Load", "pt", "Point to which load will be assigned", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("Rotations", "rot", "Rotations Rx,Ry,Rz", GH_ParamAccess.list, new List < bool > { false, false, false });
-            pManager.AddBooleanParameter("Translations", "tra", "Translatons Tx,Ty,Tz", GH_ParamAccess.list, new List<bool> { false, false, false });
+            pManager.AddPointParameter("Point", "pt", "Point to which load will be assigned", GH_ParamAccess.list);
+            pManager.AddPlaneParameter("Plane", "plane", "", GH_ParamAccess.list);
+            // pManager.AddBooleanParameter("Rotations", "rot", "Rotations Rx,Ry,Rz", GH_ParamAccess.list, new List < bool > { false, false, false });
+            // pManager.AddBooleanParameter("Translations", "tra", "Translatons Tx,Ty,Tz", GH_ParamAccess.list, new List<bool> { false, false, false });
 
+            pManager[0].Optional = true;
+            pManager[2].Optional = true;
         }
 
         /// <summary>
@@ -52,52 +62,81 @@ namespace PTK
         {
             #region variables
             string Tag = "N/A";
-            int lcase = 0;
-            Point3d lpoint = new Point3d();
-            List<bool> lrot = new List<bool> { false, false, false };
-            List<bool> ltra = new List<bool> { false, false, false };
+            int lCase = 0;
+            List<Point3d> lPts = new List<Point3d>();
+            List<Plane> supPlns = new List<Plane>();
+            List<bool> lRot = new List<bool> { false, false, false };
+            List<bool> lTra = new List<bool> { false, false, false };
+            List<Supports> sups = new List<Supports>();
             #endregion
 
             #region input
             // DA.GetData(0, ref Tag);
-            if (!DA.GetData(0, ref lcase)) { return; }
-            if (!DA.GetData(1, ref lpoint)) { return; }
-            if (!DA.GetDataList(2, lrot)) { return; }
-            if (!DA.GetDataList(3, ltra)) { return; }
+            DA.GetData(0, ref lCase);
+            if (!DA.GetDataList(1, lPts)) { return; }
+            DA.GetDataList(2, supPlns);
             #endregion
 
             #region solve
-            Supports PTKsupports = new Supports(Tag, lpoint, lrot, ltra);
+            /*
+            for (int i = 0; i < lPts.Count; i++)
+            {
+
+            }
+            */
+
+            // Supports PTKsupports = new Supports(Tag, lPt, lrot, ltra);
 
             // Karamba.Supports.Support news = 
             // new Karamba.Supports.Support(new Point3d(0, 0, 0), new List<bool> { false, false, false, false, false, false }, new Plane(new Point3d(0, 0, 0), new Vector3d(0, 0, 1)));
-            
 
             #endregion
-
+            Message = boolSupString;
             #region output
-            DA.SetData(0, PTKsupports);
+            DA.SetData(0, sups);
             // DA.SetData(1, new GH_Support(news));
             #endregion
         }
 
+        
         public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
         {
             base.AppendAdditionalMenuItems(menu);
             Menu_AppendItem(menu, "Support Settings(&S)...", Menu_CustomOnClick);
         }
-
+        
+        // Custom Menu Extension (Right-Clicking at the center of the component)
         private void Menu_CustomOnClick(Object sender, EventArgs e)
         {
-            Forms.F01_Supports frm = new Forms.F01_Supports();
-            // frm.ShowDialog();
-
+            if (boolSupString == "") boolSupString = "000000";
+            Forms.F01_Supports frm = new Forms.F01_Supports(boolSupString);
+            frm.BoolSupString = boolSupString;
             if (frm.ShowDialog() == DialogResult.OK)
             {
+                boolSupString = frm.BoolSupString;
+                boolSupArray = Supports.StringToArray(boolSupString);
+                
+                // ExpireSolution: once form is set, ExpireSolution(true) tells GH 
+                // that this components and its downstreams need recalculations.
                 ExpireSolution(true);
-
             }
         }
+        
+
+        // Data saving function
+        public override bool Write(GH_IWriter writer)
+        {
+            writer.SetString("boolSupString", boolSupString);
+            return base.Write(writer);
+        }
+
+        // Data reading function
+        public override bool Read(GH_IReader reader)
+        {
+            boolSupString = reader.GetString("boolSupString");
+            return base.Read(reader);
+        }
+        
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -120,7 +159,5 @@ namespace PTK
             get { return new Guid("965bef7b-feea-46d1-abe9-f686d28c4c41"); }
         }
     }
-
-
-
+    
 }
