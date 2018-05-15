@@ -25,6 +25,7 @@ namespace PTK
               "Disassemble Element (PTK)",
               CommonProps.category, "Utility") 
         {
+            Message = "PTK";
         }
 
         /// <summary>

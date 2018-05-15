@@ -18,6 +18,7 @@ namespace PTK
               "Select Node (PTK)",
               CommonProps.category, "Utility")
         {
+            Message = "PTK";
         }
 
         /// <summary>

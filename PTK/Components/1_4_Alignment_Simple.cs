@@ -16,6 +16,7 @@ namespace PTK
               "Simple Alignment",
               CommonProps.category, "Materialize")
         {
+            Message = "PTK";
         }
 
         /// <summary>

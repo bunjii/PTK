@@ -30,6 +30,7 @@ namespace PTK
               "Assemble",
               CommonProps.category, "Assemble")
         {
+            Message = "PTK";
         }
 
         /// <summary>

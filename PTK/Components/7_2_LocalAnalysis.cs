@@ -16,6 +16,7 @@ namespace PTK
               "Local Analysis",
               CommonProps.category, "Structure")
         {
+            Message = "PTK";
         }
 
         /// <summary>

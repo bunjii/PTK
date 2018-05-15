@@ -16,6 +16,7 @@ namespace PTK
               "Summarizing Structure",
               CommonProps.category, "Structure")
         {
+            Message = "PTK";
         }
 
         /// <summary>

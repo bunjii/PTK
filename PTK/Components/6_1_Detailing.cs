@@ -16,6 +16,7 @@ namespace PTK
               "DETAIL A",
               CommonProps.category, "Detail")
         {
+            Message = "PTK";
         }
 
         /// <summary>

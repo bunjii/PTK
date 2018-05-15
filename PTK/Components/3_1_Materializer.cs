@@ -26,6 +26,7 @@ namespace PTK
               "creates a beam element.",
               CommonProps.category, "Materialize")
         {
+            Message = "PTK";
         }
 
         /// <summary>

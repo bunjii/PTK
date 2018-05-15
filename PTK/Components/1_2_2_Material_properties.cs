@@ -15,6 +15,7 @@ namespace PTK
               "creates material properties",
               CommonProps.category, "Materialize")
         {
+            Message = "PTK";
         }
 
         /// <summary>

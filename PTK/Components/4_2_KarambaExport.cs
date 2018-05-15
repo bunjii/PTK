@@ -62,6 +62,7 @@ namespace PTK
               "Creates Model information of Karamba",
               CommonProps.category, "Structure")
         {
+            Message = "PTK";
         }
 
         /// <summary>

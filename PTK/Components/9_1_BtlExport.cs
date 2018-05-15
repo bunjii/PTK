@@ -16,6 +16,7 @@ namespace PTK
               "Exporting BTL file to the designated location",
               CommonProps.category, "Assemble")
         {
+            Message = "PTK";
         }
 
         /// <summary>

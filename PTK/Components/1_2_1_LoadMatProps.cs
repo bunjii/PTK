@@ -21,6 +21,7 @@ namespace PTK
               "loads material properties from Tree.",
               CommonProps.category, "Materialize")
         {
+            Message = "PTK";
         }
 
         /// <summary>

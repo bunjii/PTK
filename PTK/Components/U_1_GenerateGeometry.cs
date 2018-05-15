@@ -18,6 +18,7 @@ namespace PTK
               "Generating Mesh or Brep Geometry",
               CommonProps.category, "Utility")
         {
+            Message = "PTK";
         }
 
         /// <summary>

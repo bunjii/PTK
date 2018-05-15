@@ -16,6 +16,7 @@ namespace PTK
               "FEASIBILITY CHECK",
               CommonProps.category, "Structure")
         {
+            Message = "PTK";
         }
 
         /// <summary>

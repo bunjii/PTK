@@ -18,6 +18,7 @@ namespace PTK.Components
               "Description",
               CommonProps.category, "Assemble")
         {
+            Message = "PTK";
         }
 
         /// <summary>

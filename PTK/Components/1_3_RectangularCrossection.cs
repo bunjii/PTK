@@ -17,6 +17,7 @@ namespace PTK
               "CrossSection is being generated based on width, height, alignment and height-direction ",
               CommonProps.category, "Materialize")
         {
+            Message = "PTK";
         }
 
         /// <summary>

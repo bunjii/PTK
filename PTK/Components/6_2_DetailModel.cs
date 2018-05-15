@@ -17,6 +17,7 @@ namespace PTK
               "This is to combine detail logic to PTK Class",
               CommonProps.category, "Assemble")
         {
+            Message = "PTK";
         }
 
         /// <summary>

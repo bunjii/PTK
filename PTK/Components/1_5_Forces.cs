@@ -16,6 +16,7 @@ namespace PTK
               "Adding forces here if data allready is provided ",
               CommonProps.category, "Structure")
         {
+            Message = "PTK";
         }
 
         /// <summary>

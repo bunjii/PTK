@@ -21,6 +21,7 @@ namespace PTK
               "Combine PTK class and Karamba Analysis Data",
               CommonProps.category, "Assemble")
         {
+            Message = "PTK";
         }
 
         /// <summary>
