@@ -89,12 +89,12 @@
     <Compile Include="Forms\F01_Supports.Designer.cs">
       <DependentUpon>F01_Supports.cs</DependentUpon>
     </Compile>
+    <Compile Include="Components\1_3_RectangularCrossection.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Components\1_3_RectangularCrossection.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -250,12 +250,6 @@
     <None Include="Resources\ico_global.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\ico_detail.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\ico_finish.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\ico_localanalysis.png" />
   </ItemGroup>
   <ItemGroup>
@@ -272,6 +266,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ico_geom.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_detail.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_detailing.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_finish.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_detail.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

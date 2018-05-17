@@ -103,6 +103,16 @@ namespace PTK.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ico_detailing {
+            get {
+                object obj = ResourceManager.GetObject("ico_detailing", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ico_dimensioning {
             get {
                 object obj = ResourceManager.GetObject("ico_dimensioning", resourceCulture);
@@ -306,16 +316,6 @@ namespace PTK.Properties {
         internal static System.Drawing.Bitmap ico_xsection {
             get {
                 object obj = ResourceManager.GetObject("ico_xsection", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap icontest1 {
-            get {
-                object obj = ResourceManager.GetObject("icontest1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
