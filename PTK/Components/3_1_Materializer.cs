@@ -37,7 +37,7 @@ namespace PTK
             pManager.AddTextParameter("tag", "tag", "Add tags to the structure here.", GH_ParamAccess.item, "Untitled");
             pManager.AddCurveParameter("curve", "crv", "Add curves that shall be materalized", GH_ParamAccess.list);
             pManager.AddGenericParameter("PTK Cross Section", "CS (PTK)", "Add the cross-section componentt here", GH_ParamAccess.item);
-            pManager.AddGenericParameter("PTK Material", "Mat (PTK)", "Add Material-component here",GH_ParamAccess.item);
+            pManager.AddGenericParameter("PTK Material", "M (PTK)", "Add Material-component here",GH_ParamAccess.item);
             pManager.AddGenericParameter("PTK Align", "Aln (PTK)", "Describes the alignment of the member. (Rotation and offset)", GH_ParamAccess.item);
             pManager.AddGenericParameter("PTK Force", "F (PTK)", "Add Forces-component here", GH_ParamAccess.item);
             

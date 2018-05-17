@@ -51,7 +51,7 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK Supports", "S (PTK)", "Support data to be send to Assembler(PTK)", GH_ParamAccess.item);
+            pManager.AddGenericParameter("PTK Supports", "Sup (PTK)", "Support data to be send to Assembler(PTK)", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -78,12 +78,11 @@ namespace PTK
             #endregion
 
             #region solve
-            /*
             for (int i = 0; i < lPts.Count; i++)
             {
 
             }
-            */
+            
 
             // Supports PTKsupports = new Supports(Tag, lPt, lrot, ltra);
 
