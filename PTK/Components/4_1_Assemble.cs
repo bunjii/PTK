@@ -28,9 +28,9 @@ namespace PTK
         public PTK_4_Assemble()
           : base("Assemble (PTK)", "Assemble",
               "Assemble",
-              CommonProps.category, "Assemble")
+              CommonProps.category, CommonProps.subcat1)
         {
-            Message = "PTK";
+            Message = CommonProps.initialMessage;
         }
 
         /// <summary>
@@ -211,7 +211,7 @@ namespace PTK
                 // You can add image files to your project resources and access them like this:
                 //return Resources.IconForThisComponent;
                 // return null;
-                return PTK.Properties.Resources.icontest11;
+                return PTK.Properties.Resources.ico_assemble;
             }
         }
 

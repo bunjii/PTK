@@ -14,9 +14,9 @@ namespace PTK
         public PTK_6_1_Detailing()
           : base("DETAIL A (PTK)", "DETAIL A",
               "DETAIL A",
-              CommonProps.category, "Detail")
+              CommonProps.category, CommonProps.subcat3)
         {
-            Message = "PTK";
+            Message = CommonProps.initialMessage;
         }
 
         /// <summary>

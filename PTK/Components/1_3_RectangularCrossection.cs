@@ -15,9 +15,9 @@ namespace PTK
         public PTK_1_3_RectangularCrossection()
           : base("Rectangular CrossSection (PTK)", "Rectangular",
               "CrossSection is being generated based on width, height, alignment and height-direction ",
-              CommonProps.category, "Materialize")
+              CommonProps.category, CommonProps.subcat2)
         {
-            Message = "PTK";
+            Message = CommonProps.initialMessage;
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace PTK
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return PTK.Properties.Resources.icontest4;
+                return PTK.Properties.Resources.ico_rectangular;
             }
         }
 

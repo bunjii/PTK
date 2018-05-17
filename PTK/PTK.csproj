@@ -117,15 +117,14 @@
     <Compile Include="Components\7_1_StrSummarize.cs" />
     <Compile Include="Components\8_1_FeasibleCheck.cs" />
     <Compile Include="Components\9_1_BtlExport.cs" />
-    <Compile Include="Components\U_6_DisassembleMaterial.cs" />
-    <Compile Include="Components\U_5_DisassembleElem.cs" />
+    <Compile Include="Components\U_5_DisassembleMaterial.cs" />
+    <Compile Include="Components\U_4_DisassembleElem.cs" />
     <Compile Include="Components\U_1_GenerateGeometry.cs" />
     <Compile Include="Classes\Section.cs" />
-    <Compile Include="Components\U_4_DisassembleNode.cs" />
-    <Compile Include="Components\U_3_SelectNode.cs" />
+    <Compile Include="Components\U_3_DisassembleNode.cs" />
     <Compile Include="Classes\Supports.cs" />
     <Compile Include="Components\U_2_Disassemble.cs" />
-    <Compile Include="Components\U_7_DisassembleSection.cs" />
+    <Compile Include="Components\U_6_DisassembleSection.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forms\F01_Supports.resx">
@@ -198,6 +197,81 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Obsolete\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_support.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_load.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_loadMP.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_materializer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_assemble.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_exportKaramba.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_disassemble.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_xelement.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_material.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_xmaterial.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_rectangular.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_xsection.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_dimensioning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_matprop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_align.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_force.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_global.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_detail.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_finish.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_localanalysis.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_xnode.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_feasible.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_BTL.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_summary.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_geom.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

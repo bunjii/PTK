@@ -14,9 +14,9 @@ namespace PTK
         public PTK_9_BtlExport()
           : base("BTL EXPORTER (PTK)", "Export BTL",
               "Exporting BTL file to the designated location",
-              CommonProps.category, "Assemble")
+              CommonProps.category, CommonProps.subcat5)
         {
-            Message = "PTK";
+            Message = CommonProps.initialMessage;
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace PTK
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return PTK.Properties.Resources.icontest4;
+                return PTK.Properties.Resources.ico_BTL;
 
             }
         }

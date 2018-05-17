@@ -14,18 +14,18 @@ using Rhino.Geometry;
 
 namespace PTK
 {
-    public class PTK_U_5 : GH_Component
+    public class PTK_U_4 : GH_Component
     {
 
         /// <summary>
         /// Initializes a new instance of the TestC class.
         /// </summary>
-        public PTK_U_5()
+        public PTK_U_4()
           : base("Disassemble Element (PTK)", "X Element",
               "Disassemble Element (PTK)",
-              CommonProps.category, "Utility") 
+              CommonProps.category, CommonProps.subcat5) 
         {
-            Message = "PTK";
+            Message = CommonProps.initialMessage;
         }
 
         /// <summary>
@@ -175,7 +175,7 @@ namespace PTK
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return PTK.Properties.Resources.icon_truss;
+                return PTK.Properties.Resources.ico_xelement;
             }
         }
 

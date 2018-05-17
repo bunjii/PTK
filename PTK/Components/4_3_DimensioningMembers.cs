@@ -14,9 +14,9 @@ namespace PTK.Components
         public PTK_4_3_DimensioningMembers()
           : base("Dimensioning Members", "Dimensioning",
               "Description",
-              CommonProps.category, "Structure")
+              CommonProps.category, CommonProps.subcat4)
         {
-            Message = "PTK";
+            Message = CommonProps.initialMessage;
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace PTK.Components
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return null;
+                return PTK.Properties.Resources.ico_dimensioning;
             }
         }
 

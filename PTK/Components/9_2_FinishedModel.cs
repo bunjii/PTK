@@ -16,9 +16,9 @@ namespace PTK.Components
         public PTK_9_2_FinishedModel()
           : base("Finished Model (PTK)", "Finished",
               "Description",
-              CommonProps.category, "Assemble")
+              CommonProps.category, CommonProps.subcat1)
         {
-            Message = "PTK";
+            Message = CommonProps.initialMessage;
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace PTK.Components
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return null;
+                return PTK.Properties.Resources.ico_finish;
             }
         }
 

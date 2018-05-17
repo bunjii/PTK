@@ -13,9 +13,9 @@ namespace PTK
         public PTK_1_2_2_Material_Props()
           : base("Material Properties (PTK)", "MP",
               "creates material properties",
-              CommonProps.category, "Materialize")
+              CommonProps.category, CommonProps.subcat2)
         {
-            Message = "PTK";
+            Message = CommonProps.initialMessage;
         }
 
         /// <summary>
@@ -162,7 +162,7 @@ namespace PTK
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return PTK.Properties.Resources.icontest1;
+                return PTK.Properties.Resources.ico_matprop;
             }
         }
 

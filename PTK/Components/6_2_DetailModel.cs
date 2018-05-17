@@ -15,9 +15,9 @@ namespace PTK
         public PTK_6_2_DetailModel()
           : base("Detail Model (PTK)", "Detailed",
               "This is to combine detail logic to PTK Class",
-              CommonProps.category, "Assemble")
+              CommonProps.category, CommonProps.subcat1)
         {
-            Message = "PTK";
+            Message = CommonProps.initialMessage;
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace PTK
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return PTK.Properties.Resources.icontest14;
+                return PTK.Properties.Resources.ico_detail;
             }
         }
 

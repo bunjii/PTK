@@ -14,9 +14,9 @@ namespace PTK
         public PTK_1_5_Forces()
           : base("Force (PTK)", "Force",
               "Adding forces here if data allready is provided ",
-              CommonProps.category, "Structure")
+              CommonProps.category, CommonProps.subcat4)
         {
-            Message = "PTK";
+            Message = CommonProps.initialMessage;
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace PTK
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return PTK.Properties.Resources.icontest3;
+                return PTK.Properties.Resources.ico_force;
             }
         }
 

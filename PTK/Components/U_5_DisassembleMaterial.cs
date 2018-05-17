@@ -11,17 +11,17 @@ using Rhino.Geometry;
 
 namespace PTK
 {
-    public class PTK_U_6_DisassembleMaterial : GH_Component
+    public class PTK_U_5_DisassembleMaterial : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the PTK_UTIL6_DisassembleMaterial class.
         /// </summary>
-        public PTK_U_6_DisassembleMaterial()
+        public PTK_U_5_DisassembleMaterial()
           : base("Disassemble Material (PTK)", "X Material",
               "Disassemble Material (PTK)",
-              CommonProps.category, "Utility")
+              CommonProps.category, CommonProps.subcat5)
         {
-            Message = "PTK";
+            Message = CommonProps.initialMessage;
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace PTK
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return null;
+                return PTK.Properties.Resources.ico_xmaterial;
             }
         }
 

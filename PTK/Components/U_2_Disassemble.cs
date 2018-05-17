@@ -15,9 +15,9 @@ namespace PTK
         public PTK_U_2_Disassemble()
           : base("Disassemble (PTK)", "Disassemble",
               "Disassemble PTK Assemble Model",
-              CommonProps.category, "Utility")
+              CommonProps.category, CommonProps.subcat5)
         {
-            Message = "PTK";
+            Message = CommonProps.initialMessage;
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace PTK
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return PTK.Properties.Resources.icontest2;
+                return PTK.Properties.Resources.ico_disassemble;
             }
         }
 

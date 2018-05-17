@@ -16,9 +16,9 @@ namespace PTK
         public PTK_UTIL_1()
           : base("Generate Geometry (PTK)", "Geometry",
               "Generating Mesh or Brep Geometry",
-              CommonProps.category, "Utility")
+              CommonProps.category, CommonProps.subcat5)
         {
-            Message = "PTK";
+            Message = CommonProps.initialMessage;
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace PTK
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return PTK.Properties.Resources.icontest14;
+                return PTK.Properties.Resources.ico_geom;
 
             }
         }

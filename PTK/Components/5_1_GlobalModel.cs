@@ -19,9 +19,9 @@ namespace PTK
         public PTK_5_GlobalModel()
           : base("Global Model (PTK)", "Global",
               "Combine PTK class and Karamba Analysis Data",
-              CommonProps.category, "Assemble")
+              CommonProps.category, CommonProps.subcat1)
         {
-            Message = "PTK";
+            Message = CommonProps.initialMessage;
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace PTK
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return PTK.Properties.Resources.icontest13;
+                return PTK.Properties.Resources.ico_global;
             }
         }
 

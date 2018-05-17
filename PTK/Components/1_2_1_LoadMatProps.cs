@@ -19,9 +19,9 @@ namespace PTK
         public PTK_1_2_1_LoadMatProps()
           : base("Load Material Properties (PTK)", "Load MP",
               "loads material properties from Tree.",
-              CommonProps.category, "Materialize")
+              CommonProps.category, CommonProps.subcat2)
         {
-            Message = "PTK";
+            Message = CommonProps.initialMessage;
         }
 
         /// <summary>
@@ -219,7 +219,7 @@ namespace PTK
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return PTK.Properties.Resources.icontest0;
+                return PTK.Properties.Resources.ico_loadMP;
             }
         }
 

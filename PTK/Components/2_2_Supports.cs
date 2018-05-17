@@ -25,9 +25,9 @@ namespace PTK
         public PTK_2_2_Supports()
           : base("Supports (PTK)", "Supports",
               "Add supports here",
-              CommonProps.category, "Structure")
+              CommonProps.category, CommonProps.subcat4)
         {
-            Message = "PTK";
+            Message = CommonProps.initialMessage;
         }
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace PTK
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return PTK.Properties.Resources.icontest12;
+                return PTK.Properties.Resources.ico_support;
             }
         }
 

@@ -24,9 +24,9 @@ namespace PTK
         public PTK_3_Materializer()
           : base("Materializer (PTK)", "Materializer",
               "creates a beam element.",
-              CommonProps.category, "Materialize")
+              CommonProps.category, CommonProps.subcat2)
         {
-            Message = "PTK";
+            Message = CommonProps.initialMessage;
         }
 
         /// <summary>
@@ -165,7 +165,7 @@ namespace PTK
             {
                 // You can add image files to your project resources and access them like this:
                 //return Resources.IconForThisComponent;
-                return PTK.Properties.Resources.icontest1;
+                return PTK.Properties.Resources.ico_materializer;
             }
         }
 

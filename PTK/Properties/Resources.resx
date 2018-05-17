@@ -118,58 +118,82 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="btl" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\btl.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Detail" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Detail.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="icon_truss" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icon_truss.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="localanalysis" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\localanalysis.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Render" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Render.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="secondgatherer" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\secondgatherer.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="strsummary" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\strsummary.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="thirdgatherer" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\thirdgatherer.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="icontest0" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icontest0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="icontest1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icontest1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="icontest10" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icontest10.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ico_align" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ico_align.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="icontest11" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icontest11.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ico_assemble" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ico_assemble.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="icontest12" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icontest12.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ico_dimensioning" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ico_dimensioning.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="icontest13" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icontest13.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ico_disassemble" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ico_disassemble.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="icontest14" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icontest14.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ico_exportKaramba" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ico_exportKaramba.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="icontest2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icontest2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ico_force" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ico_force.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="icontest3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icontest3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ico_load" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ico_load.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="icontest4" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icontest4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ico_loadMP" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ico_loadMP.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ico_material" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ico_material.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ico_materializer" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ico_materializer.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ico_matprop" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ico_matprop.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ico_rectangular" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ico_rectangular.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ico_support" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ico_support.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ico_xelement" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ico_xelement.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ico_xmaterial" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ico_xmaterial.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ico_xnode" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ico_xnode.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ico_xsection" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ico_xsection.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ico_BTL" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ico_BTL.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ico_detail" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ico_detail.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ico_feasible" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ico_feasible.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ico_finish" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ico_finish.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ico_geom" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ico_geom.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ico_global" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ico_global.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ico_localanalysis" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ico_localanalysis.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ico_summary" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ico_summary.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
