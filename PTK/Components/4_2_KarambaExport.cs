@@ -138,7 +138,7 @@ namespace PTK
             // Material for Karamba Assemble
             // Unit conversion:
             // E,G,f: N/mm2 -> kN/cm2 (x 1000)
-            // rho: kg/m3 -> kN/m3 (x 0.1)
+            // rho: kg/m3 -> kN/m3 (x 0.1) 
             List<FemMaterial> kMat = new List<FemMaterial>();
             for (int i = 0; i < mats.Count; i++)
             {

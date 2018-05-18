@@ -16,6 +16,9 @@ namespace PTK
 {
     class Functions_DDL
     {
+
+        // ### public functions ###
+
         public static void Assemble(ref List<Element> _elems, ref List<Node> _nodes, ref RTree _rTreeElems, ref RTree _rTreeNodes)
         {
             // Give Id and Make RTree for elements
@@ -329,20 +332,9 @@ namespace PTK
                     {
                         // I am a Brep named _relvBrep[j]. I will be cut when _relvBrep[k] is more prioritized.
                         if (j == k) continue;
-                        /*
-                        {
-                            MessageBox.Show(j + " = " + k);
-                            continue;
-                        }
-                        */
+
                         if (_priority[j] <= _priority[k]) continue;
-                        /*
-                        {
-                            MessageBox.Show("less prioritized: nid= "+i+" , eid= "+_nElemIds[j]
-                                + " , counter eid = " + _nElemIds[k] );
-                            continue;     // if I am more prioritized than my counterpart, no need of processing.
-                        } 
-                        */
+
                         Brep[] _slashedBreps = Brep.CreateBooleanDifference(_relvBrep[j], _relvBrep[k], CommonProps.tolerances);
                         if (_slashedBreps == null) continue;
                         if (_slashedBreps.Count() == 0) continue;
@@ -373,7 +365,7 @@ namespace PTK
             return _outBreps;
         }
 
-        // ### below: private functions ###
+        // ### private functions ###
 
         private static void RegisterElemToNode(Node _node, Element _elem, double _param)
         {
@@ -420,7 +412,7 @@ namespace PTK
                 };
 
             // BoundingBox _spotBBox = new BoundingBox(_samplePt, _samplePt); 
-            // Above code didn't work out, needing of considering tolerance for BBox. comment by DDL 9th Apr.
+            // Above code didn't work out, needing of considering tolerance for BBox as below. comment by DDL 9th Apr.
             double tol = CommonProps.tolerances; 
             BoundingBox _spotBBox = new BoundingBox
                 (_sPt.X-tol,_sPt.Y-tol, _sPt.Z-tol,_sPt.X+tol,_sPt.Y+tol,_sPt.Z+tol);

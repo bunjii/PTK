@@ -1,12 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
 
+using GH_IO.Serialization;
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Attributes;
+
+using Grasshopper.GUI;
+using Grasshopper.GUI.Canvas;
 using Rhino.Geometry;
 
 using Karamba.Supports;
-using System.Windows.Forms;
-using GH_IO.Serialization;
+
+
 // using Karamba;
 
 namespace PTK
@@ -18,13 +25,12 @@ namespace PTK
         private string boolSupString = "";
         private bool[] boolSupArray = { false, false, false, false, false, false }; // six degrees of freedom
         
-
         /// <summary>
         /// Initializes a new instance of the MyComponent1 class.
         /// </summary>
         public PTK_2_2_Supports()
           : base("Supports (PTK)", "Supports",
-              "Add supports here",
+              "Add Supports Conditions here",
               CommonProps.category, CommonProps.subcat4)
         {
             Message = CommonProps.initialMessage;
@@ -35,15 +41,10 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            // pManager.AddTextParameter("tag", "tag", "tag", GH_ParamAccess.item, "0");      //We should add default values here.
-            pManager.AddIntegerParameter("Load Case", "LC", "Load case", GH_ParamAccess.item, 0);    //We should add default values here.
-            pManager.AddPointParameter("Point", "pt", "Point to which load will be assigned", GH_ParamAccess.list);
+            pManager.AddIntegerParameter("Load Case", "LC", "Load case", GH_ParamAccess.item, 0); 
             pManager.AddPlaneParameter("Plane", "plane", "", GH_ParamAccess.list);
-            // pManager.AddBooleanParameter("Rotations", "rot", "Rotations Rx,Ry,Rz", GH_ParamAccess.list, new List < bool > { false, false, false });
-            // pManager.AddBooleanParameter("Translations", "tra", "Translatons Tx,Ty,Tz", GH_ParamAccess.list, new List<bool> { false, false, false });
-
+            
             pManager[0].Optional = true;
-            pManager[2].Optional = true;
         }
 
         /// <summary>
@@ -63,65 +64,100 @@ namespace PTK
             #region variables
             string Tag = "N/A";
             int lCase = 0;
-            List<Point3d> lPts = new List<Point3d>();
             List<Plane> supPlns = new List<Plane>();
-            List<bool> lRot = new List<bool> { false, false, false };
-            List<bool> lTra = new List<bool> { false, false, false };
-            List<Supports> sups = new List<Supports>();
+            List<Support> sups = new List<Support>();
             #endregion
 
             #region input
-            // DA.GetData(0, ref Tag);
+            if (!DA.GetDataList(1, supPlns)) { return; }
             DA.GetData(0, ref lCase);
-            if (!DA.GetDataList(1, lPts)) { return; }
-            DA.GetDataList(2, supPlns);
             #endregion
 
             #region solve
-            for (int i = 0; i < lPts.Count; i++)
+            for (int i=0;i<supPlns.Count;i++)
             {
-
-            }
+                Support tmpSup = new Support(lCase, supPlns[i], Support.ArrayToList(boolSupArray));
+                sups.Add(tmpSup);
+            }            
             
-
-            // Supports PTKsupports = new Supports(Tag, lPt, lrot, ltra);
-
-            // Karamba.Supports.Support news = 
-            // new Karamba.Supports.Support(new Point3d(0, 0, 0), new List<bool> { false, false, false, false, false, false }, new Plane(new Point3d(0, 0, 0), new Vector3d(0, 0, 1)));
-
             #endregion
             Message = boolSupString;
             #region output
             DA.SetData(0, sups);
-            // DA.SetData(1, new GH_Support(news));
             #endregion
         }
-
         
-        public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
+        public override void CreateAttributes()
         {
-            base.AppendAdditionalMenuItems(menu);
-            Menu_AppendItem(menu, "Support Settings(&S)...", Menu_CustomOnClick);
+            // base.CreateAttributes();
+            m_attributes = new Attributes_Custom(this);
         }
-        
-        // Custom Menu Extension (Right-Clicking at the center of the component)
-        private void Menu_CustomOnClick(Object sender, EventArgs e)
+
+        public static void Menu_CustomOnClick(PTK_2_2_Supports _comp)
         {
-            if (boolSupString == "") boolSupString = "000000";
-            Forms.F01_Supports frm = new Forms.F01_Supports(boolSupString);
-            frm.BoolSupString = boolSupString;
+            if (_comp.boolSupString == "") _comp.boolSupString = "000000";
+            Forms.F01_Supports frm = new Forms.F01_Supports(_comp.boolSupString);
+            frm.BoolSupString = _comp.boolSupString;
+
             if (frm.ShowDialog() == DialogResult.OK)
             {
-                boolSupString = frm.BoolSupString;
-                boolSupArray = Supports.StringToArray(boolSupString);
+                _comp.boolSupString = frm.BoolSupString;
+                _comp.boolSupArray = Support.StringToArray(_comp.boolSupString);
                 
-                // ExpireSolution: once form is set, ExpireSolution(true) tells GH 
-                // that this components and its downstreams need recalculations.
-                ExpireSolution(true);
+                _comp.ExpireSolution(true);
+            }
+        }
+
+        public class Attributes_Custom : GH_ComponentAttributes
+        {
+            private Rectangle ButtonBounds { get; set; }
+
+            public Attributes_Custom(GH_Component owner) : base(owner) { }
+
+            protected override void Layout()
+            {
+                base.Layout();
+
+                Rectangle rec0 = GH_Convert.ToRectangle(Bounds);
+                rec0.Height += 26;
+
+                Rectangle rec1 = rec0;
+                rec1.Y = rec1.Bottom - 26;
+                rec1.Height = 26;
+                rec1.Inflate(-4, -4);
+                
+                Bounds = rec0;
+                ButtonBounds = rec1;
+                
+            }
+
+            protected override void Render(GH_Canvas canvas, Graphics graphics, GH_CanvasChannel channel)
+            {
+                base.Render(canvas, graphics, channel);
+                if (channel == GH_CanvasChannel.Objects)
+                {
+                    GH_Capsule button = GH_Capsule.CreateTextCapsule
+                        (ButtonBounds, ButtonBounds, GH_Palette.Black, "Set Supports", 2, 0);
+                    button.Render(graphics, Selected, Owner.Locked, false);
+                    button.Dispose();
+                }
+            }
+
+            public override GH_ObjectResponse RespondToMouseDown(GH_Canvas sender, GH_CanvasMouseEvent e)
+            {
+                if (e.Button == MouseButtons.Left)
+                {
+                    RectangleF rec = ButtonBounds;
+                    if (rec.Contains(e.CanvasLocation))
+                    {
+                        Menu_CustomOnClick((PTK_2_2_Supports)Owner);
+                        return GH_ObjectResponse.Handled;
+                    }
+                }
+                return base.RespondToMouseDown(sender, e);
             }
         }
         
-
         // Data saving function
         public override bool Write(GH_IWriter writer)
         {
@@ -144,8 +180,6 @@ namespace PTK
         {
             get
             {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
                 return PTK.Properties.Resources.ico_support;
             }
         }

@@ -87,7 +87,6 @@ namespace PTK
             List<Element> elems = new List<Element>();
             List<Material> mats = new List<Material>();
             List<Section> secs = new List<Section>();
-            // List<string> priorities = new List<string>();
             RTree rTreeNodes = new RTree();
             RTree rTreeElems = new RTree();
             
@@ -133,6 +132,8 @@ namespace PTK
             // main function #6
             // register priorities to element
             Functions_DDL.RegisterPriority(ref elems, priorityTxt);
+
+            #region obsolete
             
             /* has moved to PTK_UTIL_1_GenerateGeometry 
              * & PTK_UTIL_5_DisassembleElement
@@ -178,7 +179,7 @@ namespace PTK
                 NeighbourList.Add(text);
             }
             */
-
+            #endregion
             #endregion
 
             #region output
@@ -186,6 +187,7 @@ namespace PTK
             Assembly Assembly = new Assembly(nodes, elems, mats, secs);
 
             DA.SetData(0, Assembly);
+            #region obsolete
             // DA.SetDataList(1, PointNodes);
             // DA.SetDataList(2, BokseTest);
             // DA.SetDataList(3, IDs);
@@ -195,7 +197,9 @@ namespace PTK
             // DA.SetDataList(7, strLine);
             // DA.SetDataList(1, SubID);
             #endregion
-            
+
+            #endregion
+
         }
 
 

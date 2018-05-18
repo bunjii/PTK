@@ -166,6 +166,8 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Name = "F01_Supports";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Supports Condition";
             this.Load += new System.EventHandler(this.F01_Supports_Load);
             this.ResumeLayout(false);

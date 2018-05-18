@@ -17,11 +17,6 @@ namespace PTK
         #endregion
 
         #region constructors
-        public Assembly(List<Node> _nodes, List<Element> _elems)
-        {
-            nodes = _nodes;
-            elems = _elems;
-        }
         public Assembly(List<Node> _nodes, List<Element> _elems, List<Material> _mats, List<Section> _secs)
         {
             nodes = _nodes;

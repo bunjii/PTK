@@ -28,7 +28,7 @@ namespace PTK
         {
             pManager.AddTextParameter("MaterialName","MN", "Names the material", GH_ParamAccess.item, "UntitledMaterial");      //We should add default values here.
             pManager.AddIntegerParameter("MaterialID", "MId", "ID of the material", GH_ParamAccess.item, -999);    //We should add default values here.
-            pManager.AddGenericParameter("Material Properties(PTK)", "MP(PTK)", "Add material properties here", GH_ParamAccess.item);    //We should add default values here.
+            pManager.AddGenericParameter("Material Properties(PTK)", "MP (PTK)", "Add material properties here", GH_ParamAccess.item);    //We should add default values here.
 
         }
 

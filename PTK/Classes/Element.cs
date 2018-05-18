@@ -1,9 +1,9 @@
 ﻿using System;
-
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
-using Rhino.Geometry;
 using System.Linq;
+
+using Rhino.Geometry;
 
 namespace PTK
 {
@@ -70,7 +70,7 @@ namespace PTK
             subStructural = new List<SubElementStructural>();
 
             // initializeCentricPlanes();   // replaced by DDL on 2nd April
-            InitializeCentricPlanes2();
+            InitializeCentricPlanes();
             GenerateIntervals();            
             GenerateElementGeometry(); 
 
@@ -207,13 +207,13 @@ namespace PTK
         #region methods
         public void AddNodeId(int _nid)
         {
-            nodeIds.Add(_nid);
+            this.nodeIds.Add(_nid);
         }
 
         //This class add neighbouring points. The analysis is done in the function called AsignNeighbour in functions.cs
         public void AddNeighbour(int _ids)
         {
-            ptId.Add(_ids);
+            this.ptId.Add(_ids);
         }
         /*
         public void AddNode(Node _node)
@@ -234,13 +234,13 @@ namespace PTK
         */
         public void AddNodeParams(double _param)
         {
-            nodeParams.Add(_param);
+            this.nodeParams.Add(_param);
         }
 
 
         public void AssignID()
         {
-            id = idCount;
+            this.id = idCount;
             idCount++;
         }
 
@@ -267,6 +267,7 @@ namespace PTK
         }
         
         #region obsolete
+        /*
         //Making CentricPlanes using offset/rotation information from the align-component
         private void initializeCentricPlanes()
         {
@@ -284,9 +285,10 @@ namespace PTK
             // xyPlane = new Plane(tempPlane.Origin, tempPlane.ZAxis, tempPlane.XAxis);
 
         }
+        */
         #endregion
 
-        private void InitializeCentricPlanes2()
+        private void InitializeCentricPlanes()
         {
             Vector3d localX = crv.TangentAtStart;
             Vector3d globalZ = Vector3d.ZAxis;

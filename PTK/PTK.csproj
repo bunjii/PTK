@@ -122,7 +122,7 @@
     <Compile Include="Components\U_1_GenerateGeometry.cs" />
     <Compile Include="Classes\Section.cs" />
     <Compile Include="Components\U_3_DisassembleNode.cs" />
-    <Compile Include="Classes\Supports.cs" />
+    <Compile Include="Classes\Support.cs" />
     <Compile Include="Components\U_2_Disassemble.cs" />
     <Compile Include="Components\U_6_DisassembleSection.cs" />
   </ItemGroup>
@@ -143,57 +143,6 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <None Include="Resources\icon_truss.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\btl.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Detail.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\localanalysis.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Render.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\secondgatherer.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\strsummary.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\thirdgatherer.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icontest0.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icontest1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icontest2.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icontest3.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icontest4.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icontest10.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icontest11.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icontest12.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icontest13.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icontest14.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Obsolete\" />
@@ -221,12 +170,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ico_xelement.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\ico_material.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\ico_xmaterial.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ico_rectangular.png" />
@@ -268,9 +211,6 @@
     <None Include="Resources\ico_geom.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\icon_detail.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\ico_detailing.png" />
   </ItemGroup>
   <ItemGroup>
@@ -278,6 +218,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ico_detail.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_support.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_xmaterial.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_material.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

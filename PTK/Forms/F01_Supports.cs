@@ -26,6 +26,8 @@ namespace PTK.Forms
             setValues();
             this.DialogResult = DialogResult.Cancel;
             this.CancelButton = button2;
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            this.Icon = PTK.Properties.Resources.formico_support;
         }
         #endregion
 
@@ -41,7 +43,7 @@ namespace PTK.Forms
         // loading event
         private void setValues()
         {
-            boolSupArray = Supports.StringToArray(boolSupString);
+            boolSupArray = Support.StringToArray(boolSupString);
 
             checkBox1.Checked = boolSupArray[0];
             checkBox2.Checked = boolSupArray[1];
