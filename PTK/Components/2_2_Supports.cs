@@ -78,11 +78,11 @@ namespace PTK
             {
                 Support tmpSup = new Support(lCase, supPlns[i], Support.ArrayToList(boolSupArray));
                 sups.Add(tmpSup);
-            }            
-            
+            }
             #endregion
-            Message = boolSupString;
+
             #region output
+            Message = boolSupString;
             DA.SetData(0, sups);
             #endregion
         }
@@ -169,9 +169,10 @@ namespace PTK
         public override bool Read(GH_IReader reader)
         {
             boolSupString = reader.GetString("boolSupString");
+            // set boolSupArray values when it loads.
+            this.boolSupArray = Support.StringToArray(boolSupString);
             return base.Read(reader);
         }
-        
 
         /// <summary>
         /// Provides an Icon for the component.

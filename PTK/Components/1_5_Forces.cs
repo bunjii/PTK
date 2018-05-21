@@ -25,8 +25,8 @@ namespace PTK
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddNumberParameter("FX", "FX", "Add FX", GH_ParamAccess.tree, 0);   //Should be tree, cause more than force pr element
-            pManager.AddNumberParameter("FX", "FX", "Add FX", GH_ParamAccess.tree, 0);
-            pManager.AddNumberParameter("FX", "FX", "Add FX", GH_ParamAccess.tree, 0);
+            pManager.AddNumberParameter("FY", "FX", "Add FX", GH_ParamAccess.tree, 0);
+            pManager.AddNumberParameter("FZ", "FX", "Add FX", GH_ParamAccess.tree, 0);
             pManager.AddNumberParameter("FX", "FX", "Add FX", GH_ParamAccess.tree, 0);
             pManager.AddNumberParameter("FX", "FX", "Add FX", GH_ParamAccess.tree, 0);
             pManager.AddNumberParameter("FX", "FX", "Add FX", GH_ParamAccess.tree, 0);

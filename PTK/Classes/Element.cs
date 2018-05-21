@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using Rhino.Geometry;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-
-using Rhino.Geometry;
 
 namespace PTK
 {
     public class Element
     {
         #region fields
-        private int id;
         static int idCount = 0;
+        static int numberOfStructuralLines = 0;
+
+        private int id;
         private string tag = "N/A";
         private List<int> ptId;
         // private List<Node> nodes;
@@ -27,9 +28,9 @@ namespace PTK
         private int matId;
         private Forces force;
         private Align align;
-        private List<SubElementStructural> subStructural;
+        private List<Subelement> subStructural;
         private int priority;
-        static int numberOfStructuralLines = 0;
+
 
         // below: with one of the xy- yz- zx- planes being fixed, 
         // the others can be calculated. 
@@ -37,7 +38,7 @@ namespace PTK
         // private Plane xyPlane;
         // private Plane xzPlane;
         private Plane yzPlane;
-        
+
         // below has moved to PTK_UTIL_1_GenerateGeometry
         Interval iz; //From Centricplane
         Interval iy;
@@ -47,7 +48,7 @@ namespace PTK
         //
 
         BoundingBox boundingbox;
-        
+
 
         #endregion
 
@@ -67,12 +68,12 @@ namespace PTK
             matId = -999;
             secId = -999;
             priority = -999;
-            subStructural = new List<SubElementStructural>();
+            subStructural = new List<Subelement>();
 
             // initializeCentricPlanes();   // replaced by DDL on 2nd April
             InitializeCentricPlanes();
-            GenerateIntervals();            
-            GenerateElementGeometry(); 
+            GenerateIntervals();
+            GenerateElementGeometry();
 
             nodeParams = new List<double>();
 
@@ -151,7 +152,7 @@ namespace PTK
             set { priority = value; }
         }
 
-        public ReadOnlyCollection<SubElementStructural> SubStructural
+        public ReadOnlyCollection<Subelement> SubStructural
         {
             get { return subStructural.AsReadOnly(); }
         }
@@ -162,12 +163,12 @@ namespace PTK
             get { return subStructural; }
         }
         */
-        
+
         public Brep ElementGeometry
         {
             get { return elementGeometry; }
         }
-        
+
         public BoundingBox BoundingBox
         {
             get { return boundingbox; }
@@ -195,7 +196,7 @@ namespace PTK
         {
             get { return nodeParams.AsReadOnly(); }
         }
-        
+
         /*
         public List<Node> Nodes
         {
@@ -237,20 +238,18 @@ namespace PTK
             this.nodeParams.Add(_param);
         }
 
-
         public void AssignID()
         {
             this.id = idCount;
             idCount++;
         }
 
-
         //This function send needed information to the subclass "subStructural"
         public void AddStrctLine(Line _structuralline)
-        { 
-            this.subStructural.Add(new SubElementStructural(_structuralline, numberOfStructuralLines));
+        {
+            this.subStructural.Add(new Subelement(_structuralline, numberOfStructuralLines));
             numberOfStructuralLines++;
-    
+
         }
 
         public void ClrStrctLine()
@@ -263,9 +262,9 @@ namespace PTK
             Element tempElem;
             tempElem = _elems.Find(e => e.Id == _eid);
 
-            return tempElem; 
+            return tempElem;
         }
-        
+
         #region obsolete
         /*
         //Making CentricPlanes using offset/rotation information from the align-component
@@ -294,18 +293,18 @@ namespace PTK
             Vector3d globalZ = Vector3d.ZAxis;
 
             // determination of local-y direction
-                // case A: where local X is parallel to global Z.
-                // (such as most of the columns)
+            // case A: where local X is parallel to global Z.
+            // (such as most of the columns)
 
             Vector3d localY = Vector3d.YAxis; // case A default
 
-                // case B: other than case A. (such as beams or inclined columns)
+            // case B: other than case A. (such as beams or inclined columns)
             if (Vector3d.Multiply(globalZ, localX) != globalZ.Length * localX.Length)
             {
                 // localY direction is obtained by the cross product of globalZ and localX.
                 localY = Vector3d.CrossProduct(globalZ, localX);
             }
-            
+
             Plane localXY = new Plane(crv.PointAtStart, localX, localY);
             Plane localYZ = new Plane(localXY.Origin, localY, localXY.ZAxis);
 
@@ -325,13 +324,13 @@ namespace PTK
             // translation
             if (align.OffsetY != 0.0 || align.OffsetZ != 0.0)
             {
-                Point3d origin = new Point3d (crv.PointAtStart);
+                Point3d origin = new Point3d(crv.PointAtStart);
                 Transform transL = Transform.Translation((-1.0) * align.OffsetY * localYZ.XAxis + align.OffsetZ * localYZ.YAxis);
 
                 localXY.Transform(transL);
                 localYZ.Transform(transL);
             }
-                        
+
             yzPlane = localYZ;
         }
 
@@ -340,7 +339,7 @@ namespace PTK
         private void GenerateIntervals()
         {
             double[] parameter = { 0.0, 2.2 };
-            
+
             double HalfWidth = section.Width / 2;
             double HalfHeight = section.Height / 2;
 
@@ -364,7 +363,7 @@ namespace PTK
             else
             {
                 SweepOneRail tempsweep = new SweepOneRail();
-                
+
                 var sweep = tempsweep.PerformSweep(crv, crossSectionRectangle.ToNurbsCurve());
                 tempgeometry = sweep[0];
                 boundingbox = tempgeometry.GetBoundingBox(Rhino.Geometry.Plane.WorldXY);
@@ -372,7 +371,6 @@ namespace PTK
             }
             elementGeometry = tempgeometry;
         }
-        
 
         public static void ResetIDCount()
         {
@@ -383,7 +381,7 @@ namespace PTK
 
         // THIS IS THE CLASS THAT STORES DATA OF ALL BEAMELEMENTS. SUB LINES. 
         // An element contains one or more sub-elements.
-        public class SubElementStructural
+        public class Subelement
         {
 
             #region fields
@@ -392,20 +390,23 @@ namespace PTK
             private int strctrlLineID;
             private Point3d subStartPoint;
             private Point3d subEndPoint;
-            
+
             private double fx;
             private double fy;
             private double fz;
             private double mx;
             private double my;
             private double mz;
+
+            private int sNId; // meaning start node ID
+            private int eNId; // meaning end node ID
             #endregion
 
             #region constructors
-            public SubElementStructural(Line _subLine, int _id)
+            public Subelement(Line _subLine, int _id)
             {
                 strctrlLine = _subLine;
-                strctrlLineID= _id;
+                strctrlLineID = _id;
                 subStartPoint = _subLine.From;
                 subEndPoint = _subLine.To;
             }
@@ -415,18 +416,18 @@ namespace PTK
             #region properties
             public Line StrctrLine { get { return strctrlLine; } }
             public int StrctrlLineID { get { return strctrlLineID; } }
-            
+
             #endregion
-            
+
             #region methods
             public static void ResetSubStrIdCnt()
             {
                 numberOfStructuralLines = 0;
             }
             #endregion
-            
+
         }
-        
+
     }
-    
+
 }

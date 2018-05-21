@@ -9,9 +9,10 @@ namespace PTK
     public class Support
     {
         #region fields
+        static int idCount = 0;
+
         private int id;
         private int lCase;
-        // private Point3d pt;
         private List<bool> conditions;
         private Plane pln;
 
@@ -22,7 +23,6 @@ namespace PTK
         {
             id = -999;
             lCase = _loadCase;
-            // pt = _supPt;
             conditions = _supConditions; 
             pln = _supPln;
         }
@@ -31,12 +31,11 @@ namespace PTK
         #region properties
         public int Id { get { return id; } set { id = value; } }
         public int LCase { get { return lCase; } set { lCase = value; } }
-        // public Point3d Pt { get { return pt; } set { pt = value; } }
+        public Plane Pln { get { return pln; } set { pln = value; } }
         public ReadOnlyCollection<bool> Conditions
         {
             get { return conditions.AsReadOnly(); }
         }
-        public Plane Pln { get { return pln; } set { pln = value; } }
 
         #endregion
 
@@ -78,6 +77,17 @@ namespace PTK
             }
 
             return _returnArray;
+        }
+
+        public void AssignID()
+        {
+            this.id = idCount;
+            idCount++;
+        }
+
+        public static void ResetIDCount()
+        {
+            idCount = 0;
         }
         #endregion
     }

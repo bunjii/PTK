@@ -1,21 +1,19 @@
-﻿using System;
-// using System.Linq;
-using System.Collections.Generic;
-
-// using System.Runtime.InteropServices;
-using System.Windows.Forms;
-
-// using System.Diagnostics;
+﻿// using System.Diagnostics;
 // using System.IO;
 // using System.Threading.Tasks;
 
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
+using System;
+// using System.Linq;
+using System.Collections.Generic;
+// using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace PTK
 {
-   
+
     public class PTK_4_Assemble : GH_Component
     {
         /// <summary>
@@ -55,6 +53,7 @@ namespace PTK
         {
             pManager.AddGenericParameter("PTK Assembly", "A (PTK)", "Assembled project data", GH_ParamAccess.item);
 
+            #region obsolete
             // outputs below just checking purposes. should be removed before release. 
             /*
             pManager.AddPointParameter("Point", "", "", GH_ParamAccess.list);
@@ -66,7 +65,7 @@ namespace PTK
             pManager.AddLineParameter("Lines", "", "", GH_ParamAccess.list);
             */
             // pManager.AddTextParameter("SubID", "", "", GH_ParamAccess.list);
-            
+            #endregion
         }
 
         /// <summary>
@@ -74,11 +73,12 @@ namespace PTK
         /// </summary>
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and 
         /// to store data in output parameters.</param>
-        
+
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             Node.ResetIDCount();
             Element.ResetIDCount();
+            Support.ResetIDCount();
             #region variables
 
             // Assigning lists of objects
@@ -87,19 +87,21 @@ namespace PTK
             List<Element> elems = new List<Element>();
             List<Material> mats = new List<Material>();
             List<Section> secs = new List<Section>();
+            List<Support> sups = new List<Support>();
             RTree rTreeNodes = new RTree();
             RTree rTreeElems = new RTree();
-            
+
             List<GH_ObjectWrapper> wrapElemList = new List<GH_ObjectWrapper>();
+            List<GH_ObjectWrapper> wrapSupList = new List<GH_ObjectWrapper>();
             #endregion
 
             #region input
             if (!DA.GetDataList(0, wrapElemList)) { return; }
-            if (!DA.GetData(3, ref priorityTxt )) { return; }
+            DA.GetDataList(1, wrapSupList);
+            DA.GetData(3, ref priorityTxt);
             #endregion
 
             #region solve
-
             // DDL "unwrap wrapped element class" and 
             // "merge multiple element class instance lists"
             for (int i = 0; i < wrapElemList.Count; i++)
@@ -108,11 +110,23 @@ namespace PTK
                 wrapElemList[i].CastTo<List<Element>>(out tempElemList);
                 elems.AddRange(tempElemList);
             }
-            
+
+            // DDL "unwrap wrapped support class" and 
+            // "merge multiple support class instance lists"
+            if (wrapSupList.Count != 0)
+            {
+                for (int i = 0; i < wrapSupList.Count; i++)
+                {
+                    List<Support> tempSupList = new List<Support>();
+                    wrapSupList[i].CastTo<List<Support>>(out tempSupList);
+                    sups.AddRange(tempSupList);
+                }
+            }
+
             // main functions #1
             // Functions.Assemble returns "nodes"
             Functions_DDL.Assemble(ref elems, ref nodes, ref rTreeElems, ref rTreeNodes);
-            
+
             // main functions #2
             // Functions.Intersect returns nodes
             Functions_DDL.SolveIntersection(ref elems, ref nodes, ref rTreeElems, ref rTreeNodes);
@@ -133,8 +147,12 @@ namespace PTK
             // register priorities to element
             Functions_DDL.RegisterPriority(ref elems, priorityTxt);
 
+            // main function #7 
+            // register 
+            Functions_DDL.RegisterSupports(ref sups);
+
             #region obsolete
-            
+
             /* has moved to PTK_UTIL_1_GenerateGeometry 
              * & PTK_UTIL_5_DisassembleElement
             List<Brep> BokseTest = new List<Brep>();
@@ -184,7 +202,7 @@ namespace PTK
 
             #region output
 
-            Assembly Assembly = new Assembly(nodes, elems, mats, secs);
+            Assembly Assembly = new Assembly(nodes, elems, mats, secs, sups);
 
             DA.SetData(0, Assembly);
             #region obsolete

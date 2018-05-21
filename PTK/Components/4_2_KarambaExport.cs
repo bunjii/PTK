@@ -1,54 +1,52 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
+﻿using feb;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
-using Rhino.Geometry;
-using System.Windows.Forms;
-
+using Karamba;
 using Karamba.Algorithms;
-using Karamba.Utilities.UIWidgets;
-using Karamba.Algorithms.GUI;
 using Karamba.Algorithms.BESOShell;
-using Karamba.Utilities.Geometry.Mesh;
-using Karamba.CrossSections;
-using Karamba.Elements;
 using Karamba.Algorithms.Deprecated;
-using Karamba.CrossSections.GUI;
+using Karamba.Algorithms.GUI;
+using Karamba.CrossSections;
 using Karamba.CrossSections.Deprecated;
-using Karamba.Loads.GUI;
-using Karamba.Elements.GUI;
+using Karamba.CrossSections.GUI;
+using Karamba.Elements;
 using Karamba.Elements.Deprecated;
+using Karamba.Elements.GUI;
+using Karamba.Exporters;
+using Karamba.Exporters.Deprecated;
+using Karamba.Exporters.GUI;
+using Karamba.Licenses;
 using Karamba.Loads;
 using Karamba.Loads.Deprecated;
-using Karamba.Materials.GUI;
+using Karamba.Loads.GUI;
+using Karamba.Materials;
 using Karamba.Materials.Deprecated;
-using Karamba.Models.GUI;
-using Karamba;
+using Karamba.Materials.GUI;
 using Karamba.Models;
 using Karamba.Models.Deprecated;
-using Karamba.Results;
-using Karamba.Results.GUI;
-using Karamba.Results.Deprecated;
-using Karamba.Supports.GUI;
-using Karamba.Supports;
-using Karamba.Exporters;
-using Karamba.Licenses;
-using Karamba.Exporters.GUI;
-using Karamba.Exporters.Deprecated;
-using Karamba.Utilities;
-using feb;
-using Karamba.Utilities.GUI;
-using Karamba.Utilities.Deprecated;
-using Karamba.Utilities.Components;
-using Karamba.Utilities.Mappings.GUI;
-using Karamba.Utilities.Mappings;
-using Karamba.Materials;
-using Karamba.Supports.Deprecated;
-using Karamba.Utilities.AABBTrees;
+using Karamba.Models.GUI;
 using Karamba.Nodes;
+using Karamba.Results;
+using Karamba.Results.Deprecated;
+using Karamba.Results.GUI;
+using Karamba.Supports;
+using Karamba.Supports.Deprecated;
+using Karamba.Supports.GUI;
+using Karamba.Utilities;
+using Karamba.Utilities.AABBTrees;
+using Karamba.Utilities.Components;
+using Karamba.Utilities.Deprecated;
+using Karamba.Utilities.Geometry.Mesh;
+using Karamba.Utilities.GUI;
+using Karamba.Utilities.Mappings;
+using Karamba.Utilities.Mappings.GUI;
+using Karamba.Utilities.UIWidgets;
 using Karamba.Utilities.UIWidgets.switcher;
+using Rhino.Geometry;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace PTK
 {
@@ -71,7 +69,7 @@ namespace PTK
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("PTK Assembly", "A (PTK)", "PTK Assembly", GH_ParamAccess.item);
-
+            pManager.AddParameter(new Param_Load(), "Load", "Load", "", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -80,8 +78,11 @@ namespace PTK
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddParameter(new Param_Element(), "Elem", "Elem", "", GH_ParamAccess.list);
+            pManager.AddParameter(new Param_Support(), "Support", "Support", "", GH_ParamAccess.list);
+            pManager.AddParameter(new Param_Load(), "Load", "Load", "", GH_ParamAccess.list);
             pManager.AddParameter(new Param_CrossSection(), "Cross section", "CroSec", "", GH_ParamAccess.list);
             pManager.AddParameter(new Param_FemMaterial(), "Material", "Material", "", GH_ParamAccess.list);
+
         }
 
         /// <summary>
@@ -100,11 +101,15 @@ namespace PTK
             List<Element> elems = new List<Element>();
             List<Material> mats = new List<Material>();
             List<Section> secs = new List<Section>();
+            List<Support> sups = new List<Support>();
+
+            List<Karamba.Loads.Load> kload = new List<Karamba.Loads.Load>();
+            List<GH_Load> gInLoad = new List<GH_Load>();
             #endregion
 
             #region input
             if (!DA.GetData(0, ref wrapAssembly)) { return; }
-
+            DA.GetDataList(1, gInLoad);
             #endregion
 
             #region solve
@@ -115,24 +120,18 @@ namespace PTK
             elems = assemble.Elems;
             mats = assemble.Mats;
             secs = assemble.Secs;
-            
-            // Elem for Karamba Assemble
-            List<GrassElement> grElems = new List<GrassElement>();
-            for (int i = 0; i < elems.Count; i++)
-            {
-                for (int j=0; j<elems[i].SubStructural.Count;j++)
-                {
-                    Point3d sPt = elems[i].SubStructural[j].StrctrLine.From;
-                    Point3d ePt = elems[i].SubStructural[j].StrctrLine.To;
-                    GrassBeam gb = new GrassBeam(sPt, ePt);
-                    gb.id = elems[i].Tag;
+            sups = assemble.Sups;
 
-                    // sets the orientation of the element:
-                    gb.x_ori = elems[i].localYZPlane.ZAxis;
-                    gb.z_ori = elems[i].localYZPlane.YAxis;
-                    
-                    grElems.Add(gb);
-                }
+            // Support for Karamba Assemble
+            List<Karamba.Supports.Support> cSups = new List<Karamba.Supports.Support>();
+            for (int i = 0; i < sups.Count; i++)
+            {
+                int id = sups[i].Id;
+                List<bool> cond = sups[i].Conditions.ToList();
+                Plane pln = sups[i].Pln;
+                Point3d pt = pln.Origin;
+                cSups.Add(new Karamba.Supports.Support(pt, cond, pln));
+
             }
 
             // Material for Karamba Assemble
@@ -182,8 +181,8 @@ namespace PTK
                 // in case there is no element attached to the section, continue to next loop.
                 if (secs[i].ElemIds.Count == 0) continue;
 
-                CroSec cSec = new CroSec_Trapezoid("Trapezoid", secs[i].SectionName, "", 
-                    secs[i].Height*100, secs[i].Width*100, secs[i].Width*100); // or CroSec_Trapezoid()?
+                CroSec cSec = new CroSec_Trapezoid("Trapezoid", secs[i].SectionName, "",
+                    secs[i].Height * 100, secs[i].Width * 100, secs[i].Width * 100); // or CroSec_Trapezoid()?
 
                 List<string> tagLst = new List<string>();
                 for (int j = 0; j < secs[i].ElemIds.Count; j++)
@@ -198,16 +197,60 @@ namespace PTK
                 kCroSec.Add(cSec);
             }
 
-            #endregion
+            // Elem for Karamba Assemble
+            List<GrassElement> grElems = new List<GrassElement>();
+            for (int i = 0; i < elems.Count; i++)
+            {
+                for (int j = 0; j < elems[i].SubStructural.Count; j++)
+                {
+                    // making of a grass beam
+                    Point3d sPt = elems[i].SubStructural[j].StrctrLine.From;
+                    Point3d ePt = elems[i].SubStructural[j].StrctrLine.To;
+                    GrassBeam gb = new GrassBeam(sPt, ePt);
+                    gb.id = elems[i].Tag;
 
-            #region output
-            // GH_Model outModel = new GH_Model(nM);
+                    //  // sets the orientation of the element:
+                    gb.x_ori = elems[i].localYZPlane.ZAxis;
+                    gb.z_ori = elems[i].localYZPlane.YAxis;
 
+                    grElems.Add(gb);
+
+                    // making of a model beam
+                    int ind = elems[i].Id;
+                    //  // gb will be used
+                    FemMaterial fmat = kMat[elems[i].MatId];
+                    CroSec csec = kCroSec[elems[i].SecId];
+
+                    // elems[i].SubStructural.
+                    // in need of substructural's node ids
+
+                    // ModelBeam mb = new ModelBeam(ind, gb, fmat, csec, , );
+
+                }
+            }
+
+            // preparation for output
             List<GH_Element> gElemLst = new List<GH_Element>();
             foreach (GrassElement ge in grElems)
             {
                 GH_Element ghe = new GH_Element(ge);
                 gElemLst.Add(ghe);
+            }
+
+            List<GH_Support> gSupLst = new List<GH_Support>();
+            foreach (Karamba.Supports.Support cs in cSups)
+            {
+                GH_Support gsup = new GH_Support(cs);
+                gSupLst.Add(gsup);
+            }
+
+            List<GH_Load> gLoadLst = new List<GH_Load>(gInLoad);
+
+            List<GH_CrossSection> gCSLst = new List<GH_CrossSection>();
+            foreach (CroSec cs in kCroSec)
+            {
+                GH_CrossSection gcs = new GH_CrossSection(cs);
+                gCSLst.Add(gcs);
             }
 
             List<GH_FemMaterial> gMatLst = new List<GH_FemMaterial>();
@@ -217,16 +260,20 @@ namespace PTK
                 gMatLst.Add(ghm);
             }
 
-            List<GH_CrossSection> gCSLst = new List<GH_CrossSection>();
-            foreach (CroSec cs in kCroSec)
-            {
-                GH_CrossSection gcs = new GH_CrossSection(cs);
-                gCSLst.Add(gcs);
-            }
-            
+            Karamba.Models.Model kmodel = new Karamba.Models.Model();
+            // Functions_DDL.CreateKarambaModelElement(grElems); // , ref kmodel);
+
+
+
+
+            #endregion
+
+            #region output
             DA.SetDataList(0, gElemLst);
-            DA.SetDataList(1, gCSLst);
-            DA.SetDataList(2, gMatLst);
+            DA.SetDataList(1, gSupLst);
+            DA.SetDataList(2, gLoadLst);
+            DA.SetDataList(3, gCSLst);
+            DA.SetDataList(4, gMatLst);
             #endregion
         }
 

@@ -1,4 +1,8 @@
 ﻿// alphanumerical order for namespaces please
+using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
+using Karamba.Elements;
+using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,10 +11,6 @@ using System.Security.Cryptography; // needed to create hash
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
-using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
-using Rhino.Geometry;
 
 namespace PTK
 {
@@ -27,12 +27,12 @@ namespace PTK
                 _elems[i].AssignID(); // assigning element id
                 _rTreeElems.Insert(_elems[i].BoundingBox, i);
             }
-            
+
             for (int i = 0; i < _elems.Count; i++)
             {
                 List<Point3d> endPts =
                     new List<Point3d>() { _elems[i].PointAtStart, _elems[i].PointAtEnd };
-                
+
                 for (int j = 0; j < 2; j++) // j < 2 as spt & ept
                 {
                     // check if the node exists. 
@@ -41,15 +41,15 @@ namespace PTK
                     int nId = DetectOrCreateNode(ref _nodes, ref _rTreeNodes, endPts[j]);
 
                     // register elemId & its parameter to node
-                    RegisterElemToNode(Node.FindNodeById(_nodes, nId), _elems[i], (double) j);
+                    RegisterElemToNode(Node.FindNodeById(_nodes, nId), _elems[i], (double)j);
 
                     // register nodeId & parameter at node to elem
-                    RegisterNodeToElem(ref _elems, Node.FindNodeById(_nodes, nId), i, (double) j);
+                    RegisterNodeToElem(ref _elems, Node.FindNodeById(_nodes, nId), i, (double)j);
 
                 } // end for (int j = 0; j < 2; j++)
             } // end for (int i = 0; i < _elems.Count; i++)
         }
-        
+
         public static void SolveIntersection(ref List<Element> _elems, ref List<Node> _nodes, ref RTree _rTreeElems, ref RTree _rTreeNodes)
         {
             // check if the elements are potentially colliding by checking curves' boundary boxes.
@@ -98,14 +98,14 @@ namespace PTK
 
                     }
                     // case 2: at least one of the curves are not linear -> curve-curve intersect
-                    else 
+                    else
                     {
                         var intersect = Rhino.Geometry.Intersect.Intersection.CurveCurve
                         (targetCrv, clashingCrv, CommonProps.tolerances, CommonProps.tolerances);
 
                         // in case there's no intersect, go on with the next loop.
                         // in case intersect happens at either end of targetCrv, go on with the next loop. 
-                        if (intersect == null || intersect.Count == 0 || 
+                        if (intersect == null || intersect.Count == 0 ||
                             intersect[0].ParameterA == 0 || intersect[0].ParameterA == 1) continue;
 
                         // check if the node exists. 
@@ -137,21 +137,21 @@ namespace PTK
             {
                 List<Point3d> _segmentPts = new List<Point3d>();
                 List<double> _paramList = _elems[i].NodeParams.ToList();
-                
+
                 for (int j = 0; j < _elems[i].NodeIds.Count; j++)
                 {
                     Node _tempNode = Node.FindNodeById(_nodes, _elems[i].NodeIds[j]);
 
                     _segmentPts.Add(_tempNode.Pt3d);
                 }
-                
+
                 var key = _paramList.ToArray();
                 var ptsArray = _segmentPts.ToArray();
-                
+
                 Array.Sort(key, ptsArray);
 
                 // reset substructural id count and structural lines
-                Element.SubElementStructural.ResetSubStrIdCnt();
+                Element.Subelement.ResetSubStrIdCnt();
                 _elems[i].ClrStrctLine();
 
                 for (int j = 1; j < ptsArray.Count(); j++) // j starting with #1
@@ -300,7 +300,7 @@ namespace PTK
             {
                 _hashedTxt.Append(_hashVal[i].ToString("X2"));
             }
-            
+
             return _hashedTxt.ToString();
         }
 
@@ -315,7 +315,7 @@ namespace PTK
                 List<int> _priority = new List<int>();
                 List<Brep> _relvBrep = new List<Brep>();    // "relevant Breps"
                 List<int> _brepElemId = new List<int>();
-                
+
                 // for each element
                 for (int j = 0; j < _nElemIds.Count; j++)
                 {
@@ -324,7 +324,7 @@ namespace PTK
                     _brepElemId.Add(_nElemIds[j]);
                     _relvBrep.Add(_outBreps[_nElemIds[j]]);
                 }
-                
+
                 // looping through each element at the node for cutting
                 for (int j = 0; j < _relvBrep.Count; j++)
                 {
@@ -343,12 +343,12 @@ namespace PTK
                         for (int l = 0; l < _slashedBreps.Count(); l++)
                         {
                             Curve[] _edgeCrvs = _slashedBreps[l].DuplicateEdgeCurves();
-                            
+
                             double _length = 0.0;
                             foreach (Curve _c in _edgeCrvs) _length += _c.GetLength();
 
                             _totalEdgeLength.Add(_length);
-                            
+
                         }
 
                         double[] _totalEdgeLengthArray = _totalEdgeLength.ToArray();
@@ -363,6 +363,22 @@ namespace PTK
             } // end for (int i = 0; i < _nodes.Count; i++)
 
             return _outBreps;
+        }
+
+        public static void RegisterSupports(ref List<Support> _sups)
+        {
+            for (int i = 0; i < _sups.Count; i++)
+            {
+                _sups[i].AssignID();
+            }
+        }
+
+        public static void CreateKarambaModelElement(List<GrassElement> _ge)
+        {
+
+            List<ModelElement> me = new List<ModelElement>();
+
+
         }
 
         // ### private functions ###
@@ -388,7 +404,7 @@ namespace PTK
                 _elems[_i].AddNodeParams(_param);
             }
         }
-        
+
         private static Line CurveToLine(Curve _crv)
         {
             Point3d pt0 = _crv.PointAtStart;
@@ -413,13 +429,13 @@ namespace PTK
 
             // BoundingBox _spotBBox = new BoundingBox(_samplePt, _samplePt); 
             // Above code didn't work out, needing of considering tolerance for BBox as below. comment by DDL 9th Apr.
-            double tol = CommonProps.tolerances; 
+            double tol = CommonProps.tolerances;
             BoundingBox _spotBBox = new BoundingBox
-                (_sPt.X-tol,_sPt.Y-tol, _sPt.Z-tol,_sPt.X+tol,_sPt.Y+tol,_sPt.Z+tol);
+                (_sPt.X - tol, _sPt.Y - tol, _sPt.Z - tol, _sPt.X + tol, _sPt.Y + tol, _sPt.Z + tol);
 
             // node search
             _rTreeNodes.Search(_spotBBox, _nodeExisting);
-            
+
             if (!_nodeExists)
             {
                 Node _newNode = new Node(_sPt);

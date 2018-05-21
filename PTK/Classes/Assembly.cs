@@ -14,15 +14,18 @@ namespace PTK
         private List<Element> elems;
         private List<Material> mats;
         private List<Section> secs;
+        private List<Support> sups;
         #endregion
 
         #region constructors
-        public Assembly(List<Node> _nodes, List<Element> _elems, List<Material> _mats, List<Section> _secs)
+        public Assembly(List<Node> _nodes, List<Element> _elems, List<Material> _mats,
+            List<Section> _secs, List<Support> _sups)
         {
             nodes = _nodes;
             elems = _elems;
             mats = _mats;
             secs = _secs;
+            sups = _sups;
         }
         #endregion
 
@@ -46,6 +49,11 @@ namespace PTK
         {
             get { return secs; }
             set { secs = value; }
+        }
+        public List<Support> Sups
+        {
+            get { return sups; }
+            set { sups = value; }
         }
         #endregion
 
