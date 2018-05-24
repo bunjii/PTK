@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Windows.Forms;
-using System.Threading.Tasks;
-using System.Linq;
-
-using Grasshopper.Kernel;
-using Grasshopper.Kernel.Attributes;
+﻿using GH_IO.Serialization;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
-using GH_IO.Serialization;
+using Grasshopper.Kernel;
+using Grasshopper.Kernel.Attributes;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 //using Rhino.Geometry;
 
 namespace PTK.Optimization
@@ -486,7 +485,7 @@ namespace PTK.Optimization
                     OutpuCSVGeneration(nowGeneration, false);       //Save current generation as CSV
 
                     decimal tmpBest = GeneAlgoOption.IsMinimize ? nowGeneration.Min(g => g.Fitness) : nowGeneration.Max(g => g.Fitness);    //Get the best value
-                    decimal tmpBest2 = GeneAlgoOption.IsMinimize ? 
+                    decimal tmpBest2 = GeneAlgoOption.IsMinimize ?
                         nowGeneration.Where(g => g.IsEnableFitness == true).Min(g => g.Fitness)
                         : nowGeneration.Where(g => g.IsEnableFitness == true).Max(g => g.Fitness);    //Get the best value
 
@@ -535,7 +534,9 @@ namespace PTK.Optimization
                 }
                 else
                 {
-                    if(GetFitnessVal(out decimal fitVal)){
+                    decimal fitVal;
+                    if (GetFitnessVal(out fitVal))
+                    {
                         nextGeneration[individualIndex].Fitness = fitVal;      //Set gene to slider and get fitness
                     }
                     else
@@ -579,8 +580,8 @@ namespace PTK.Optimization
         {
             Grasshopper.Instances.DocumentEditor.Invoke(new Action(() =>
             {
-                    //-------Adapted to slider for each gene
-                    for (int i = 0; i < GeneAlgoOption.geneLength; i++)
+                //-------Adapted to slider for each gene
+                for (int i = 0; i < GeneAlgoOption.geneLength; i++)
                 {
                     decimal sliMin = GeneAlgoOption.geneSliders[i].Slider.Minimum;
                     GeneAlgoOption.geneSliders[i].SetSliderValue(_ind.GetGene(i) * (GeneAlgoOption.geneSliders[i].Slider.Maximum - sliMin) + sliMin);
@@ -615,7 +616,7 @@ namespace PTK.Optimization
         //-------Output fitness to form log
         private static void OutputFitnessVal(List<Individual> _generation, bool _IsOverviewOnly)
         {
-            var enableGeneration =_generation.Where(g => g.IsEnableFitness == true);
+            var enableGeneration = _generation.Where(g => g.IsEnableFitness == true);
             if (_IsOverviewOnly) //Output summary value only
             {
                 String outputText = "Fitness: Average[";
