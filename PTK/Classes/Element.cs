@@ -10,7 +10,7 @@ namespace PTK
     {
         #region fields
         static int idCount = 0;
-        static int numberOfStructuralLines = 0;
+        static int numStrLns = 0;
 
         private int id;
         private string tag = "N/A";
@@ -28,7 +28,7 @@ namespace PTK
         private int matId;
         private Forces force;
         private Align align;
-        private List<Subelement> subStructural;
+        private List<Subelement> subElem;
         private int priority;
 
 
@@ -68,7 +68,7 @@ namespace PTK
             matId = -999;
             secId = -999;
             priority = -999;
-            subStructural = new List<Subelement>();
+            subElem = new List<Subelement>();
 
             // initializeCentricPlanes();   // replaced by DDL on 2nd April
             InitializeCentricPlanes();
@@ -107,7 +107,7 @@ namespace PTK
         }
         public int NumberOfStructuralLines
         {
-            get { return numberOfStructuralLines; }
+            get { return numStrLns; }
         }
         public string Tag
         {
@@ -152,9 +152,9 @@ namespace PTK
             set { priority = value; }
         }
 
-        public ReadOnlyCollection<Subelement> SubStructural
+        public ReadOnlyCollection<Subelement> SubElem
         {
-            get { return subStructural.AsReadOnly(); }
+            get { return subElem.AsReadOnly(); }
         }
 
         /*
@@ -245,16 +245,16 @@ namespace PTK
         }
 
         //This function send needed information to the subclass "subStructural"
-        public void AddStrctLine(Line _structuralline)
+        public void AddStrctLine(Line _strLn)
         {
-            this.subStructural.Add(new Subelement(_structuralline, numberOfStructuralLines));
-            numberOfStructuralLines++;
+            this.subElem.Add(new Subelement(_strLn, numStrLns));
+            numStrLns++;
 
         }
 
-        public void ClrStrctLine()
+        public void ClrStrLn()
         {
-            this.subStructural.Clear();
+            this.subElem.Clear();
         }
 
         public static Element FindElemById(List<Element> _elems, int _eid)
@@ -375,7 +375,7 @@ namespace PTK
         public static void ResetIDCount()
         {
             idCount = 0;
-            numberOfStructuralLines = 0;
+            numStrLns = 0;
         }
         #endregion
 
@@ -386,8 +386,8 @@ namespace PTK
 
             #region fields
 
-            private Line strctrlLine;
-            private int strctrlLineID;
+            private Line strLn;
+            private int strLnId;
             private Point3d subStartPoint;
             private Point3d subEndPoint;
 
@@ -403,26 +403,31 @@ namespace PTK
             #endregion
 
             #region constructors
-            public Subelement(Line _subLine, int _id)
+            public Subelement(Line _subLn, int _id)
             {
-                strctrlLine = _subLine;
-                strctrlLineID = _id;
-                subStartPoint = _subLine.From;
-                subEndPoint = _subLine.To;
+                strLn = _subLn;
+                strLnId = _id;
+                subStartPoint = _subLn.From;
+                subEndPoint = _subLn.To;
+
+                sNId = -999;
+                eNId = -999;
             }
 
             #endregion
 
             #region properties
-            public Line StrctrLine { get { return strctrlLine; } }
-            public int StrctrlLineID { get { return strctrlLineID; } }
+            public Line StrLn { get { return strLn; } }
+            public int StrLnId { get { return strLnId; } }
+            public int SNId { get { return sNId; } set { sNId = value; } }
+            public int ENId { get { return eNId; } set { eNId = value; } }
 
             #endregion
 
             #region methods
             public static void ResetSubStrIdCnt()
             {
-                numberOfStructuralLines = 0;
+                numStrLns = 0;
             }
             #endregion
 

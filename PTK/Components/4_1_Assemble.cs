@@ -1,14 +1,15 @@
-﻿// using System.Diagnostics;
-// using System.IO;
-// using System.Threading.Tasks;
-
-using Grasshopper.Kernel;
+﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 using System;
-// using System.Linq;
 using System.Collections.Generic;
-// using System.Runtime.InteropServices;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PTK
@@ -76,9 +77,11 @@ namespace PTK
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+
             Node.ResetIDCount();
             Element.ResetIDCount();
             Support.ResetIDCount();
+            // ExpireSolution(true);
             #region variables
 
             // Assigning lists of objects
@@ -125,16 +128,40 @@ namespace PTK
 
             // main functions #1
             // Functions.Assemble returns "nodes"
-            Functions_DDL.Assemble(ref elems, ref nodes, ref rTreeElems, ref rTreeNodes);
-
+            try
+            {
+                Assemble(ref elems, ref nodes, ref rTreeElems, ref rTreeNodes);
+                //Functions_DDL.Assemble(ref elems, ref nodes, ref rTreeElems, ref rTreeNodes);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("assemble fails.");
+                ExpireSolution(true);
+            }
             // main functions #2
             // Functions.Intersect returns nodes
-            Functions_DDL.SolveIntersection(ref elems, ref nodes, ref rTreeElems, ref rTreeNodes);
-
+            try
+            {
+                // Functions_DDL.SolveIntersection(ref elems, ref nodes, ref rTreeElems, ref rTreeNodes);
+                SolveIntersection(ref elems, ref nodes, ref rTreeElems, ref rTreeNodes);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("intersection fails.");
+                ExpireSolution(true);
+            }
             // main functions #3
             // Functions.GenerateStructuralLines returns nodes
-            Functions_DDL.GenerateStructuralLines(ref elems, nodes);
-
+            try
+            {
+                GenerateStructuralLines(ref elems, nodes);
+                //Functions_DDL.GenerateStructuralLines(ref elems, nodes);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("structural line fails");
+                ExpireSolution(true);
+            }
             // main functions #4
             // extract material information from elements
             Functions_DDL.RegisterMaterials(ref elems, ref mats);
@@ -201,8 +228,15 @@ namespace PTK
             #endregion
 
             #region output
+            Assembly Assembly = new Assembly(new List<Node>(nodes), new List<Element>(elems),
+                new List<Material>(mats), new List<Section>(secs), new List<Support>(sups));
 
-            Assembly Assembly = new Assembly(nodes, elems, mats, secs, sups);
+            // Assembly Assembly = new Assembly(nodes, elems, mats, secs, sups);
+            nodes.Clear();
+            elems.Clear();
+            mats.Clear();
+            secs.Clear();
+            sups.Clear();
 
             DA.SetData(0, Assembly);
             #region obsolete
@@ -220,7 +254,222 @@ namespace PTK
 
         }
 
+        internal void Assemble(ref List<Element> _elems, ref List<Node> _nodes, ref RTree _rTreeElems, ref RTree _rTreeNodes)
+        {
+            // Give Id and Make RTree for elements
+            for (int i = 0; i < _elems.Count; i++)
+            {
+                _elems[i].AssignID(); // assigning element id
+                _rTreeElems.Insert(_elems[i].BoundingBox, i);
+            }
 
+            for (int i = 0; i < _elems.Count; i++)
+            {
+                List<Point3d> endPts =
+                    new List<Point3d>() { _elems[i].PointAtStart, _elems[i].PointAtEnd };
+
+                for (int j = 0; j < 2; j++) // j < 2 as spt & ept
+                {
+                    // check if the node exists. 
+                    // if yes it returns nId, 
+                    // else it makes node, register to rtree, then it returns nid.
+                    int nId = DetectOrCreateNode(ref _nodes, ref _rTreeNodes, endPts[j]);
+
+                    // register elemId & its parameter to node
+                    Node targetNode = _nodes[nId];
+                    RegisterElemToNode(ref targetNode, _elems[i], (double)j);
+
+                    // register nodeId & parameter at node to elem
+                    RegisterNodeToElem(ref _elems, Node.FindNodeById(_nodes, nId), i, (double)j);
+
+                } // end for (int j = 0; j < 2; j++)
+            } // end for (int i = 0; i < _elems.Count; i++)
+        }
+
+        internal void SolveIntersection(ref List<Element> _elems,
+            ref List<Node> _nodes, ref RTree _rTreeElems, ref RTree _rTreeNodes)
+        {
+            // check if the elements are potentially colliding by checking curves' boundary boxes.
+            for (int i = 0; i < _elems.Count; i++)
+            {
+                Curve targetCrv = _elems[i].Crv;
+                // reparameterize targetCrv
+                targetCrv.Domain = new Interval(0, 1);
+                List<int> eNumBBoxClash = new List<int>();
+
+                // event handler of bbox clash
+                EventHandler<RTreeEventArgs> elementExisting = (object sender, RTreeEventArgs args) =>
+                {
+                    eNumBBoxClash.Add(args.Id);
+                };
+
+                // search for bbox clashes
+                _rTreeElems.Search(new Sphere(targetCrv.PointAt(0.5),
+                    targetCrv.GetLength() / 2), elementExisting);
+
+                // search for real clashes out of bbox clashes 
+                // and register to elems and nodes list if any detected.
+                for (int j = 0; j < eNumBBoxClash.Count; j++)
+                {
+                    Curve clashingCrv = _elems[eNumBBoxClash[j]].Crv;
+                    Line target = CurveToLine(targetCrv);
+                    Line clash = CurveToLine(clashingCrv);
+
+                    double paramA, paramB;
+                    int nId = new int();
+                    Point3d intersectPt = new Point3d();
+                    bool registerFlag = false;
+
+                    // case 1: curves are linear -> LLXIntersect
+                    if (targetCrv.IsLinear() && clashingCrv.IsLinear() && Rhino.Geometry.Intersect.Intersection.LineLine
+                        (target, clash, out paramA, out paramB, CommonProps.tolerances, true)
+                        & (CommonProps.tolerances < paramA && paramA < 1 - CommonProps.tolerances))
+                    {
+                        intersectPt = target.PointAt(paramA);
+
+                        // check if the node exists. 
+                        // if yes it returns nId, else it makes node, register to rtree, then it returns nid.
+                        nId = DetectOrCreateNode(ref _nodes, ref _rTreeNodes, intersectPt);
+
+                        registerFlag = true;
+                    }
+                    // case 2: at least one of the curves are not linear -> curve-curve intersect
+                    else
+                    {
+                        var intersect = Rhino.Geometry.Intersect.Intersection.CurveCurve
+                        (targetCrv, clashingCrv, CommonProps.tolerances, CommonProps.tolerances);
+
+                        // in case there's no intersect, go on with the next loop.
+                        // in case intersect happens at either end of targetCrv, go on with the next loop. 
+                        if (intersect == null || intersect.Count == 0 ||
+                            intersect[0].ParameterA == 0 || intersect[0].ParameterA == 1) continue;
+
+                        // check if the node exists. 
+                        // if yes it returns nId, else it makes node, register to rtree, then it returns nid.
+                        intersectPt = intersect[0].PointA;
+                        paramA = intersect[0].ParameterA;
+
+                        nId = DetectOrCreateNode(ref _nodes, ref _rTreeNodes, intersectPt);
+
+                        registerFlag = true;
+                    }
+
+                    if (registerFlag == false) continue;
+
+                    // register elemId & its parameter to node                    
+                    Node targetNode = _nodes[nId];
+                    RegisterElemToNode(ref targetNode, _elems[i], (double)j);
+
+                    // register nodeId & parameter at node to elem
+                    RegisterNodeToElem(ref _elems, Node.FindNodeById(_nodes, nId), i, paramA);
+                }
+            }
+        }
+
+        internal void GenerateStructuralLines(ref List<Element> _elems, List<Node> _nodes)
+        {
+            for (int i = 0; i < _elems.Count; i++) //Element index i       
+            {
+                List<Point3d> _segmentPts = new List<Point3d>();
+                List<int> _nids = new List<int>();
+                List<double> _paramList = _elems[i].NodeParams.ToList();
+
+                for (int j = 0; j < _elems[i].NodeIds.Count; j++)
+                {
+                    Node _tempNode = Node.FindNodeById(_nodes, _elems[i].NodeIds[j]);
+                    _nids.Add(_tempNode.Id);
+                    _segmentPts.Add(_tempNode.Pt3d);
+                }
+
+                // sort points in a line from start pt to end pt
+                var key = _paramList.ToArray();
+                var ptsArray = _segmentPts.ToArray();
+                var nidArray = _nids.ToArray();
+
+                Array.Sort(key, ptsArray);
+                Array.Sort(key, nidArray);
+
+                // reset substructural id count and structural lines
+                Element.Subelement.ResetSubStrIdCnt();
+                _elems[i].ClrStrLn();
+
+                for (int j = 1; j < ptsArray.Count(); j++) // j starting with #1
+                {
+                    Line _segment = new Line(ptsArray[j - 1], ptsArray[j]);
+                    // be aware that Element.AddStrctline gives subid as well as segment.
+                    _elems[i].AddStrctLine(_segment);
+                    _elems[i].SubElem[_elems[i].SubElem.Count - 1].SNId = nidArray[j - 1];
+                    _elems[i].SubElem[_elems[i].SubElem.Count - 1].ENId = nidArray[j];
+                }
+
+            }
+        }
+
+        internal int DetectOrCreateNode(ref List<Node> _nodes, ref RTree _rTreeNodes, Point3d _sPt)
+        {
+            // check if the node exists.
+            int _nId = new int();
+            bool _nodeExists = false;
+
+            // "nodeExisting" will be performed, when items are found.
+            EventHandler<RTreeEventArgs> _nodeExisting =
+                (object sender, RTreeEventArgs args) =>
+                {
+                    _nodeExists = true;
+                    _nId = args.Id;
+                };
+
+            // BoundingBox _spotBBox = new BoundingBox(_samplePt, _samplePt); 
+            // Above code didn't work out, needing of considering tolerance for BBox as below. comment by DDL 9th Apr.
+            double tol = CommonProps.tolerances;
+            BoundingBox _spotBBox = new BoundingBox
+                (_sPt.X - tol, _sPt.Y - tol, _sPt.Z - tol, _sPt.X + tol, _sPt.Y + tol, _sPt.Z + tol);
+
+            // node search
+            _rTreeNodes.Search(_spotBBox, _nodeExisting);
+
+            if (!_nodeExists)
+            {
+                Node _newNode = new Node(_sPt);
+                _nodes.Add(_newNode);
+                // register the node to _rTreeNodes
+                _rTreeNodes.Insert(_newNode.BoundingBox, _newNode.Id);
+                // obtain nId
+                _nId = _newNode.Id;
+            }
+
+            return _nId;
+        }
+
+        internal void RegisterElemToNode(ref Node _node, Element _elem, double _param)
+        {
+            // check if the elem id is already registered, 
+            // and if not, register elem and elemparam to node.
+            if (_node.ElemIds.Contains(_elem.Id) == false)
+            {
+                _node.AddElemId(_elem.Id);
+                _node.AddElemParams(_param);
+            }
+        }
+
+        internal void RegisterNodeToElem(ref List<Element> _elems, Node _node, int _i, double _param)
+        {
+            // check if the node id is already registered, 
+            // and if not, register node and nodeparam to elem
+            if (_elems[_i].NodeIds.Contains(_node.Id) == false)
+            {
+                _elems[_i].AddNodeId(_node.Id);
+                _elems[_i].AddNodeParams(_param);
+            }
+        }
+
+        internal static Line CurveToLine(Curve _crv)
+        {
+            Point3d pt0 = _crv.PointAtStart;
+            Point3d pt1 = _crv.PointAtEnd;
+            Line result = new Line(pt0, pt1);
+            return result;
+        }
 
         /// <summary>
         /// Provides an Icon for every component that will be visible in the User Interface.

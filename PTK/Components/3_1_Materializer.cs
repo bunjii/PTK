@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Grasshopper.Kernel;
+﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-
 using System.Windows.Forms;
 
 namespace PTK
@@ -20,7 +18,7 @@ namespace PTK
         /// new tabs/panels will automatically be created.
         /// </summary>
         /// 
-        
+
         public PTK_3_Materializer()
           : base("Materializer (PTK)", "Materializer",
               "creates a beam element.",
@@ -37,10 +35,10 @@ namespace PTK
             pManager.AddTextParameter("tag", "tag", "Add tags to the structure here.", GH_ParamAccess.item, "Untitled");
             pManager.AddCurveParameter("curve", "crv", "Add curves that shall be materalized", GH_ParamAccess.list);
             pManager.AddGenericParameter("PTK Cross Section", "CS (PTK)", "Add the cross-section componentt here", GH_ParamAccess.item);
-            pManager.AddGenericParameter("PTK Material", "M (PTK)", "Add Material-component here",GH_ParamAccess.item);
+            pManager.AddGenericParameter("PTK Material", "M (PTK)", "Add Material-component here", GH_ParamAccess.item);
             pManager.AddGenericParameter("PTK Align", "Aln (PTK)", "Describes the alignment of the member. (Rotation and offset)", GH_ParamAccess.item);
             pManager.AddGenericParameter("PTK Force", "F (PTK)", "Add Forces-component here", GH_ParamAccess.item);
-            
+
             pManager[0].Optional = true;
             pManager[2].Optional = true;
             pManager[3].Optional = true;
@@ -72,11 +70,11 @@ namespace PTK
             List<Node> nodes = new List<Node>();
             List<Align> alignList = new List<Align>();
             // Align aligner;
-            
+
             string elemTag = "N/A";
             List<Vector3d> normalVec = new List<Vector3d>();
             GH_ObjectWrapper wrapSec = new GH_ObjectWrapper();
-            GH_ObjectWrapper  wrapMat = new GH_ObjectWrapper();
+            GH_ObjectWrapper wrapMat = new GH_ObjectWrapper();
             GH_ObjectWrapper wrapAlign = new GH_ObjectWrapper();
             GH_ObjectWrapper wrapForce = new GH_ObjectWrapper();
 
@@ -93,12 +91,12 @@ namespace PTK
             DA.GetData(3, ref wrapMat);
             DA.GetData(4, ref wrapAlign);
             DA.GetData(5, ref wrapForce);
-            
+
             #endregion
 
             #region solve
             //Turning objectwrappers into its respective objects. 
-            wrapSec.CastTo<Section>(out section);   
+            wrapSec.CastTo<Section>(out section);
             wrapMat.CastTo<Material>(out material);
             wrapAlign.CastTo<Align>(out align);
             wrapForce.CastTo<Forces>(out forces);
@@ -117,6 +115,7 @@ namespace PTK
 
             elemTag = elemTag.Trim();
 
+            /* 
             // trial multi-threading by john, need to understand this.
             if (curves.Count > 20)
             {
@@ -126,13 +125,12 @@ namespace PTK
                     {
                         if (!curves[i].IsValid) { return; }
                         elems.Add(new Element(curves[i], elemTag, align, section, material));
-                        
                     }
-                    
+
                 });
             }
 
-            //Creating Elements from Curves
+            // non multi-threading way. Creating Elements from Curves
             else
             {
                 for (int i = 0; i < curves.Count; i++)
@@ -141,17 +139,21 @@ namespace PTK
                     if (!curves[i].IsValid) continue;
 
                     elems.Add(new Element(curves[i], elemTag, align, section, material));
-                    // MessageBox.Show(elems[elems.Count-1].MatId.ToString());
-
                 }
+            }*/
+            for (int i = 0; i < curves.Count; i++)
+            {
+                if (curves[i] == null) continue;
+                if (!curves[i].IsValid) continue;
+
+                elems.Add(new Element(curves[i], elemTag, align, section, material));
             }
 
             #endregion
 
             #region output
-
+            // ExpireSolution(false);
             DA.SetData(0, elems);
-            // elems.Clear();
             #endregion
         }
 

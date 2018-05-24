@@ -1,4 +1,5 @@
 ﻿using feb;
+using GH_IO.Serialization;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Karamba;
@@ -45,6 +46,7 @@ using Karamba.Utilities.UIWidgets.switcher;
 using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -61,6 +63,7 @@ namespace PTK
               CommonProps.category, CommonProps.subcat4)
         {
             Message = CommonProps.initialMessage;
+
         }
 
         /// <summary>
@@ -77,12 +80,11 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddParameter(new Param_Element(), "Elem", "Elem", "", GH_ParamAccess.list);
-            pManager.AddParameter(new Param_Support(), "Support", "Support", "", GH_ParamAccess.list);
-            pManager.AddParameter(new Param_Load(), "Load", "Load", "", GH_ParamAccess.list);
-            pManager.AddParameter(new Param_CrossSection(), "Cross section", "CroSec", "", GH_ParamAccess.list);
-            pManager.AddParameter(new Param_FemMaterial(), "Material", "Material", "", GH_ParamAccess.list);
-
+            pManager.AddParameter(new Param_Model(), "Assembled Model", "Assembled Model", "", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_Model(), "Analysed Model", "Analized Model", "", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Displacement", "Disp", "Maximum displacement in [m]", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Gravity force", "G", "Resulting force of gravity [kN] of each load-case of the model", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Strain Energy", "Energy", "Internal elastic energy in [kNm of each load cases of the model", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -91,20 +93,19 @@ namespace PTK
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-
-            GH_Model in_gh_model = null;
-
             #region variables
-            GH_ObjectWrapper wrapAssembly = new GH_ObjectWrapper();
             Assembly assemble;
-            List<Node> nodes = new List<Node>();
-            List<Element> elems = new List<Element>();
-            List<Material> mats = new List<Material>();
-            List<Section> secs = new List<Section>();
-            List<Support> sups = new List<Support>();
+            List<Node> nodes;
+            List<Element> elems;
+            List<Material> mats;
+            List<Section> secs;
+            List<Support> sups;
 
-            List<Karamba.Loads.Load> kload = new List<Karamba.Loads.Load>();
+            GH_ObjectWrapper wrapAssembly = new GH_ObjectWrapper();
+            List<Karamba.Loads.Load> kload;
             List<GH_Load> gInLoad = new List<GH_Load>();
+            bool flgNewSolution = false;
+
             #endregion
 
             #region input
@@ -113,7 +114,6 @@ namespace PTK
             #endregion
 
             #region solve
-
             wrapAssembly.CastTo<Assembly>(out assemble);
 
             nodes = assemble.Nodes;
@@ -122,7 +122,14 @@ namespace PTK
             secs = assemble.Secs;
             sups = assemble.Sups;
 
-            // Support for Karamba Assemble
+            // Create Pt List
+            List<Point3d> pts = new List<Point3d>();
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                pts.Add(nodes[i].Pt3d);
+            }
+
+            // Support Information for Karamba Assemble
             List<Karamba.Supports.Support> cSups = new List<Karamba.Supports.Support>();
             for (int i = 0; i < sups.Count; i++)
             {
@@ -131,7 +138,6 @@ namespace PTK
                 Plane pln = sups[i].Pln;
                 Point3d pt = pln.Origin;
                 cSups.Add(new Karamba.Supports.Support(pt, cond, pln));
-
             }
 
             // Material for Karamba Assemble
@@ -148,13 +154,15 @@ namespace PTK
 
                 FemMaterial fMat = new FemMaterial();
 
-                string kMFamily = "Wood";       // tentatively "Wood"
+                // tentatively "Wood"
+                string kMFamily = "Wood";
                 string kMName = mats[i].MatName;
                 double kME = 1000 * mats[i].Properties.EE0gmean;
                 double kMG = 1000 * mats[i].Properties.GGgmean;
                 double kMGamma = 0.1 * mats[i].Properties.Rhogmean;
                 double kMFy = 1000 * mats[i].Properties.Fmgk;
-                double kMAlphaT = 5.00E-06;     // temporal value for general wood. might need be confirmed.
+                double kMAlphaT = 5.00E-06;
+                // kMAlphaT: temporal value for general wood. might need be confirmed.
 
                 fMat.setMaterialProperties(kMFamily, kMName, kME, kMG, kMGamma, kMFy, kMAlphaT);
 
@@ -163,8 +171,16 @@ namespace PTK
                 List<string> tagLst = new List<string>();
                 for (int j = 0; j < mats[i].ElemIds.Count; j++)
                 {
-                    string elemTag = Element.FindElemById(elems, mats[i].ElemIds[j]).Tag;
-
+                    string elemTag = "N/A";
+                    try
+                    {
+                        elemTag = Element.FindElemById(elems, mats[i].ElemIds[j]).Tag;
+                    }
+                    catch (NullReferenceException e)
+                    {
+                        flgNewSolution = true;
+                        // ExpireSolution(true);
+                    }
                     if (tagLst.Contains(elemTag)) continue;
 
                     tagLst.Add(elemTag);
@@ -182,12 +198,21 @@ namespace PTK
                 if (secs[i].ElemIds.Count == 0) continue;
 
                 CroSec cSec = new CroSec_Trapezoid("Trapezoid", secs[i].SectionName, "",
-                    secs[i].Height * 100, secs[i].Width * 100, secs[i].Width * 100); // or CroSec_Trapezoid()?
+                    secs[i].Height * 100, secs[i].Width * 100, secs[i].Width * 100);
 
                 List<string> tagLst = new List<string>();
                 for (int j = 0; j < secs[i].ElemIds.Count; j++)
                 {
-                    string elemTag = Element.FindElemById(elems, secs[i].ElemIds[j]).Tag;
+                    string elemTag = "N/A";
+                    try
+                    {
+                        elemTag = Element.FindElemById(elems, secs[i].ElemIds[j]).Tag;
+                    }
+                    catch (NullReferenceException e)
+                    {
+                        flgNewSolution = true;
+                        // ExpireSolution(true);
+                    }
 
                     if (tagLst.Contains(elemTag)) continue;
 
@@ -198,85 +223,117 @@ namespace PTK
             }
 
             // Elem for Karamba Assemble
+            // Create modelbeam element, too.
             List<GrassElement> grElems = new List<GrassElement>();
+            List<ModelBeam> mbs = new List<ModelBeam>();
             for (int i = 0; i < elems.Count; i++)
             {
-                for (int j = 0; j < elems[i].SubStructural.Count; j++)
+                for (int j = 0; j < elems[i].SubElem.Count; j++)
                 {
                     // making of a grass beam
-                    Point3d sPt = elems[i].SubStructural[j].StrctrLine.From;
-                    Point3d ePt = elems[i].SubStructural[j].StrctrLine.To;
-                    GrassBeam gb = new GrassBeam(sPt, ePt);
-                    gb.id = elems[i].Tag;
+                    Point3d _sPt = elems[i].SubElem[j].StrLn.From;
+                    Point3d _ePt = elems[i].SubElem[j].StrLn.To;
+                    GrassBeam _gb = new GrassBeam(_sPt, _ePt);
+                    _gb.id = elems[i].Tag;
 
-                    //  // sets the orientation of the element:
-                    gb.x_ori = elems[i].localYZPlane.ZAxis;
-                    gb.z_ori = elems[i].localYZPlane.YAxis;
+                    // sets the orientation of the element:
+                    _gb.x_ori = elems[i].localYZPlane.ZAxis;
+                    _gb.z_ori = elems[i].localYZPlane.YAxis;
 
-                    grElems.Add(gb);
-
-                    // making of a model beam
-                    int ind = elems[i].Id;
-                    //  // gb will be used
-                    FemMaterial fmat = kMat[elems[i].MatId];
-                    CroSec csec = kCroSec[elems[i].SecId];
-
-                    // elems[i].SubStructural.
-                    // in need of substructural's node ids
-
-                    // ModelBeam mb = new ModelBeam(ind, gb, fmat, csec, , );
-
+                    grElems.Add(_gb);
                 }
             }
 
-            // preparation for output
-            List<GH_Element> gElemLst = new List<GH_Element>();
-            foreach (GrassElement ge in grElems)
-            {
-                GH_Element ghe = new GH_Element(ge);
-                gElemLst.Add(ghe);
-            }
 
-            List<GH_Support> gSupLst = new List<GH_Support>();
-            foreach (Karamba.Supports.Support cs in cSups)
-            {
-                GH_Support gsup = new GH_Support(cs);
-                gSupLst.Add(gsup);
-            }
-
-            List<GH_Load> gLoadLst = new List<GH_Load>(gInLoad);
-
-            List<GH_CrossSection> gCSLst = new List<GH_CrossSection>();
-            foreach (CroSec cs in kCroSec)
-            {
-                GH_CrossSection gcs = new GH_CrossSection(cs);
-                gCSLst.Add(gcs);
-            }
-
-            List<GH_FemMaterial> gMatLst = new List<GH_FemMaterial>();
-            foreach (FemMaterial fm in kMat)
-            {
-                GH_FemMaterial ghm = new GH_FemMaterial(fm);
-                gMatLst.Add(ghm);
-            }
-
+            List<ElemSet> _esets = new List<ElemSet>();
             Karamba.Models.Model kmodel = new Karamba.Models.Model();
-            // Functions_DDL.CreateKarambaModelElement(grElems); // , ref kmodel);
+            string aInfo; string aMsg; double aMass; Point3d aCoG; GH_RuntimeMessageLevel aLvl;
 
+            List<Karamba.Loads.Load> modelLoads = new List<Karamba.Loads.Load>();
+            modelLoads.Add(new Karamba.Loads.GravityLoad(new Vector3d(0, 0, -1.0), 0));
 
+            // Equivalent to karamba assemble component
+            try
+            {
+                Karamba.Models.Component_AssembleModel.solve(pts, grElems, cSups, modelLoads,
+                                kCroSec, kMat, _esets, 0.005, out kmodel, out aInfo, out aMass,
+                                out aCoG, out aMsg, out aLvl);
+            }
+            catch (Exception e)
+            {
+                flgNewSolution = true;
+                Debug.WriteLine(e.ToString());
+            }
 
+            // trial for analysis
+            List<double> lc_max_disp = new List<double>();
+            List<double> lc_gravity_force = new List<double>();
+            List<double> lc_elastic_energy = new List<double>();
+            Karamba.Models.Model analysedModel = new Karamba.Models.Model();
+
+            // bool flIni = false;
+            try
+            {
+                Karamba.Algorithms.Component_ThIAnalyze_new.solve(kmodel, false, out lc_max_disp,
+                                out lc_gravity_force, out lc_elastic_energy, out analysedModel);
+                // .fe2model()
+                // update the model with data from the fe-model. 
+                // Both models may be out of sync after mappings were performed on the fe-model. 
+                // Has to be called before displaying the model or retrieving results.
+                analysedModel.fe2model();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("################\n" + e.ToString());
+                // Debug.WriteLine(kmodel.IsValid.ToString());
+                // at initial loading, Component_ThIAnalyze_new tends to return exception.
+                // below is the workaround for this.
+                // if (flIni == true) ExpireSolution(true);
+                // flIni = false;
+                flgNewSolution = true;
+            }
+
+            GH_Model gma = new GH_Model(kmodel);
+            GH_Model gm = new GH_Model(analysedModel);
+
+            if (flgNewSolution == true)
+            {
+                // ExpireSolution(true);
+                GH_Document doc = this.OnPingDocument(); //.ExpireSolution(); // .NewSolution(true);
+                Debug.WriteLine("### new solution ###");
+                doc.NewSolution(true, 0);
+            }
 
             #endregion
 
             #region output
-            DA.SetDataList(0, gElemLst);
-            DA.SetDataList(1, gSupLst);
-            DA.SetDataList(2, gLoadLst);
-            DA.SetDataList(3, gCSLst);
-            DA.SetDataList(4, gMatLst);
+            DA.SetData(0, gma);
+            DA.SetData(1, gm);
+            DA.SetDataList(2, lc_max_disp);
+            DA.SetDataList(3, lc_gravity_force);
+            DA.SetDataList(4, lc_elastic_energy);
+
             #endregion
         }
 
+        /*
+        // Data saving function
+        public override bool Write(GH_IWriter writer)
+        {
+            // writer.SetString("boolSupString", boolSupString);
+            return base.Write(writer);
+        }
+
+        // Data reading function
+        public override bool Read(GH_IReader reader)
+        {
+            // boolSupString = reader.GetString("boolSupString");
+            // set boolSupArray values when it loads.
+            // this.boolSupArray = Support.StringToArray(boolSupString);
+            // ExpireSolution(true);
+            return base.Read(reader);
+        }
+        */
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
