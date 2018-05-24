@@ -9,6 +9,8 @@ using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Globalization;
+
 //using Rhino.Geometry;
 
 namespace PTK.Optimization
@@ -484,8 +486,7 @@ namespace PTK.Optimization
                     DrawFitnessVal(nowGeneration);                  //Draw fitness on graph
                     OutpuCSVGeneration(nowGeneration, false);       //Save current generation as CSV
 
-                    decimal tmpBest = GeneAlgoOption.IsMinimize ? nowGeneration.Min(g => g.Fitness) : nowGeneration.Max(g => g.Fitness);    //Get the best value
-                    decimal tmpBest2 = GeneAlgoOption.IsMinimize ?
+                    decimal tmpBest = GeneAlgoOption.IsMinimize ?
                         nowGeneration.Where(g => g.IsEnableFitness == true).Min(g => g.Fitness)
                         : nowGeneration.Where(g => g.IsEnableFitness == true).Max(g => g.Fitness);    //Get the best value
 
@@ -730,14 +731,17 @@ namespace PTK.Optimization
         {
             String csvFilePath = GeneAlgoOption.SavePath;
             System.IO.StreamWriter sw = new System.IO.StreamWriter(csvFilePath, _IsAdd);
+            NumberFormatInfo nfi = new NumberFormatInfo();
+            nfi.NumberDecimalSeparator = ".";
+
             foreach (Individual ind in _generation)
             {
-                sw.Write(age.ToString() + ',');                 //Age
-                sw.Write(ind.Fitness.ToString() + ',');         //Fitness
-                sw.Write(ind.IsEnableFitness.ToString() + ','); //Enable
+                sw.Write(age.ToString(nfi) + ',');                 //Age
+                sw.Write(ind.Fitness.ToString(nfi) + ',');         //Fitness
+                sw.Write(ind.IsEnableFitness.ToString(nfi) + ','); //Enable
                 foreach (decimal gene in ind.GetGenes())
                 {
-                    sw.Write(gene.ToString() + ',');            //Genes
+                    sw.Write(gene.ToString(nfi) + ',');            //Genes
                 }
                 sw.Write("\r\n");
             }
