@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Grasshopper;
+﻿using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
-
 using Rhino.Geometry;
+using System;
+using System.Collections.Generic;
 
 // using System.Numerics;
 
@@ -44,6 +42,7 @@ namespace PTK
             pManager.AddPointParameter("points", "pts", "points", GH_ParamAccess.list);
             pManager.AddIntegerParameter("PTK NODE ID", "N (PTK) ID", "PTK NODE ID", GH_ParamAccess.list);
             pManager.AddIntegerParameter("PTK NODE ELEM ID", "N (PTK) EID", "PTK NODE ELEM ID", GH_ParamAccess.tree);
+            pManager.AddNumberParameter("PTK NODE ELEM PARAM", "N (PTK) ELEM P", "PTK NODE ELEM PARAM", GH_ParamAccess.tree);
         }
 
         /// <summary>
@@ -60,6 +59,7 @@ namespace PTK
             List<int> nodeIds = new List<int>();
             List<Point3d> points = new List<Point3d>();
             DataTree<int> elemIdTree = new DataTree<int>();
+            DataTree<double> elemIdParam = new DataTree<double>();
             #endregion
 
             #region input
@@ -87,7 +87,7 @@ namespace PTK
             }
 
 
-            for (int i=0;i<outNodes.Count;i++)
+            for (int i = 0; i < outNodes.Count; i++)
             {
                 points.Add(outNodes[i].Pt3d);
                 nodeIds.Add(outNodes[i].Id);
@@ -101,6 +101,12 @@ namespace PTK
                 {
                     elemIdTree.Add(j, path);
                 }
+
+                foreach (double j in outNodes[i].ElemParams)
+                {
+
+                    elemIdParam.Add(j, path);
+                }
             }
             #endregion
 
@@ -108,6 +114,7 @@ namespace PTK
             DA.SetDataList(0, points);
             DA.SetDataList(1, nodeIds);
             DA.SetDataTree(2, elemIdTree);
+            DA.SetDataTree(3, elemIdParam);
             #endregion
         }
 
