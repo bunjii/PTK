@@ -31,6 +31,7 @@ namespace PTK
         public static string FindDecimalSeparator()
         {
             string txtFindLocale = string.Format("{0}", 1.1);
+            
             string message = "";
 
             if (txtFindLocale == "1.1") message += "period";

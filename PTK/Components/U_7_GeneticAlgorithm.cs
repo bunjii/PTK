@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Globalization;
 
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Attributes;
@@ -729,14 +730,17 @@ namespace PTK.Optimization
         {
             String csvFilePath = GeneAlgoOption.SavePath;
             System.IO.StreamWriter sw = new System.IO.StreamWriter(csvFilePath, _IsAdd);
+            NumberFormatInfo nfi = new NumberFormatInfo();
+            nfi.NumberDecimalSeparator = ".";
+
             foreach (Individual ind in _generation)
             {
-                sw.Write(age.ToString() + ',');                 //Age
-                sw.Write(ind.Fitness.ToString() + ',');         //Fitness
-                sw.Write(ind.IsEnableFitness.ToString() + ','); //Enable
+                sw.Write(age.ToString(nfi) + ',');                 //Age
+                sw.Write(ind.Fitness.ToString(nfi) + ',');         //Fitness
+                sw.Write(ind.IsEnableFitness.ToString(nfi) + ','); //Enable
                 foreach (decimal gene in ind.GetGenes())
                 {
-                    sw.Write(gene.ToString() + ',');            //Genes
+                    sw.Write(gene.ToString(nfi) + ',');            //Genes
                 }
                 sw.Write("\r\n");
             }
