@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Windows.Forms;
-
-using Grasshopper;
+﻿using Grasshopper;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
-
 using Rhino.Geometry;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace PTK
 {
@@ -23,7 +21,7 @@ namespace PTK
         public PTK_U_4()
           : base("Disassemble Element (PTK)", "X Element",
               "Disassemble Element (PTK)",
-              CommonProps.category, CommonProps.subcat5) 
+              CommonProps.category, CommonProps.subcat5)
         {
             Message = CommonProps.initialMessage;
         }
@@ -80,17 +78,17 @@ namespace PTK
             List<Plane> plns = new List<Plane>();
             List<int> mids = new List<int>();
             List<int> priority = new List<int>();
-            
+
             List<BoundingBox> bbox = new List<BoundingBox>();
 
             DataTree<int> nidTr = new DataTree<int>();
             DataTree<double> pcnTr = new DataTree<double>();
             DataTree<Line> lineTr = new DataTree<Line>();
-            DataTree<string> subidTr = new DataTree<string>(); 
+            DataTree<string> subidTr = new DataTree<string>();
             #endregion
 
             #region input
-            if (!DA.GetData(0, ref wrapElem)) { return;  }
+            if (!DA.GetData(0, ref wrapElem)) { return; }
             wrapElem.CastTo<List<Element>>(out elems);
 
             DA.GetDataList(1, inputTags);
@@ -104,7 +102,7 @@ namespace PTK
             }
             else
             {
-                for (int i=0; i<inputTags.Count; i++)
+                for (int i = 0; i < inputTags.Count; i++)
                 {
                     inputTags[i] = inputTags[i].Trim();
                 }
@@ -117,7 +115,7 @@ namespace PTK
                 }
             }
             // foreach (Element e in outElems)
-            for (int i=0; i<outElems.Count;i++)
+            for (int i = 0; i < outElems.Count; i++)
             {
                 curves.Add(outElems[i].Crv);
                 elemTags.Add(outElems[i].Tag);
@@ -136,12 +134,12 @@ namespace PTK
                     pcnTr.Add(outElems[i].NodeParams[j], pth);
                     nidTr.Add(outElems[i].NodeIds[j], pth);
                 }
-                
-                for (int j=0; j< outElems[i].SubStructural.Count; j++)
+
+                for (int j = 0; j < outElems[i].SubElem.Count; j++)
                 {
-                    lineTr.Add(outElems[i].SubStructural[j].StrctrLine, pth);
-                    subidTr.Add(outElems[i].Id.ToString() + "_" 
-                        + outElems[i].SubStructural[j].StrctrlLineID.ToString(), pth);
+                    lineTr.Add(outElems[i].SubElem[j].StrLn, pth);
+                    subidTr.Add(outElems[i].Id.ToString() + "_"
+                        + outElems[i].SubElem[j].StrLnId.ToString(), pth);
                 }
 
                 bbox.Add(outElems[i].BoundingBox);

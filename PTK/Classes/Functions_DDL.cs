@@ -1,4 +1,4 @@
-﻿// alphanumerical order for namespaces please
+﻿using feb;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Karamba.Elements;
@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Security.Cryptography; // needed to create hash
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -77,13 +77,13 @@ namespace PTK
                     Line target = CurveToLine(targetCrv);
                     Line clash = CurveToLine(clashingCrv);
 
-                    // case 1: curves are linear -> LLXIntersect
+
                     double paramA, paramB;
                     int nId = new int();
                     Point3d intersectPt = new Point3d();
                     bool registerFlag = false;
-                    // line-line intersect operation.
-                    // be aware of & and && here.
+
+                    // case 1: curves are linear -> LLXIntersect
                     if (targetCrv.IsLinear() && clashingCrv.IsLinear() && Rhino.Geometry.Intersect.Intersection.LineLine
                         (target, clash, out paramA, out paramB, CommonProps.tolerances, true)
                         & (CommonProps.tolerances < paramA && paramA < 1 - CommonProps.tolerances))
@@ -136,30 +136,37 @@ namespace PTK
             for (int i = 0; i < _elems.Count; i++) //Element index i       
             {
                 List<Point3d> _segmentPts = new List<Point3d>();
+                List<int> _nids = new List<int>();
                 List<double> _paramList = _elems[i].NodeParams.ToList();
 
                 for (int j = 0; j < _elems[i].NodeIds.Count; j++)
                 {
                     Node _tempNode = Node.FindNodeById(_nodes, _elems[i].NodeIds[j]);
-
+                    _nids.Add(_tempNode.Id);
                     _segmentPts.Add(_tempNode.Pt3d);
                 }
 
+                // sort points in a line from start pt to end pt
                 var key = _paramList.ToArray();
                 var ptsArray = _segmentPts.ToArray();
+                var nidArray = _nids.ToArray();
 
                 Array.Sort(key, ptsArray);
+                Array.Sort(key, nidArray);
 
                 // reset substructural id count and structural lines
                 Element.Subelement.ResetSubStrIdCnt();
-                _elems[i].ClrStrctLine();
+                _elems[i].ClrStrLn();
 
                 for (int j = 1; j < ptsArray.Count(); j++) // j starting with #1
                 {
                     Line _segment = new Line(ptsArray[j - 1], ptsArray[j]);
                     // be aware that Element.AddStrctline gives subid as well as segment.
                     _elems[i].AddStrctLine(_segment);
+                    _elems[i].SubElem[_elems[i].SubElem.Count - 1].SNId = nidArray[j - 1];
+                    _elems[i].SubElem[_elems[i].SubElem.Count - 1].ENId = nidArray[j];
                 }
+
             }
         }
 
@@ -373,12 +380,16 @@ namespace PTK
             }
         }
 
-        public static void CreateKarambaModelElement(List<GrassElement> _ge)
+        public static void CloneKarambaModel(ref Karamba.Models.Model _model)
         {
+            // clone model to avoid side effects
+            _model = (Karamba.Models.Model)_model.Clone();
 
-            List<ModelElement> me = new List<ModelElement>();
+            // clone its elements to avoid side effects
+            _model.cloneElements();
 
-
+            // clone the feb-model to avoid side effects
+            _model.deepCloneFEModel();
         }
 
         // ### private functions ###

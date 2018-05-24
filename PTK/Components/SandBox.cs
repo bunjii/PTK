@@ -1,8 +1,54 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Grasshopper.Kernel;
+﻿using Grasshopper.Kernel;
+using Karamba;
+using Karamba.Algorithms;
+using Karamba.Algorithms.BESOShell;
+using Karamba.Algorithms.Deprecated;
+using Karamba.Algorithms.GUI;
+using Karamba.CrossSections;
+using Karamba.CrossSections.Deprecated;
+using Karamba.CrossSections.GUI;
+using Karamba.Elements;
+using Karamba.Elements.Deprecated;
+using Karamba.Elements.GUI;
+using Karamba.Exporters;
+using Karamba.Exporters.Deprecated;
+using Karamba.Exporters.GUI;
+using Karamba.Licenses;
+using Karamba.Loads;
+using Karamba.Loads.Deprecated;
+using Karamba.Loads.GUI;
+using Karamba.Materials;
+using Karamba.Materials.Deprecated;
+using Karamba.Materials.GUI;
+using Karamba.Models;
+using Karamba.Models.Deprecated;
+using Karamba.Models.GUI;
+using Karamba.Nodes;
+using Karamba.Results;
+using Karamba.Results.Deprecated;
+using Karamba.Results.GUI;
+using Karamba.Supports;
+using Karamba.Supports.Deprecated;
+using Karamba.Supports.GUI;
+using Karamba.Utilities;
+using Karamba.Utilities.AABBTrees;
+using Karamba.Utilities.Components;
+using Karamba.Utilities.Deprecated;
+using Karamba.Utilities.Geometry.Mesh;
+using Karamba.Utilities.GUI;
+using Karamba.Utilities.Mappings;
+using Karamba.Utilities.Mappings.GUI;
+using Karamba.Utilities.UIWidgets;
+using Karamba.Utilities.UIWidgets.switcher;
 using Rhino.Geometry;
+using Rhino.Geometry;
+using System;
+using System;
+using System.Collections.Generic;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
+
 
 namespace PTK.Components
 {
@@ -24,6 +70,7 @@ namespace PTK.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
+
         }
 
         /// <summary>
