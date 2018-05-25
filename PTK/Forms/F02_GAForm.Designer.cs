@@ -33,6 +33,10 @@
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint1 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0D);
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint2 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0D);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GAForm));
             this.MinRadioButton = new System.Windows.Forms.RadioButton();
             this.StartButton = new System.Windows.Forms.Button();
@@ -62,6 +66,10 @@
             this.SaveGenerationGroup = new System.Windows.Forms.GroupBox();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.SaveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.ChartTabControl = new System.Windows.Forms.TabControl();
+            this.AllGenerations = new System.Windows.Forms.TabPage();
+            this.ForSeveralGenerations = new System.Windows.Forms.TabPage();
+            this.RestrictionFitnessChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.FitnessBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FitnessChart)).BeginInit();
             this.ExitConditionsGroup.SuspendLayout();
@@ -73,6 +81,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.EliteRateBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MutationRateBox)).BeginInit();
             this.SaveGenerationGroup.SuspendLayout();
+            this.ChartTabControl.SuspendLayout();
+            this.AllGenerations.SuspendLayout();
+            this.ForSeveralGenerations.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.RestrictionFitnessChart)).BeginInit();
             this.SuspendLayout();
             // 
             // MinRadioButton
@@ -186,9 +198,10 @@
             // FitnessChart
             // 
             this.FitnessChart.BackColor = System.Drawing.Color.DimGray;
+            chartArea1.AxisX.IsMarginVisible = false;
             chartArea1.Name = "ChartArea1";
             this.FitnessChart.ChartAreas.Add(chartArea1);
-            this.FitnessChart.Location = new System.Drawing.Point(12, 472);
+            this.FitnessChart.Location = new System.Drawing.Point(0, 0);
             this.FitnessChart.Name = "FitnessChart";
             series1.ChartArea = "ChartArea1";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Range;
@@ -203,7 +216,7 @@
             series2.Points.Add(dataPoint1);
             this.FitnessChart.Series.Add(series1);
             this.FitnessChart.Series.Add(series2);
-            this.FitnessChart.Size = new System.Drawing.Size(558, 233);
+            this.FitnessChart.Size = new System.Drawing.Size(550, 288);
             this.FitnessChart.TabIndex = 9;
             this.FitnessChart.Text = "chart1";
             // 
@@ -458,15 +471,74 @@
             this.SaveFileDialog.Filter = "CSV File(*.csv)|*.csv";
             this.SaveFileDialog.Title = "Change file name when saving";
             // 
+            // ChartTabControl
+            // 
+            this.ChartTabControl.Controls.Add(this.AllGenerations);
+            this.ChartTabControl.Controls.Add(this.ForSeveralGenerations);
+            this.ChartTabControl.Location = new System.Drawing.Point(12, 461);
+            this.ChartTabControl.Name = "ChartTabControl";
+            this.ChartTabControl.SelectedIndex = 0;
+            this.ChartTabControl.Size = new System.Drawing.Size(558, 317);
+            this.ChartTabControl.TabIndex = 15;
+            // 
+            // AllGenerations
+            // 
+            this.AllGenerations.Controls.Add(this.FitnessChart);
+            this.AllGenerations.Location = new System.Drawing.Point(4, 25);
+            this.AllGenerations.Name = "AllGenerations";
+            this.AllGenerations.Padding = new System.Windows.Forms.Padding(3);
+            this.AllGenerations.Size = new System.Drawing.Size(550, 288);
+            this.AllGenerations.TabIndex = 1;
+            this.AllGenerations.Text = "All Generations";
+            this.AllGenerations.UseVisualStyleBackColor = true;
+            // 
+            // ForSeveralGenerations
+            // 
+            this.ForSeveralGenerations.Controls.Add(this.RestrictionFitnessChart);
+            this.ForSeveralGenerations.Location = new System.Drawing.Point(4, 25);
+            this.ForSeveralGenerations.Name = "ForSeveralGenerations";
+            this.ForSeveralGenerations.Padding = new System.Windows.Forms.Padding(3);
+            this.ForSeveralGenerations.Size = new System.Drawing.Size(550, 288);
+            this.ForSeveralGenerations.TabIndex = 2;
+            this.ForSeveralGenerations.Text = "For 20 Generations";
+            this.ForSeveralGenerations.UseVisualStyleBackColor = true;
+            // 
+            // RestrictionFitnessChart
+            // 
+            this.RestrictionFitnessChart.BackColor = System.Drawing.Color.DimGray;
+            chartArea2.AxisX.IsMarginVisible = false;
+            chartArea2.Name = "ChartArea1";
+            this.RestrictionFitnessChart.ChartAreas.Add(chartArea2);
+            this.RestrictionFitnessChart.Location = new System.Drawing.Point(0, 0);
+            this.RestrictionFitnessChart.Name = "RestrictionFitnessChart";
+            series3.ChartArea = "ChartArea1";
+            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Range;
+            series3.Color = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(255)))));
+            series3.Name = "MaxMinChart";
+            series3.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Int32;
+            series3.YValuesPerPoint = 2;
+            series4.BorderWidth = 3;
+            series4.ChartArea = "ChartArea1";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series4.Color = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            series4.Name = "AverageChart";
+            series4.Points.Add(dataPoint2);
+            series4.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Int32;
+            this.RestrictionFitnessChart.Series.Add(series3);
+            this.RestrictionFitnessChart.Series.Add(series4);
+            this.RestrictionFitnessChart.Size = new System.Drawing.Size(550, 288);
+            this.RestrictionFitnessChart.TabIndex = 10;
+            this.RestrictionFitnessChart.Text = "chart1";
+            // 
             // GAForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(582, 722);
+            this.ClientSize = new System.Drawing.Size(582, 818);
+            this.Controls.Add(this.ChartTabControl);
             this.Controls.Add(this.SaveGenerationGroup);
             this.Controls.Add(this.ConfigurationGroup);
             this.Controls.Add(this.ExitConditionsGroup);
-            this.Controls.Add(this.FitnessChart);
             this.Controls.Add(this.RestartButton);
             this.Controls.Add(this.OutputLogBox);
             this.Controls.Add(this.StopButton);
@@ -495,6 +567,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.MutationRateBox)).EndInit();
             this.SaveGenerationGroup.ResumeLayout(false);
             this.SaveGenerationGroup.PerformLayout();
+            this.ChartTabControl.ResumeLayout(false);
+            this.AllGenerations.ResumeLayout(false);
+            this.ForSeveralGenerations.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.RestrictionFitnessChart)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -529,5 +605,9 @@
         private System.Windows.Forms.NumericUpDown MutationRateBox;
         private System.Windows.Forms.ToolTip ToolTip;
         private System.Windows.Forms.SaveFileDialog SaveFileDialog;
+        private System.Windows.Forms.TabControl ChartTabControl;
+        private System.Windows.Forms.TabPage AllGenerations;
+        private System.Windows.Forms.TabPage ForSeveralGenerations;
+        protected System.Windows.Forms.DataVisualization.Charting.Chart RestrictionFitnessChart;
     }
 }

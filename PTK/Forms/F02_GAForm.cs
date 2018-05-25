@@ -31,6 +31,8 @@ namespace PTK.Optimization
             {
                 FitnessChart.Series["AverageChart"].Points.Clear();     //Reset graph of average value
                 FitnessChart.Series["MaxMinChart"].Points.Clear();      //Reset graph of Min-Max value
+                RestrictionFitnessChart.Series["AverageChart"].Points.Clear();     //Reset graph of average value
+                RestrictionFitnessChart.Series["MaxMinChart"].Points.Clear();      //Reset graph of Min-Max value
 
                 await Task.Run(() =>
                 {
@@ -53,6 +55,8 @@ namespace PTK.Optimization
                     //Resume Failure
                     FitnessChart.Series["AverageChart"].Points.Clear();     //Reset graph of average value
                     FitnessChart.Series["MaxMinChart"].Points.Clear();      //Reset graph of Min-Max value
+                    RestrictionFitnessChart.Series["AverageChart"].Points.Clear();     //Reset graph of average value
+                    RestrictionFitnessChart.Series["MaxMinChart"].Points.Clear();      //Reset graph of Min-Max value
                 }
 
                 await Task.Run(() =>
@@ -123,6 +127,18 @@ namespace PTK.Optimization
             {
                 FitnessChart.Series["AverageChart"].Points.AddXY(_x, _yAve);        //Add average value to graph
                 FitnessChart.Series["MaxMinChart"].Points.AddXY(_x, _yMax, _yMin);  //Add Min-Max value to graph
+                if (RestrictionFitnessChart.Series["AverageChart"].Points.Count >= 20)
+                {
+                    RestrictionFitnessChart.Series["AverageChart"].Points.RemoveAt(0);
+                    RestrictionFitnessChart.Series["MaxMinChart"].Points.RemoveAt(0);
+                }
+                RestrictionFitnessChart.Series["AverageChart"].Points.AddXY(_x, _yAve);        //Add average value to graph
+                RestrictionFitnessChart.Series["MaxMinChart"].Points.AddXY(_x, _yMax, _yMin);  //Add Min-Max value to graph
+                //ReScaling RestrictionFitnessChart Area
+                RestrictionFitnessChart.ChartAreas["ChartArea1"].AxisX.Minimum = RestrictionFitnessChart.Series["AverageChart"].Points.ElementAt(0).XValue;
+                RestrictionFitnessChart.ChartAreas["ChartArea1"].AxisX.Maximum = RestrictionFitnessChart.Series["AverageChart"].Points.Last().XValue;
+                RestrictionFitnessChart.ChartAreas["ChartArea1"].AxisY.Minimum = RestrictionFitnessChart.Series["MaxMinChart"].Points.Min(p => p.YValues[1]);
+                RestrictionFitnessChart.ChartAreas["ChartArea1"].AxisY.Maximum = RestrictionFitnessChart.Series["MaxMinChart"].Points.Max(p => p.YValues[0]);
             }
         }
 
