@@ -2,6 +2,7 @@
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -81,7 +82,6 @@ namespace PTK
             Node.ResetIDCount();
             Element.ResetIDCount();
             Support.ResetIDCount();
-            // ExpireSolution(true);
             #region variables
 
             // Assigning lists of objects
@@ -109,9 +109,14 @@ namespace PTK
             // "merge multiple element class instance lists"
             for (int i = 0; i < wrapElemList.Count; i++)
             {
+                //List<Element> tempElemList = new List<Element>();
+                //wrapElemList[i].CastTo<List<Element>>(out tempElemList);
+                //elems.AddRange(tempElemList);
                 List<Element> tempElemList = new List<Element>();
                 wrapElemList[i].CastTo<List<Element>>(out tempElemList);
-                elems.AddRange(tempElemList);
+                // memberwise clone
+                foreach (Element e in tempElemList) elems.Add(e.Clone());
+
             }
 
             // DDL "unwrap wrapped support class" and 
@@ -131,52 +136,50 @@ namespace PTK
             try
             {
                 Assemble(ref elems, ref nodes, ref rTreeElems, ref rTreeNodes);
-                //Functions_DDL.Assemble(ref elems, ref nodes, ref rTreeElems, ref rTreeNodes);
             }
             catch (Exception e)
             {
-                Debug.WriteLine("assemble fails.");
-                ExpireSolution(true);
+                Debug.WriteLine("assemble fails: " + e.Message);
             }
+
             // main functions #2
             // Functions.Intersect returns nodes
             try
             {
-                // Functions_DDL.SolveIntersection(ref elems, ref nodes, ref rTreeElems, ref rTreeNodes);
                 SolveIntersection(ref elems, ref nodes, ref rTreeElems, ref rTreeNodes);
             }
             catch (Exception e)
             {
-                Debug.WriteLine("intersection fails.");
-                ExpireSolution(true);
+                Debug.WriteLine("### intersection fails: " + e.Message);
             }
+
             // main functions #3
             // Functions.GenerateStructuralLines returns nodes
-            try
-            {
-                GenerateStructuralLines(ref elems, nodes);
-                //Functions_DDL.GenerateStructuralLines(ref elems, nodes);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("structural line fails");
-                ExpireSolution(true);
-            }
+            GenerateStructuralLines(ref elems, nodes);
+            //try
+            //{
+            //    GenerateStructuralLines(ref elems, nodes);
+            //}
+            //catch (Exception e)
+            //{
+            //    Debug.WriteLine("### structural line fails: " + e.Message);
+            //}
+
             // main functions #4
             // extract material information from elements
-            Functions_DDL.RegisterMaterials(ref elems, ref mats);
+            RegisterMaterials(ref elems, ref mats);
 
             // main functions #5
             // extract cross-section informations from elements
-            Functions_DDL.RegisterSections(ref elems, ref secs);
+            RegisterSections(ref elems, ref secs);
 
             // main function #6
             // register priorities to element
-            Functions_DDL.RegisterPriority(ref elems, priorityTxt);
+            RegisterPriority(ref elems, priorityTxt);
 
             // main function #7 
             // register 
-            Functions_DDL.RegisterSupports(ref sups);
+            RegisterSupports(ref sups);
 
             #region obsolete
 
@@ -254,11 +257,15 @@ namespace PTK
 
         }
 
-        internal void Assemble(ref List<Element> _elems, ref List<Node> _nodes, ref RTree _rTreeElems, ref RTree _rTreeNodes)
+        internal void Assemble(ref List<Element> _elems,
+            ref List<Node> _nodes, ref RTree _rTreeElems, ref RTree _rTreeNodes)
         {
+
             // Give Id and Make RTree for elements
             for (int i = 0; i < _elems.Count; i++)
             {
+                _elems[i].ClrNodeData();
+
                 _elems[i].AssignID(); // assigning element id
                 _rTreeElems.Insert(_elems[i].BoundingBox, i);
             }
@@ -307,7 +314,7 @@ namespace PTK
                 _rTreeElems.Search(new Sphere(targetCrv.PointAt(0.5),
                     targetCrv.GetLength() / 2), elementExisting);
 
-                // search for real clashes out of bbox clashes 
+                // search for real clashes out of bbox clashes, 
                 // and register to elems and nodes list if any detected.
                 for (int j = 0; j < eNumBBoxClash.Count; j++)
                 {
@@ -358,87 +365,107 @@ namespace PTK
 
                     // register elemId & its parameter to node                    
                     Node targetNode = _nodes[nId];
-                    RegisterElemToNode(ref targetNode, _elems[i], (double)j);
+                    RegisterElemToNode(ref targetNode, _elems[i], paramA);
 
                     // register nodeId & parameter at node to elem
                     RegisterNodeToElem(ref _elems, Node.FindNodeById(_nodes, nId), i, paramA);
-                }
+                } // for each real clash
             }
         }
 
         internal void GenerateStructuralLines(ref List<Element> _elems, List<Node> _nodes)
         {
+
             for (int i = 0; i < _elems.Count; i++) //Element index i       
             {
-                List<Point3d> _segmentPts = new List<Point3d>();
-                List<int> _nids = new List<int>();
-                List<double> _paramList = _elems[i].NodeParams.ToList();
+                List<Point3d> segmentPts = new List<Point3d>();
+                List<int> nIds = new List<int>();
+                List<double> paramLst = new List<double>();
 
                 for (int j = 0; j < _elems[i].NodeIds.Count; j++)
                 {
-                    Node _tempNode = Node.FindNodeById(_nodes, _elems[i].NodeIds[j]);
-                    _nids.Add(_tempNode.Id);
-                    _segmentPts.Add(_tempNode.Pt3d);
+                    Debug.WriteLine("&&&& _elems[" + i + "] NodeIds[" + j + "]: Nodeid= " + _elems[i].NodeIds[j]);
                 }
 
-                // sort points in a line from start pt to end pt
-                var key = _paramList.ToArray();
-                var ptsArray = _segmentPts.ToArray();
-                var nidArray = _nids.ToArray();
+                paramLst = _elems[i].NodeParams.ToList();
+                for (int j = 0; j < _elems[i].NodeIds.Count; j++)
+                {
+                    Node tempNode = Node.FindNodeById(_nodes, _elems[i].NodeIds[j]);
+                    if (tempNode == null) MessageBox.Show("_elems[" + i + "] NodeIds[" + j + "]: Nodeid= " + _elems[i].NodeIds[j]);
 
-                Array.Sort(key, ptsArray);
-                Array.Sort(key, nidArray);
+                    nIds.Add(_elems[i].NodeIds[j]);
+                    segmentPts.Add(tempNode.Pt3d);
+                }
+
+                //Debug.WriteLine("#" + _elems[i].Id + " / " + _elems.Count + " . SegPtNum: " + segmentPts.Count);
+
+                // with sorted dictionary
+                SortedList<double, Point3d> ptsList = new SortedList<double, Point3d>();
+                SortedList<double, int> nIdList = new SortedList<double, int>();
+                for (int j = 0; j < paramLst.Count; j++)
+                {
+                    ptsList.Add(paramLst[j], segmentPts[j]);
+                    nIdList.Add(paramLst[j], nIds[j]);
+                }
+
+                string debugtxt = "";
+                string debugtxt2 = "";
+                for (int j = 0; j < nIdList.Count; j++) debugtxt += nIdList.Values[j] + ", ";
+                for (int j = 0; j < nIdList.Count; j++) debugtxt2 += nIdList.Keys[j] + ", ";
+
+                //Debug.WriteLine("##nodeid:" + debugtxt + " ; param: " + debugtxt2);
 
                 // reset substructural id count and structural lines
                 Element.Subelement.ResetSubStrIdCnt();
-                _elems[i].ClrStrLn();
+                _elems[i].ClrSubElem(); // removes all the subelement in _elems[i]
 
-                for (int j = 1; j < ptsArray.Count(); j++) // j starting with #1
+                for (int j = 1; j < ptsList.Count; j++) // j starting with #1
                 {
-                    Line _segment = new Line(ptsArray[j - 1], ptsArray[j]);
+                    Line _segment = new Line(ptsList.Values[j - 1], ptsList.Values[j]);
                     // be aware that Element.AddStrctline gives subid as well as segment.
-                    _elems[i].AddStrctLine(_segment);
-                    _elems[i].SubElem[_elems[i].SubElem.Count - 1].SNId = nidArray[j - 1];
-                    _elems[i].SubElem[_elems[i].SubElem.Count - 1].ENId = nidArray[j];
-                }
+                    _elems[i].AddSubElem(_segment);
+                    //Debug.WriteLine("###snid: " + nIdList.Values[j - 1] + " , enid: " + nIdList.Values[j]);
+                    _elems[i].SubElem[_elems[i].SubElem.Count - 1].SNId = nIdList.Values[j - 1];
+                    _elems[i].SubElem[_elems[i].SubElem.Count - 1].ENId = nIdList.Values[j];
 
-            }
+                }
+            } // for (int i = 0; i < _elems.Count; i++) //Element index i
         }
 
         internal int DetectOrCreateNode(ref List<Node> _nodes, ref RTree _rTreeNodes, Point3d _sPt)
         {
             // check if the node exists.
-            int _nId = new int();
-            bool _nodeExists = false;
+            int nId = new int();
+            bool nodeExists = false;
 
             // "nodeExisting" will be performed, when items are found.
-            EventHandler<RTreeEventArgs> _nodeExisting =
+            EventHandler<RTreeEventArgs> nodeExisting =
                 (object sender, RTreeEventArgs args) =>
                 {
-                    _nodeExists = true;
-                    _nId = args.Id;
+                    nodeExists = true;
+                    nId = args.Id;
                 };
 
-            // BoundingBox _spotBBox = new BoundingBox(_samplePt, _samplePt); 
+            // "BoundingBox _spotBBox = new BoundingBox(_samplePt, _samplePt);" 
             // Above code didn't work out, needing of considering tolerance for BBox as below. comment by DDL 9th Apr.
             double tol = CommonProps.tolerances;
-            BoundingBox _spotBBox = new BoundingBox
+            BoundingBox spotBBox = new BoundingBox
                 (_sPt.X - tol, _sPt.Y - tol, _sPt.Z - tol, _sPt.X + tol, _sPt.Y + tol, _sPt.Z + tol);
 
             // node search
-            _rTreeNodes.Search(_spotBBox, _nodeExisting);
+            _rTreeNodes.Search(spotBBox, nodeExisting);
 
-            if (!_nodeExists)
+            if (!nodeExists)
             {
-                Node _newNode = new Node(_sPt);
-                _nodes.Add(_newNode);
+                Node newNode = new Node(_sPt);
+                _nodes.Add(newNode);
                 // register the node to _rTreeNodes
-                _rTreeNodes.Insert(_newNode.BoundingBox, _newNode.Id);
+                _rTreeNodes.Insert(newNode.BoundingBox, newNode.Id);
                 // obtain nId
-                _nId = _newNode.Id;
+                nId = newNode.Id;
             }
 
-            return _nId;
+            return nId;
         }
 
         internal void RegisterElemToNode(ref Node _node, Element _elem, double _param)
@@ -461,6 +488,118 @@ namespace PTK
                 _elems[_i].AddNodeId(_node.Id);
                 _elems[_i].AddNodeParams(_param);
             }
+        }
+
+        internal void RegisterMaterials(ref List<Element> _elems, ref List<Material> _mats)
+        {
+            List<string> _hashList = new List<string>();
+            int _matIdCnt = 0;
+
+            foreach (Element e in _elems)
+            {
+                Material _elemMat = e.Material;
+                string _hash = _elemMat.Properties.TxtHash;
+
+                // if the hash values coincide, add existent matId. 
+                if (_hashList.Contains(_hash))
+                {
+                    int _numLst = _hashList.IndexOf(_hash);
+                    e.MatId = _mats[_numLst].Id;
+
+                    // add element id into material instance
+                    _mats[_numLst].AddElemId(e.Id);
+                }
+                // else: register material and assign matId.
+                else
+                {
+                    // assign id to material
+                    e.Material.Id = _matIdCnt;
+                    // assign material id to element
+                    e.MatId = _matIdCnt;
+                    // register material and its hash value
+                    _mats.Add(e.Material);
+                    _hashList.Add(_hash);
+
+                    // add element id into material instance
+                    _mats[_mats.Count - 1].AddElemId(e.Id);
+                    _matIdCnt++;
+                }
+            }
+        }
+
+        internal void RegisterSections(ref List<Element> _elems, ref List<Section> _secs)
+        {
+            List<string> _hashList = new List<string>();
+            int _secIdCnt = 0;
+
+            foreach (Element e in _elems)
+            {
+                Section _elemSec = e.Section;
+                string _hash = _elemSec.TxtHash;
+
+                // if the hash values coincides, add existent secId.
+                if (_hashList.Contains(_hash))
+                {
+                    int _numLst = _hashList.IndexOf(_hash);
+                    e.SecId = _secs[_numLst].Id;
+
+                    // add element id into section instance
+                    _secs[_numLst].AddElemId(e.Id);
+                }
+                // else: register section and assign secId.
+                else
+                {
+                    // assign id to section
+                    e.Section.Id = _secIdCnt;
+                    // assign section id to element
+                    e.SecId = _secIdCnt;
+                    // register section and its hash value
+                    _secs.Add(e.Section);
+                    _hashList.Add(_hash);
+
+                    // add element id into material instance
+                    _secs[_secs.Count - 1].AddElemId(e.Id);
+                    _secIdCnt++;
+                }
+            }
+
+        }
+
+        internal void RegisterSupports(ref List<Support> _sups)
+        {
+            for (int i = 0; i < _sups.Count; i++)
+            {
+                _sups[i].AssignID();
+            }
+        }
+
+        internal void RegisterPriority(ref List<Element> _elems, string _priorityTxt)
+        {
+            // priority: 0 (highest priority) to bigger integer (lower priority)
+
+            if (_priorityTxt != "")
+            {
+                // make a priority list out of the text input
+                List<string> _prLst = new List<string>();
+                _prLst = _priorityTxt.Split(',').ToList();
+                for (int i = 0; i < _prLst.Count; i++)
+                {
+                    _prLst[i] = _prLst[i].Trim();
+                }
+
+                for (int i = 0; i < _elems.Count; i++)
+                {
+                    _elems[i].Priority = _prLst.IndexOf(_elems[i].Tag);
+                }
+            }
+            else // in case the list is disconnected.
+            {
+                for (int i = 0; i < _elems.Count; i++)
+                {
+                    _elems[i].Priority = -999;
+                }
+            }
+
         }
 
         internal static Line CurveToLine(Curve _crv)

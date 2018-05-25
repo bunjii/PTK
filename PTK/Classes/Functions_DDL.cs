@@ -19,6 +19,8 @@ namespace PTK
 
         // ### public functions ###
 
+        #region obsolete
+        /*
         public static void Assemble(ref List<Element> _elems, ref List<Node> _nodes, ref RTree _rTreeElems, ref RTree _rTreeNodes)
         {
             // Give Id and Make RTree for elements
@@ -169,6 +171,7 @@ namespace PTK
 
             }
         }
+        
 
         public static void RegisterMaterials(ref List<Element> _elems, ref List<Material> _mats)
         {
@@ -273,6 +276,9 @@ namespace PTK
             }
 
         }
+
+        */
+        #endregion
 
         public static string ConvertCommaToPeriodDecimal(string _txt, bool _reverse = false)
         {
@@ -424,6 +430,7 @@ namespace PTK
             return result;
         }
 
+        /*
         private static int DetectOrCreateNode(ref List<Node> _nodes, ref RTree _rTreeNodes, Point3d _sPt)
         {
             // check if the node exists.
@@ -459,5 +466,7 @@ namespace PTK
 
             return _nId;
         }
+        */
+
     }
 }

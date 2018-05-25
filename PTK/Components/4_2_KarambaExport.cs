@@ -271,7 +271,6 @@ namespace PTK
             List<double> lc_elastic_energy = new List<double>();
             Karamba.Models.Model analysedModel = new Karamba.Models.Model();
 
-            // bool flIni = false;
             try
             {
                 Karamba.Algorithms.Component_ThIAnalyze_new.solve(kmodel, false, out lc_max_disp,
@@ -284,12 +283,7 @@ namespace PTK
             }
             catch (Exception e)
             {
-                Debug.WriteLine("################\n" + e.ToString());
-                // Debug.WriteLine(kmodel.IsValid.ToString());
-                // at initial loading, Component_ThIAnalyze_new tends to return exception.
-                // below is the workaround for this.
-                // if (flIni == true) ExpireSolution(true);
-                // flIni = false;
+                Debug.WriteLine(e.ToString());
                 flgNewSolution = true;
             }
 
@@ -316,24 +310,6 @@ namespace PTK
             #endregion
         }
 
-        /*
-        // Data saving function
-        public override bool Write(GH_IWriter writer)
-        {
-            // writer.SetString("boolSupString", boolSupString);
-            return base.Write(writer);
-        }
-
-        // Data reading function
-        public override bool Read(GH_IReader reader)
-        {
-            // boolSupString = reader.GetString("boolSupString");
-            // set boolSupArray values when it loads.
-            // this.boolSupArray = Support.StringToArray(boolSupString);
-            // ExpireSolution(true);
-            return base.Read(reader);
-        }
-        */
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
