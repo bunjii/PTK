@@ -29,10 +29,12 @@ namespace PTK.Optimization
         {
             if (TransitionOperatingState())
             {
-                FitnessChart.Series["AverageChart"].Points.Clear();     //Reset graph of average value
-                FitnessChart.Series["MaxMinChart"].Points.Clear();      //Reset graph of Min-Max value
-                RestrictionFitnessChart.Series["AverageChart"].Points.Clear();     //Reset graph of average value
-                RestrictionFitnessChart.Series["MaxMinChart"].Points.Clear();      //Reset graph of Min-Max value
+                FitnessChart.Series["AverageChart"].Points.Clear();         //Reset graph of average value
+                FitnessChart.Series["MaxMinChart"].Points.Clear();          //Reset graph of Min-Max value
+                FitnessChart.Series["BestFitnessUpdate"].Points.Clear();    //Reset graph of BestFitness value
+                RestrictionFitnessChart.Series["AverageChart"].Points.Clear();          //Reset graph of average value
+                RestrictionFitnessChart.Series["MaxMinChart"].Points.Clear();           //Reset graph of Min-Max value
+                RestrictionFitnessChart.Series["BestFitnessUpdate"].Points.Clear();     //Reset graph of BestFitness value
 
                 await Task.Run(() =>
                 {
@@ -53,10 +55,12 @@ namespace PTK.Optimization
                 if (!GeneticAlgo.ResumeRun())  //Perform resume processing
                 {
                     //Resume Failure
-                    FitnessChart.Series["AverageChart"].Points.Clear();     //Reset graph of average value
-                    FitnessChart.Series["MaxMinChart"].Points.Clear();      //Reset graph of Min-Max value
-                    RestrictionFitnessChart.Series["AverageChart"].Points.Clear();     //Reset graph of average value
-                    RestrictionFitnessChart.Series["MaxMinChart"].Points.Clear();      //Reset graph of Min-Max value
+                    FitnessChart.Series["AverageChart"].Points.Clear();         //Reset graph of average value
+                    FitnessChart.Series["MaxMinChart"].Points.Clear();          //Reset graph of Min-Max value
+                    FitnessChart.Series["BestFitnessUpdate"].Points.Clear();    //Reset graph of BestFitness value
+                    RestrictionFitnessChart.Series["AverageChart"].Points.Clear();          //Reset graph of average value
+                    RestrictionFitnessChart.Series["MaxMinChart"].Points.Clear();           //Reset graph of Min-Max value
+                    RestrictionFitnessChart.Series["BestFitnessUpdate"].Points.Clear();     //Reset graph of BestFitness value
                 }
 
                 await Task.Run(() =>
@@ -114,13 +118,13 @@ namespace PTK.Optimization
             }
         }
 
-        public delegate void DrawChartDelegate(int _x, double _yAve, double _yMax, double _yMin);
-        public void DrawChart(int _x, double _yAve, double _yMax, double _yMin)
+        public delegate void DrawChartDelegate(int _x, double _yAve, double _yMax, double _yMin, bool _IsDrawBestFitness);
+        public void DrawChart(int _x, double _yAve, double _yMax, double _yMin, bool _IsDrawBestFitness)
         {
             if (this.InvokeRequired)    //Use Invoke to securely access the form when calling from another thread
             {
                 DrawChartDelegate d = new DrawChartDelegate(DrawChart);
-                this.Invoke(d, _x, _yAve, _yMax, _yMin);
+                this.Invoke(d, _x, _yAve, _yMax, _yMin, _IsDrawBestFitness);
                 return;
             }
             else
@@ -134,11 +138,25 @@ namespace PTK.Optimization
                 }
                 RestrictionFitnessChart.Series["AverageChart"].Points.AddXY(_x, _yAve);        //Add average value to graph
                 RestrictionFitnessChart.Series["MaxMinChart"].Points.AddXY(_x, _yMax, _yMin);  //Add Min-Max value to graph
-                //ReScaling RestrictionFitnessChart Area
+                //-------ReScaling RestrictionFitnessChart Area
                 RestrictionFitnessChart.ChartAreas["ChartArea1"].AxisX.Minimum = RestrictionFitnessChart.Series["AverageChart"].Points.ElementAt(0).XValue;
                 RestrictionFitnessChart.ChartAreas["ChartArea1"].AxisX.Maximum = RestrictionFitnessChart.Series["AverageChart"].Points.Last().XValue;
-                RestrictionFitnessChart.ChartAreas["ChartArea1"].AxisY.Minimum = RestrictionFitnessChart.Series["MaxMinChart"].Points.Min(p => p.YValues[1]);
-                RestrictionFitnessChart.ChartAreas["ChartArea1"].AxisY.Maximum = RestrictionFitnessChart.Series["MaxMinChart"].Points.Max(p => p.YValues[0]);
+                RestrictionFitnessChart.ChartAreas["ChartArea1"].AxisY.Minimum = RestrictionFitnessChart.Series["MaxMinChart"].Points.Min(p => p.YValues[1]);   //Get Y-min
+                RestrictionFitnessChart.ChartAreas["ChartArea1"].AxisY.Maximum = RestrictionFitnessChart.Series["MaxMinChart"].Points.Max(p => p.YValues[0]);   //Get Y-max
+                //-------Best Fitness point add to graph
+                if (_IsDrawBestFitness)
+                {
+                    if (GetIsFitnessMinimize())
+                    {
+                        FitnessChart.Series["BestFitnessUpdate"].Points.AddXY(_x, _yMin);
+                        RestrictionFitnessChart.Series["BestFitnessUpdate"].Points.AddXY(_x, _yMin);
+                    }
+                    else
+                    {
+                        FitnessChart.Series["BestFitnessUpdate"].Points.AddXY(_x, _yMax);
+                        RestrictionFitnessChart.Series["BestFitnessUpdate"].Points.AddXY(_x, _yMax);
+                    }
+                }
             }
         }
 

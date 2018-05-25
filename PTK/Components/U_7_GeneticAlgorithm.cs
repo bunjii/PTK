@@ -61,7 +61,7 @@ namespace PTK.Optimization
             IsEnableMaxGene = true;
             MaxGeneration = 100;
             IsEnableContinuation = true;
-            ContinuationNum = 10;
+            ContinuationNum = 30;
         }
 
         //-------Override appearance of component
@@ -445,6 +445,9 @@ namespace PTK.Optimization
             if (InputCSVGeneration(out nextGeneration))     //Extract saved data from CSV
             {
                 individualIndex = GeneAlgoOption.IndividualNum;
+                bestFitness = GeneAlgoOption.IsMinimize ?
+                        nextGeneration.Where(g => g.IsEnableFitness == true).Min(g => g.Fitness)
+                        : nextGeneration.Where(g => g.IsEnableFitness == true).Max(g => g.Fitness);    //Get the best value
                 return true;
             }
             else       //When loading CSV failed or the saved setting value is different from the current setting
@@ -482,24 +485,27 @@ namespace PTK.Optimization
                 {
                     nowGeneration.Clear();
                     nowGeneration.AddRange(nextGeneration.Select(i => (Individual)i.DeepCopyIndividual()));     //Copy generations and shift
-                    OutputFitnessVal(nowGeneration, true);          //Display fitness in log
-                    DrawFitnessVal(nowGeneration);                  //Draw fitness on graph
-                    OutpuCSVGeneration(nowGeneration, false);       //Save current generation as CSV
 
+                    //-------Check best fitness update
                     decimal tmpBest = GeneAlgoOption.IsMinimize ?
                         nowGeneration.Where(g => g.IsEnableFitness == true).Min(g => g.Fitness)
                         : nowGeneration.Where(g => g.IsEnableFitness == true).Max(g => g.Fitness);    //Get the best value
 
-                    if (bestFitness == tmpBest)
-                    {
-                        continuationCount++;
-                    }
-                    else
+                    if ((GeneAlgoOption.IsMinimize ? bestFitness > tmpBest : bestFitness < tmpBest) || age == 0)    //Does it apply to the update condition of the best value
                     {
                         bestFitness = tmpBest;    //Update best value
                         continuationCount = 0;
                     }
-                    //When the termination condition is reached
+                    else
+                    {
+                        continuationCount++;
+                    }
+
+                    OutputFitnessVal(nowGeneration, true);                  //Display fitness in log
+                    DrawFitnessVal(nowGeneration, continuationCount == 0);  //Draw fitness on graph
+                    OutpuCSVGeneration(nowGeneration, false);               //Save current generation as CSV
+
+                    //-------When the termination condition is reached
                     if ((GeneAlgoOption.IsEnableMaxGene && age >= GeneAlgoOption.MaxGeneration) || (GeneAlgoOption.IsEnableContinuation && continuationCount >= GeneAlgoOption.ContinuationNum))
                     {
                         SetExcellenceIndividual(nowGeneration);     //Set the best individual
@@ -511,7 +517,7 @@ namespace PTK.Optimization
                     {
                         nowGeneration = NormaliseFitnessGeneration(nowGeneration);  //Normalize fitness
 
-                        //Generate the next generation of individuals
+                        //-------Generate the next generation of individuals
                         nextGeneration.Clear();
                         for (int i = 0; i < GeneAlgoOption.IndividualNum; i++)
                         {
@@ -621,11 +627,11 @@ namespace PTK.Optimization
             if (_IsOverviewOnly) //Output summary value only
             {
                 String outputText = "Fitness: Average[";
-                outputText += enableGeneration.Average(g => g.Fitness).ToString();
+                outputText += enableGeneration.Average(g => g.Fitness).ToString("G6");
                 outputText += "],Max[";
-                outputText += enableGeneration.Max(g => g.Fitness).ToString();
+                outputText += enableGeneration.Max(g => g.Fitness).ToString("G6");
                 outputText += "],Min[";
-                outputText += enableGeneration.Min(g => g.Fitness).ToString();
+                outputText += enableGeneration.Min(g => g.Fitness).ToString("G6");
                 outputText += "]";
                 WriteLogForm(outputText);
             }
@@ -643,10 +649,10 @@ namespace PTK.Optimization
         }
 
         //-------Draw fitness on form graph
-        private static void DrawFitnessVal(List<Individual> _generation)
+        private static void DrawFitnessVal(List<Individual> _generation, bool _IsUpdateBestFitness)
         {
             var enableGeneration = _generation.Where(g => g.IsEnableFitness == true);
-            GeneAlgoOption.gaForm.DrawChart(age, (double)enableGeneration.Average(g => g.Fitness), (double)enableGeneration.Max(g => g.Fitness), (double)enableGeneration.Min(g => g.Fitness));
+            GeneAlgoOption.gaForm.DrawChart(age, (double)enableGeneration.Average(g => g.Fitness), (double)enableGeneration.Max(g => g.Fitness), (double)enableGeneration.Min(g => g.Fitness), _IsUpdateBestFitness);
         }
 
         //-------Rearrange individuals in generations in order of excellence
