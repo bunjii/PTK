@@ -73,7 +73,7 @@ namespace PTK.Optimization
         //-------Input
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("GeneSliderNames", "SliNam", "Slider names to be manipulated for genes", GH_ParamAccess.list);
+            pManager.AddTextParameter("GeneSliderNames", "SliName", "Slider names to be manipulated for genes", GH_ParamAccess.list);
             pManager.AddNumberParameter("FitnessComponent", "FitComp", "Please connect to primitive component showing fitness", GH_ParamAccess.item);
         }
 
@@ -420,8 +420,8 @@ namespace PTK.Optimization
         private static int individualIndex;    //Individual index for loop
         private static Random rnd;             //Shared random number source
 
-        private static decimal bestFitness;    //Individuals with the highest fitness among generations
-        private static int continuationCount;  //Continuous number of best individuals
+        private static Individual bestIndividual;   //Individuals with the best Fitness
+        private static int continuationCount;       //Continuous number of best individuals
 
         //-------Reset and Initialize
         public static bool ResetGeneticAlgo()
@@ -445,9 +445,10 @@ namespace PTK.Optimization
             if (InputCSVGeneration(out nextGeneration))     //Extract saved data from CSV
             {
                 individualIndex = GeneAlgoOption.IndividualNum;
-                bestFitness = GeneAlgoOption.IsMinimize ?
-                        nextGeneration.Where(g => g.IsEnableFitness == true).Min(g => g.Fitness)
-                        : nextGeneration.Where(g => g.IsEnableFitness == true).Max(g => g.Fitness);    //Get the best value
+                bestIndividual = GeneAlgoOption.IsMinimize ?
+                       (Individual)nextGeneration.Where(i => i.IsEnableFitness == true).OrderBy(i => i.Fitness).ElementAt(0).DeepCopyIndividual()
+                       : (Individual)nextGeneration.Where(i => i.IsEnableFitness == true).OrderByDescending(i => i.Fitness).ElementAt(0).DeepCopyIndividual();    //Get the best individual
+
                 return true;
             }
             else       //When loading CSV failed or the saved setting value is different from the current setting
@@ -487,13 +488,13 @@ namespace PTK.Optimization
                     nowGeneration.AddRange(nextGeneration.Select(i => (Individual)i.DeepCopyIndividual()));     //Copy generations and shift
 
                     //-------Check best fitness update
-                    decimal tmpBest = GeneAlgoOption.IsMinimize ?
-                        nowGeneration.Where(g => g.IsEnableFitness == true).Min(g => g.Fitness)
-                        : nowGeneration.Where(g => g.IsEnableFitness == true).Max(g => g.Fitness);    //Get the best value
+                    Individual tmpBestIndividual = GeneAlgoOption.IsMinimize ?
+                        (Individual)nowGeneration.Where(i => i.IsEnableFitness == true).OrderBy(i => i.Fitness).ElementAt(0).DeepCopyIndividual()
+                        : (Individual)nowGeneration.Where(i => i.IsEnableFitness == true).OrderByDescending(i => i.Fitness).ElementAt(0).DeepCopyIndividual();    //Get the best individual
 
-                    if ((GeneAlgoOption.IsMinimize ? bestFitness > tmpBest : bestFitness < tmpBest) || age == 0)    //Does it apply to the update condition of the best value
+                    if (age == 0 || (GeneAlgoOption.IsMinimize ? bestIndividual.Fitness > tmpBestIndividual.Fitness : bestIndividual.Fitness < tmpBestIndividual.Fitness))    //Does it apply to the update condition of the best value
                     {
-                        bestFitness = tmpBest;    //Update best value
+                        bestIndividual = tmpBestIndividual;    //Update best value
                         continuationCount = 0;
                     }
                     else
@@ -616,8 +617,15 @@ namespace PTK.Optimization
         //-------Make the best individuals in the generation reflected in GH
         private static void SetExcellenceIndividual(List<Individual> _generation)
         {
-            _generation = SortGeneration(_generation);  //Sort by excellence
-            SetSlider(_generation[0]);
+            if (bestIndividual != null)
+            {
+                SetSlider(bestIndividual);
+            }
+            else
+            {
+                _generation = SortGeneration(_generation);  //Sort by excellence
+                SetSlider(_generation[0]);
+            }
         }
 
         //-------Output fitness to form log
