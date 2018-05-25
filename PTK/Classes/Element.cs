@@ -206,9 +206,20 @@ namespace PTK
         #endregion
 
         #region methods
+        public Element Clone()
+        {
+            return (Element)MemberwiseClone();
+        }
+
         public void AddNodeId(int _nid)
         {
             this.nodeIds.Add(_nid);
+        }
+
+        public void ClrNodeData()
+        {
+            this.nodeIds.Clear();
+            this.nodeParams.Clear();
         }
 
         //This class add neighbouring points. The analysis is done in the function called AsignNeighbour in functions.cs
@@ -244,26 +255,7 @@ namespace PTK
             idCount++;
         }
 
-        //This function send needed information to the subclass "subStructural"
-        public void AddStrctLine(Line _strLn)
-        {
-            this.subElem.Add(new Subelement(_strLn, numStrLns));
-            numStrLns++;
 
-        }
-
-        public void ClrStrLn()
-        {
-            this.subElem.Clear();
-        }
-
-        public static Element FindElemById(List<Element> _elems, int _eid)
-        {
-            Element tempElem;
-            tempElem = _elems.Find(e => e.Id == _eid);
-
-            return tempElem;
-        }
 
         #region obsolete
         /*
@@ -431,6 +423,28 @@ namespace PTK
             }
             #endregion
 
+        }
+
+        //This function send needed information to the subclass "subElement"
+        public void AddSubElem(Line _strLn)
+        {
+            this.subElem.Add(new Subelement(_strLn, numStrLns));
+            numStrLns++;
+
+        }
+
+        public void ClrSubElem()
+        {
+            this.subElem = new List<Subelement>();
+            // this.subElem.Clear();
+        }
+
+        public static Element FindElemById(List<Element> _elems, int _eid)
+        {
+            Element tempElem;
+            tempElem = _elems.Find(e => e.Id == _eid);
+
+            return tempElem;
         }
 
     }
