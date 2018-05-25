@@ -68,7 +68,7 @@
             this.SaveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.ChartTabControl = new System.Windows.Forms.TabControl();
             this.AllGenerations = new System.Windows.Forms.TabPage();
-            this.ForSeveralGenerations = new System.Windows.Forms.TabPage();
+            this.LastSeveralGenerations = new System.Windows.Forms.TabPage();
             this.RestrictionFitnessChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.FitnessBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FitnessChart)).BeginInit();
@@ -83,7 +83,7 @@
             this.SaveGenerationGroup.SuspendLayout();
             this.ChartTabControl.SuspendLayout();
             this.AllGenerations.SuspendLayout();
-            this.ForSeveralGenerations.SuspendLayout();
+            this.LastSeveralGenerations.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.RestrictionFitnessChart)).BeginInit();
             this.SuspendLayout();
             // 
@@ -474,7 +474,7 @@
             // ChartTabControl
             // 
             this.ChartTabControl.Controls.Add(this.AllGenerations);
-            this.ChartTabControl.Controls.Add(this.ForSeveralGenerations);
+            this.ChartTabControl.Controls.Add(this.LastSeveralGenerations);
             this.ChartTabControl.Location = new System.Drawing.Point(12, 461);
             this.ChartTabControl.Name = "ChartTabControl";
             this.ChartTabControl.SelectedIndex = 0;
@@ -492,16 +492,16 @@
             this.AllGenerations.Text = "All Generations";
             this.AllGenerations.UseVisualStyleBackColor = true;
             // 
-            // ForSeveralGenerations
+            // LastSeveralGenerations
             // 
-            this.ForSeveralGenerations.Controls.Add(this.RestrictionFitnessChart);
-            this.ForSeveralGenerations.Location = new System.Drawing.Point(4, 25);
-            this.ForSeveralGenerations.Name = "ForSeveralGenerations";
-            this.ForSeveralGenerations.Padding = new System.Windows.Forms.Padding(3);
-            this.ForSeveralGenerations.Size = new System.Drawing.Size(550, 288);
-            this.ForSeveralGenerations.TabIndex = 2;
-            this.ForSeveralGenerations.Text = "For 20 Generations";
-            this.ForSeveralGenerations.UseVisualStyleBackColor = true;
+            this.LastSeveralGenerations.Controls.Add(this.RestrictionFitnessChart);
+            this.LastSeveralGenerations.Location = new System.Drawing.Point(4, 25);
+            this.LastSeveralGenerations.Name = "LastSeveralGenerations";
+            this.LastSeveralGenerations.Padding = new System.Windows.Forms.Padding(3);
+            this.LastSeveralGenerations.Size = new System.Drawing.Size(550, 288);
+            this.LastSeveralGenerations.TabIndex = 2;
+            this.LastSeveralGenerations.Text = "Last 20 Generations";
+            this.LastSeveralGenerations.UseVisualStyleBackColor = true;
             // 
             // RestrictionFitnessChart
             // 
@@ -569,7 +569,7 @@
             this.SaveGenerationGroup.PerformLayout();
             this.ChartTabControl.ResumeLayout(false);
             this.AllGenerations.ResumeLayout(false);
-            this.ForSeveralGenerations.ResumeLayout(false);
+            this.LastSeveralGenerations.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.RestrictionFitnessChart)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -607,7 +607,7 @@
         private System.Windows.Forms.SaveFileDialog SaveFileDialog;
         private System.Windows.Forms.TabControl ChartTabControl;
         private System.Windows.Forms.TabPage AllGenerations;
-        private System.Windows.Forms.TabPage ForSeveralGenerations;
+        private System.Windows.Forms.TabPage LastSeveralGenerations;
         protected System.Windows.Forms.DataVisualization.Charting.Chart RestrictionFitnessChart;
     }
 }
