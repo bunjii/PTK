@@ -109,14 +109,10 @@ namespace PTK
             // "merge multiple element class instance lists"
             for (int i = 0; i < wrapElemList.Count; i++)
             {
-                //List<Element> tempElemList = new List<Element>();
-                //wrapElemList[i].CastTo<List<Element>>(out tempElemList);
-                //elems.AddRange(tempElemList);
                 List<Element> tempElemList = new List<Element>();
                 wrapElemList[i].CastTo<List<Element>>(out tempElemList);
                 // memberwise clone
                 foreach (Element e in tempElemList) elems.Add(e.Clone());
-
             }
 
             // DDL "unwrap wrapped support class" and 
@@ -156,14 +152,6 @@ namespace PTK
             // main functions #3
             // Functions.GenerateStructuralLines returns nodes
             GenerateStructuralLines(ref elems, nodes);
-            //try
-            //{
-            //    GenerateStructuralLines(ref elems, nodes);
-            //}
-            //catch (Exception e)
-            //{
-            //    Debug.WriteLine("### structural line fails: " + e.Message);
-            //}
 
             // main functions #4
             // extract material information from elements
@@ -382,22 +370,15 @@ namespace PTK
                 List<int> nIds = new List<int>();
                 List<double> paramLst = new List<double>();
 
-                for (int j = 0; j < _elems[i].NodeIds.Count; j++)
-                {
-                    Debug.WriteLine("&&&& _elems[" + i + "] NodeIds[" + j + "]: Nodeid= " + _elems[i].NodeIds[j]);
-                }
-
                 paramLst = _elems[i].NodeParams.ToList();
                 for (int j = 0; j < _elems[i].NodeIds.Count; j++)
                 {
                     Node tempNode = Node.FindNodeById(_nodes, _elems[i].NodeIds[j]);
-                    if (tempNode == null) MessageBox.Show("_elems[" + i + "] NodeIds[" + j + "]: Nodeid= " + _elems[i].NodeIds[j]);
 
                     nIds.Add(_elems[i].NodeIds[j]);
                     segmentPts.Add(tempNode.Pt3d);
                 }
 
-                //Debug.WriteLine("#" + _elems[i].Id + " / " + _elems.Count + " . SegPtNum: " + segmentPts.Count);
 
                 // with sorted dictionary
                 SortedList<double, Point3d> ptsList = new SortedList<double, Point3d>();

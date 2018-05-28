@@ -220,9 +220,6 @@
     <None Include="Resources\ico_summary.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\ico_geom.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\ico_detailing.png" />
   </ItemGroup>
   <ItemGroup>
@@ -245,6 +242,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\favicon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_materializer_new.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_geom .png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -81,7 +81,7 @@ namespace PTK
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddParameter(new Param_Model(), "Assembled Model", "Assembled Model", "", GH_ParamAccess.item);
-            pManager.AddParameter(new Param_Model(), "Analysed Model", "Analized Model", "", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_Model(), "Analyzed Model", "Analyzed Model", "", GH_ParamAccess.item);
             pManager.AddNumberParameter("Displacement", "Disp", "Maximum displacement in [m]", GH_ParamAccess.list);
             pManager.AddNumberParameter("Gravity force", "G", "Resulting force of gravity [kN] of each load-case of the model", GH_ParamAccess.list);
             pManager.AddNumberParameter("Strain Energy", "Energy", "Internal elastic energy in [kNm of each load cases of the model", GH_ParamAccess.list);
@@ -179,7 +179,6 @@ namespace PTK
                     catch (NullReferenceException e)
                     {
                         flgNewSolution = true;
-                        // ExpireSolution(true);
                     }
                     if (tagLst.Contains(elemTag)) continue;
 
@@ -211,7 +210,6 @@ namespace PTK
                     catch (NullReferenceException e)
                     {
                         flgNewSolution = true;
-                        // ExpireSolution(true);
                     }
 
                     if (tagLst.Contains(elemTag)) continue;
@@ -265,21 +263,41 @@ namespace PTK
                 Debug.WriteLine(e.ToString());
             }
 
-            // trial for analysis
+            // trial for analysis = inside of component 
             List<double> lc_max_disp = new List<double>();
             List<double> lc_gravity_force = new List<double>();
             List<double> lc_elastic_energy = new List<double>();
-            Karamba.Models.Model analysedModel = new Karamba.Models.Model();
+            Karamba.Models.Model outModel = new Karamba.Models.Model();
 
             try
             {
-                Karamba.Algorithms.Component_ThIAnalyze_new.solve(kmodel, false, out lc_max_disp,
-                                out lc_gravity_force, out lc_elastic_energy, out analysedModel);
-                // .fe2model()
-                // update the model with data from the fe-model. 
-                // Both models may be out of sync after mappings were performed on the fe-model. 
-                // Has to be called before displaying the model or retrieving results.
-                analysedModel.fe2model();
+                outModel = (Karamba.Models.Model)kmodel.Clone();
+                feb.Model febModel = outModel.febmodel;
+                // febModel = outModel.
+                Deform deform = new Deform(febModel); // error
+                Response response = new Response(deform);
+                Utils.handleError(response.updateMemberForces(), deform);
+                outModel.maxDisp = 0.0;
+
+                for (int i = 0; i < outModel.numLC; i++)
+                {
+                    double num = response.maxDisplacement(i);
+                    outModel.maxDisp = Math.Max(outModel.maxDisp, num);
+                    lc_max_disp.Add(num);
+
+                    double item = deform.deadWeight((uint)i);
+                    lc_gravity_force.Add(item);
+
+                    EnergyVisitor energyVisitor = new EnergyVisitor(outModel.febmodel,
+                        outModel.febmodel.state((uint)i), (uint)i);
+                    energyVisitor.visit(outModel.febmodel);
+
+                    double item2 = energyVisitor.elasticEnergy();
+                    lc_elastic_energy.Add(item2);
+                }
+
+                deform.Dispose();
+                response.Dispose();
             }
             catch (Exception e)
             {
@@ -288,14 +306,14 @@ namespace PTK
             }
 
             GH_Model gma = new GH_Model(kmodel);
-            GH_Model gm = new GH_Model(analysedModel);
+            GH_Model gm = new GH_Model(outModel);
 
             if (flgNewSolution == true)
             {
                 // ExpireSolution(true);
-                GH_Document doc = this.OnPingDocument(); //.ExpireSolution(); // .NewSolution(true);
+                GH_Document doc = this.OnPingDocument();
                 Debug.WriteLine("### new solution ###");
-                doc.NewSolution(true, 0);
+                doc.NewSolution(true);
             }
 
             #endregion
