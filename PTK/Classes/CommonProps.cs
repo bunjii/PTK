@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace PTK
 {
-    public class CommonProps
+    public static class CommonProps
     {
         #region fields
-        public const double tolerances = 0.001;
-        public const string category = "PTK";
-        public const string subcat1 = "Assemble";
-        public const string subcat2 = "Materialize";
-        public const string subcat3 = "Detail";
-        public const string subcat4 = "Structure";
-        public const string subcat5 = "Utility";
-        public const string initialMessage = "PTK Ver.0.5";
+        public static double tolerances = 0.001;
+        public static string category = "PTK";
+        public static string subcat1 = "Assemble";
+        public static string subcat2 = "Materialize";
+        public static string subcat3 = "Detail";
+        public static string subcat4 = "Structure";
+        public static string subcat5 = "Utility";
+        public static string initialMessage = "PTK Ver.0.5";
         // public const string 
         #endregion
 
