@@ -111,6 +111,11 @@ namespace PTK.Components
                 Debug.WriteLine("&&&&&&&&&&&&&\n" + e.ToString());
             }
 
+            // The dimensioning algorithms
+
+
+
+
             // Debug.WriteLine(model.element_selector.select("G1").Count.ToString());
             #endregion
 

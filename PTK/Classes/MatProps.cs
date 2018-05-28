@@ -14,7 +14,7 @@ namespace PTK
 
         #region fields
 
-        private string materialName;
+        private string materialName;            //either glulam, either timber
         // for glulam according LIMTREBOKA
         
         private double fmgk;

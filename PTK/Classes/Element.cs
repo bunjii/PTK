@@ -30,7 +30,12 @@ namespace PTK
         private Align align;
         private List<Subelement> subElem;
         private int priority;
+        private StructuralProperties structprop;
+        // the structural properties
+       
 
+        
+        
 
         // below: with one of the xy- yz- zx- planes being fixed, 
         // the others can be calculated. 
@@ -448,5 +453,5 @@ namespace PTK
         }
 
     }
-
-}
+    
+    }
