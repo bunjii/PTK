@@ -143,7 +143,7 @@ namespace PTK.Optimization
                 base.Render(canvas, graphics, channel);
                 if (channel == GH_CanvasChannel.Objects)
                 {
-                    GH_Capsule button = GH_Capsule.CreateTextCapsule(ButtonBounds, ButtonBounds, GH_Palette.Black, "Show Form", 2, 0);  //Add button
+                    GH_Capsule button = GH_Capsule.CreateTextCapsule(ButtonBounds, ButtonBounds, GH_Palette.Black, "GA Run!", 2, 0);  //Add button
                     button.Render(graphics, Selected, Owner.Locked, false);
                     button.Dispose();
                 }
@@ -478,7 +478,7 @@ namespace PTK.Optimization
                 if (individualIndex == -1)  //Only the first loop exception
                 {
                     CreateRandomGeneration(out nextGeneration);     //Set genes of current generation individuals as random
-                    WriteLogForm("Initialised");
+                    WriteLogForm("Initialised generation");
                     individualIndex = 0;
                     SetSlider(nextGeneration[individualIndex]);
                 }
@@ -562,8 +562,11 @@ namespace PTK.Optimization
             {
                 //-------Error handling
                 MessageBox.Show(e.Message);
-                WriteLogForm("GA is terminated because an Unexpected Error occurred");
-                GeneAlgoOption.gaForm.TransitionStopingState();
+                if (GeneAlgoOption.gaForm != null)
+                {
+                    WriteLogForm("GA is terminated because an Unexpected Error occurred");
+                    GeneAlgoOption.gaForm.TransitionStopingState();
+                }
                 return;
             }
             Task.Run(() => GARun());    //Next Loop
@@ -635,7 +638,7 @@ namespace PTK.Optimization
             if (_IsOverviewOnly) //Output summary value only
             {
                 String outputText = "Fitness: Average[";
-                outputText += enableGeneration.Average(g => g.Fitness).ToString("G6");
+                outputText += enableGeneration.Average(g => g.Fitness).ToString("G6");  //6 significant digits
                 outputText += "],Max[";
                 outputText += enableGeneration.Max(g => g.Fitness).ToString("G6");
                 outputText += "],Min[";

@@ -91,9 +91,10 @@
             // 
             this.MinRadioButton.AutoSize = true;
             this.MinRadioButton.Checked = true;
-            this.MinRadioButton.Location = new System.Drawing.Point(16, 21);
+            this.MinRadioButton.Location = new System.Drawing.Point(12, 17);
+            this.MinRadioButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.MinRadioButton.Name = "MinRadioButton";
-            this.MinRadioButton.Size = new System.Drawing.Size(82, 19);
+            this.MinRadioButton.Size = new System.Drawing.Size(67, 16);
             this.MinRadioButton.TabIndex = 0;
             this.MinRadioButton.TabStop = true;
             this.MinRadioButton.Text = "Minimize";
@@ -104,9 +105,10 @@
             // StartButton
             // 
             this.StartButton.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.StartButton.Location = new System.Drawing.Point(12, 12);
+            this.StartButton.Location = new System.Drawing.Point(9, 10);
+            this.StartButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.StartButton.Name = "StartButton";
-            this.StartButton.Size = new System.Drawing.Size(182, 53);
+            this.StartButton.Size = new System.Drawing.Size(136, 42);
             this.StartButton.TabIndex = 1;
             this.StartButton.Text = "Start";
             this.StartButton.UseVisualStyleBackColor = true;
@@ -116,9 +118,10 @@
             // 
             this.StopButton.Enabled = false;
             this.StopButton.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.StopButton.Location = new System.Drawing.Point(200, 12);
+            this.StopButton.Location = new System.Drawing.Point(150, 10);
+            this.StopButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.StopButton.Name = "StopButton";
-            this.StopButton.Size = new System.Drawing.Size(182, 53);
+            this.StopButton.Size = new System.Drawing.Size(136, 42);
             this.StopButton.TabIndex = 2;
             this.StopButton.Text = "Stop";
             this.StopButton.UseVisualStyleBackColor = true;
@@ -128,9 +131,11 @@
             // 
             this.FitnessBox.Controls.Add(this.MaxRadioButton);
             this.FitnessBox.Controls.Add(this.MinRadioButton);
-            this.FitnessBox.Location = new System.Drawing.Point(306, 21);
+            this.FitnessBox.Location = new System.Drawing.Point(230, 17);
+            this.FitnessBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.FitnessBox.Name = "FitnessBox";
-            this.FitnessBox.Size = new System.Drawing.Size(202, 48);
+            this.FitnessBox.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.FitnessBox.Size = new System.Drawing.Size(152, 38);
             this.FitnessBox.TabIndex = 3;
             this.FitnessBox.TabStop = false;
             this.FitnessBox.Text = "Fitness";
@@ -139,9 +144,10 @@
             // MaxRadioButton
             // 
             this.MaxRadioButton.AutoSize = true;
-            this.MaxRadioButton.Location = new System.Drawing.Point(105, 21);
+            this.MaxRadioButton.Location = new System.Drawing.Point(79, 17);
+            this.MaxRadioButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.MaxRadioButton.Name = "MaxRadioButton";
-            this.MaxRadioButton.Size = new System.Drawing.Size(85, 19);
+            this.MaxRadioButton.Size = new System.Drawing.Size(70, 16);
             this.MaxRadioButton.TabIndex = 1;
             this.MaxRadioButton.Text = "Maximize";
             this.ToolTip.SetToolTip(this.MaxRadioButton, "Do you try to minimize fitness or maximize it?");
@@ -149,19 +155,21 @@
             // 
             // OutputLogBox
             // 
-            this.OutputLogBox.Location = new System.Drawing.Point(12, 375);
+            this.OutputLogBox.Location = new System.Drawing.Point(9, 300);
+            this.OutputLogBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.OutputLogBox.Multiline = true;
             this.OutputLogBox.Name = "OutputLogBox";
             this.OutputLogBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.OutputLogBox.Size = new System.Drawing.Size(558, 80);
+            this.OutputLogBox.Size = new System.Drawing.Size(420, 65);
             this.OutputLogBox.TabIndex = 4;
             // 
             // RestartButton
             // 
             this.RestartButton.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.RestartButton.Location = new System.Drawing.Point(388, 12);
+            this.RestartButton.Location = new System.Drawing.Point(291, 10);
+            this.RestartButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.RestartButton.Name = "RestartButton";
-            this.RestartButton.Size = new System.Drawing.Size(182, 53);
+            this.RestartButton.Size = new System.Drawing.Size(136, 42);
             this.RestartButton.TabIndex = 5;
             this.RestartButton.Text = "Resume";
             this.RestartButton.UseVisualStyleBackColor = true;
@@ -169,17 +177,19 @@
             // 
             // SaveFolderTextBox
             // 
-            this.SaveFolderTextBox.Location = new System.Drawing.Point(12, 51);
+            this.SaveFolderTextBox.Location = new System.Drawing.Point(9, 41);
+            this.SaveFolderTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.SaveFolderTextBox.Name = "SaveFolderTextBox";
-            this.SaveFolderTextBox.Size = new System.Drawing.Size(503, 22);
+            this.SaveFolderTextBox.Size = new System.Drawing.Size(378, 19);
             this.SaveFolderTextBox.TabIndex = 6;
             this.SaveFolderTextBox.Leave += new System.EventHandler(this.SaveFolderTextBox_Leave);
             // 
             // OpenSaveFolder
             // 
-            this.OpenSaveFolder.Location = new System.Drawing.Point(521, 51);
+            this.OpenSaveFolder.Location = new System.Drawing.Point(391, 41);
+            this.OpenSaveFolder.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.OpenSaveFolder.Name = "OpenSaveFolder";
-            this.OpenSaveFolder.Size = new System.Drawing.Size(28, 22);
+            this.OpenSaveFolder.Size = new System.Drawing.Size(21, 18);
             this.OpenSaveFolder.TabIndex = 7;
             this.OpenSaveFolder.Text = "...";
             this.OpenSaveFolder.UseVisualStyleBackColor = true;
@@ -188,9 +198,10 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 18);
+            this.label1.Location = new System.Drawing.Point(7, 14);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(496, 30);
+            this.label1.Size = new System.Drawing.Size(393, 24);
             this.label1.TabIndex = 8;
             this.label1.Text = "For each generation, genes are recorded in the following file.\r\nWhen you press Re" +
     "sume, calculation resumes from the recorded generation.";
@@ -222,6 +233,7 @@
             chartArea1.ShadowColor = System.Drawing.Color.Empty;
             this.FitnessChart.ChartAreas.Add(chartArea1);
             this.FitnessChart.Location = new System.Drawing.Point(0, 0);
+            this.FitnessChart.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.FitnessChart.Name = "FitnessChart";
             series1.ChartArea = "ChartArea1";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Range;
@@ -244,7 +256,7 @@
             this.FitnessChart.Series.Add(series1);
             this.FitnessChart.Series.Add(series2);
             this.FitnessChart.Series.Add(series3);
-            this.FitnessChart.Size = new System.Drawing.Size(550, 288);
+            this.FitnessChart.Size = new System.Drawing.Size(412, 230);
             this.FitnessChart.TabIndex = 9;
             this.FitnessChart.Text = "chart1";
             // 
@@ -254,23 +266,26 @@
             this.ExitConditionsGroup.Controls.Add(this.MaxGenerationBox);
             this.ExitConditionsGroup.Controls.Add(this.ContinuationCheck);
             this.ExitConditionsGroup.Controls.Add(this.MaxGenerationCheck);
-            this.ExitConditionsGroup.Location = new System.Drawing.Point(12, 193);
+            this.ExitConditionsGroup.Location = new System.Drawing.Point(9, 154);
+            this.ExitConditionsGroup.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.ExitConditionsGroup.Name = "ExitConditionsGroup";
-            this.ExitConditionsGroup.Size = new System.Drawing.Size(558, 81);
+            this.ExitConditionsGroup.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ExitConditionsGroup.Size = new System.Drawing.Size(418, 65);
             this.ExitConditionsGroup.TabIndex = 12;
             this.ExitConditionsGroup.TabStop = false;
             this.ExitConditionsGroup.Text = "Exit Conditions";
             // 
             // ContinuationBox
             // 
-            this.ContinuationBox.Location = new System.Drawing.Point(215, 52);
+            this.ContinuationBox.Location = new System.Drawing.Point(172, 41);
+            this.ContinuationBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.ContinuationBox.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
             this.ContinuationBox.Name = "ContinuationBox";
-            this.ContinuationBox.Size = new System.Drawing.Size(120, 22);
+            this.ContinuationBox.Size = new System.Drawing.Size(90, 19);
             this.ContinuationBox.TabIndex = 16;
             this.ContinuationBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.ToolTip.SetToolTip(this.ContinuationBox, "If the best individual is the same for generations longer than this value, \r\nthe " +
@@ -284,7 +299,8 @@
             // 
             // MaxGenerationBox
             // 
-            this.MaxGenerationBox.Location = new System.Drawing.Point(215, 24);
+            this.MaxGenerationBox.Location = new System.Drawing.Point(172, 18);
+            this.MaxGenerationBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.MaxGenerationBox.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -296,7 +312,7 @@
             0,
             0});
             this.MaxGenerationBox.Name = "MaxGenerationBox";
-            this.MaxGenerationBox.Size = new System.Drawing.Size(120, 22);
+            this.MaxGenerationBox.Size = new System.Drawing.Size(90, 19);
             this.MaxGenerationBox.TabIndex = 15;
             this.MaxGenerationBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.ToolTip.SetToolTip(this.MaxGenerationBox, "Forcibly terminate the search when this generation turns to this number.");
@@ -312,9 +328,10 @@
             this.ContinuationCheck.AutoSize = true;
             this.ContinuationCheck.Checked = true;
             this.ContinuationCheck.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ContinuationCheck.Location = new System.Drawing.Point(13, 53);
+            this.ContinuationCheck.Location = new System.Drawing.Point(10, 42);
+            this.ContinuationCheck.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.ContinuationCheck.Name = "ContinuationCheck";
-            this.ContinuationCheck.Size = new System.Drawing.Size(196, 19);
+            this.ContinuationCheck.Size = new System.Drawing.Size(158, 16);
             this.ContinuationCheck.TabIndex = 13;
             this.ContinuationCheck.Text = "Continuation Best Fitness";
             this.ToolTip.SetToolTip(this.ContinuationCheck, "Stop creating next generation when the best individual is not updated for the giv" +
@@ -327,9 +344,10 @@
             this.MaxGenerationCheck.AutoSize = true;
             this.MaxGenerationCheck.Checked = true;
             this.MaxGenerationCheck.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.MaxGenerationCheck.Location = new System.Drawing.Point(13, 25);
+            this.MaxGenerationCheck.Location = new System.Drawing.Point(10, 20);
+            this.MaxGenerationCheck.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.MaxGenerationCheck.Name = "MaxGenerationCheck";
-            this.MaxGenerationCheck.Size = new System.Drawing.Size(129, 19);
+            this.MaxGenerationCheck.Size = new System.Drawing.Size(104, 16);
             this.MaxGenerationCheck.TabIndex = 12;
             this.MaxGenerationCheck.Text = "Max Generation";
             this.ToolTip.SetToolTip(this.MaxGenerationCheck, "The upper limit on the number of generations.\r\n");
@@ -340,9 +358,11 @@
             // 
             this.ConfigurationGroup.Controls.Add(this.tableLayoutPanel1);
             this.ConfigurationGroup.Controls.Add(this.FitnessBox);
-            this.ConfigurationGroup.Location = new System.Drawing.Point(12, 71);
+            this.ConfigurationGroup.Location = new System.Drawing.Point(9, 57);
+            this.ConfigurationGroup.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.ConfigurationGroup.Name = "ConfigurationGroup";
-            this.ConfigurationGroup.Size = new System.Drawing.Size(558, 116);
+            this.ConfigurationGroup.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ConfigurationGroup.Size = new System.Drawing.Size(418, 93);
             this.ConfigurationGroup.TabIndex = 13;
             this.ConfigurationGroup.TabStop = false;
             this.ConfigurationGroup.Text = "Configuration";
@@ -358,29 +378,32 @@
             this.tableLayoutPanel1.Controls.Add(this.EliteRateBox, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.label4, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.MutationRateBox, 1, 2);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(6, 21);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(4, 17);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(253, 86);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(190, 69);
             this.tableLayoutPanel1.TabIndex = 6;
             // 
             // label2
             // 
             this.label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 6);
+            this.label2.Location = new System.Drawing.Point(2, 5);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(98, 15);
+            this.label2.Size = new System.Drawing.Size(80, 12);
             this.label2.TabIndex = 4;
             this.label2.Text = "Individual Num";
             // 
             // IndivitualNumBox
             // 
             this.IndivitualNumBox.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.IndivitualNumBox.Location = new System.Drawing.Point(129, 3);
+            this.IndivitualNumBox.Location = new System.Drawing.Point(97, 2);
+            this.IndivitualNumBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.IndivitualNumBox.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -392,7 +415,7 @@
             0,
             0});
             this.IndivitualNumBox.Name = "IndivitualNumBox";
-            this.IndivitualNumBox.Size = new System.Drawing.Size(120, 22);
+            this.IndivitualNumBox.Size = new System.Drawing.Size(90, 19);
             this.IndivitualNumBox.TabIndex = 5;
             this.IndivitualNumBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.ToolTip.SetToolTip(this.IndivitualNumBox, "Number of individuals included in one generation. \r\nThe more it is, the harder it" +
@@ -408,9 +431,10 @@
             // 
             this.label3.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(3, 34);
+            this.label3.Location = new System.Drawing.Point(2, 28);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(68, 15);
+            this.label3.Size = new System.Drawing.Size(56, 12);
             this.label3.TabIndex = 4;
             this.label3.Text = "Elite Rate";
             // 
@@ -423,14 +447,15 @@
             0,
             0,
             131072});
-            this.EliteRateBox.Location = new System.Drawing.Point(129, 31);
+            this.EliteRateBox.Location = new System.Drawing.Point(97, 25);
+            this.EliteRateBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.EliteRateBox.Maximum = new decimal(new int[] {
             1,
             0,
             0,
             0});
             this.EliteRateBox.Name = "EliteRateBox";
-            this.EliteRateBox.Size = new System.Drawing.Size(120, 22);
+            this.EliteRateBox.Size = new System.Drawing.Size(90, 19);
             this.EliteRateBox.TabIndex = 5;
             this.EliteRateBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.ToolTip.SetToolTip(this.EliteRateBox, "Percentage of excellent individuals that will be preferentially left for next gen" +
@@ -447,9 +472,10 @@
             // 
             this.label4.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 63);
+            this.label4.Location = new System.Drawing.Point(2, 51);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(96, 15);
+            this.label4.Size = new System.Drawing.Size(77, 12);
             this.label4.TabIndex = 4;
             this.label4.Text = "Mutation Rate";
             // 
@@ -462,14 +488,15 @@
             0,
             0,
             131072});
-            this.MutationRateBox.Location = new System.Drawing.Point(129, 60);
+            this.MutationRateBox.Location = new System.Drawing.Point(97, 48);
+            this.MutationRateBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.MutationRateBox.Maximum = new decimal(new int[] {
             1,
             0,
             0,
             0});
             this.MutationRateBox.Name = "MutationRateBox";
-            this.MutationRateBox.Size = new System.Drawing.Size(120, 22);
+            this.MutationRateBox.Size = new System.Drawing.Size(90, 19);
             this.MutationRateBox.TabIndex = 5;
             this.MutationRateBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.ToolTip.SetToolTip(this.MutationRateBox, "The rate at which the mutation occurs. \r\nA lower value can lead to fall into a lo" +
@@ -486,9 +513,11 @@
             this.SaveGenerationGroup.Controls.Add(this.label1);
             this.SaveGenerationGroup.Controls.Add(this.SaveFolderTextBox);
             this.SaveGenerationGroup.Controls.Add(this.OpenSaveFolder);
-            this.SaveGenerationGroup.Location = new System.Drawing.Point(12, 280);
+            this.SaveGenerationGroup.Location = new System.Drawing.Point(9, 224);
+            this.SaveGenerationGroup.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.SaveGenerationGroup.Name = "SaveGenerationGroup";
-            this.SaveGenerationGroup.Size = new System.Drawing.Size(558, 80);
+            this.SaveGenerationGroup.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.SaveGenerationGroup.Size = new System.Drawing.Size(418, 64);
             this.SaveGenerationGroup.TabIndex = 14;
             this.SaveGenerationGroup.TabStop = false;
             this.SaveGenerationGroup.Text = "Save Generation";
@@ -503,19 +532,21 @@
             // 
             this.ChartTabControl.Controls.Add(this.AllGenerations);
             this.ChartTabControl.Controls.Add(this.LastSeveralGenerations);
-            this.ChartTabControl.Location = new System.Drawing.Point(12, 461);
+            this.ChartTabControl.Location = new System.Drawing.Point(9, 369);
+            this.ChartTabControl.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.ChartTabControl.Name = "ChartTabControl";
             this.ChartTabControl.SelectedIndex = 0;
-            this.ChartTabControl.Size = new System.Drawing.Size(558, 317);
+            this.ChartTabControl.Size = new System.Drawing.Size(420, 254);
             this.ChartTabControl.TabIndex = 15;
             // 
             // AllGenerations
             // 
             this.AllGenerations.Controls.Add(this.FitnessChart);
-            this.AllGenerations.Location = new System.Drawing.Point(4, 25);
+            this.AllGenerations.Location = new System.Drawing.Point(4, 22);
+            this.AllGenerations.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.AllGenerations.Name = "AllGenerations";
-            this.AllGenerations.Padding = new System.Windows.Forms.Padding(3);
-            this.AllGenerations.Size = new System.Drawing.Size(550, 288);
+            this.AllGenerations.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.AllGenerations.Size = new System.Drawing.Size(412, 228);
             this.AllGenerations.TabIndex = 1;
             this.AllGenerations.Text = "All Generations";
             this.AllGenerations.UseVisualStyleBackColor = true;
@@ -523,10 +554,11 @@
             // LastSeveralGenerations
             // 
             this.LastSeveralGenerations.Controls.Add(this.RestrictionFitnessChart);
-            this.LastSeveralGenerations.Location = new System.Drawing.Point(4, 25);
+            this.LastSeveralGenerations.Location = new System.Drawing.Point(4, 22);
+            this.LastSeveralGenerations.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.LastSeveralGenerations.Name = "LastSeveralGenerations";
-            this.LastSeveralGenerations.Padding = new System.Windows.Forms.Padding(3);
-            this.LastSeveralGenerations.Size = new System.Drawing.Size(550, 288);
+            this.LastSeveralGenerations.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.LastSeveralGenerations.Size = new System.Drawing.Size(412, 228);
             this.LastSeveralGenerations.TabIndex = 2;
             this.LastSeveralGenerations.Text = "Last 20 Generations";
             this.LastSeveralGenerations.UseVisualStyleBackColor = true;
@@ -556,6 +588,7 @@
             chartArea2.Name = "ChartArea1";
             this.RestrictionFitnessChart.ChartAreas.Add(chartArea2);
             this.RestrictionFitnessChart.Location = new System.Drawing.Point(0, 0);
+            this.RestrictionFitnessChart.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.RestrictionFitnessChart.Name = "RestrictionFitnessChart";
             series4.ChartArea = "ChartArea1";
             series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Range;
@@ -580,15 +613,15 @@
             this.RestrictionFitnessChart.Series.Add(series4);
             this.RestrictionFitnessChart.Series.Add(series5);
             this.RestrictionFitnessChart.Series.Add(series6);
-            this.RestrictionFitnessChart.Size = new System.Drawing.Size(550, 288);
+            this.RestrictionFitnessChart.Size = new System.Drawing.Size(412, 230);
             this.RestrictionFitnessChart.TabIndex = 10;
             this.RestrictionFitnessChart.Text = "chart1";
             // 
             // GAForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(582, 818);
+            this.ClientSize = new System.Drawing.Size(436, 630);
             this.Controls.Add(this.ChartTabControl);
             this.Controls.Add(this.SaveGenerationGroup);
             this.Controls.Add(this.ConfigurationGroup);
@@ -599,6 +632,7 @@
             this.Controls.Add(this.StartButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "GAForm";
