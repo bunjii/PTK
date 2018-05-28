@@ -1,0 +1,282 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug64</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E7A35053-E041-4A91-9C7B-7012D7DD4F7D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PTK</RootNamespace>
+    <AssemblyName>PTK</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug64|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="GH_IO">
+      <HintPath>..\..\Library\GH_IO.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Grasshopper, Version=1.0.0.20, Culture=neutral, PublicKeyToken=dda4f5ec2cd80803, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Library\Grasshopper.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="karamba">
+      <HintPath>..\..\Library\karamba.gha</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RhinoCommon">
+      <HintPath>..\..\Library\RhinoCommon.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.4.0\lib\portable-net45+win8+wp8+wpa81\System.Numerics.Vectors.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Windows.Forms.DataVisualization.Design" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Classes\Align.cs" />
+    <Compile Include="Classes\Assembly.cs" />
+    <Compile Include="Classes\Element.cs" />
+    <Compile Include="Classes\Functions.cs" />
+    <Compile Include="Classes\Functions_DDL.cs" />
+    <Compile Include="Classes\Loads.cs" />
+    <Compile Include="Classes\Material.cs" />
+    <Compile Include="Classes\MatProps.cs" />
+    <Compile Include="Classes\Node.cs" />
+    <Compile Include="Classes\CommonProps.cs" />
+    <Compile Include="Components\9_2_FinishedModel.cs" />
+    <Compile Include="Components\1_4_Alignment_Simple.cs" />
+    <Compile Include="Components\1_5_Forces.cs" />
+    <Compile Include="Classes\Forces.cs" />
+    <Compile Include="Components\4_3_DimensioningMembers.cs" />
+    <Compile Include="Components\SandBox.cs" />
+    <Compile Include="Forms\F01_Supports.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\F01_Supports.Designer.cs">
+      <DependentUpon>F01_Supports.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\1_3_RectangularCrossection.cs" />
+    <Compile Include="Forms\F02_GAForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\F02_GAForm.Designer.cs">
+      <DependentUpon>F02_GAForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="PTKInfo.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Components\3_1_Materializer.cs" />
+    <Compile Include="Components\4_2_KarambaExport.cs" />
+    <Compile Include="Components\4_1_Assemble.cs" />
+    <Compile Include="Components\1_2_1_LoadMatProps.cs" />
+    <Compile Include="Components\1_2_2_Material_properties.cs" />
+    <Compile Include="Components\1_1_Material.cs" />
+    <Compile Include="Components\2_1_Loads.cs" />
+    <Compile Include="Components\2_2_Supports.cs" />
+    <Compile Include="Components\5_1_GlobalModel.cs" />
+    <Compile Include="Components\6_1_Detailing.cs" />
+    <Compile Include="Components\6_2_DetailModel.cs" />
+    <Compile Include="Components\7_2_LocalAnalysis.cs" />
+    <Compile Include="Components\7_1_StrSummarize.cs" />
+    <Compile Include="Components\8_1_FeasibleCheck.cs" />
+    <Compile Include="Components\9_1_BtlExport.cs" />
+    <Compile Include="Components\U_5_DisassembleMaterial.cs" />
+    <Compile Include="Components\U_4_DisassembleElem.cs" />
+    <Compile Include="Components\U_1_GenerateGeometry.cs" />
+    <Compile Include="Classes\Section.cs" />
+    <Compile Include="Components\U_3_DisassembleNode.cs" />
+    <Compile Include="Classes\Support.cs" />
+    <Compile Include="Components\U_2_Disassemble.cs" />
+    <Compile Include="Components\U_6_DisassembleSection.cs" />
+    <Compile Include="Components\U_7_GeneticAlgorithm.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Forms\F01_Supports.resx">
+      <DependentUpon>F01_Supports.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\F02_GAForm.resx">
+      <DependentUpon>F02_GAForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Resources\icon_truss.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Obsolete\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_support.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_load.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_loadMP.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_materializer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_assemble.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_exportKaramba.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_disassemble.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_xelement.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_rectangular.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_xsection.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_dimensioning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_matprop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_align.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_force.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_global.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_localanalysis.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_xnode.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_feasible.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_BTL.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_summary.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_geom.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_detailing.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_finish.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_detail.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_support.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_xmaterial.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_material.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\GA_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\favicon.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>Copy "$(TargetPath)" "%25UserProfile%25\AppData\Roaming\Grasshopper\Libraries\$(ProjectName).gha"
+Erase "$(TargetPath)"</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <FallbackCulture>en-US</FallbackCulture>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug64|AnyCPU'">
+    <StartProgram>C:\Program Files\Rhinoceros 5.0 (64-bit)\System\Rhino.exe</StartProgram>
+    <StartArguments>
+    </StartArguments>
+    <StartAction>Program</StartAction>
+    <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>
+    </DocumentationFile>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>2</WarningLevel>
+    <NoWarn>
+    </NoWarn>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+</Project>
