@@ -94,14 +94,14 @@ namespace PTK
                     iz = new Interval(-HalfHeight, HalfHeight);
                     iy = new Interval(-HalfWidth, HalfWidth);
                     ix = new Interval(0, e.Crv.GetLength());
-                    crossSectionRectangle = new Rectangle3d(e.localYZPlane, iy, iz);
+                    crossSectionRectangle = new Rectangle3d(e.LocalYZPlane, iy, iz);
 
                     // from Element.GenerateElementGeometry()
                     Brep oneBeamGeom = new Brep();
 
                     if (e.Crv.IsLinear())
                     {
-                        Box boxen = new Box(e.localYZPlane, iy, iz, ix);
+                        Box boxen = new Box(e.LocalYZPlane, iy, iz, ix);
                         oneBeamGeom = Brep.CreateFromBox(boxen);
                         boundingbox = boxen.BoundingBox;
                     }

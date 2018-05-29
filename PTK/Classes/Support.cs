@@ -15,7 +15,6 @@ namespace PTK
         private int lCase;
         private List<bool> conditions;
         private Plane pln;
-
         #endregion
 
         #region constructors
@@ -36,7 +35,6 @@ namespace PTK
         {
             get { return conditions.AsReadOnly(); }
         }
-
         #endregion
 
         #region methods
@@ -57,26 +55,23 @@ namespace PTK
 
         public static bool[] StringToArray(string _boolStr)
         {
-            bool[] _returnArray = new bool[6];
+            List<bool> _returnArray = new List<bool>();
             char[] _tempChar;
 
             _tempChar = _boolStr.ToCharArray();
-            for (int i = 0; i < 6; i++)
+            foreach(char c in _tempChar)
             {
                 bool _tempBool;
-                if (_tempChar[i] == '0')
+                if (c == '0')
                 {
-                    _tempBool = false;
+                    _returnArray.Add(false);
                 }
                 else
                 {
-                    _tempBool = true;
+                    _returnArray.Add(true);
                 }
-
-                _returnArray[i] = _tempBool;
             }
-
-            return _returnArray;
+            return _returnArray.ToArray();
         }
 
         public void AssignID()

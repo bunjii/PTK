@@ -10,13 +10,13 @@ namespace PTK
     {
         #region fields
         public static double tolerances = 0.001;
-        public static string category = "PTK";
-        public static string subcat1 = "Assemble";
-        public static string subcat2 = "Materialize";
-        public static string subcat3 = "Detail";
-        public static string subcat4 = "Structure";
-        public static string subcat5 = "Utility";
-        public static string initialMessage = "PTK Ver.0.5";
+        public static readonly string category = "PTK";
+        public static readonly string subcat1 = "Assemble";
+        public static readonly string subcat2 = "Materialize";
+        public static readonly string subcat3 = "Detail";
+        public static readonly string subcat4 = "Structure";
+        public static readonly string subcat5 = "Utility";
+        public static readonly string initialMessage = "PTK Ver.0.5";
         #endregion
 
         #region constructors

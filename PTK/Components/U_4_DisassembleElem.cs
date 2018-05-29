@@ -124,7 +124,7 @@ namespace PTK
                 //n0ids.Add(e.N0id);
                 //n1ids.Add(e.N1id);
                 secs.Add(outElems[i].Section);
-                plns.Add(outElems[i].localYZPlane);
+                plns.Add(outElems[i].LocalYZPlane);
                 mids.Add(outElems[i].MatId);
                 priority.Add(outElems[i].Priority);
 

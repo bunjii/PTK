@@ -235,8 +235,8 @@ namespace PTK
                     _gb.id = elems[i].Tag;
 
                     // sets the orientation of the element:
-                    _gb.x_ori = elems[i].localYZPlane.ZAxis;
-                    _gb.z_ori = elems[i].localYZPlane.YAxis;
+                    _gb.x_ori = elems[i].LocalYZPlane.ZAxis;
+                    _gb.z_ori = elems[i].LocalYZPlane.YAxis;
 
                     grElems.Add(_gb);
                 }
