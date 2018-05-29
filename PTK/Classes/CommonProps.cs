@@ -35,6 +35,14 @@ namespace PTK
             else if (txtFindLocale == "1,1") return DecimalSeparator.comma;
             else return DecimalSeparator.error;
         }
+
+        
+        public static double ConversionUnit(Rhino.UnitSystem _toUnitSystem)
+        {
+            Rhino.RhinoDoc doc = Rhino.RhinoDoc.ActiveDoc;
+            Rhino.UnitSystem fromUnitSystem = doc.ModelUnitSystem;
+            return Rhino.RhinoMath.UnitScale(fromUnitSystem, _toUnitSystem);
+        }
         #endregion
         
     }
