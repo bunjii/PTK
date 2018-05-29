@@ -17,7 +17,6 @@ namespace PTK
         public static string subcat4 = "Structure";
         public static string subcat5 = "Utility";
         public static string initialMessage = "PTK Ver.0.5";
-        // public const string 
         #endregion
 
         #region constructors
@@ -28,20 +27,22 @@ namespace PTK
 
         #region methods
         // simple decimal separator checker
-        public static string FindDecimalSeparator()
+        public static DecimalSeparator FindDecimalSeparator()
         {
             string txtFindLocale = string.Format("{0}", 1.1);
-            
-            string message = "";
 
-            if (txtFindLocale == "1.1") message += "period";
-            else if (txtFindLocale == "1,1") message += "comma";
-            else message += txtFindLocale;
-
-            return message;
+            if (txtFindLocale == "1.1") return DecimalSeparator.period;
+            else if (txtFindLocale == "1,1") return DecimalSeparator.comma;
+            else return DecimalSeparator.error;
         }
         #endregion
         
+    }
+
+
+    public enum DecimalSeparator
+    {
+        error,period,comma
     }
 
 

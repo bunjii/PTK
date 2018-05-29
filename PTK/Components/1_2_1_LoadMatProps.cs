@@ -92,7 +92,7 @@ namespace PTK
 
             #region solve
             // check locale: "comma" or "period"
-            string decimalSeparator = CommonProps.FindDecimalSeparator();
+            DecimalSeparator ds = CommonProps.FindDecimalSeparator();
             bool comma = false, period = false; // to check if text contains comma or period.
              
             // registering materials
@@ -120,14 +120,14 @@ namespace PTK
                 bool convert = false;
                 string convertedTxt = "";
 
-                if (decimalSeparator == "comma")
+                if (ds == DecimalSeparator.comma)
                 {
                     if (period == false) continue;
 
                     // if csv includes "period", it needs treatment
                     convertedTxt = Functions_DDL.ConvertCommaToPeriodDecimal(nlist[i], true);
                 }
-                else if (decimalSeparator == "period")
+                else if (ds == DecimalSeparator.period)
                 {
                     if (comma == false) continue;
 
