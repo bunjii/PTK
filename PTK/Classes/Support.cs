@@ -45,15 +45,15 @@ namespace PTK
             this.conditions = _conditions;
         }
 
-        public static List<bool> ArrayToList(bool[] _boolArray)
-        {
-            List<bool> _boolList = new List<bool>();
-            for (int i=0;i<6; i++)
-            {
-                _boolList.Add(_boolArray[i]);
-            }
-            return _boolList;
-        }
+        //public static List<bool> ArrayToList(bool[] _boolArray)
+        //{
+        //    List<bool> _boolList = new List<bool>();
+        //    for (int i=0;i<6; i++)
+        //    {
+        //        _boolList.Add(_boolArray[i]);
+        //    }
+        //    return _boolList;
+        //}
 
         public static bool[] StringToArray(string _boolStr)
         {
