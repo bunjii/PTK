@@ -12,7 +12,7 @@ namespace PTK
     {
         #region fields
         private static int sectionIDCount = 2000;
-        public int Id { get; private set; }
+        public int Id { get; set; }
         public string SectionName { get; private set; }
         public double Width { get; private set; } = 100;
         public double Height { get; private set; } = 100;

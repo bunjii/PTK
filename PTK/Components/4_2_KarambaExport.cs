@@ -126,7 +126,7 @@ namespace PTK
             List<Point3d> pts = new List<Point3d>();
             for (int i = 0; i < nodes.Count; i++)
             {
-                pts.Add(nodes[i].Pt3d);
+                pts.Add(nodes[i].Pt3d * CommonProps.ConversionUnit(Rhino.UnitSystem.Meters));
             }
 
             // Support Information for Karamba Assemble
@@ -136,7 +136,7 @@ namespace PTK
                 int id = sups[i].Id;
                 List<bool> cond = sups[i].Conditions.ToList();
                 Plane pln = sups[i].Pln;
-                Point3d pt = pln.Origin;
+                Point3d pt = pln.Origin * CommonProps.ConversionUnit(Rhino.UnitSystem.Meters);
                 cSups.Add(new Karamba.Supports.Support(pt, cond, pln));
             }
 
@@ -229,8 +229,8 @@ namespace PTK
                 for (int j = 0; j < elems[i].SubElem.Count; j++)
                 {
                     // making of a grass beam
-                    Point3d _sPt = elems[i].SubElem[j].StrLn.From;
-                    Point3d _ePt = elems[i].SubElem[j].StrLn.To;
+                    Point3d _sPt = elems[i].SubElem[j].StrLn.From * CommonProps.ConversionUnit(Rhino.UnitSystem.Meters);
+                    Point3d _ePt = elems[i].SubElem[j].StrLn.To * CommonProps.ConversionUnit(Rhino.UnitSystem.Meters);
                     GrassBeam _gb = new GrassBeam(_sPt, _ePt);
                     _gb.id = elems[i].Tag;
 

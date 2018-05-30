@@ -114,6 +114,30 @@ namespace PTK
 
             elemTag = elemTag.Trim();
 
+            /* 
+            // trial multi-threading by john, need to understand this.
+            if (curves.Count > 20)
+            {
+                Parallel.For(0, curves.Count, (int i) =>
+                {
+                    if (curves[i] != null)
+                    {
+                        if (!curves[i].IsValid) { return; }
+                        elems.Add(new Element(curves[i], elemTag, align, section, material));
+                    }
+                });
+            }
+            // non multi-threading way. Creating Elements from Curves
+            else
+            {
+                for (int i = 0; i < curves.Count; i++)
+                {
+                    if (curves[i] == null) continue;
+                    if (!curves[i].IsValid) continue;
+                    elems.Add(new Element(curves[i], elemTag, align, section, material));
+                }
+            }*/
+
             for (int i = 0; i < curves.Count; i++)
             {
                 if (curves[i] == null) continue;

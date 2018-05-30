@@ -82,7 +82,7 @@ namespace PTK
                     Interval iy;
                     Interval ix;
                     Rectangle3d crossSectionRectangle;
-                    Brep elementGeometry;
+                    //Brep elementGeometry;
                     BoundingBox boundingbox;
 
                     double[] paramter = { 0.0, 2.2 };

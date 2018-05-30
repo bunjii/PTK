@@ -201,7 +201,7 @@ namespace PTK
         // Generating extrusion/SweepIntervals
         private void GenerateIntervals()
         {
-            double[] parameter = { 0.0, 2.2 };
+            //double[] parameter = { 0.0, 2.2 };
 
             double HalfWidth = Section.Width / 2;
             double HalfHeight = Section.Height / 2;
