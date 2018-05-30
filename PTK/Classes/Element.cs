@@ -10,70 +10,18 @@ namespace PTK
     {
         #region fields
         static int idCount = 0;
-        //static int numStrLns = 0;
-        //private List<int> ptId;
-        //private List<int> nodeIds;
-        //private List<double> nodeParams;
-        //private List<Subelement> subElem;
-
+        public List<int> NodeIds { get; private set; } = new List<int>();
+        public int MatId { get; set; }
+        public int SecId { get; set; }
+        public Curve Crv { get; private set; }
+        public static int NumberOfStructuralLines { get; private set; }
+        public string Tag { get; private set; } = "N/A";
         // below: with one of the xy- yz- zx- planes being fixed, 
         // the others can be calculated. 
         // so we can go with less field members.
         // private Plane xyPlane;
         // private Plane xzPlane;
         private Plane yzPlane;
-
-        // below has moved to PTK_UTIL_1_GenerateGeometry
-        Interval iz; //From Centricplane
-        Interval iy;
-        Interval ix;
-        Rectangle3d crossSectionRectangle;
-
-
-        #endregion
-
-        #region constructors
-        public Element(Curve _crv, string _tag, Align _align, Section _section, Material _material)
-        {
-            // nodes = new List<Node>();
-            //nodeIds = new List<int>();
-            Crv = _crv;
-            Tag = _tag;
-            Align = _align;
-            Section = _section;
-            Material = _material;
-            PointAtEnd = _crv.PointAtEnd;
-            PointAtStart = _crv.PointAtStart;
-            //ptId = new List<int>();
-            MatId = -999;
-            SecId = -999;
-            Priority = -999;
-            //subElem = new List<Subelement>();
-
-            // initializeCentricPlanes();   // replaced by DDL on 2nd April
-            InitializeCentricPlanes();
-            GenerateIntervals();
-            GenerateElementGeometry();
-
-            //nodeParams = new List<double>();
-
-            //n0id = -999: This one is currently missing, but easy to remake in the AsignNeighbour function
-            //n1id = -999; This one is currently missing, but easy to remake in the AsignNeighbour function
-
-        }
-        #endregion
-
-        #region properties
-        public List<int> NodeIds { get; private set; } = new List<int>();
-        public int MatId { get; set; }
-        public int SecId { get; set; }
-        public Curve Crv { get; private set; }
-        public static int NumberOfStructuralLines { get; private set;}
-        public string Tag { get; private set; } = "N/A";
-        public Plane LocalYZPlane
-        {
-            get { return yzPlane; }
-        }
         public int Id { get; private set; }
         public Section Section { get; private set; }
         public Material Material { get; private set; }
@@ -87,6 +35,45 @@ namespace PTK
         public Point3d PointAtEnd { get; private set; }
         public int ConnectedNodes { get; private set; } = 0;
         public List<double> NodeParams { get; private set; } = new List<double>();
+        // below has moved to PTK_UTIL_1_GenerateGeometry
+        Interval iz; //From Centricplane
+        Interval iy;
+        Interval ix;
+        Rectangle3d crossSectionRectangle;
+        #endregion
+
+        #region constructors
+        public Element(Curve _crv, string _tag, Align _align, Section _section, Material _material)
+        {
+            Crv = _crv;
+            Tag = _tag;
+            Align = _align;
+            Section = _section;
+            Material = _material;
+            PointAtEnd = _crv.PointAtEnd;
+            PointAtStart = _crv.PointAtStart;
+            MatId = -999;
+            SecId = -999;
+            Priority = -999;
+
+            // initializeCentricPlanes();   // replaced by DDL on 2nd April
+            InitializeCentricPlanes();
+            GenerateIntervals();
+            GenerateElementGeometry();
+
+            //n0id = -999: This one is currently missing, but easy to remake in the AsignNeighbour function
+            //n1id = -999; This one is currently missing, but easy to remake in the AsignNeighbour function
+
+        }
+        #endregion
+
+        #region properties
+
+        public Plane LocalYZPlane
+        {
+            get { return yzPlane; }
+        }
+
         #endregion
 
         #region methods

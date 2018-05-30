@@ -282,20 +282,14 @@ namespace PTK
 
         public static string ConvertCommaToPeriodDecimal(string _txt, bool _reverse = false)
         {
-            char[] _charList;
-            string _resultString = "";
-
-            _charList = _txt.ToCharArray();
-            foreach (char _c in _charList)
+            if (!_reverse)
             {
-                char tmpC;
-                if (_reverse == false && _c == ',') tmpC = '.';
-                else if (_reverse == true && _c == '.') tmpC = ',';
-                else tmpC = _c;
-                _resultString += tmpC;
+                return _txt.Replace(',', '.');  //Comma to Period
             }
-
-            return _resultString;
+            else
+            {
+                return _txt.Replace('.', ',');  //Period to Comma
+            }
         }
 
         public static string CreateHash(string _str)
@@ -429,44 +423,5 @@ namespace PTK
             Line result = new Line(pt0, pt1);
             return result;
         }
-
-        /*
-        private static int DetectOrCreateNode(ref List<Node> _nodes, ref RTree _rTreeNodes, Point3d _sPt)
-        {
-            // check if the node exists.
-            int _nId = new int();
-            bool _nodeExists = false;
-
-            // "nodeExisting" will be performed, when items are found.
-            EventHandler<RTreeEventArgs> _nodeExisting =
-                (object sender, RTreeEventArgs args) =>
-                {
-                    _nodeExists = true;
-                    _nId = args.Id;
-                };
-
-            // BoundingBox _spotBBox = new BoundingBox(_samplePt, _samplePt); 
-            // Above code didn't work out, needing of considering tolerance for BBox as below. comment by DDL 9th Apr.
-            double tol = CommonProps.tolerances;
-            BoundingBox _spotBBox = new BoundingBox
-                (_sPt.X - tol, _sPt.Y - tol, _sPt.Z - tol, _sPt.X + tol, _sPt.Y + tol, _sPt.Z + tol);
-
-            // node search
-            _rTreeNodes.Search(_spotBBox, _nodeExisting);
-
-            if (!_nodeExists)
-            {
-                Node _newNode = new Node(_sPt);
-                _nodes.Add(_newNode);
-                // register the node to _rTreeNodes
-                _rTreeNodes.Insert(_newNode.BoundingBox, _newNode.Id);
-                // obtain nId
-                _nId = _newNode.Id;
-            }
-
-            return _nId;
-        }
-        */
-
     }
 }

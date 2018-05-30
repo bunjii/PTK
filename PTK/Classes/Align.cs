@@ -44,7 +44,6 @@ namespace PTK
             idCount++;
             Name = _name;
         }
-
         public Align(String _name, Point3d _pt, double _offsetY, double _offsetZ)// 0Align by rotational vector3d and deconstructed transformational vector
         {
             alignmethod = 2;
@@ -67,8 +66,10 @@ namespace PTK
         }
 
         #endregion
+
         #region properties
         #endregion
+
         #region methods
 
         public void RotationVectorToPoint(Point3d pt)
@@ -78,8 +79,6 @@ namespace PTK
             Rotation = vt;
 
         }
-
-
 
         #endregion
     }
