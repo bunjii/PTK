@@ -10,79 +10,55 @@ namespace PTK
     {
 
         #region fields
-        static int idCount = 0;
-
-        private int id;
-        private int lCase;
-        private List<bool> conditions;
-        private Plane pln;
-
+        private static int idCount = 0;
+        public int Id { get; private set; }
+        public int LCase { get; private set; }
+        public Plane Pln { get; private set; }
+        public List<bool> Conditions { get; private set; } = new List<bool>();
         #endregion
 
         #region constructors
         public Support(int _loadCase, Plane _supPln, List<bool> _supConditions) 
         {
-            id = -999;
-            lCase = _loadCase;
-            conditions = _supConditions; 
-            pln = _supPln;
+            Id = -999;
+            LCase = _loadCase;
+            Conditions = _supConditions; 
+            Pln = _supPln;
         }
         #endregion
 
         #region properties
-        public int Id { get { return id; } set { id = value; } }
-        public int LCase { get { return lCase; } set { lCase = value; } }
-        public Plane Pln { get { return pln; } set { pln = value; } }
-        public ReadOnlyCollection<bool> Conditions
-        {
-            get { return conditions.AsReadOnly(); }
-        }
-
         #endregion
 
         #region methods
         public void UpdateConditions(List<bool> _conditions)
         {
-            this.conditions = _conditions;
-        }
-
-        public static List<bool> ArrayToList(bool[] _boolArray)
-        {
-            List<bool> _boolList = new List<bool>();
-            for (int i=0;i<6; i++)
-            {
-                _boolList.Add(_boolArray[i]);
-            }
-            return _boolList;
+            this.Conditions = _conditions;
         }
 
         public static bool[] StringToArray(string _boolStr)
         {
-            bool[] _returnArray = new bool[6];
-            char[] _tempChar;
+            List<bool> _returnArray = new List<bool>();
+            char[] _tempChars;
+            _tempChars = _boolStr.ToCharArray();
 
-            _tempChar = _boolStr.ToCharArray();
-            for (int i = 0; i < 6; i++)
+            foreach(char c in _tempChars)
             {
-                bool _tempBool;
-                if (_tempChar[i] == '0')
+                if (c == '0')
                 {
-                    _tempBool = false;
+                    _returnArray.Add(false);
                 }
                 else
                 {
-                    _tempBool = true;
+                    _returnArray.Add(true);
                 }
-
-                _returnArray[i] = _tempBool;
             }
-
-            return _returnArray;
+            return _returnArray.ToArray();
         }
 
         public void AssignID()
         {
-            this.id = idCount;
+            this.Id = idCount;
             idCount++;
         }
 

@@ -76,7 +76,7 @@ namespace PTK
             #region solve
             for (int i=0;i<supPlns.Count;i++)
             {
-                Support tmpSup = new Support(lCase, supPlns[i], Support.ArrayToList(boolSupArray));
+                Support tmpSup = new Support(lCase, supPlns[i], new List<bool>(boolSupArray));
                 sups.Add(tmpSup);
             }
             #endregion

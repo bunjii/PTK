@@ -11,39 +11,30 @@ namespace PTK
     public class Section
     {
         #region fields
-        private static int sectionIDCount = 2000;  
-        // ID Corresponds to the name of the component
-        // Bunji: need to understand this and its usage.
-        private string sectionName;
-        private int id;
-        
-        private double width = 100;
-        private double height = 100;
-        private string txtHash = "";
-
-        private List<int> elemIds = new List<int>();
+        private static int sectionIDCount = 2000;
+        public int Id { get; set; }
+        public string SectionName { get; private set; }
+        public double Width { get; private set; } = 100;
+        public double Height { get; private set; } = 100;
+        public string TxtHash { get; private set; } = "";
+        public List<int> ElemIds { get; private set; } = new List<int>();
         #endregion
 
         #region constructors
         public Section(string _name, double _width, double _height)
         {
-            id = sectionIDCount;
+            Id = sectionIDCount;
             sectionIDCount++;
-            sectionName = _name;
-            width = _width;
-            height = _height;
 
-            txtHash = CreateHashFromSP(this);
+            SectionName = _name;
+            Width = _width;
+            Height = _height;
+
+            TxtHash = CreateHashFromSP(this);
         }
         #endregion
 
         #region properties
-        public double Width { get { return width; }  }
-        public double Height { get { return height; }  }
-        public string SectionName { get { return sectionName; } set { sectionName = value; } }
-        public int Id { get { return id; } set { id = value; } }
-        public string TxtHash { get { return txtHash; } }
-        public List<int> ElemIds { get { return elemIds;  } }
         #endregion
 
         #region methods
@@ -52,9 +43,10 @@ namespace PTK
             string _key = _sec.Height.ToString() + _sec.Width.ToString() + _sec.SectionName ;
             return Functions_DDL.CreateHash(_key);
         }
+
         public void AddElemId(int elemId)
         {
-            this.elemIds.Add(elemId);
+            ElemIds.Add(elemId);
         }
 
         public static Section FindSecById(List<Section> _secs, int _sid)
@@ -67,21 +59,4 @@ namespace PTK
         #endregion
     }
 
-    /*
-    public class SomeNewClass
-    {
-        #region fields
-        #endregion
-        #region constructors
-        #endregion
-        #region properties
-        #endregion
-        #region methods
-        #endregion
-    }
-    
-        private double width;
-        private double height;
-        private Vector2d offsetVec;
-    */
 }

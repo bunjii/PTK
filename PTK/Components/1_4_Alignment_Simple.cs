@@ -25,8 +25,8 @@ namespace PTK
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             
-            pManager.AddNumberParameter("offset Local y", "local y", "Offset length[mm] local y", GH_ParamAccess.item, 0.0);
-            pManager.AddNumberParameter("offset Local z", "local z", "Offset length[mm] local z", GH_ParamAccess.item, 0.0);
+            pManager.AddNumberParameter("offset Local y", "local y", "Offset length local y", GH_ParamAccess.item, 0.0);
+            pManager.AddNumberParameter("offset Local z", "local z", "Offset length local z", GH_ParamAccess.item, 0.0);
             pManager.AddNumberParameter("angle", "angle", "Rotational angle in degree", GH_ParamAccess.item, 0.0);
 
             pManager[0].Optional = true;
@@ -49,30 +49,25 @@ namespace PTK
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             #region variables
-            double offsetY = 0.0;
-            double offsetZ = 0.0;
-            double rotationAngle = 0.0;
-
+            double offsetY = new double();
+            double offsetZ = new double();
+            double rotationAngle = new double();
             #endregion
 
             #region input
             if (!DA.GetData(0, ref offsetY)) { return; }
             if (!DA.GetData(1, ref offsetZ)) { return; }
             if (!DA.GetData(2, ref rotationAngle)) { return; }
-
             #endregion
 
             #region solve
-            Align Simple = new Align(offsetY/1000, offsetZ/1000, rotationAngle);
+            Align Simple = new Align(offsetY, offsetZ, rotationAngle);
 
             #endregion
 
             #region output
             DA.SetData(0, Simple);
-            
             #endregion
-
-
         }
 
         /// <summary>

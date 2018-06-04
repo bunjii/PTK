@@ -10,77 +10,56 @@ namespace PTK
     {
         #region fields
         static int idCount = 0;
-        static int numStrLns = 0;
-
-        private int id;
-        private string tag = "N/A";
-        private List<int> ptId;
-        // private List<Node> nodes;
-        private List<int> nodeIds;
-        private List<double> nodeParams;
-        private int connectedNodes = 0;
-        private Point3d pointAtStart;
-        private Point3d pointAtEnd;
-        private Curve crv;
-        private Section section;
-        private int secId;
-        private Material material;
-        private int matId;
-        private Forces force;
-        private Align align;
-        private List<Subelement> subElem;
-        private int priority;
-        private StructuralProperties structprop;
-        // the structural properties
-       
-
-        
-        
-
+        public List<int> NodeIds { get; private set; } = new List<int>();
+        public int MatId { get; set; }
+        public int SecId { get; set; }
+        public Curve Crv { get; private set; }
+        public static int NumberOfStructuralLines { get; private set; }
+        public string Tag { get; private set; } = "N/A";
         // below: with one of the xy- yz- zx- planes being fixed, 
         // the others can be calculated. 
         // so we can go with less field members.
         // private Plane xyPlane;
         // private Plane xzPlane;
         private Plane yzPlane;
-
+        public int Id { get; private set; }
+        public Section Section { get; private set; }
+        public Material Material { get; private set; }
+        public Forces Force { get; private set; }
+        public Align Align { get; private set; }
+        public int Priority { get; set; }
+        public List<Subelement> SubElem { get; private set; } = new List<Subelement>();
+        public Brep ElementGeometry { get; private set; }
+        public BoundingBox BoundingBox { get; private set; }
+        public Point3d PointAtStart { get; private set; }
+        public Point3d PointAtEnd { get; private set; }
+        public int ConnectedNodes { get; private set; } = 0;
+        public List<double> NodeParams { get; private set; } = new List<double>();
         // below has moved to PTK_UTIL_1_GenerateGeometry
         Interval iz; //From Centricplane
         Interval iy;
         Interval ix;
         Rectangle3d crossSectionRectangle;
-        Brep elementGeometry;
-        //
-
-        BoundingBox boundingbox;
-
-
         #endregion
 
         #region constructors
         public Element(Curve _crv, string _tag, Align _align, Section _section, Material _material)
         {
-            // nodes = new List<Node>();
-            nodeIds = new List<int>();
-            crv = _crv;
-            tag = _tag;
-            align = _align;
-            section = _section;
-            material = _material;
-            pointAtEnd = _crv.PointAtEnd;
-            pointAtStart = _crv.PointAtStart;
-            ptId = new List<int>();
-            matId = -999;
-            secId = -999;
-            priority = -999;
-            subElem = new List<Subelement>();
+            Crv = _crv;
+            Tag = _tag;
+            Align = _align;
+            Section = _section;
+            Material = _material;
+            PointAtEnd = _crv.PointAtEnd;
+            PointAtStart = _crv.PointAtStart;
+            MatId = -999;
+            SecId = -999;
+            Priority = -999;
 
             // initializeCentricPlanes();   // replaced by DDL on 2nd April
             InitializeCentricPlanes();
             GenerateIntervals();
             GenerateElementGeometry();
-
-            nodeParams = new List<double>();
 
             //n0id = -999: This one is currently missing, but easy to remake in the AsignNeighbour function
             //n1id = -999; This one is currently missing, but easy to remake in the AsignNeighbour function
@@ -89,125 +68,12 @@ namespace PTK
         #endregion
 
         #region properties
-        public ReadOnlyCollection<int> NodeIds
-        {
-            get { return nodeIds.AsReadOnly(); }
-        }
 
-        public int MatId
-        {
-            get { return matId; }
-            set { matId = value; }
-        }
-
-        public int SecId
-        {
-            get { return secId; }
-            set { secId = value; }
-        }
-
-        public Curve Crv
-        {
-            get { return crv; }
-        }
-        public int NumberOfStructuralLines
-        {
-            get { return numStrLns; }
-        }
-        public string Tag
-        {
-            get { return tag; }
-            set { tag = value; }
-        }
-        public Plane localYZPlane
+        public Plane LocalYZPlane
         {
             get { return yzPlane; }
         }
 
-        //public int N0id { get { return n0id; } set { n0id = value; } } Not working atm. See line 33
-        //public int N1id { get { return n1id; } set { n1id = value; } } Not working atm. See line 34
-
-        public int Id
-        {
-            get { return id; }
-        }
-        public Section Section
-        {
-            get { return section; }
-            set { section = value; }
-        }
-        public Material Material
-        {
-            get { return material; }
-            set { material = value; }
-        }
-        public Forces Force
-        {
-            get { return force; }
-            set { force = value; }
-        }
-        public Align Align
-        {
-            get { return align; }
-            set { align = value; }
-        }
-        public int Priority
-        {
-            get { return priority; }
-            set { priority = value; }
-        }
-
-        public ReadOnlyCollection<Subelement> SubElem
-        {
-            get { return subElem.AsReadOnly(); }
-        }
-
-        /*
-        public List<SubElementStructural> SubStructural
-        {
-            get { return subStructural; }
-        }
-        */
-
-        public Brep ElementGeometry
-        {
-            get { return elementGeometry; }
-        }
-
-        public BoundingBox BoundingBox
-        {
-            get { return boundingbox; }
-        }
-        public Point3d PointAtStart
-        {
-            get { return pointAtStart; }
-        }
-        public Point3d PointAtEnd
-        {
-            get { return pointAtEnd; }
-        }
-        public int ConnectedNodes
-        {
-            get { return connectedNodes; }
-        }
-
-        // this should be ReadOnlyCollection
-        // public List<double> NodeParams
-        // {
-        //     get { return nodeParams; }
-        // }
-
-        public ReadOnlyCollection<double> NodeParams
-        {
-            get { return nodeParams.AsReadOnly(); }
-        }
-
-        /*
-        public List<Node> Nodes
-        {
-            get { return nodes; }
-        }
-        */
         #endregion
 
         #region methods
@@ -218,20 +84,20 @@ namespace PTK
 
         public void AddNodeId(int _nid)
         {
-            this.nodeIds.Add(_nid);
+            this.NodeIds.Add(_nid);
         }
 
         public void ClrNodeData()
         {
-            this.nodeIds.Clear();
-            this.nodeParams.Clear();
+            this.NodeIds.Clear();
+            this.NodeParams.Clear();
         }
 
         //This class add neighbouring points. The analysis is done in the function called AsignNeighbour in functions.cs
-        public void AddNeighbour(int _ids)
-        {
-            this.ptId.Add(_ids);
-        }
+        //public void AddNeighbour(int _ids)
+        //{
+        //    this.ptId.Add(_ids);
+        //}
         /*
         public void AddNode(Node _node)
         {
@@ -251,12 +117,12 @@ namespace PTK
         */
         public void AddNodeParams(double _param)
         {
-            this.nodeParams.Add(_param);
+            this.NodeParams.Add(_param);
         }
 
         public void AssignID()
         {
-            this.id = idCount;
+            this.Id = idCount;
             idCount++;
         }
 
@@ -286,7 +152,7 @@ namespace PTK
 
         private void InitializeCentricPlanes()
         {
-            Vector3d localX = crv.TangentAtStart;
+            Vector3d localX = Crv.TangentAtStart;
             Vector3d globalZ = Vector3d.ZAxis;
 
             // determination of local-y direction
@@ -302,13 +168,13 @@ namespace PTK
                 localY = Vector3d.CrossProduct(globalZ, localX);
             }
 
-            Plane localXY = new Plane(crv.PointAtStart, localX, localY);
+            Plane localXY = new Plane(Crv.PointAtStart, localX, localY);
             Plane localYZ = new Plane(localXY.Origin, localY, localXY.ZAxis);
 
             // rotation
-            if (align.RotationAngle != 0.0)
+            if (Align.RotationAngle != 0.0)
             {
-                double rad = align.RotationAngle * Math.PI / 180; // degree to radian
+                double rad = Align.RotationAngle * Math.PI / 180; // degree to radian
                 Vector3d axis = localYZ.ZAxis;
                 Point3d origin = localYZ.Origin;
                 Transform transR = Transform.Rotation(rad, axis, origin);
@@ -319,10 +185,10 @@ namespace PTK
             }
 
             // translation
-            if (align.OffsetY != 0.0 || align.OffsetZ != 0.0)
+            if (Align.OffsetY != 0.0 || Align.OffsetZ != 0.0)
             {
-                Point3d origin = new Point3d(crv.PointAtStart);
-                Transform transL = Transform.Translation((-1.0) * align.OffsetY * localYZ.XAxis + align.OffsetZ * localYZ.YAxis);
+                Point3d origin = new Point3d(Crv.PointAtStart);
+                Transform transL = Transform.Translation((-1.0) * Align.OffsetY * localYZ.XAxis + Align.OffsetZ * localYZ.YAxis);
 
                 localXY.Transform(transL);
                 localYZ.Transform(transL);
@@ -335,14 +201,14 @@ namespace PTK
         // Generating extrusion/SweepIntervals
         private void GenerateIntervals()
         {
-            double[] parameter = { 0.0, 2.2 };
+            //double[] parameter = { 0.0, 2.2 };
 
-            double HalfWidth = section.Width / 2;
-            double HalfHeight = section.Height / 2;
+            double HalfWidth = Section.Width / 2;
+            double HalfHeight = Section.Height / 2;
 
             iz = new Interval(-HalfHeight, HalfHeight);
             iy = new Interval(-HalfWidth, HalfWidth);
-            ix = new Interval(0, crv.GetLength());
+            ix = new Interval(0, Crv.GetLength());
             crossSectionRectangle = new Rectangle3d(yzPlane, iy, iz);
         }
 
@@ -350,29 +216,29 @@ namespace PTK
         {
             Brep tempgeometry = new Brep();
 
-            if (crv.IsLinear())
+            if (Crv.IsLinear())
             {
                 Box boxen = new Box(yzPlane, iy, iz, ix);
                 tempgeometry = Brep.CreateFromBox(boxen);
-                boundingbox = boxen.BoundingBox;
+                BoundingBox = boxen.BoundingBox;
 
             }
             else
             {
                 SweepOneRail tempsweep = new SweepOneRail();
 
-                var sweep = tempsweep.PerformSweep(crv, crossSectionRectangle.ToNurbsCurve());
+                var sweep = tempsweep.PerformSweep(Crv, crossSectionRectangle.ToNurbsCurve());
                 tempgeometry = sweep[0];
-                boundingbox = tempgeometry.GetBoundingBox(Rhino.Geometry.Plane.WorldXY);
+                BoundingBox = tempgeometry.GetBoundingBox(Rhino.Geometry.Plane.WorldXY);
                 int test = 0;
             }
-            elementGeometry = tempgeometry;
+            ElementGeometry = tempgeometry;
         }
 
         public static void ResetIDCount()
         {
             idCount = 0;
-            numStrLns = 0;
+            NumberOfStructuralLines = 0;
         }
         #endregion
 
@@ -382,12 +248,8 @@ namespace PTK
         {
 
             #region fields
-
-            private Line strLn;
-            private int strLnId;
             private Point3d subStartPoint;
             private Point3d subEndPoint;
-
             private double fx;
             private double fy;
             private double fz;
@@ -395,52 +257,49 @@ namespace PTK
             private double my;
             private double mz;
 
-            private int sNId; // meaning start node ID
-            private int eNId; // meaning end node ID
             #endregion
 
             #region constructors
             public Subelement(Line _subLn, int _id)
             {
-                strLn = _subLn;
-                strLnId = _id;
+                StrLn = _subLn;
+                StrLnId = _id;
                 subStartPoint = _subLn.From;
                 subEndPoint = _subLn.To;
 
-                sNId = -999;
-                eNId = -999;
+                SNId = -999;
+                ENId = -999;
             }
 
             #endregion
 
             #region properties
-            public Line StrLn { get { return strLn; } }
-            public int StrLnId { get { return strLnId; } }
-            public int SNId { get { return sNId; } set { sNId = value; } }
-            public int ENId { get { return eNId; } set { eNId = value; } }
+            public Line StrLn { get; private set; }
+            public int StrLnId { get; private set; }
+            public int SNId { get; set; }// meaning start node ID
+            public int ENId { get; set; }// meaning end node ID
 
             #endregion
 
             #region methods
             public static void ResetSubStrIdCnt()
             {
-                numStrLns = 0;
+                NumberOfStructuralLines = 0;
             }
             #endregion
-
         }
 
         //This function send needed information to the subclass "subElement"
         public void AddSubElem(Line _strLn)
         {
-            this.subElem.Add(new Subelement(_strLn, numStrLns));
-            numStrLns++;
+            this.SubElem.Add(new Subelement(_strLn, NumberOfStructuralLines));
+            NumberOfStructuralLines++;
 
         }
 
         public void ClrSubElem()
         {
-            this.subElem = new List<Subelement>();
+            this.SubElem = new List<Subelement>();
             // this.subElem.Clear();
         }
 

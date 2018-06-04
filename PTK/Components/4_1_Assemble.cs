@@ -299,6 +299,7 @@ namespace PTK
                 };
 
                 // search for bbox clashes
+                //パラメータの0.5が必ずしもカーブの中点でないため要検討
                 _rTreeElems.Search(new Sphere(targetCrv.PointAt(0.5),
                     targetCrv.GetLength() / 2), elementExisting);
 

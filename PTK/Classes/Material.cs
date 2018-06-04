@@ -12,12 +12,13 @@ namespace PTK
 {
     public class Material
     {
+
         #region fields
-        private string materialName;
-        private int id;
-        private List<int> elemIds = new List<int>();
-        private MatProps properties;
-        #endregion 
+        public string MatName { get; set; }
+        public int Id { get; set; }
+        public List<int> ElemIds { get; private set; } = new List<int>();
+        public MatProps Properties { get; set; }
+        #endregion
 
         #region constructors
         /*
@@ -30,40 +31,21 @@ namespace PTK
         */
         public Material(MatProps _properties)
         {
-            id = -999; 
-            materialName = "N/A";
-            properties = _properties;
+            Id = -999; 
+            MatName = "N/A";
+            Properties = _properties;
         }
         #endregion
 
         #region properties
-        public string MatName
-        {
-            get { return materialName; }
-            set { materialName = value; }
-        }
-        public int Id
-        {
-            get { return id; }
-            set { id = value; }
-        }
-        public ReadOnlyCollection<int> ElemIds
-        {
-            get { return elemIds.AsReadOnly(); }
-        }
-        public MatProps Properties
-        {
-            get { return properties; }
-            set { properties = value; }
-        }
-
         #endregion
 
         #region methods
         public void AddElemId(int elemId)
         {
-            this.elemIds.Add(elemId);
+            this.ElemIds.Add(elemId);
         }
+
         public static Material FindMatById(List<Material> _mats, int _mid)
         {
             Material tempMat;

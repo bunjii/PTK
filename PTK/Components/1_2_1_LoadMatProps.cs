@@ -92,8 +92,9 @@ namespace PTK
 
             #region solve
             // check locale: "comma" or "period"
-            string decimalSeparator = CommonProps.FindDecimalSeparator();
-            bool comma = false, period = false; // to check if text contains comma or period.
+            DecimalSeparator envDs = CommonProps.FindDecimalSeparator();
+            DecimalSeparator csvDs = DecimalSeparator.error;
+            //bool comma = false, period = false; // to check if text contains comma or period.
              
             // registering materials
             for (int i = 0; i < Tree.get_Branch(0).Count; i++)
@@ -109,8 +110,8 @@ namespace PTK
                 {
                     string txt = Tree.get_Branch(j)[i].ToString();
                     nlist.Add(txt);
-                    if (txt.Contains(",")) comma = true;
-                    else if (txt.Contains(".")) period = true;
+                    if (txt.Contains(",")) csvDs = DecimalSeparator.comma;
+                    else if (txt.Contains(".")) csvDs = DecimalSeparator.period;
                 }
             }
             
@@ -120,26 +121,20 @@ namespace PTK
                 bool convert = false;
                 string convertedTxt = "";
 
-                if (decimalSeparator == "comma")
+                if (envDs == DecimalSeparator.comma && csvDs == DecimalSeparator.period)
                 {
-                    if (period == false) continue;
-
                     // if csv includes "period", it needs treatment
                     convertedTxt = Functions_DDL.ConvertCommaToPeriodDecimal(nlist[i], true);
                 }
-                else if (decimalSeparator == "period")
+                else if (envDs == DecimalSeparator.period && csvDs == DecimalSeparator.comma)
                 {
-                    if (comma == false) continue;
-
                     // if csv includes "comma", it needs treatment
-                    convertedTxt = Functions_DDL.ConvertCommaToPeriodDecimal(nlist[i]);
+                    convertedTxt = Functions_DDL.ConvertCommaToPeriodDecimal(nlist[i], false);
                 }
                 else
                 {
-                    // exception
-                    convertedTxt = nlist[i];
+                    continue;
                 }
-
                 nlist[i] = convertedTxt;
             }
             

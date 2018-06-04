@@ -126,7 +126,7 @@ namespace PTK
             List<Point3d> pts = new List<Point3d>();
             for (int i = 0; i < nodes.Count; i++)
             {
-                pts.Add(nodes[i].Pt3d);
+                pts.Add(nodes[i].Pt3d * CommonProps.ConversionUnit(Rhino.UnitSystem.Meters));
             }
 
             // Support Information for Karamba Assemble
@@ -136,7 +136,7 @@ namespace PTK
                 int id = sups[i].Id;
                 List<bool> cond = sups[i].Conditions.ToList();
                 Plane pln = sups[i].Pln;
-                Point3d pt = pln.Origin;
+                Point3d pt = pln.Origin * CommonProps.ConversionUnit(Rhino.UnitSystem.Meters);
                 cSups.Add(new Karamba.Supports.Support(pt, cond, pln));
             }
 
@@ -197,7 +197,7 @@ namespace PTK
                 if (secs[i].ElemIds.Count == 0) continue;
 
                 CroSec cSec = new CroSec_Trapezoid("Trapezoid", secs[i].SectionName, "",
-                    secs[i].Height * 100, secs[i].Width * 100, secs[i].Width * 100);
+                    secs[i].Height * CommonProps.ConversionUnit(Rhino.UnitSystem.Centimeters), secs[i].Width * CommonProps.ConversionUnit(Rhino.UnitSystem.Centimeters), secs[i].Width * CommonProps.ConversionUnit(Rhino.UnitSystem.Centimeters));
 
                 List<string> tagLst = new List<string>();
                 for (int j = 0; j < secs[i].ElemIds.Count; j++)
@@ -229,14 +229,14 @@ namespace PTK
                 for (int j = 0; j < elems[i].SubElem.Count; j++)
                 {
                     // making of a grass beam
-                    Point3d _sPt = elems[i].SubElem[j].StrLn.From;
-                    Point3d _ePt = elems[i].SubElem[j].StrLn.To;
+                    Point3d _sPt = elems[i].SubElem[j].StrLn.From * CommonProps.ConversionUnit(Rhino.UnitSystem.Meters);
+                    Point3d _ePt = elems[i].SubElem[j].StrLn.To * CommonProps.ConversionUnit(Rhino.UnitSystem.Meters);
                     GrassBeam _gb = new GrassBeam(_sPt, _ePt);
                     _gb.id = elems[i].Tag;
 
                     // sets the orientation of the element:
-                    _gb.x_ori = elems[i].localYZPlane.ZAxis;
-                    _gb.z_ori = elems[i].localYZPlane.YAxis;
+                    _gb.x_ori = elems[i].LocalYZPlane.ZAxis;
+                    _gb.z_ori = elems[i].LocalYZPlane.YAxis;
 
                     grElems.Add(_gb);
                 }

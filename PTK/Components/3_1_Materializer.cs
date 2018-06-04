@@ -69,7 +69,6 @@ namespace PTK
             List<Element> elems = new List<Element>();
             List<Node> nodes = new List<Node>();
             List<Align> alignList = new List<Align>();
-            // Align aligner;
 
             string elemTag = "N/A";
             List<Vector3d> normalVec = new List<Vector3d>();
@@ -126,10 +125,8 @@ namespace PTK
                         if (!curves[i].IsValid) { return; }
                         elems.Add(new Element(curves[i], elemTag, align, section, material));
                     }
-
                 });
             }
-
             // non multi-threading way. Creating Elements from Curves
             else
             {
@@ -137,10 +134,10 @@ namespace PTK
                 {
                     if (curves[i] == null) continue;
                     if (!curves[i].IsValid) continue;
-
                     elems.Add(new Element(curves[i], elemTag, align, section, material));
                 }
             }*/
+
             for (int i = 0; i < curves.Count; i++)
             {
                 if (curves[i] == null) continue;
