@@ -80,6 +80,7 @@
     <Compile Include="Classes\MatProps.cs" />
     <Compile Include="Classes\Node.cs" />
     <Compile Include="Classes\CommonProps.cs" />
+    <Compile Include="Components\3_1b_Materializer-Multi.cs" />
     <Compile Include="Components\9_2_FinishedModel.cs" />
     <Compile Include="Components\1_4_Alignment_Simple.cs" />
     <Compile Include="Components\1_5_Forces.cs" />

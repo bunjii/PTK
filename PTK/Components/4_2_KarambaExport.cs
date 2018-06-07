@@ -49,7 +49,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
-/*
+
 namespace PTK
 {
     public class PTK_4_2_KarambaExport : GH_Component
@@ -350,4 +350,3 @@ namespace PTK
         }
     }
 }
-*/
