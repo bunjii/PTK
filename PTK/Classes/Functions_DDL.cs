@@ -282,14 +282,20 @@ namespace PTK
 
         public static string ConvertCommaToPeriodDecimal(string _txt, bool _reverse = false)
         {
-            if (!_reverse)
+            char[] _charList;
+            string _resultString = "";
+
+            _charList = _txt.ToCharArray();
+            foreach (char _c in _charList)
             {
-                return _txt.Replace(',', '.');  //Comma to Period
+                char tmpC;
+                if (_reverse == false && _c == ',') tmpC = '.';
+                else if (_reverse == true && _c == '.') tmpC = ',';
+                else tmpC = _c;
+                _resultString += tmpC;
             }
-            else
-            {
-                return _txt.Replace('.', ',');  //Period to Comma
-            }
+
+            return _resultString;
         }
 
         public static string CreateHash(string _str)
@@ -311,7 +317,7 @@ namespace PTK
             return _hashedTxt.ToString();
         }
 
-        public static List<Brep> OperatePriority(List<Node> _nodes, List<Element> _elems, ref List<Brep> _breps)
+        public static List<Brep> OperatePriority(List<Node> _nodes, List<PTK_Element> _elems, ref List<Brep> _breps)
         {
             List<Brep> _outBreps = new List<Brep>(_breps);
 
@@ -326,7 +332,7 @@ namespace PTK
                 // for each element
                 for (int j = 0; j < _nElemIds.Count; j++)
                 {
-                    _priority.Add(Element.FindElemById(_elems, _nElemIds[j]).Priority);
+                    _priority.Add(PTK_Element.FindElemById(_elems, _nElemIds[j]).Priority);
 
                     _brepElemId.Add(_nElemIds[j]);
                     _relvBrep.Add(_outBreps[_nElemIds[j]]);
@@ -372,7 +378,7 @@ namespace PTK
             return _outBreps;
         }
 
-        public static void RegisterSupports(ref List<Support> _sups)
+        public static void RegisterSupports(ref List<PTK_Support> _sups)
         {
             for (int i = 0; i < _sups.Count; i++)
             {
@@ -394,7 +400,7 @@ namespace PTK
 
         // ### private functions ###
 
-        private static void RegisterElemToNode(Node _node, Element _elem, double _param)
+        private static void RegisterElemToNode(Node _node, PTK_Element _elem, double _param)
         {
             // check if the elem id is already registered, 
             // and if not, register elem and elemparam to node.
@@ -405,7 +411,7 @@ namespace PTK
             }
         }
 
-        private static void RegisterNodeToElem(ref List<Element> _elems, Node _node, int _i, double _param)
+        private static void RegisterNodeToElem(ref List<PTK_Element> _elems, Node _node, int _i, double _param)
         {
             // check if the node id is already registered, 
             // and if not, register node and nodeparam to elem
@@ -423,5 +429,44 @@ namespace PTK
             Line result = new Line(pt0, pt1);
             return result;
         }
+
+        /*
+        private static int DetectOrCreateNode(ref List<Node> _nodes, ref RTree _rTreeNodes, Point3d _sPt)
+        {
+            // check if the node exists.
+            int _nId = new int();
+            bool _nodeExists = false;
+
+            // "nodeExisting" will be performed, when items are found.
+            EventHandler<RTreeEventArgs> _nodeExisting =
+                (object sender, RTreeEventArgs args) =>
+                {
+                    _nodeExists = true;
+                    _nId = args.Id;
+                };
+
+            // BoundingBox _spotBBox = new BoundingBox(_samplePt, _samplePt); 
+            // Above code didn't work out, needing of considering tolerance for BBox as below. comment by DDL 9th Apr.
+            double tol = CommonProps.tolerances;
+            BoundingBox _spotBBox = new BoundingBox
+                (_sPt.X - tol, _sPt.Y - tol, _sPt.Z - tol, _sPt.X + tol, _sPt.Y + tol, _sPt.Z + tol);
+
+            // node search
+            _rTreeNodes.Search(_spotBBox, _nodeExisting);
+
+            if (!_nodeExists)
+            {
+                Node _newNode = new Node(_sPt);
+                _nodes.Add(_newNode);
+                // register the node to _rTreeNodes
+                _rTreeNodes.Insert(_newNode.BoundingBox, _newNode.Id);
+                // obtain nId
+                _nId = _newNode.Id;
+            }
+
+            return _nId;
+        }
+        */
+
     }
 }

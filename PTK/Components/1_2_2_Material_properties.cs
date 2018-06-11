@@ -116,7 +116,7 @@ namespace PTK
             #endregion
 
             #region solve
-            MatProps Material_prop = new MatProps(
+            PTK_MatProps Material_prop = new PTK_MatProps(
                 MaterialName,
                 fmgk,
 

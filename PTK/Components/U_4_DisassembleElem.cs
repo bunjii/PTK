@@ -66,8 +66,8 @@ namespace PTK
         {
             #region variables
             GH_ObjectWrapper wrapElem = new GH_ObjectWrapper();
-            List<Element> elems = new List<Element>();
-            List<Element> outElems = new List<Element>();
+            List<PTK_Element> elems = new List<PTK_Element>();
+            List<PTK_Element> outElems = new List<PTK_Element>();
             List<string> elemTags = new List<string>();
             List<string> inputTags = new List<string>();
             List<Curve> curves = new List<Curve>();
@@ -89,7 +89,7 @@ namespace PTK
 
             #region input
             if (!DA.GetData(0, ref wrapElem)) { return; }
-            wrapElem.CastTo<List<Element>>(out elems);
+            wrapElem.CastTo<List<PTK_Element>>(out elems);
 
             DA.GetDataList(1, inputTags);
             #endregion
@@ -107,7 +107,7 @@ namespace PTK
                     inputTags[i] = inputTags[i].Trim();
                 }
 
-                foreach (Element e in elems)
+                foreach (PTK_Element e in elems)
                 {
                     if (!inputTags.Contains(e.Tag)) continue;
 
@@ -124,7 +124,7 @@ namespace PTK
                 //n0ids.Add(e.N0id);
                 //n1ids.Add(e.N1id);
                 secs.Add(outElems[i].Section);
-                plns.Add(outElems[i].LocalYZPlane);
+                plns.Add(outElems[i].localYZPlane);
                 mids.Add(outElems[i].MatId);
                 priority.Add(outElems[i].Priority);
 

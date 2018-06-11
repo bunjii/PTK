@@ -54,7 +54,7 @@ namespace PTK
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddGenericParameter("PTK Assembly", "A (PTK)", "Assembled project data", GH_ParamAccess.item);
-
+            pManager.RegisterParam(new Karamba.Models.Param_Model(), "Model", "Model", "Karamba Model");
             #region obsolete
             // outputs below just checking purposes. should be removed before release. 
             /*
@@ -80,27 +80,34 @@ namespace PTK
         {
 
             Node.ResetIDCount();
-            Element.ResetIDCount();
-            Support.ResetIDCount();
+            PTK_Element.ResetIDCount();
+            PTK_Support.ResetIDCount();
+            PTK_Load.ResetIDCount();
             #region variables
 
             // Assigning lists of objects
             string priorityTxt = "";
             List<Node> nodes = new List<Node>();
-            List<Element> elems = new List<Element>();
-            List<Material> mats = new List<Material>();
+            List<PTK_Element> elems = new List<PTK_Element>();
+            List<PTK_Material> mats = new List<PTK_Material>();
             List<Section> secs = new List<Section>();
-            List<Support> sups = new List<Support>();
+            List<PTK_Support> sups = new List<PTK_Support>();
+            List<PTK_Load> loads = new List<PTK_Load>();
+
             RTree rTreeNodes = new RTree();
             RTree rTreeElems = new RTree();
 
+
             List<GH_ObjectWrapper> wrapElemList = new List<GH_ObjectWrapper>();
             List<GH_ObjectWrapper> wrapSupList = new List<GH_ObjectWrapper>();
+            List<GH_ObjectWrapper> wrapLoadList = new List<GH_ObjectWrapper>();
+
             #endregion
 
             #region input
             if (!DA.GetDataList(0, wrapElemList)) { return; }
             DA.GetDataList(1, wrapSupList);
+            DA.GetDataList(2, wrapLoadList);
             DA.GetData(3, ref priorityTxt);
             #endregion
 
@@ -109,14 +116,35 @@ namespace PTK
             // "merge multiple element class instance lists"
             for (int i = 0; i < wrapElemList.Count; i++)
             {
-                List<Element> tempElemList = new List<Element>();
-                wrapElemList[i].CastTo<List<Element>>(out tempElemList);
+                List<PTK_Element> tempElemList = new List<PTK_Element>();
+                wrapElemList[i].CastTo<List<PTK_Element>>(out tempElemList);
                 // memberwise clone
-                foreach (Element e in tempElemList) elems.Add(e.Clone());
+                foreach (PTK_Element e in tempElemList) elems.Add(e.Clone());
+            }
+            
+            /*
+            foreach (var wrapped_element in wrapElemList)
+            {
+                var e = wrapped_element.Value as Element;
+                if (e != null) elems.Add(e);
+            }
+            */
+
+            foreach (var wrapped_support in wrapSupList)
+            {
+                var s = wrapped_support.Value as PTK_Support;
+                if (s != null) sups.Add(s);
+            }
+
+            foreach (var wrapped_load in wrapLoadList)
+            {
+                var s = wrapped_load.Value as PTK_Load;
+                if (s != null) loads.Add(s);
             }
 
             // DDL "unwrap wrapped support class" and 
             // "merge multiple support class instance lists"
+            /*
             if (wrapSupList.Count != 0)
             {
                 for (int i = 0; i < wrapSupList.Count; i++)
@@ -126,6 +154,7 @@ namespace PTK
                     sups.AddRange(tempSupList);
                 }
             }
+            */
 
             // main functions #1
             // Functions.Assemble returns "nodes"
@@ -219,8 +248,8 @@ namespace PTK
             #endregion
 
             #region output
-            Assembly Assembly = new Assembly(new List<Node>(nodes), new List<Element>(elems),
-                new List<Material>(mats), new List<Section>(secs), new List<Support>(sups));
+            Assembly Assembly = new Assembly(new List<Node>(nodes), new List<PTK_Element>(elems),
+                new List<PTK_Material>(mats), new List<Section>(secs), new List<PTK_Support>(sups));
 
             // Assembly Assembly = new Assembly(nodes, elems, mats, secs, sups);
             nodes.Clear();
@@ -229,7 +258,13 @@ namespace PTK
             secs.Clear();
             sups.Clear();
 
+            var Model = new PTK.Classes.KarambaExport(Assembly).BuildModel();
+            var karamba_model = new Karamba.Models.GH_Model(Model);
+
+
             DA.SetData(0, Assembly);
+            DA.SetData(1, karamba_model);
+            
             #region obsolete
             // DA.SetDataList(1, PointNodes);
             // DA.SetDataList(2, BokseTest);
@@ -245,7 +280,7 @@ namespace PTK
 
         }
 
-        internal void Assemble(ref List<Element> _elems,
+        internal void Assemble(ref List<PTK_Element> _elems,
             ref List<Node> _nodes, ref RTree _rTreeElems, ref RTree _rTreeNodes)
         {
 
@@ -281,7 +316,7 @@ namespace PTK
             } // end for (int i = 0; i < _elems.Count; i++)
         }
 
-        internal void SolveIntersection(ref List<Element> _elems,
+        internal void SolveIntersection(ref List<PTK_Element> _elems,
             ref List<Node> _nodes, ref RTree _rTreeElems, ref RTree _rTreeNodes)
         {
             // check if the elements are potentially colliding by checking curves' boundary boxes.
@@ -299,7 +334,6 @@ namespace PTK
                 };
 
                 // search for bbox clashes
-                //パラメータの0.5が必ずしもカーブの中点でないため要検討
                 _rTreeElems.Search(new Sphere(targetCrv.PointAt(0.5),
                     targetCrv.GetLength() / 2), elementExisting);
 
@@ -362,7 +396,7 @@ namespace PTK
             }
         }
 
-        internal void GenerateStructuralLines(ref List<Element> _elems, List<Node> _nodes)
+        internal void GenerateStructuralLines(ref List<PTK_Element> _elems, List<Node> _nodes)
         {
 
             for (int i = 0; i < _elems.Count; i++) //Element index i       
@@ -398,7 +432,7 @@ namespace PTK
                 //Debug.WriteLine("##nodeid:" + debugtxt + " ; param: " + debugtxt2);
 
                 // reset substructural id count and structural lines
-                Element.Subelement.ResetSubStrIdCnt();
+                PTK_Element.Subelement.ResetSubStrIdCnt();
                 _elems[i].ClrSubElem(); // removes all the subelement in _elems[i]
 
                 for (int j = 1; j < ptsList.Count; j++) // j starting with #1
@@ -450,7 +484,7 @@ namespace PTK
             return nId;
         }
 
-        internal void RegisterElemToNode(ref Node _node, Element _elem, double _param)
+        internal void RegisterElemToNode(ref Node _node, PTK_Element _elem, double _param)
         {
             // check if the elem id is already registered, 
             // and if not, register elem and elemparam to node.
@@ -461,7 +495,7 @@ namespace PTK
             }
         }
 
-        internal void RegisterNodeToElem(ref List<Element> _elems, Node _node, int _i, double _param)
+        internal void RegisterNodeToElem(ref List<PTK_Element> _elems, Node _node, int _i, double _param)
         {
             // check if the node id is already registered, 
             // and if not, register node and nodeparam to elem
@@ -472,14 +506,14 @@ namespace PTK
             }
         }
 
-        internal void RegisterMaterials(ref List<Element> _elems, ref List<Material> _mats)
+        internal void RegisterMaterials(ref List<PTK_Element> _elems, ref List<PTK_Material> _mats)
         {
             List<string> _hashList = new List<string>();
             int _matIdCnt = 0;
 
-            foreach (Element e in _elems)
+            foreach (PTK_Element e in _elems)
             {
-                Material _elemMat = e.Material;
+                PTK_Material _elemMat = e.Material;
                 string _hash = _elemMat.Properties.TxtHash;
 
                 // if the hash values coincide, add existent matId. 
@@ -509,12 +543,12 @@ namespace PTK
             }
         }
 
-        internal void RegisterSections(ref List<Element> _elems, ref List<Section> _secs)
+        internal void RegisterSections(ref List<PTK_Element> _elems, ref List<Section> _secs)
         {
             List<string> _hashList = new List<string>();
             int _secIdCnt = 0;
 
-            foreach (Element e in _elems)
+            foreach (PTK_Element e in _elems)
             {
                 Section _elemSec = e.Section;
                 string _hash = _elemSec.TxtHash;
@@ -547,7 +581,7 @@ namespace PTK
 
         }
 
-        internal void RegisterSupports(ref List<Support> _sups)
+        internal void RegisterSupports(ref List<PTK_Support> _sups)
         {
             for (int i = 0; i < _sups.Count; i++)
             {
@@ -555,7 +589,7 @@ namespace PTK
             }
         }
 
-        internal void RegisterPriority(ref List<Element> _elems, string _priorityTxt)
+        internal void RegisterPriority(ref List<PTK_Element> _elems, string _priorityTxt)
         {
             // priority: 0 (highest priority) to bigger integer (lower priority)
 

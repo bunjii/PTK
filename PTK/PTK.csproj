@@ -37,21 +37,20 @@
     <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GH_IO">
-      <HintPath>..\..\Library\GH_IO.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Grasshopper, Version=1.0.0.20, Culture=neutral, PublicKeyToken=dda4f5ec2cd80803, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Library\Grasshopper.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="karamba">
-      <HintPath>..\..\Library\karamba.gha</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files\Rhinoceros 5 (64-bit)\Plug-ins\karamba.gha</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="GH_IO">
+      <HintPath>..\..\..\..\Desktop\Nikken_C#\shortcuts\GH_IO.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Grasshopper">
+      <HintPath>..\..\..\..\..\..\Program Files\Common Files\McNeel\Rhinoceros\5.0\Plug-ins\Grasshopper (b45a29b1-4343-4035-989e-044e8580d9cf)\0.9.76.0\Grasshopper.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="RhinoCommon">
-      <HintPath>..\..\Library\RhinoCommon.dll</HintPath>
+      <HintPath>..\..\..\..\Desktop\Nikken_C#\shortcuts\RhinoCommon.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -61,7 +60,7 @@
     <Reference Include="System.Numerics" />
     <Reference Include="System.Numerics.Vectors, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Numerics.Vectors.4.4.0\lib\portable-net45+win8+wp8+wpa81\System.Numerics.Vectors.dll</HintPath>
-      <Private>True</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
@@ -71,20 +70,20 @@
   <ItemGroup>
     <Compile Include="Classes\Align.cs" />
     <Compile Include="Classes\Assembly.cs" />
+    <Compile Include="Classes\KarambaExport.cs" />
     <Compile Include="Classes\StructuralProperties.cs" />
-    <Compile Include="Classes\Element.cs" />
+    <Compile Include="Classes\PTK_Element.cs" />
     <Compile Include="Classes\Functions.cs" />
     <Compile Include="Classes\Functions_DDL.cs" />
-    <Compile Include="Classes\Loads.cs" />
-    <Compile Include="Classes\Material.cs" />
-    <Compile Include="Classes\MatProps.cs" />
+    <Compile Include="Classes\PTK_Load.cs" />
+    <Compile Include="Classes\PTK_Material.cs" />
+    <Compile Include="Classes\PTK_MatProps.cs" />
     <Compile Include="Classes\Node.cs" />
     <Compile Include="Classes\CommonProps.cs" />
-    <Compile Include="Components\3_1b_Materializer-Multi.cs" />
     <Compile Include="Components\9_2_FinishedModel.cs" />
     <Compile Include="Components\1_4_Alignment_Simple.cs" />
     <Compile Include="Components\1_5_Forces.cs" />
-    <Compile Include="Classes\Forces.cs" />
+    <Compile Include="Classes\PTK_Forces.cs" />
     <Compile Include="Components\4_3_DimensioningMembers.cs" />
     <Compile Include="Components\SandBox.cs" />
     <Compile Include="Forms\F01_Supports.cs">
@@ -132,7 +131,7 @@
     <Compile Include="Components\U_1_GenerateGeometry.cs" />
     <Compile Include="Classes\Section.cs" />
     <Compile Include="Components\U_3_DisassembleNode.cs" />
-    <Compile Include="Classes\Support.cs" />
+    <Compile Include="Classes\PTK_Support.cs" />
     <Compile Include="Components\U_2_Disassemble.cs" />
     <Compile Include="Components\U_6_DisassembleSection.cs" />
     <Compile Include="Components\U_7_GeneticAlgorithm.cs" />
@@ -260,7 +259,8 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>Copy "$(TargetPath)" "%25UserProfile%25\AppData\Roaming\Grasshopper\Libraries\$(ProjectName).gha"
+    <PostBuildEvent>rem Copy "$(TargetPath)" "%25UserProfile%25\AppData\Roaming\Grasshopper\Libraries\$(ProjectName).gha"
+Copy "$(TargetPath)" "C:\Program Files\Rhinoceros 5 (64-bit)\Plug-ins\$(ProjectName).gha"
 Erase "$(TargetPath)"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>

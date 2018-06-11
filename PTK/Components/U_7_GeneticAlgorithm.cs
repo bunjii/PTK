@@ -44,7 +44,7 @@ namespace PTK.Optimization
         public int ContinuationNum { get; set; }        //Number of consecutive number of best individuals who abolish generation alternation
         public String SavePath { get; set; }            //Storage location when interrupted
 
-        public List<String> GeneSliderNames { get; private set; }   //Name of slider to use as gene
+        public List<String> GeneSliderNames { get; set; }   //Name of slider to use as gene
 
 
         //-------Overview

@@ -49,10 +49,10 @@ namespace PTK.Components
         {
             #region variables
             List<Node> nodes = new List<Node>();
-            List<Element> elems = new List<Element>();
-            List<Material> mats = new List<Material>();
+            List<PTK_Element> elems = new List<PTK_Element>();
+            List<PTK_Material> mats = new List<PTK_Material>();
             List<Section> secs = new List<Section>();
-            List<Support> sups = new List<Support>();
+            List<PTK_Support> sups = new List<PTK_Support>();
             GH_ObjectWrapper wrapAssembly = new GH_ObjectWrapper();
             Assembly assemble;
             #endregion

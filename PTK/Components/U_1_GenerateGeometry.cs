@@ -55,7 +55,7 @@ namespace PTK
             Boolean isMesh = false;
             Boolean isBrep = false;
             List<Node> nodes = new List<Node>();
-            List<Element> elems = new List<Element>();
+            List<PTK_Element> elems = new List<PTK_Element>();
             List<Section> secs = new List<Section>();
             List<Brep> brepGeom = new List<Brep>();
             List<Brep> slashedBreps = new List<Brep>();
@@ -75,14 +75,14 @@ namespace PTK
 
             if (isBrep == true)
             {
-                foreach (Element e in elems)
+                foreach (PTK_Element e in elems)
                 {
                     // from Element.GenerateIntervals()
                     Interval iz;
                     Interval iy;
                     Interval ix;
                     Rectangle3d crossSectionRectangle;
-                    //Brep elementGeometry;
+                    Brep elementGeometry;
                     BoundingBox boundingbox;
 
                     double[] paramter = { 0.0, 2.2 };
@@ -94,14 +94,14 @@ namespace PTK
                     iz = new Interval(-HalfHeight, HalfHeight);
                     iy = new Interval(-HalfWidth, HalfWidth);
                     ix = new Interval(0, e.Crv.GetLength());
-                    crossSectionRectangle = new Rectangle3d(e.LocalYZPlane, iy, iz);
+                    crossSectionRectangle = new Rectangle3d(e.localYZPlane, iy, iz);
 
                     // from Element.GenerateElementGeometry()
                     Brep oneBeamGeom = new Brep();
 
                     if (e.Crv.IsLinear())
                     {
-                        Box boxen = new Box(e.LocalYZPlane, iy, iz, ix);
+                        Box boxen = new Box(e.localYZPlane, iy, iz, ix);
                         oneBeamGeom = Brep.CreateFromBox(boxen);
                         boundingbox = boxen.BoundingBox;
                     }

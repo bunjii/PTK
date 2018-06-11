@@ -92,9 +92,8 @@ namespace PTK
 
             #region solve
             // check locale: "comma" or "period"
-            DecimalSeparator envDs = CommonProps.FindDecimalSeparator();
-            DecimalSeparator csvDs = DecimalSeparator.error;
-            //bool comma = false, period = false; // to check if text contains comma or period.
+            string decimalSeparator = CommonProps.FindDecimalSeparator();
+            bool comma = false, period = false; // to check if text contains comma or period.
              
             // registering materials
             for (int i = 0; i < Tree.get_Branch(0).Count; i++)
@@ -110,8 +109,8 @@ namespace PTK
                 {
                     string txt = Tree.get_Branch(j)[i].ToString();
                     nlist.Add(txt);
-                    if (txt.Contains(",")) csvDs = DecimalSeparator.comma;
-                    else if (txt.Contains(".")) csvDs = DecimalSeparator.period;
+                    if (txt.Contains(",")) comma = true;
+                    else if (txt.Contains(".")) period = true;
                 }
             }
             
@@ -121,20 +120,26 @@ namespace PTK
                 bool convert = false;
                 string convertedTxt = "";
 
-                if (envDs == DecimalSeparator.comma && csvDs == DecimalSeparator.period)
+                if (decimalSeparator == "comma")
                 {
+                    if (period == false) continue;
+
                     // if csv includes "period", it needs treatment
                     convertedTxt = Functions_DDL.ConvertCommaToPeriodDecimal(nlist[i], true);
                 }
-                else if (envDs == DecimalSeparator.period && csvDs == DecimalSeparator.comma)
+                else if (decimalSeparator == "period")
                 {
+                    if (comma == false) continue;
+
                     // if csv includes "comma", it needs treatment
-                    convertedTxt = Functions_DDL.ConvertCommaToPeriodDecimal(nlist[i], false);
+                    convertedTxt = Functions_DDL.ConvertCommaToPeriodDecimal(nlist[i]);
                 }
                 else
                 {
-                    continue;
+                    // exception
+                    convertedTxt = nlist[i];
                 }
+
                 nlist[i] = convertedTxt;
             }
             
@@ -164,7 +169,7 @@ namespace PTK
             rhogk = double.Parse(nlist[15]);
             rhogmean = double.Parse(nlist[16]);
 
-            MatProps matProp = new MatProps(
+            PTK_MatProps matProp = new PTK_MatProps(
              MaterialName,
              fmgk,
              ft0gk,

@@ -53,9 +53,9 @@ namespace PTK
             GH_ObjectWrapper wrapMat = new GH_ObjectWrapper();
 
             // in case the component is connected to somewhere after Assemble.
-            List<Material> mats = new List<Material>();
+            List<PTK_Material> mats = new List<PTK_Material>();
             // in case the component is connected directly to Material.
-            Material mat;
+            PTK_Material mat;
 
             List<string> matNames = new List<string>();
             DataTree<double> matPropTree = new DataTree<double>();
@@ -67,8 +67,8 @@ namespace PTK
 
             #region input
             if (!DA.GetData(0, ref wrapMat)) { return; }
-            wrapMat.CastTo<List<Material>>(out mats);
-            wrapMat.CastTo<Material>(out mat);
+            wrapMat.CastTo<List<PTK_Material>>(out mats);
+            wrapMat.CastTo<PTK_Material>(out mat);
             #endregion
 
             #region solve
@@ -79,7 +79,7 @@ namespace PTK
             }
             for (int i = 0; i<mats.Count;i++)
             {
-                MatProps mp = mats[i].Properties;
+                PTK_MatProps mp = mats[i].Properties;
 
                 matNames.Add(mp.MaterialName);
                 GH_Path path = new GH_Path(i);

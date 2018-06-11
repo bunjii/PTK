@@ -11,7 +11,7 @@ using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Rhino.Geometry;
 
-using Karamba.Supports;
+using Karamba;
 
 
 // using Karamba;
@@ -41,18 +41,23 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddIntegerParameter("Load Case", "LC", "Load case", GH_ParamAccess.item, 0); 
-            pManager.AddPlaneParameter("Plane", "plane", "", GH_ParamAccess.list);
-            
+            pManager.AddPointParameter("Position", "point", "Boundary point", GH_ParamAccess.item );
+            pManager.AddPlaneParameter("Orientation", "orientation", "Plane which defines rotatation of support point", GH_ParamAccess.item, Plane.WorldXY);
+            pManager.AddPlaneParameter("Plane", "plane", "All of the points on this plane will be supported", GH_ParamAccess.item, Plane.WorldXY);
+            pManager.AddTextParameter("Conditions", "bc", "Boundary condtitions", GH_ParamAccess.item,"111000");
+
             pManager[0].Optional = true;
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
+        /// 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddGenericParameter("PTK Supports", "Sup (PTK)", "Support data to be send to Assembler(PTK)", GH_ParamAccess.item);
+            pManager.RegisterParam(new Karamba.Supports.Param_Support(), "Support", "supp", "Ouput support(s)");
+            pManager.AddTextParameter("BCinfo", "bccond", "Information about realeses", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -62,117 +67,90 @@ namespace PTK
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             #region variables
+
             string Tag = "N/A";
             int lCase = 0;
-            List<Plane> supPlns = new List<Plane>();
-            List<Support> sups = new List<Support>();
+            
+            List<Karamba.Supports.Support> sups = new List<Karamba.Supports.Support>();
+
+            Point3d sup_point = new Point3d();
+            Plane sup_orient = new Plane();
+            Plane sup_pln = new Plane();
+
+            string bc="111000";
+            List<bool> sup_bc_list = new List<bool>();
+            List<string> sup_bc_info = new List<string>();
             #endregion
 
+
+
             #region input
-            if (!DA.GetDataList(1, supPlns)) { return; }
-            DA.GetData(0, ref lCase);
+
+
+            if (!DA.GetData(0, ref sup_point)) { return; }
+            if (!DA.GetData(1, ref sup_orient)) { return; }
+            if (!DA.GetData(2, ref sup_pln)) { return; }
+
+            if (!DA.GetData(3, ref bc)) { return; }
             #endregion
 
             #region solve
-            for (int i=0;i<supPlns.Count;i++)
+            // 
+            //Message = boolSupString;
+            //bc = boolSupString;
+            char[] bool_sup_a = bc.ToCharArray();
+
+            List<string> infolist = new List<string> {
+            "Translation in dir 1 is ",
+            "Translation in dir 2 is ",
+            "Translation in dir 3 is ",
+            "Rotation in dir 1 is ",
+            "Rotation in dir 2 is ",
+            "Rotation in dir 3 is ",
+            };
+
+            int i=0;
+            foreach (char c in bool_sup_a)
             {
-                Support tmpSup = new Support(lCase, supPlns[i], new List<bool>(boolSupArray));
-                sups.Add(tmpSup);
+                string tempc = c.ToString();
+                if (tempc == "0")
+                {
+                    sup_bc_list.Add(false);
+                    sup_bc_info.Add(" " + infolist[i] + " free");
+                    i++;
+                }
+                else
+                {
+                    sup_bc_list.Add(true);
+                    sup_bc_info.Add(" " + infolist[i] + " blocked");
+                    i++;
+                }
+
             }
+
+
+
+            List<bool> bc_list = sup_bc_list;
+
+            Karamba.Supports.Support tmp_sup = new Karamba.Supports.Support(sup_point, bc_list , sup_orient);
+
+            Karamba.Supports.GH_Support krmb_sup = new Karamba.Supports.GH_Support(tmp_sup);
+
+            var n_support = new PTK_Support(krmb_sup);
+
             #endregion
 
             #region output
-            Message = boolSupString;
-            DA.SetData(0, sups);
+
+
+            DA.SetData(0, n_support) ;
+            DA.SetData(1, krmb_sup) ;
+            DA.SetDataList(2, sup_bc_info );
             #endregion
         }
         
-        public override void CreateAttributes()
-        {
-            // base.CreateAttributes();
-            m_attributes = new Attributes_Custom(this);
-        }
 
-        public static void Menu_CustomOnClick(PTK_2_2_Supports _comp)
-        {
-            if (_comp.boolSupString == "") _comp.boolSupString = "000000";
-            Forms.F01_Supports frm = new Forms.F01_Supports(_comp.boolSupString);
-            frm.BoolSupString = _comp.boolSupString;
 
-            if (frm.ShowDialog() == DialogResult.OK)
-            {
-                _comp.boolSupString = frm.BoolSupString;
-                _comp.boolSupArray = Support.StringToArray(_comp.boolSupString);
-                
-                _comp.ExpireSolution(true);
-            }
-        }
-
-        public class Attributes_Custom : GH_ComponentAttributes
-        {
-            private Rectangle ButtonBounds { get; set; }
-
-            public Attributes_Custom(GH_Component owner) : base(owner) { }
-
-            protected override void Layout()
-            {
-                base.Layout();
-
-                Rectangle rec0 = GH_Convert.ToRectangle(Bounds);
-                rec0.Height += 26;
-
-                Rectangle rec1 = rec0;
-                rec1.Y = rec1.Bottom - 26;
-                rec1.Height = 26;
-                rec1.Inflate(-4, -4);
-                
-                Bounds = rec0;
-                ButtonBounds = rec1;
-                
-            }
-
-            protected override void Render(GH_Canvas canvas, Graphics graphics, GH_CanvasChannel channel)
-            {
-                base.Render(canvas, graphics, channel);
-                if (channel == GH_CanvasChannel.Objects)
-                {
-                    GH_Capsule button = GH_Capsule.CreateTextCapsule
-                        (ButtonBounds, ButtonBounds, GH_Palette.Black, "Set Supports", 2, 0);
-                    button.Render(graphics, Selected, Owner.Locked, false);
-                    button.Dispose();
-                }
-            }
-
-            public override GH_ObjectResponse RespondToMouseDown(GH_Canvas sender, GH_CanvasMouseEvent e)
-            {
-                if (e.Button == MouseButtons.Left)
-                {
-                    RectangleF rec = ButtonBounds;
-                    if (rec.Contains(e.CanvasLocation))
-                    {
-                        Menu_CustomOnClick((PTK_2_2_Supports)Owner);
-                        return GH_ObjectResponse.Handled;
-                    }
-                }
-                return base.RespondToMouseDown(sender, e);
-            }
-        }
-        
-        // Data saving function
-        public override bool Write(GH_IWriter writer)
-        {
-            writer.SetString("boolSupString", boolSupString);
-            return base.Write(writer);
-        }
-
-        // Data reading function
-        public override bool Read(GH_IReader reader)
-        {
-            boolSupString = reader.GetString("boolSupString");
-            // set boolSupArray values when it loads.
-            this.boolSupArray = Support.StringToArray(boolSupString);
-            return base.Read(reader);
-        }
 
         /// <summary>
         /// Provides an Icon for the component.

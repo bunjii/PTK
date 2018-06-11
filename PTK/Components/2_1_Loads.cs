@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 
+using Karamba;
+
 namespace PTK
 {
     public class PTK_2_1_Loads : GH_Component
@@ -43,6 +45,8 @@ namespace PTK
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddGenericParameter("PTK Load", "L (PTK)", "Load data to be send to Assembler(PTK)", GH_ParamAccess.item);
+            pManager.RegisterParam(new Karamba.Loads.Param_Load(), "Support", "supp", "Ouput support(s)");
+
         }
 
         /// <summary>
@@ -67,12 +71,19 @@ namespace PTK
             #endregion
 
             #region solve
-            Loads PTKloads = new Loads(Tag,lpoint,lvector);
-           
+            PTK_Load PTKloads = new PTK_Load(Tag,lpoint,lvector);
+
+            
+            var load_1 = new Karamba.Loads.PointLoad(lpoint, lvector, lvector, lcase, true);
+            var krmb_load = new Karamba.Loads.GH_Load(load_1);
+
+            PTK_Load ptkload1 = new PTK_Load(krmb_load);
+
             #endregion
 
             #region output
-            DA.SetData(0, PTKloads);
+            DA.SetData(0, ptkload1);
+            DA.SetData(1, krmb_load);
             #endregion
 
         }

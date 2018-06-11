@@ -10,70 +10,110 @@ namespace PTK
 {
     public class Node : IEquatable<Node>
     {
-
         #region fields
+        private int id;
+        private List<int> elemIds;
+        private List<PTK_Element> elems;
+        private List<double> elemParams;
+        private int connectedElems;
+        private Point3d pt3d;
+        private Plane nodePlane;
+        private double x;
+        private double y;
+        private double z;
         private static int idCount = 0;
-        public Point3d Pt3d { get; private set; }
-        public BoundingBox BoundingBox { get; private set; }
-        public double X { get; private set; }
-        public double Y { get; private set; }
-        public double Z { get; private set; }
-        public int Id { get; private set; }  //removed the possibility to set an ID
-        public int ConnectedElements { get; private set; }  //removed the possibility to set an ID
-        public List<int> ElemIds { get; private set; } = new List<int>();
-        public List<Element> Elems { get; private set; } = new List<Element>();
-        public List<double> ElemParams { get; private set; } = new List<double>();
-        public Plane NodePlane { get; private set; }
-        //int temp;
+        int temp;
+        BoundingBox boundingbox; 
         #endregion
 
         #region constructors
         //The points are given from the PTK4_assemble. ID is unique by iterating each time the class is instanced. idCount is static
         public Node(Point3d pt)
         {
-            Pt3d = pt;
-            X = pt.X;
-            Y = pt.Y;
-            Z = pt.Z;
-            Id = idCount;
-            NodePlane = new Plane(pt, new Vector3d(0, 0, 1));
+            pt3d = pt;
+            x = pt.X;
+            y = pt.Y;
+            z = pt.Z;
+            id = idCount;
+            nodePlane = new Plane(pt, new Vector3d(0, 0, 1));
             idCount++;
-            BoundingBox = new BoundingBox(pt, pt);
+            elemIds = new List<int>();
+
+            elemParams = new List<double>();
+            boundingbox = new BoundingBox(pt, pt);
+
+            #region obsolete
+            elems = new List<PTK_Element>();
+            #endregion
+
         }
         #endregion
 
         #region properties
+        public Point3d Pt3d
+        {
+            get { return pt3d; }
+        }
+        public BoundingBox BoundingBox
+        {
+            get { return boundingbox; }
+        }
+
+        public ReadOnlyCollection<int> ElemIds
+        {
+            get { return elemIds.AsReadOnly(); }
+
+        }
+
+        /*
+        public List<double> ElemParams // ParameterOfConnectedElements
+        {
+            get { return elemParams; }
+        }
+        */        
+         
+        public ReadOnlyCollection<double> ElemParams
+        {
+            get { return elemParams.AsReadOnly(); }
+        }
+
+        public double X { get { return x; } }
+        public double Y { get { return y; } }
+        public double Z { get { return z; } }
+        public int Id { get { return id; } }  //removed the possibility to set an ID
+        public int ConnectedElements { get { return connectedElems; } }  //removed the possibility to set an ID
+
         #endregion
 
         #region methods
 
         public void AddElemId(int _id)
         {
-            ElemIds.Add(_id);
+            elemIds.Add(_id);
         }
 
         //Adding neighbours. see the function called AssignNeighbours in function.cs. 
         public void AddNeighbour(int ids)
         { 
-            if (ElemIds==null)
+            if (elemIds==null)
             {
-                ElemIds = new List<int>();
+                elemIds = new List<int>();
             }
-            //temp = ids;
-            ElemIds.Add(ids);
+            temp = ids;
+            elemIds.Add(ids);
         }
 
         public void AddElemParams(double _param)
         {
-            this.ElemParams.Add(_param);
+            this.elemParams.Add(_param);
         }
 
 
         #region obsolete
-        public void AddElements(Element _element)
+        public void AddElements(PTK_Element _element)
         {
             bool add = true;
-            foreach (Element elem in Elems)
+            foreach (PTK_Element elem in elems)
             {
                 if (elem.Id.Equals(_element.Id))
                     add = false;
@@ -81,10 +121,10 @@ namespace PTK
 
             if (add)
             {
-                Elems.Add(_element);
+                elems.Add(_element);
             }
             
-            Elems.Add(_element);
+            elems.Add(_element);
         }
         #endregion
 
@@ -92,7 +132,7 @@ namespace PTK
         // Probably useful later when extracting the geometry. 
         public bool Equals(Node other)
         {
-            if (X == other.X && Y == other.Y && Z == other.Z)
+            if (x == other.X && y == other.Y && z == other.Z)
             {
                 return true;
             }

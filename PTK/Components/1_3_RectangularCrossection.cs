@@ -26,12 +26,14 @@ namespace PTK
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddTextParameter("Cross Section Name", "name", "Add Cross-SectionName", GH_ParamAccess.item,"Untitled");
-            pManager.AddNumberParameter("width", "w", "", GH_ParamAccess.item, 100);  
-            pManager.AddNumberParameter("height", "h", "", GH_ParamAccess.item, 100);
+            pManager.AddNumberParameter("width", "w", "in [mm]", GH_ParamAccess.item, 100);  
+            pManager.AddNumberParameter("height", "h", "in [mm]", GH_ParamAccess.item, 100);
+            
 
             pManager[0].Optional = true;
             pManager[1].Optional = true;
             pManager[2].Optional = true;
+
         }
 
         /// <summary>
@@ -52,16 +54,23 @@ namespace PTK
             string name = "N/A";
             double width = new double();
             double height = new double();
+            Vector3d offset = new Vector3d(0, 0, 0);
+
             #endregion
 
             #region input
             if (!DA.GetData(0, ref name)) { return; }
             if (!DA.GetData(1, ref width)) { return; }
             if (!DA.GetData(2, ref height)) { return; }
+            
+
             #endregion
 
             #region solve
-            Section rectSec = new Section(name, width, height);
+            Section rectSec = new Section(name, width/1000, height/1000);
+            string test = "";
+            test += rectSec.SectionName + ", " + rectSec.Height.ToString();
+            // MessageBox.Show(test);
             #endregion
 
             #region output

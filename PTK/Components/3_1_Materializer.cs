@@ -66,9 +66,10 @@ namespace PTK
 
             List<Curve> curves = new List<Curve>();
             List<Point3d> pts = new List<Point3d>();
-            List<Element> elems = new List<Element>();
+            List<PTK_Element> elems = new List<PTK_Element>();
             List<Node> nodes = new List<Node>();
             List<Align> alignList = new List<Align>();
+            // Align aligner;
 
             string elemTag = "N/A";
             List<Vector3d> normalVec = new List<Vector3d>();
@@ -78,8 +79,8 @@ namespace PTK
             GH_ObjectWrapper wrapForce = new GH_ObjectWrapper();
 
             Section section;
-            Material material;
-            Forces forces;
+            PTK_Material material;
+            PTK_Forces forces;
             Align align;
             #endregion
 
@@ -96,19 +97,19 @@ namespace PTK
             #region solve
             //Turning objectwrappers into its respective objects. 
             wrapSec.CastTo<Section>(out section);
-            wrapMat.CastTo<Material>(out material);
+            wrapMat.CastTo<PTK_Material>(out material);
             wrapAlign.CastTo<Align>(out align);
-            wrapForce.CastTo<Forces>(out forces);
+            wrapForce.CastTo<PTK_Forces>(out forces);
 
 
             //Assigning Default Values if not inputed (correctly)
             if (section == null) section = new Section("Untitled", 100, 100);
-            if (forces == null) forces = new Forces();
+            if (forces == null) forces = new PTK_Forces();
             if (material == null)
             {
                 // material = new Material("untitled", 10, new MatProps("Untitled", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)); //Marcin: Add something generic here
-                material = new Material(
-                    new MatProps("Untitled", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
+                material = new PTK_Material(
+                    new PTK_MatProps("Untitled", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
             }
             if (align == null) align = new Align("Untitled", new Vector3d(0, 0, 1), new Vector3d(0, 0, 0));
 
@@ -125,8 +126,10 @@ namespace PTK
                         if (!curves[i].IsValid) { return; }
                         elems.Add(new Element(curves[i], elemTag, align, section, material));
                     }
+
                 });
             }
+
             // non multi-threading way. Creating Elements from Curves
             else
             {
@@ -134,16 +137,16 @@ namespace PTK
                 {
                     if (curves[i] == null) continue;
                     if (!curves[i].IsValid) continue;
+
                     elems.Add(new Element(curves[i], elemTag, align, section, material));
                 }
             }*/
-
             for (int i = 0; i < curves.Count; i++)
             {
                 if (curves[i] == null) continue;
                 if (!curves[i].IsValid) continue;
 
-                elems.Add(new Element(curves[i], elemTag, align, section, material));
+                elems.Add(new PTK_Element(curves[i], elemTag, align, section, material ));
             }
 
             #endregion

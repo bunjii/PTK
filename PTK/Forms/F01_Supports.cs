@@ -43,14 +43,7 @@ namespace PTK.Forms
         // loading event
         private void setValues()
         {
-            boolSupArray = Support.StringToArray(boolSupString);
-
-            checkBox1.Checked = boolSupArray[0];
-            checkBox2.Checked = boolSupArray[1];
-            checkBox3.Checked = boolSupArray[2];
-            checkBox4.Checked = boolSupArray[3];
-            checkBox5.Checked = boolSupArray[4];
-            checkBox6.Checked = boolSupArray[5];
+           
             
         }
 
