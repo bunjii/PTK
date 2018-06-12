@@ -16,7 +16,7 @@ using System.Windows.Forms;
 namespace PTK
 {
 
-    public class PTK_4_Assemble : GH_Component
+    public class checker1 : GH_Component
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public 
@@ -25,10 +25,10 @@ namespace PTK
         /// Subcategory the panel. If you use non-existing tab or panel names, 
         /// new tabs/panels will automatically be created.
         /// </summary>
-        public PTK_4_Assemble()
-          : base("Assemble (PTK)", "Assemble",
-              "Assemble",
-              CommonProps.category, CommonProps.subcat1)
+        public checker1()
+          : base("checker1 (PTK)", "checker1",
+              "checker1",
+              CommonProps.category, "temporary")
         {
             Message = CommonProps.initialMessage;
         }
@@ -55,6 +55,9 @@ namespace PTK
         {
             pManager.AddGenericParameter("PTK Assembly", "A (PTK)", "Assembled project data", GH_ParamAccess.item);
             pManager.RegisterParam(new Karamba.Models.Param_Model(), "Model", "Model", "Karamba Model");
+
+            pManager.AddTextParameter("PTK Assembly", "A (PTK)", "Assembled project data", GH_ParamAccess.list);
+
             #region obsolete
             // outputs below just checking purposes. should be removed before release. 
             /*
@@ -108,9 +111,9 @@ namespace PTK
 
             #region input
             if (!DA.GetDataList(0, wrapElemList)) { return; }
-            DA.GetDataList(1, wrapSupList);
-            DA.GetDataList(2, wrapLoadList);
-            DA.GetData(3, ref priorityTxt);
+            if (!DA.GetDataList(1, wrapSupList)) { return; }
+            if (!DA.GetDataList(2, wrapLoadList)) { return; }
+            if (!DA.GetData(3, ref priorityTxt)) { return; }
             #endregion
 
             #region solve
@@ -125,7 +128,7 @@ namespace PTK
                 foreach (PTK_Element e in tempElemList) elems.Add(e.Clone());
             }
 
-            
+
             for (int i1 = 0; i1 < wrapSupList.Count; i1++)
             {
                 List<PTK_Support> tempSupList = new List<PTK_Support>();
@@ -134,31 +137,13 @@ namespace PTK
                 // memberwise clone
                 foreach (PTK_Support s in tempSupList) sups.Add(s.Clone());
             }
-            
-            
 
-            for (int i2 = 0; i2 < wrapLoadList.Count; i2++)
-            {
-                List<PTK_Load> tempLoadList = new List<PTK_Load>();
-                wrapLoadList[i2].CastTo<List<PTK_Load>>(out tempLoadList);
-
-                // memberwise clone
-                foreach (PTK_Load l in tempLoadList) loads.Add(l.Clone());
-            }
-
-            /* old version,when we got input as item not list
-             
-            foreach (var wrapped_sup in wrapSupList)
-            {
-                var s = wrapped_sup.Value as PTK_Support;
-                if (s != null) sups.Add(s);
-            }
             foreach (var wrapped_load in wrapLoadList)
             {
-                var l = wrapped_load.Value as PTK_Load;
-                if (l != null) loads.Add(l);
+                var s = wrapped_load.Value as PTK_Load;
+                if (s != null) loads.Add(s);
             }
-            */
+
 
             // main functions #1
             // Functions.Assemble returns "nodes"
@@ -205,20 +190,18 @@ namespace PTK
             #endregion
 
             #region output
-            Assembly Assembly = new Assembly(
-                new List<Node>(nodes), 
-                new List<PTK_Element>(elems),
-                new List<PTK_Material>(mats), 
-                new List<Section>(secs), 
-                new List<PTK_Support>(sups), 
+            Assembly Assembly = new Assembly(new List<Node>(nodes), new List<PTK_Element>(elems),
+                new List<PTK_Material>(mats), new List<Section>(secs), new List<PTK_Support>(sups),
                 new List<PTK_Load>(loads));
 
             var Model = new PTK.Classes.KarambaExport(Assembly).BuildModel();
             var karamba_GH_model = new Karamba.Models.GH_Model(Model);
 
             models.Add(karamba_GH_model);
+
             Assembly.Krmb_GH_model = models;
-            
+
+
             // Assembly Assembly = new Assembly(nodes, elems, mats, secs, sups);
             nodes.Clear();
             elems.Clear();
@@ -226,10 +209,20 @@ namespace PTK
             secs.Clear();
             sups.Clear();
             loads.Clear();
-            
-            DA.SetData(0, Assembly);
-            DA.SetData(1, karamba_GH_model);
-            
+
+            List<string> outlist = new List<string>();
+
+            foreach (var su in sups)
+            {
+                outlist.Add(su.ToString()) ;
+            }
+
+
+            DA.SetData(0, Assembly) ;
+            DA.SetData(1, karamba_GH_model) ;
+
+            DA.SetDataList(2, outlist) ;
+
             #region obsolete
             // DA.SetDataList(1, PointNodes);
             // DA.SetDataList(2, BokseTest);
@@ -613,7 +606,7 @@ namespace PTK
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("d16b2f49-a170-4d47-ae63-f17a4907fed1"); }
+            get { return new Guid("d16b2f49-a170-4d42-ae63-f17a4907fed1"); }
         }
     }
 }

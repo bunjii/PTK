@@ -15,7 +15,7 @@ namespace PTK
         private int load_id;
         private Vector3d load_vector;
         private Point3d load_point;
-        private Karamba.Loads.GH_Load krmb_load;
+        private Karamba.Loads.GH_Load krmb_GH_load;
         #endregion
 
         #region constructors
@@ -28,9 +28,9 @@ namespace PTK
 
         }
 
-        public PTK_Load(Karamba.Loads.GH_Load _krmb_load)
+        public PTK_Load(Karamba.Loads.GH_Load _krmb_GH_load)
         {
-            krmb_load = _krmb_load ;               // inheriting Load Class
+            krmb_GH_load = _krmb_GH_load;               // inheriting Load Class
 
         }
         #endregion
@@ -41,11 +41,15 @@ namespace PTK
         public Vector3d Load_vecotr { get { return load_vector; } set { load_vector = value; } }
         public Point3d Load_point { get { return load_point; } set { load_point = value; } }
 
-        public Karamba.Loads.GH_Load Krmb_GH_load { get { return krmb_load; } set { krmb_load = value; } }
+        public Karamba.Loads.GH_Load Krmb_GH_load { get { return krmb_GH_load; } set { krmb_GH_load = value; } }
         #endregion
 
         #region methods
-
+        
+        public PTK_Load Clone()
+        {
+            return (PTK_Load)MemberwiseClone();
+        }
         public void AssignID()
         {
             this.id = idCount;
@@ -55,6 +59,17 @@ namespace PTK
         public static void ResetIDCount()
         {
             idCount = 0;
+        }
+
+        public override string ToString()
+        {
+            if (krmb_GH_load != null)
+            {
+                return base.ToString() + "\n" + krmb_GH_load.ToString();
+            }
+
+            return base.ToString();
+
         }
         #endregion
     }

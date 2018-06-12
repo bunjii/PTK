@@ -49,7 +49,10 @@ namespace PTK
         #endregion
 
         #region methods
-
+        public PTK_Support Clone()
+        {
+            return (PTK_Support)MemberwiseClone();
+        }
         public void AssignID()
         {
             this.id = idCount;
