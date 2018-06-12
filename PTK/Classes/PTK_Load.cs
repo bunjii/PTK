@@ -41,7 +41,7 @@ namespace PTK
         public Vector3d Load_vecotr { get { return load_vector; } set { load_vector = value; } }
         public Point3d Load_point { get { return load_point; } set { load_point = value; } }
 
-        public Karamba.Loads.GH_Load Krmb_load { get { return krmb_load; } set { krmb_load = value; } }
+        public Karamba.Loads.GH_Load Krmb_GH_load { get { return krmb_load; } set { krmb_load = value; } }
         #endregion
 
         #region methods

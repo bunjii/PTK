@@ -53,12 +53,15 @@ namespace PTK.Components
             List<PTK_Material> mats = new List<PTK_Material>();
             List<Section> secs = new List<Section>();
             List<PTK_Support> sups = new List<PTK_Support>();
+            List<PTK_Load> loads = new List<PTK_Load>();
+            
             GH_ObjectWrapper wrapAssembly = new GH_ObjectWrapper();
             Assembly assemble;
             #endregion
 
             #region input
             if (!DA.GetData(0, ref wrapAssembly)) { return; }
+
             #endregion
 
             #region solve
@@ -71,7 +74,7 @@ namespace PTK.Components
             secs = assemble.Secs;
             sups = assemble.Sups;
 
-            Assembly outAssemble = new Assembly(nodes, elems, mats, secs, sups);
+            Assembly outAssemble = new Assembly(nodes, elems, mats, secs, sups, loads);
 
             #endregion
 

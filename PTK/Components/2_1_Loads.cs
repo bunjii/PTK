@@ -27,10 +27,11 @@ namespace PTK
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
 
-            pManager.AddTextParameter("tag", "tag", "tag", GH_ParamAccess.item,"0");      //We should add default values here.
-            pManager.AddIntegerParameter("Load Case", "LC", "Load case", GH_ParamAccess.item, 0);    //We should add default values here.
-            pManager.AddPointParameter("Point Load", "pt", "Point to which load will be assigned", GH_ParamAccess.item );
-            pManager.AddVectorParameter("Vector Load","load vec","in [kN]. Vector which describe the diretion and value in kN", GH_ParamAccess.item);
+            pManager.AddTextParameter("tag", "tag", "tag", GH_ParamAccess.list,"0");      //We should add default values here.
+            pManager.AddIntegerParameter("Load Case", "LC", "Load case", GH_ParamAccess.list, 0);    //We should add default values here.
+            pManager.AddPointParameter("Point Load", "pt", "Point to which load will be assigned", GH_ParamAccess.list, new Point3d() );
+            pManager.AddVectorParameter("Vector Force Load","load vec","in [kN]. Vector which describe the diretion and value in kN", GH_ParamAccess.list, new Vector3d() );
+            pManager.AddVectorParameter("Vector Moment Load", "moment vec", "in [kN]. Vector which describe the diretion and value in kNm", GH_ParamAccess.list, new Vector3d());
 
             pManager[0].Optional = true;
             pManager[1].Optional = true;
@@ -44,8 +45,9 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK Load", "L (PTK)", "Load data to be send to Assembler(PTK)", GH_ParamAccess.item);
+            pManager.AddGenericParameter("PTK Load", "L (PTK)", "Load data to be send to Assembler(PTK)", GH_ParamAccess.item );
             pManager.RegisterParam(new Karamba.Loads.Param_Load(), "Support", "supp", "Ouput support(s)");
+            
 
         }
 
@@ -56,34 +58,49 @@ namespace PTK
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             #region variables
-            string Tag = "N/A";
-            int lcase = 0;
-            Point3d lpoint = new Point3d();
-            Vector3d lvector = new Vector3d();
+            
+            List<string> Tag_list = new List<string>();
+            List<int> lcase_list = new List<int>();
+            List<Point3d> lpoint_list = new List<Point3d>();
+            List<Vector3d> lfvector_list = new List<Vector3d>();
+            List<Vector3d> lmvecotr_list = new List<Vector3d>();
 
+            List<PTK_Load> load_list = new List<PTK_Load>();
+            List<Karamba.Loads.GH_Load> load_GH_list = new List<Karamba.Loads.GH_Load>();
             #endregion
 
             #region input
-            DA.GetData(0, ref Tag);
-            if (!DA.GetData(1, ref lcase)) { return; }
-            if (!DA.GetData(2, ref lpoint)) { return; }
-            if (!DA.GetData(3, ref lvector)) { return; }
+            
+            if (!DA.GetDataList(0, Tag_list))       { return; }
+            if (!DA.GetDataList(1, lcase_list))     { return; }
+            if (!DA.GetDataList(2, lpoint_list))    { return; }
+            if (!DA.GetDataList(3, lfvector_list))       { return; }
+            if (!DA.GetDataList(4, lmvecotr_list))       { return; }
             #endregion
 
             #region solve
-            PTK_Load PTKloads = new PTK_Load(Tag,lpoint,lvector);
-
             
-            var load_1 = new Karamba.Loads.PointLoad(lpoint, lvector, lvector, lcase, true);
-            var krmb_load = new Karamba.Loads.GH_Load(load_1);
 
-            PTK_Load ptkload1 = new PTK_Load(krmb_load);
+            int id1 = 0;
+            foreach (var p in lpoint_list)
+            {
+                var load_1 = new Karamba.Loads.PointLoad(lpoint_list[id1], lfvector_list[id1], lmvecotr_list[id1], lcase_list[id1], true);
+                var krmb_load = new Karamba.Loads.GH_Load(load_1);
+
+                load_GH_list.Add( krmb_load );
+                load_list.Add( new PTK_Load(krmb_load) );
+
+                id1++;
+            }
+
 
             #endregion
 
+
+
             #region output
-            DA.SetData(0, ptkload1);
-            DA.SetData(1, krmb_load);
+            DA.SetData(0, load_list);
+            DA.SetDataList(1, load_GH_list);
             #endregion
 
         }

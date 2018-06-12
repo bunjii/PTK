@@ -93,6 +93,7 @@ namespace PTK
             List<Section> secs = new List<Section>();
             List<PTK_Support> sups = new List<PTK_Support>();
             List<PTK_Load> loads = new List<PTK_Load>();
+            List<Karamba.Models.GH_Model> models = new List<Karamba.Models.GH_Model>();
 
             RTree rTreeNodes = new RTree();
             RTree rTreeElems = new RTree();
@@ -122,14 +123,6 @@ namespace PTK
                 foreach (PTK_Element e in tempElemList) elems.Add(e.Clone());
             }
             
-            /*
-            foreach (var wrapped_element in wrapElemList)
-            {
-                var e = wrapped_element.Value as Element;
-                if (e != null) elems.Add(e);
-            }
-            */
-
             foreach (var wrapped_support in wrapSupList)
             {
                 var s = wrapped_support.Value as PTK_Support;
@@ -142,19 +135,6 @@ namespace PTK
                 if (s != null) loads.Add(s);
             }
 
-            // DDL "unwrap wrapped support class" and 
-            // "merge multiple support class instance lists"
-            /*
-            if (wrapSupList.Count != 0)
-            {
-                for (int i = 0; i < wrapSupList.Count; i++)
-                {
-                    List<Support> tempSupList = new List<Support>();
-                    wrapSupList[i].CastTo<List<Support>>(out tempSupList);
-                    sups.AddRange(tempSupList);
-                }
-            }
-            */
 
             // main functions #1
             // Functions.Assemble returns "nodes"
@@ -198,58 +178,20 @@ namespace PTK
             // register 
             RegisterSupports(ref sups);
 
-            #region obsolete
-
-            /* has moved to PTK_UTIL_1_GenerateGeometry 
-             * & PTK_UTIL_5_DisassembleElement
-            List<Brep> BokseTest = new List<Brep>();
-            List<Curve> elementCurves = new List<Curve>();
-            List<int> elementid = new List<int>();
-            List<int> ConnectedNodes = new List<int>();
-            
-            List<Line> strLine = new List<Line>();
-            List<String> SubID = new List<String>();
-
-            // Testing, making breps
-            for (int i = 0; i < elems.Count; i++)
-            {
-                has moved to PTK_UTIL_1_GenerateGeometry
-                BokseTest.Add(elems[i].ElementGeometry);
-                elementCurves.Add(elems[i].Crv);
-                ConnectedNodes.Add(elems[i].ConnectedNodes);
-                elementid.Add(elems[i].Id);
-                
-
-                string tempID = Convert.ToString(elems[i].Id);
-                
-                // making SubID output
-                for (int j = 0; j < elems[i].SubStructural.Count; j++)
-                {
-                    strLine.Add(elems[i].SubStructural[j].StrctrLine);
-                    SubID.Add(tempID + "_" + Convert.ToString(elems[i].SubStructural[j].StrctrlLineID));
-                }
-            }
-            List<string> IDs = new List<string>();
-            List<Point3d> PointNodes = new List<Point3d>();
-            List<string> NeighbourList = new List<string>();
-            for (int i = 0; i < nodes.Count; i++)
-            {
-                IDs.Add(Convert.ToString( nodes[i].ID));
-                PointNodes.Add(nodes[i].Pt3d);
-                string text ="N"+ Convert.ToString(nodes[i].ID)+"_";
-                for (int j = 0; j < nodes[i].ElemIds.Count; j++)
-                {
-                    text += "E:" +Convert.ToString(nodes[i].ElemIds[j])+" ";
-                }
-                NeighbourList.Add(text);
-            }
-            */
-            #endregion
             #endregion
 
             #region output
             Assembly Assembly = new Assembly(new List<Node>(nodes), new List<PTK_Element>(elems),
-                new List<PTK_Material>(mats), new List<Section>(secs), new List<PTK_Support>(sups));
+                new List<PTK_Material>(mats), new List<Section>(secs), new List<PTK_Support>(sups), 
+                new List<PTK_Load>(loads));
+
+            var Model = new PTK.Classes.KarambaExport(Assembly).BuildModel();
+            var karamba_GH_model = new Karamba.Models.GH_Model(Model);
+
+            models.Add(karamba_GH_model);
+
+            Assembly.Krmb_GH_model = models;
+
 
             // Assembly Assembly = new Assembly(nodes, elems, mats, secs, sups);
             nodes.Clear();
@@ -257,13 +199,13 @@ namespace PTK
             mats.Clear();
             secs.Clear();
             sups.Clear();
+            loads.Clear();
 
-            var Model = new PTK.Classes.KarambaExport(Assembly).BuildModel();
-            var karamba_model = new Karamba.Models.GH_Model(Model);
+            
 
 
             DA.SetData(0, Assembly);
-            DA.SetData(1, karamba_model);
+            DA.SetData(1, karamba_GH_model);
             
             #region obsolete
             // DA.SetDataList(1, PointNodes);

@@ -41,12 +41,10 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddPointParameter("Position", "point", "Boundary point", GH_ParamAccess.item );
-            pManager.AddPlaneParameter("Orientation", "orientation", "Plane which defines rotatation of support point", GH_ParamAccess.item, Plane.WorldXY);
-            pManager.AddPlaneParameter("Plane", "plane", "All of the points on this plane will be supported", GH_ParamAccess.item, Plane.WorldXY);
+            pManager.AddPointParameter("Position", "point", "Boundary point", GH_ParamAccess.list );
+            pManager.AddPlaneParameter("Orientation", "orientation", "Plane which defines rotatation of support point", GH_ParamAccess.list, Plane.WorldXY);
             pManager.AddTextParameter("Conditions", "bc", "Boundary condtitions", GH_ParamAccess.item,"111000");
-
-            pManager[0].Optional = true;
+ 
         }
 
         /// <summary>
@@ -57,7 +55,7 @@ namespace PTK
         {
             pManager.AddGenericParameter("PTK Supports", "Sup (PTK)", "Support data to be send to Assembler(PTK)", GH_ParamAccess.item);
             pManager.RegisterParam(new Karamba.Supports.Param_Support(), "Support", "supp", "Ouput support(s)");
-            pManager.AddTextParameter("BCinfo", "bccond", "Information about realeses", GH_ParamAccess.list);
+            pManager.AddTextParameter("BCinfo", "bccond", "Information about realeses", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -70,28 +68,28 @@ namespace PTK
 
             string Tag = "N/A";
             int lCase = 0;
-            
-            List<Karamba.Supports.Support> sups = new List<Karamba.Supports.Support>();
-
-            Point3d sup_point = new Point3d();
-            Plane sup_orient = new Plane();
-            Plane sup_pln = new Plane();
-
             string bc="111000";
+
+            List<PTK_Support> sups = new List<PTK_Support>();
+            List<Karamba.Supports.GH_Support> sups_GH_krmb = new List<Karamba.Supports.GH_Support>();
+
             List<bool> sup_bc_list = new List<bool>();
             List<string> sup_bc_info = new List<string>();
+
+            List<string> Tag_list= new List<string>();
+            List<int> lcase_list = new List<int>();
+
+            List<Point3d> sup_point_list = new List<Point3d>();
+            List<Plane> sup_orientation_list = new List<Plane>();
+            
             #endregion
 
-
-
             #region input
+            
+            if (!DA.GetDataList(0,  sup_point_list)) { return; }
+            if (!DA.GetDataList(1,  sup_orientation_list)) { return; }
 
-
-            if (!DA.GetData(0, ref sup_point)) { return; }
-            if (!DA.GetData(1, ref sup_orient)) { return; }
-            if (!DA.GetData(2, ref sup_pln)) { return; }
-
-            if (!DA.GetData(3, ref bc)) { return; }
+            if (!DA.GetData(2, ref bc)) { return; }
             #endregion
 
             #region solve
@@ -128,23 +126,30 @@ namespace PTK
 
             }
 
-
-
             List<bool> bc_list = sup_bc_list;
 
-            Karamba.Supports.Support tmp_sup = new Karamba.Supports.Support(sup_point, bc_list , sup_orient);
 
-            Karamba.Supports.GH_Support krmb_sup = new Karamba.Supports.GH_Support(tmp_sup);
+            int id1 = 0;
+            foreach (var p in sup_point_list)
+            {
+                Karamba.Supports.Support tmp_sup = new Karamba.Supports.Support(sup_point_list[id1], bc_list , sup_orientation_list[id1]);
+                Karamba.Supports.GH_Support krmb_sup = new Karamba.Supports.GH_Support(tmp_sup);
+                
+                sups.Add(new PTK_Support(krmb_sup));
+                sups_GH_krmb.Add( krmb_sup );
 
-            var n_support = new PTK_Support(krmb_sup);
+                id1++;
+            }
+
+            
 
             #endregion
 
             #region output
 
 
-            DA.SetData(0, n_support) ;
-            DA.SetData(1, krmb_sup) ;
+            DA.SetData(0, sups) ;
+            DA.SetDataList(1, sups_GH_krmb) ;
             DA.SetDataList(2, sup_bc_info );
             #endregion
         }

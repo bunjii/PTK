@@ -105,14 +105,19 @@ namespace PTK.Classes
             var add_beamsets = new List<Karamba.Utilities.ElemSet>();
             var add_mats = new List<Karamba.Materials.FemMaterial>();
 
-
+            /// supports
             foreach (PTK_Support s in ptkassembly.Sups)
             {
                 supps.Add( s.Krmb_GH_support.Value );
             }
 
+            /// loads
+            foreach (PTK_Load l in ptkassembly.Loads)
+            {
+                loads.Add( l.Krmb_GH_load.Value );
+            }
 
-           
+
             double limit_dist = 0.005;
             var model_builder = new Karamba.Models.ModelBuilder(limit_dist);
             var model = model_builder.build(
