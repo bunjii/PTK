@@ -27,6 +27,7 @@ namespace PTK
         private Plane xyPlane;
         private Plane xzPlane;
         private Plane yzPlane;
+        private double length;
         Interval iz; //From Centricplanse
         Interval iy;
         Interval ix;
@@ -42,6 +43,7 @@ namespace PTK
         {
             nodes = new List<Node>();
             crv = _crv;
+            length = crv.GetLength();
             tag = _tag;
             align = _align;
             section = _section;
@@ -54,6 +56,7 @@ namespace PTK
             generateIntervals();
             generateElementGeometry();
             parameterConnectedNodes = new List<double>();
+
 
 
 
@@ -93,7 +96,7 @@ namespace PTK
         public int ConnectedNodes { get { return connectedNodes; } }
         public List<double> ParameterConnectedNodes { get { return parameterConnectedNodes; } }
         public List<Node> Nodes { get { return nodes; } }
-
+        public double Length { get { return length; } }
 
 
 

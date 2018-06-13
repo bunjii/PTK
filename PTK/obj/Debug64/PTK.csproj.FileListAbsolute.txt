@@ -1,0 +1,15 @@
+C:\Users\Lokaladm\Google Drive\PHD\PTK\PTK\obj\Debug64\PTK.csprojResolveAssemblyReference.cache
+C:\Users\Lokaladm\Google Drive\PHD\PTK\PTK\obj\Debug64\PTK.Properties.Resources.resources
+C:\Users\Lokaladm\Google Drive\PHD\PTK\PTK\obj\Debug64\PTK.csproj.GenerateResource.Cache
+C:\Users\Lokaladm\Google Drive\PHD\PTK\PTK\bin\PTK.dll
+C:\Users\Lokaladm\Google Drive\PHD\PTK\PTK\bin\PTK.pdb
+C:\Users\Lokaladm\Google Drive\PHD\PTK\PTK\bin\System.Numerics.Vectors.dll
+C:\Users\Lokaladm\Google Drive\PHD\PTK\PTK\bin\System.Numerics.Vectors.xml
+C:\Users\Lokaladm\Google Drive\PHD\PTK\PTK\obj\Debug64\PTK.dll
+C:\Users\Lokaladm\Google Drive\PHD\PTK\PTK\obj\Debug64\PTK.pdb
+C:\Users\Lokaladm\Google Drive\PHD\PTK\PTK\bin\Grasshopper.dll
+C:\Users\Lokaladm\Google Drive\PHD\PTK\PTK\bin\GH_IO.dll
+C:\Users\Lokaladm\Google Drive\PHD\PTK\PTK\bin\RhinoCommon.dll
+C:\Users\Lokaladm\Google Drive\PHD\PTK\PTK\bin\PTK.dll.config
+C:\Users\Lokaladm\Google Drive\PHD\PTK\PTK\bin\AutoMapper.dll
+C:\Users\Lokaladm\Google Drive\PHD\PTK\PTK\bin\AutoMapper.xml

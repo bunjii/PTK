@@ -83,6 +83,8 @@ namespace PTK
             if (add)
             {
                 elems.Add(_element);
+                elemIds.Add(_element.ID);
+
             }
 
 

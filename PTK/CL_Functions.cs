@@ -138,9 +138,6 @@ namespace PTK
                     {
                         pointOnCurves.Add(tmppt);
                         parameterTemp.Add(t);
-
-
-
                         element[e].AddNeighbour(Node[n].ID);
                         Node[n].AddNeighbour(element[e].ID);
                         /*
@@ -186,6 +183,10 @@ namespace PTK
 
 
         }
+        
+        
+
+
 
 
 

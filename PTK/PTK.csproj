@@ -34,6 +34,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=7.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.7.0.0\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="GH_IO">
       <HintPath>..\..\Library\GH_IO.dll</HintPath>
     </Reference>
@@ -44,6 +48,7 @@
     <Reference Include="karamba">
       <HintPath>..\..\Library\karamba.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="referenceKaramba, Version=1.14.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\AppData\Roaming\Grasshopper\Libraries\referenceKaramba.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
@@ -61,19 +66,27 @@
       <HintPath>..\packages\System.Numerics.Vectors.4.4.0\lib\portable-net45+win8+wp8+wpa81\System.Numerics.Vectors.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CL_Align.cs" />
     <Compile Include="CL_Assembly.cs" />
+    <Compile Include="CL_Descriptions.cs" />
+    <Compile Include="CL_Detail.cs" />
+    <Compile Include="CL_DetailingGroup.cs" />
     <Compile Include="CL_Element.cs" />
     <Compile Include="CL_Functions.cs" />
     <Compile Include="CL_Loads.cs" />
     <Compile Include="CL_Material.cs" />
     <Compile Include="CL_Material_properties.cs" />
+    <Compile Include="CL_Rule.cs" />
     <Compile Include="MyComponent1.cs" />
     <Compile Include="CL_Node.cs" />
     <Compile Include="ProjectProperties.cs" />
+    <Compile Include="PTK_10_Description_01_Length.cs" />
+    <Compile Include="PTK_10_Description_02_ElemAmount.cs" />
+    <Compile Include="PTK_10_DetailDescription.cs" />
     <Compile Include="PTK_1_4_Alignment_Simple.cs" />
     <Compile Include="PTK_1_5_Forces.cs" />
     <Compile Include="CL_Forces.cs" />
@@ -115,6 +128,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <None Include="Resources\icon_truss.png" />
   </ItemGroup>

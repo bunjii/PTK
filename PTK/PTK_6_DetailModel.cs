@@ -24,6 +24,7 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
+            pManager.AddTextParameter("DetailingGroupName", "", "", GH_ParamAccess.item);
             pManager.AddGenericParameter("PTK Assembly", "PTK A", "PTK Assembly", GH_ParamAccess.item);
             // pManager.AddGenericParameter("PTK LOGIC", "PTK LOGIC", "COLLECTIONS OF DETAIL SELECTIONS", GH_ParamAccess.item);
 
@@ -34,7 +35,9 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK Assembly", "PTK A", "PTK Assembly", GH_ParamAccess.item);
+            pManager.AddCurveParameter("Eleements", "PTK A", "PTK Assembly", GH_ParamAccess.list);
+            pManager.AddPointParameter("nodes", "", "", GH_ParamAccess.list);
+
         }
 
         /// <summary>
@@ -44,29 +47,53 @@ namespace PTK
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             #region variables
-            List<Node> nodes = new List<Node>();
-            List<Element> elems = new List<Element>();
-            GH_ObjectWrapper wrapAssembly = new GH_ObjectWrapper();
-            Assembly assemble;
+
+            Assembly assemble = null;
+            string Name = "";
+
+            DA.GetData(0, ref Name);
+
+            DA.GetData(1, ref assemble);
+
+            
+
+            List<Detail> Details = assemble.DetailingGroups.Find(t => t.Name == Name).Details;
+
+
+            List<Curve> curves = new List<Curve>();
+            List<Point3d> points = new List<Point3d>();
+
+            foreach(Detail Detail in Details)
+            {
+                
+                    foreach (Element elem in Detail.Elems)
+                {
+                    curves.Add(elem.Crv);
+                }
+                    foreach (Node node in Detail.Nodes)
+                {
+                    points.Add(node.Pt3d);
+                }
+
+
+            }
+
+            DA.SetDataList(0, curves);
+            DA.SetDataList(1, points);
+
+
+
             #endregion
 
-            #region input
-            if (!DA.GetData(0, ref wrapAssembly)) { return; }
-            #endregion
+
 
             #region solve
 
-            wrapAssembly.CastTo<Assembly>(out assemble);
-
-            nodes = assemble.Nodes;
-            elems = assemble.Elems;
-
-            Assembly assemble2 = new Assembly(nodes, elems);
 
             #endregion
 
             #region output
-            DA.SetData(0, assemble2);
+            DA.SetData(0, assemble);
             #endregion
         }
 

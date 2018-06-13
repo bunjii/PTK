@@ -11,14 +11,24 @@ namespace PTK
         #region fields
         private List<Node> nodes;
         private List<Element> elems;
+        private List<DetailingGroup> detailingGroups;
         #endregion
 
         #region constructors
+        public Assembly(List<Node> _nodes, List<Element> _elems, List<DetailingGroup> _detailingGroups)
+        {
+            nodes = _nodes;
+            elems = _elems;
+            detailingGroups = _detailingGroups;
+        }
         public Assembly(List<Node> _nodes, List<Element> _elems)
         {
             nodes = _nodes;
             elems = _elems;
+            
         }
+
+
         #endregion
 
         #region properties
@@ -32,10 +42,16 @@ namespace PTK
             get { return elems; }
             set { elems = value; }
         }
+
+        public List<DetailingGroup> DetailingGroups
+        {
+            get { return detailingGroups; }
+            set { detailingGroups = value; }
+        }
         #endregion
 
         #region methods
         #endregion
-        
+
     }
 }

@@ -40,9 +40,12 @@ namespace PTK
             pManager.AddGenericParameter("Element", "E", "Add elements here", GH_ParamAccess.list);
             pManager.AddGenericParameter("Supports", "S", "Add Supports here", GH_ParamAccess.list);
             pManager.AddGenericParameter("Loads", "L", "Add Loads here", GH_ParamAccess.list);
+            pManager.AddGenericParameter("DetailingGroupDescriptions", "DGD", "Add detailinggroupDescriptions here", GH_ParamAccess.list);
+
 
             pManager[1].Optional = true;
             pManager[2].Optional = true;
+            
         }
 
         /// <summary>
@@ -59,6 +62,8 @@ namespace PTK
             pManager.AddTextParameter("Neighbours", "", "", GH_ParamAccess.list);
             pManager.AddLineParameter("Lines", "", "", GH_ParamAccess.list);
             pManager.AddTextParameter("SubID", "", "", GH_ParamAccess.list);
+            pManager.AddCurveParameter("", "", "", GH_ParamAccess.item);
+            pManager.AddPointParameter("", "", "", GH_ParamAccess.item);
 
 
         }
@@ -80,6 +85,7 @@ namespace PTK
             List<Element> elems = new List<Element>();
             List<Section> rectSecs = new List<Section>();
             List<Element> tempElemList = new List<Element>();
+            List<DetailingGroup> DetailingGroup = new List<DetailingGroup>();
             
 
             List<GH_ObjectWrapper> wrapElemList = new List<GH_ObjectWrapper>();
@@ -87,6 +93,8 @@ namespace PTK
 
             #region input
             if (!DA.GetDataList(0, wrapElemList)) { return; }
+            DA.GetDataList(3, DetailingGroup);
+
             #endregion
 
             #region solve
@@ -112,8 +120,11 @@ namespace PTK
 
             Functions.Assemble(elems, out nodes);
             Functions.GenerateStructuralLines(elems);
+            
   
             
+
+
             List<Brep> BokseTest = new List<Brep>();
             List<Curve> elementCurves = new List<Curve>();
             List<int> elementid = new List<int>();
@@ -159,14 +170,22 @@ namespace PTK
 
             }
 
-            
+
+
+            for (int i = 0; i < DetailingGroup.Count; i++)
+            {
+                DetailingGroup[i].assignDetails(nodes, elems);
+            }
 
 
             #endregion
 
             #region output
 
-            Assembly Assembly = new Assembly(nodes, elems);
+
+
+
+            Assembly Assembly = new Assembly(nodes, elems, DetailingGroup);
 
             DA.SetData(0, Assembly);
             DA.SetDataList(1, PointNodes);
@@ -177,6 +196,8 @@ namespace PTK
             DA.SetDataList(6, ConnectedNodes);
             DA.SetDataList(7, strLine);
             DA.SetDataList(8, SubID);
+            
+
             #endregion
 
 
