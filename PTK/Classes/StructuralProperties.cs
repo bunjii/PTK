@@ -9,6 +9,10 @@ namespace PTK
     class StructuralProperties
     {
 
+
+
+
+
         public double Length;
         public double forceNx;
         public double momentMy;

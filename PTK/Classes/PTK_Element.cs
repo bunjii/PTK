@@ -26,10 +26,11 @@ namespace PTK
         private int secId;
         private PTK_Material material;
         private int matId;
-        private PTK_Forces force;
+        private PTK_Forces forces;
         private Align align;
         private List<Subelement> subElem;
         private int priority;
+        
         //private StructuralProperties structprop;
         // the structural properties
        
@@ -67,6 +68,45 @@ namespace PTK
             align = _align;
             section = _section;
             material = _material;
+            pointAtEnd = _crv.PointAtEnd;
+            pointAtStart = _crv.PointAtStart;
+            ptId = new List<int>();
+            matId = -999;
+            secId = -999;
+            priority = -999;
+            subElem = new List<Subelement>();
+
+            // initializeCentricPlanes();   // replaced by DDL on 2nd April
+            InitializeCentricPlanes();
+            GenerateIntervals();
+            GenerateElementGeometry();
+
+            nodeParams = new List<double>();
+
+            //n0id = -999: This one is currently missing, but easy to remake in the AsignNeighbour function
+            //n1id = -999; This one is currently missing, but easy to remake in the AsignNeighbour function
+
+        }
+
+        public PTK_Element(
+            Curve _crv,
+            string _tag,
+            Align _align,
+            Section _section,
+            PTK_Material _material,
+            PTK_Forces _forces
+            )
+        {
+            // nodes = new List<Node>();
+
+            nodeIds = new List<int>();
+            crv = _crv;
+            tag = _tag;
+            align = _align;
+            section = _section;
+            material = _material;
+            forces = _forces;
+
             pointAtEnd = _crv.PointAtEnd;
             pointAtStart = _crv.PointAtStart;
             ptId = new List<int>();
@@ -141,10 +181,10 @@ namespace PTK
             get { return material; }
             set { material = value; }
         }
-        public PTK_Forces Force
+        public PTK_Forces Forces
         {
-            get { return force; }
-            set { force = value; }
+            get { return forces; }
+            set { forces = value; }
         }
         public Align Align
         {
