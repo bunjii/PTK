@@ -12,7 +12,7 @@ namespace PTK
         /// Initializes a new instance of the PTK1_4_Alignment class.
         /// </summary>
         public PTK_1_4_Alignment_Simple()
-          : base("Alignment", "Nickname",
+          : base("Alignment", "Yeahhh",
               "Description",
               "PTK", "Materializer")
         {

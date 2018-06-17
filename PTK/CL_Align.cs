@@ -80,7 +80,7 @@ namespace PTK
 
         public void rotationVectorToPoint(Point3d pt)
         {
-            Line ln = new Line(pt, alignToPoint);
+            
 
             Vector3d vt = new Vector3d(pt.X - alignToPoint.X, pt.Y - alignToPoint.Y, pt.Z - alignToPoint.Z);
             rotation = vt;

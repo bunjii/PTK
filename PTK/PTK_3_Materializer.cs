@@ -134,7 +134,7 @@ namespace PTK
 
             elemTag = elemTag.Trim();
 
-            if (curves.Count > 20)
+            if (false)//curves.Count > 20
             {
                 Parallel.For(0, curves.Count, (int i) =>
                 {

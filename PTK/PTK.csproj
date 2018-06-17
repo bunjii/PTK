@@ -65,9 +65,10 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="btlx_10.Designer.cs" />
+    <Compile Include="btlx_10.DesignerNew.cs" />
     <Compile Include="CL_Align.cs" />
     <Compile Include="CL_Assembly.cs" />
+    <Compile Include="CL_BTLhelpClasses.cs" />
     <Compile Include="CL_Element.cs" />
     <Compile Include="CL_Functions.cs" />
     <Compile Include="CL_Loads.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="MyComponent1.cs" />
     <Compile Include="CL_Node.cs" />
     <Compile Include="ProjectProperties.cs" />
+    <Compile Include="PTK_11_Processing_01_Cut.cs" />
     <Compile Include="PTK_1_4_Alignment_Simple.cs" />
     <Compile Include="PTK_1_5_Forces.cs" />
     <Compile Include="CL_Forces.cs" />

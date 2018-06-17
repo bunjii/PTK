@@ -6,6 +6,7 @@ using Rhino.Geometry;
 using System.Xml;
 using System.Xml.Serialization;
 using System.IO;
+using System.Runtime.Serialization;
 
 namespace PTK
 {
@@ -27,7 +28,8 @@ namespace PTK
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("PTK INPUT", "PTK IN", "PTK DATA INPUT", GH_ParamAccess.item);
-            pManager.AddTextParameter("FILE LOCATION", "FILE", "FILE LOCATION OF EXPORTED BTL FILE", GH_ParamAccess.item);
+            pManager.AddGenericParameter("BTL-processes", "", "", GH_ParamAccess.list);
+            pManager.AddTextParameter("FILE LOCATION", "Folder", "Folder LOCATION OF EXPORTED BTL FILE", GH_ParamAccess.item);
             pManager.AddBooleanParameter("ENABLE?", "ENABLE?", "ENABLE EXPORTING?", GH_ParamAccess.item);
         }
 
@@ -46,18 +48,39 @@ namespace PTK
         {
             bool enable = false;
             Assembly assembly = new Assembly();
+            List<ProcessingType> Processes = new List<ProcessingType>();
+            
+            string filepath = "";
 
-            DA.GetData(2, ref enable);
+            
             DA.GetData(0, ref assembly);
+            DA.GetDataList(1, Processes);
+            DA.GetData(2, ref filepath);
+            DA.GetData(3, ref enable);
+            filepath += @"\Test.btlx";
 
             if (enable)
             {
                 //Initializing the parts
                 ProjectTypeParts Parts = new ProjectTypeParts();
+                
+                
+
+                foreach(ProcessingType process in Processes)
+                {
+                    List<ProcessingBaseType> test = new List<ProcessingBaseType>();
+                    List<ProcessingType> inni = new List<ProcessingType>();
+                    inni.Add(process);
+                    test.AddRange(inni);
+                    
+                    assembly.Elems.Find(t => t.ID == Convert.ToInt16(process.Name)).BTLPart.Processings.Items.AddRange(inni);
+                    
+                }
+
 
                 for (int i = 0; i < assembly.Elems.Count; i++)
                 {
-                    Parts.Part.Add(assembly.Elems[i].BTLPart);
+                    Parts.Part.Add(assembly.Elems[i].BTLPart);              
                 }
                     
                 //Initializing the project
@@ -66,6 +89,8 @@ namespace PTK
                 Project.Name = "PTK";
                 Project.Architect = "JOHNBUNJIMarcin";
                 Project.Comment = "YeaaaahhH! Finally. ";
+                
+
 
 
                 //Initializing the file;
@@ -77,10 +102,14 @@ namespace PTK
 
 
                 // Create a new XmlSerializer instance with the type of the test class
+
+
                 XmlSerializer SerializerObj = new XmlSerializer(typeof(BTLx));
+                
 
                 // Create a new file stream to write the serialized object to a file
-                TextWriter WriteFileStream = new StreamWriter(@"C:\Users\Lokaladm\Desktop\Teste\test.btlx");
+                TextWriter WriteFileStream = new StreamWriter(filepath);
+
                 SerializerObj.Serialize(WriteFileStream, BTLx);
                 WriteFileStream.Close();
 
