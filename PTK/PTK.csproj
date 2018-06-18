@@ -111,6 +111,7 @@
     <Compile Include="CL_Supports.cs" />
     <Compile Include="CL_TempDummyClass.cs" />
     <Compile Include="PTK_UTIL_2_Disassemble.cs" />
+    <Compile Include="SubElementBTL.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

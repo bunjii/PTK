@@ -48,7 +48,8 @@ namespace PTK
         {
             bool enable = false;
             Assembly assembly = new Assembly();
-            List<ProcessingType> Processes = new List<ProcessingType>();
+
+            List<BTLprocess> Processes = new List<BTLprocess>();
             
             string filepath = "";
 
@@ -65,16 +66,20 @@ namespace PTK
                 ProjectTypeParts Parts = new ProjectTypeParts();
                 
                 
+                
 
-                foreach(ProcessingType process in Processes)
+                foreach(BTLprocess process in Processes)
                 {
-                    List<ProcessingBaseType> test = new List<ProcessingBaseType>();
+
                     List<ProcessingType> inni = new List<ProcessingType>();
-                    inni.Add(process);
-                    test.AddRange(inni);
-                    
-                    assembly.Elems.Find(t => t.ID == Convert.ToInt16(process.Name)).BTLPart.Processings.Items.AddRange(inni);
-                    
+                    List<Brep> Voids = new List<Brep>();
+                    inni.Add(process.Process);
+
+
+                    assembly.Elems.Find(t => t.ID == Convert.ToInt16(process.Process.Name)).BTLPart.Processings.Items.Add(process.Process);
+                    assembly.Elems.Find(t => t.ID == Convert.ToInt16(process.Process.Name)).BTLPart
+
+
                 }
 
 

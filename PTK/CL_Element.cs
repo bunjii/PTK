@@ -24,10 +24,13 @@ namespace PTK
         private Forces force;
         private Align align;
         private List<SubElementStructural> subStructural;
+        private List<SubElementBTL> subBTL;
         private int numberOfStructuralLines = 0;
         private Plane xyPlane;
         private Plane xzPlane;
         private Plane yzPlane;
+        
+
         Interval iz; //From Centricplanse
         Interval iy;
         Interval ix;
@@ -36,6 +39,10 @@ namespace PTK
         BoundingBox boundingbox;
         PartType btlPart;
         BTLref btlRef;
+
+
+
+        
 
 
 
@@ -91,6 +98,7 @@ namespace PTK
         public Forces Force { get { return force; } set { force = value; } }
         public Align Align { get { return align; } set { align = value; } }
         public List<SubElementStructural> SubStructural { get { return subStructural; } }
+        public List<SubElementBTL> SubBTL { get { return subBTL; } }
         public Brep ElementGeometry { get { return elementGeometry; } }
         public BoundingBox BoundingBox { get { return boundingbox; } }
         public Point3d PointAtStart { get { return pointAtStart; } }
@@ -99,11 +107,13 @@ namespace PTK
         public int ConnectedNodes { get { return connectedNodes; } }
         public List<double> ParameterConnectedNodes { get { return parameterConnectedNodes; } }
         public List<Node> Nodes { get { return nodes; } }
+
         public PartType BTLPart { get { return btlPart; } }
         public Plane XYPlane { get { return xyPlane; } }
         public Plane XZPlane { get { return xzPlane; } }
         public Plane YZPlane { get { return yzPlane; } }
         public BTLref BTLRef { get { return btlRef; } }
+        
 
 
 
@@ -163,13 +173,13 @@ namespace PTK
             //Getting rotation angle
             double angle = Rhino.Geometry.Vector3d.VectorAngle(tempPlane.XAxis, alignvector, tempPlane);
 
-            tempPlane.Rotate(angle, tempPlane.Normal, tempPlane.Origin);
+            tempPlane.Rotate(-angle, tempPlane.Normal, tempPlane.Origin);
             tempPlane.Translate(tempPlane.XAxis * align.OffsetY);
             tempPlane.Translate(tempPlane.YAxis * align.OffsetZ);
-            yzPlane = tempPlane;
-            xzPlane = new Plane(tempPlane.Origin, tempPlane.ZAxis, tempPlane.YAxis);
-            xyPlane = new Plane(tempPlane.Origin, tempPlane.ZAxis, tempPlane.XAxis);
-
+            xyPlane = new Plane(tempPlane.Origin, tempPlane.ZAxis, tempPlane.YAxis);
+            xzPlane = new Plane(xyPlane.Origin, xyPlane.XAxis, xyPlane.ZAxis);
+            yzPlane = new Plane(xyPlane.Origin, xyPlane.YAxis, xyPlane.ZAxis);
+            
             
 
         }
@@ -179,7 +189,7 @@ namespace PTK
             CoordinateSystemType CoordinateSystem = new CoordinateSystemType();   //Initializing the coordinate system of a part
             PointType Point = new PointType();  //the point of a part
 
-            btlRef = new BTLref(yzPlane, section.Height, section.Width);
+            btlRef = new BTLref(yzPlane, section.Height, section.Width, length);
 
 
             Plane btlPlane = btlRef.BTLplane;
@@ -240,7 +250,9 @@ namespace PTK
             {
                 Box boxen = new Box(yzPlane, iy, iz, ix);
                 tempgeometry = Brep.CreateFromBox(boxen);
-                boundingbox = boxen.BoundingBox;
+                boundingbox = boxen.BoundingBox ;
+                
+
 
             }
             else
@@ -304,6 +316,10 @@ namespace PTK
 
         }
         
+        public void GenerateCornerPoints()
+        {
+            
+        }
 
             
     }

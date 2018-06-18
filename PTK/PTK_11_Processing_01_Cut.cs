@@ -24,9 +24,9 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Assembly", "", "", GH_ParamAccess.item);
-            pManager.AddPlaneParameter("Cut Plane", "", "", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("ElemID", "", "", GH_ParamAccess.item);
+            pManager.AddGenericParameter("A", "Assembly", "", GH_ParamAccess.item);
+            pManager.AddPlaneParameter("P", "CutPlane", "", GH_ParamAccess.item);
+            pManager.AddIntegerParameter("ID", "ElemID", "", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -34,10 +34,7 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("BTL-Cut", "", "", GH_ParamAccess.list);
-            pManager.AddCurveParameter("Cutline", "", "", GH_ParamAccess.item);
-            pManager.AddPlaneParameter("RefSide", "", "", GH_ParamAccess.item);
-            pManager.AddCurveParameter("RefEdge", "", "", GH_ParamAccess.item);
+            pManager.AddGenericParameter("B", "BTL-Cut", "", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -49,61 +46,83 @@ namespace PTK
             Assembly Assembly = new Assembly();
             Plane cutPlane = new Plane();
             int ElemId = 0;
+            List<int> ElemIDs = new List<int>();
 
             DA.GetData(0, ref Assembly);
             DA.GetData(1, ref cutPlane);
-            DA.GetData(2, ref ElemId);
+            DA.GetDataList(2, ElemIDs);
 
-            
+            List<BTLprocess> Processes = new List<BTLprocess>();
 
-
-            Element elem = Assembly.Elems.Find(t => t.ID ==ElemId);
-            
-
-            if (elem != null)
+            foreach(int ElemID in ElemIDs)
             {
-                Plane RefSide = elem.BTLRef.RefSide1;
-                Line refEdge = elem.BTLRef.RefEdge1;
+                Element elem = Assembly.Elems.Find(t => t.ID == ElemId);
+                //Element elem = Assembly.Elems[0];
 
-                Point3d intersectPoint = Rhino.Geometry.Intersect.Intersection.CurvePlane(refEdge.ToNurbsCurve(), cutPlane, 0.01)[0].PointA;
-                Line directionLine = new Line();
-                if (Rhino.Geometry.Intersect.Intersection.PlanePlane(RefSide, cutPlane, out directionLine)) ;
-                
-
-
+                if (elem != null)
+                {
+                    Plane RefSide = elem.BTLRef.RefSide1;
+                    Line refEdge = elem.BTLRef.RefEdge1;
 
 
+                    Point3d intersectPoint = Rhino.Geometry.Intersect.Intersection.CurvePlane(refEdge.ToNurbsCurve(), cutPlane, 0.01)[0].PointA;
+                    Line directionLine = new Line();
+                    if (Rhino.Geometry.Intersect.Intersection.PlanePlane(RefSide, cutPlane, out directionLine)) ;
 
-                ComponentTypeProcessings Processing = new ComponentTypeProcessings();
-                JackRafterCutType JackRafterCut = new JackRafterCutType();
 
-                
-
-                JackRafterCut.ReferencePlaneID = 1;
-                JackRafterCut.Process = BooleanType.yes;
-                JackRafterCut.StartX = refEdge.From.DistanceTo(intersectPoint);
-                JackRafterCut.StartY = 0.0;
-                JackRafterCut.StartDepth = 0.0;
-                JackRafterCut.Angle = Vector3d.VectorAngle(refEdge.Direction, directionLine.Direction);
-                JackRafterCut.Angle = Convert.ToDouble( Rhino.RhinoMath.ToDegrees(JackRafterCut.Angle));
-                JackRafterCut.Inclination = 90.0;
-                JackRafterCut.Orientation = OrientationType.end;
-                JackRafterCut.StartDepth = 0.0;
+                    OrientationType orientation;
+                    cutPlane = BTLref.AlignInputPlane(refEdge, RefSide, cutPlane, out orientation);
+                    Plane inclinationplane = new Plane(cutPlane.Origin, cutPlane.YAxis, cutPlane.ZAxis);
 
 
 
-                JackRafterCut.Name = Convert.ToString(ElemId);
-                List<ProcessingBaseType> Base = new List<ProcessingBaseType>();
-                
 
-                List<ProcessingType> Process = new List<ProcessingType>();
-                Process.Add(JackRafterCut);
-                
 
-                DA.SetDataList(0, Process);
-                DA.SetData(1, directionLine);
-                DA.SetData(2, RefSide);
-                DA.SetData(3, refEdge);
+                    Vector3d RefVector = refEdge.Direction;
+                    Vector3d Cutvector = cutPlane.YAxis;
+                    
+                    List<Point3d> voidpoints = elem.BTLRef.StartPoints; //Adding startpoints to be included in the cuttingbox
+
+
+                    if (orientation == OrientationType.end)
+                    {
+
+                        RefVector.Reverse();
+                        Cutvector.Reverse(); //Correct
+                        voidpoints = elem.BTLRef.Endpoints;  //Adding endpoints to be included in the cuttingbox
+
+                    }
+
+                    //Adding points to ensure the cuttingbox includes the crossesction of the cut
+                    voidpoints.Add(Rhino.Geometry.Intersect.Intersection.CurvePlane(elem.BTLRef.RefEdge1.ToNurbsCurve(), cutPlane, 0.1)[0].PointA);
+                    voidpoints.Add(Rhino.Geometry.Intersect.Intersection.CurvePlane(elem.BTLRef.RefEdge2.ToNurbsCurve(), cutPlane, 0.1)[0].PointA);
+                    voidpoints.Add(Rhino.Geometry.Intersect.Intersection.CurvePlane(elem.BTLRef.RefEdge3.ToNurbsCurve(), cutPlane, 0.1)[0].PointA);
+                    voidpoints.Add(Rhino.Geometry.Intersect.Intersection.CurvePlane(elem.BTLRef.RefEdge4.ToNurbsCurve(), cutPlane, 0.1)[0].PointA);
+
+                    Box box = new Box(cutPlane, voidpoints);
+
+                    //Creating BTL processing
+                    JackRafterCutType JackRafterCut = new JackRafterCutType();
+
+                    JackRafterCut.Orientation = orientation;
+                    JackRafterCut.ReferencePlaneID = 1;
+                    JackRafterCut.Process = BooleanType.yes;
+                    JackRafterCut.StartX = refEdge.From.DistanceTo(intersectPoint);
+                    JackRafterCut.StartY = 0.0;
+                    JackRafterCut.StartDepth = 0.0;
+                    JackRafterCut.Angle = Vector3d.VectorAngle(RefVector, cutPlane.XAxis);
+                    JackRafterCut.Angle = Convert.ToDouble(Rhino.RhinoMath.ToDegrees(JackRafterCut.Angle));
+                    JackRafterCut.Inclination = Vector3d.VectorAngle(RefVector, Cutvector);
+                    JackRafterCut.Inclination = Convert.ToDouble(Rhino.RhinoMath.ToDegrees(JackRafterCut.Inclination));
+                    JackRafterCut.StartDepth = 0.0;
+                    JackRafterCut.Name = Convert.ToString(ElemId);    //Name is used as container for elemId identifier
+
+                    Processes.Add( new BTLprocess(JackRafterCut, Brep.CreateFromBox(box)));
+
+                }
+
+                DA.SetDataList(0, Processes);
+
             }
 
 

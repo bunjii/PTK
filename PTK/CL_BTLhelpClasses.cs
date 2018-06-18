@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 
+
 namespace PTK
 {
     public class BTLref
@@ -22,18 +23,21 @@ namespace PTK
         private Line refEdge2;
         private Line refEdge3;
         private Line refEdge4;
+        private List<Point3d> startPoints;
+        private List<Point3d> endPoints;
+        
 
 
 
         #endregion
         #region constructors
 
-        public BTLref(Plane yzPlane, double _height, double _width )
+        public BTLref(Plane yzPlane, double _height, double _width, double _length )
         {
             //Move half height, half width
 
             
-            yzPlane.Translate(yzPlane.XAxis * _width / 2 + (yzPlane.YAxis * _height/2));
+            yzPlane.Translate(yzPlane.XAxis * _width / 2 + (yzPlane.YAxis * -_height/2));
 
             //Making same plane as in manual
             btlplane = new Plane(yzPlane.Origin, yzPlane.ZAxis, yzPlane.YAxis);
@@ -55,6 +59,22 @@ namespace PTK
             refEdge4 = new Line(refSide4.Origin, refSide4.XAxis, 5000);
 
 
+            Rectangle3d rec = new Rectangle3d(yzPlane, -_width, _height);
+            Polyline poly = rec.ToPolyline();
+            startPoints = poly.ToList();
+
+            Plane endplane = yzPlane;
+            endplane.Translate(endplane.ZAxis * _length);
+            Rectangle3d rec2 = new Rectangle3d(endplane, -_width, _height);
+            poly = rec2.ToPolyline();
+            endPoints = poly.ToList();
+            
+
+
+            
+
+
+
 
 
 
@@ -72,12 +92,96 @@ namespace PTK
         public Line RefEdge2 { get { return refEdge2; } }
         public Line RefEdge3 { get { return refEdge3; } }
         public Line RefEdge4 { get { return refEdge4; } }
-
+        public List<Point3d> StartPoints { get { return startPoints; } }
+        public List<Point3d> Endpoints { get { return endPoints; } }
         #endregion
         #region methods
+
+
+
+
+        static public Plane AlignInputPlane(Line _refEdge, Plane _refPlane, Plane _cutPlane, out OrientationType orientationtype)
+        {
+
+
+            Point3d intersectPoint = Rhino.Geometry.Intersect.Intersection.CurvePlane(_refEdge.ToNurbsCurve(), _cutPlane, 0.01)[0].PointA;
+            Line intersectionLine = new Line();
+            Rhino.Geometry.Intersect.Intersection.PlanePlane(_refPlane, _cutPlane, out intersectionLine);
+            _cutPlane.Origin = intersectPoint;
+
+            Line directionLine = FlipLine(_refPlane.YAxis, intersectionLine);
+
+            
+
+
+            double angle = Vector3d.VectorAngle(_cutPlane.XAxis, directionLine.Direction,_cutPlane);
+
+            _cutPlane.Rotate(angle, _cutPlane.ZAxis, _cutPlane.Origin);
+
+            orientationtype = OrientationType.start;
+            if(Vector3d.VectorAngle(_refPlane.XAxis,_cutPlane.ZAxis)< Math.PI/2)
+            {
+                orientationtype = OrientationType.end;
+            }
+            
+
+
+            
+            return _cutPlane;
+            
+
+
+
+
+        }
+
+        public static Line FlipLine (Vector3d _guide, Line _line)
+        {
+            List<double> angle = new List<double>();
+            List<Line> intersectionlines = new List<Line>() ;
+            Line flipline = _line;
+            flipline.Flip();
+            angle.Add(Vector3d.VectorAngle(_guide, _line.Direction));
+            intersectionlines.Add(_line);
+            angle.Add(Vector3d.VectorAngle(_guide, flipline.Direction));
+            intersectionlines.Add(flipline);
+
+            //Returning the line with the smallest angle: Aligning the line to face the same direction as the vector
+            if (angle[0] < angle[1])
+            {
+                return intersectionlines[0];
+            }
+            else
+            {
+                return intersectionlines[1];
+            }
+            
+
+
+        }
+
+
+
         #endregion
 
 
+
+    }
+
+    public class BTLprocess
+    {
+        ProcessingType process;
+        Brep voidgeometry;
+
+        public BTLprocess(ProcessingType _process, Brep _voidGeometry)
+        {
+            voidgeometry = _voidGeometry;
+            process = _process;
+        }
+
+
+        public ProcessingType Process { get { return process; } }
+        public Brep Voidgeometry { get { return voidgeometry; } }
 
     }
 
