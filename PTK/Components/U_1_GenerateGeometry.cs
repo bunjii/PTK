@@ -70,8 +70,8 @@ namespace PTK
 
             #region solve
             nodes = assemble.Nodes;
-            elems = assemble.Elems;
-            secs = assemble.Secs;
+            elems = assemble.Elements;
+            secs = assemble.Sections;
 
             if (isBrep == true)
             {

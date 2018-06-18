@@ -11,26 +11,31 @@ namespace PTK
     public class Section
     {
         #region fields
-        private static int sectionIDCount = 2000;
-        public int Id { get; set; }
-        public string SectionName { get; private set; }
+        public string Name { get; private set; }
         public double Width { get; private set; } = 100;
         public double Height { get; private set; } = 100;
-        public string TxtHash { get; private set; } = "";
-        public List<int> ElemIds { get; private set; } = new List<int>();
+        public Material Material { get; private set; }
         #endregion
 
         #region constructors
-        public Section(string _name, double _width, double _height)
+        public Section()
         {
-            Id = sectionIDCount;
-            sectionIDCount++;
-
-            SectionName = _name;
+            Name = "N/A";
+            Material = new Material();
+        }
+       public Section(string _name, double _width, double _height)
+        {
+            Name = _name;
             Width = _width;
             Height = _height;
-
-            TxtHash = CreateHashFromSP(this);
+            Material = new Material();
+        }
+        public Section(string _name, double _width, double _height, Material _material)
+        {
+            Name = _name;
+            Width = _width;
+            Height = _height;
+            Material = _material;
         }
         #endregion
 
@@ -38,23 +43,11 @@ namespace PTK
         #endregion
 
         #region methods
-        private static string CreateHashFromSP(Section _sec) // SP : short for "section properties"
+        public override string ToString()
         {
-            string _key = _sec.Height.ToString() + _sec.Width.ToString() + _sec.SectionName ;
-            return Functions_DDL.CreateHash(_key);
-        }
-
-        public void AddElemId(int elemId)
-        {
-            ElemIds.Add(elemId);
-        }
-
-        public static Section FindSecById(List<Section> _secs, int _sid)
-        {
-            Section tempSec;
-            tempSec = _secs.Find(s => s.Id == _sid);
-
-            return tempSec;
+            string info;
+            info = "Name:" + Name + " Width:" + Width.ToString() + " Height:" + Height.ToString() + " Material:" + Material.Name;
+            return info; 
         }
         #endregion
     }

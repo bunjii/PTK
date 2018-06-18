@@ -6,34 +6,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-// using Karamba.Loads ;
-
 namespace PTK
 {
     public class Material
     {
-
         #region fields
-        public string MatName { get; set; }
-        public int Id { get; set; }
-        public List<int> ElemIds { get; private set; } = new List<int>();
-        public MatProps Properties { get; set; }
+        public string Name { get; private set; }
+        public MaterialStructuralProp StructuralProp { get; private set; }
         #endregion
 
         #region constructors
-        /*
-        public Material(string _materialName, int _materialId, MatProps _properties)
+        public Material()
         {
-            materialName = _materialName; // inheriting  Class
-            id = -999; // inheriting  Class
-            properties = _properties;
+            Name = "N/A";
+            StructuralProp = new MaterialStructuralProp();
         }
-        */
-        public Material(MatProps _properties)
+        public Material(string _name)
         {
-            Id = -999; 
-            MatName = "N/A";
-            Properties = _properties;
+            Name = _name;
+            StructuralProp = new MaterialStructuralProp();
+        }
+        public Material(string _name, MaterialStructuralProp _structuralProp)
+        {
+            Name = _name;
+            StructuralProp = _structuralProp;
         }
         #endregion
 
@@ -41,17 +37,11 @@ namespace PTK
         #endregion
 
         #region methods
-        public void AddElemId(int elemId)
+        public override string ToString()
         {
-            this.ElemIds.Add(elemId);
-        }
-
-        public static Material FindMatById(List<Material> _mats, int _mid)
-        {
-            Material tempMat;
-            tempMat = _mats.Find(m => m.Id == _mid);
-
-            return tempMat;
+            string info;
+            info = "Name:" + Name + " StructuralProp.Name:" + StructuralProp.Name;
+            return info;
         }
         #endregion
     }

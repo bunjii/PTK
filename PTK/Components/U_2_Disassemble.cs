@@ -61,9 +61,9 @@ namespace PTK
 
             #region solve
             nodes = assemble.Nodes;
-            elems = assemble.Elems;
-            mats = assemble.Mats;
-            secs = assemble.Secs;
+            elems = assemble.Elements;
+            mats = assemble.Materials;
+            secs = assemble.Sections;
             #endregion
 
             #region output

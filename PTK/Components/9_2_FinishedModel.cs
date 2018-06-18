@@ -66,9 +66,9 @@ namespace PTK.Components
             wrapAssembly.CastTo<Assembly>(out assemble);
 
             nodes = assemble.Nodes;
-            elems = assemble.Elems;
-            mats = assemble.Mats;
-            secs = assemble.Secs;
+            elems = assemble.Elements;
+            mats = assemble.Materials;
+            secs = assemble.Sections;
             sups = assemble.Sups;
 
             Assembly outAssemble = new Assembly(nodes, elems, mats, secs, sups);

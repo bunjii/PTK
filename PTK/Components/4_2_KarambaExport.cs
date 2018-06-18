@@ -117,9 +117,9 @@ namespace PTK
             wrapAssembly.CastTo<Assembly>(out assemble);
 
             nodes = assemble.Nodes;
-            elems = assemble.Elems;
-            mats = assemble.Mats;
-            secs = assemble.Secs;
+            elems = assemble.Elements;
+            mats = assemble.Materials;
+            secs = assemble.Sections;
             sups = assemble.Sups;
 
             // Create Pt List

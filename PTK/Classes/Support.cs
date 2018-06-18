@@ -8,22 +8,23 @@ namespace PTK
 {
     public class Support
     {
-
         #region fields
-        private static int idCount = 0;
-        public int Id { get; private set; }
-        public int LCase { get; private set; }
-        public Plane Pln { get; private set; }
-        public List<bool> Conditions { get; private set; } = new List<bool>();
+        public int LoadCase { get; private set; } = 0;
+        public Plane FixingPlane { get; private set; }
+        public List<bool> Conditions { get; private set; }
         #endregion
 
         #region constructors
-        public Support(int _loadCase, Plane _supPln, List<bool> _supConditions) 
+        public Support()
         {
-            Id = -999;
-            LCase = _loadCase;
-            Conditions = _supConditions; 
-            Pln = _supPln;
+            FixingPlane = new Plane();
+            Conditions = new List<bool>();
+        }
+        public Support(int _loadCase, Plane _fixingPlane, List<bool> _conditions) 
+        {
+            LoadCase = _loadCase;
+            FixingPlane = _fixingPlane;
+            Conditions = _conditions;
         }
         #endregion
 
@@ -56,16 +57,6 @@ namespace PTK
             return _returnArray.ToArray();
         }
 
-        public void AssignID()
-        {
-            this.Id = idCount;
-            idCount++;
-        }
-
-        public static void ResetIDCount()
-        {
-            idCount = 0;
-        }
         #endregion
     }
 }
