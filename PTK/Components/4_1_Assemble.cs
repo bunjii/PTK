@@ -42,10 +42,12 @@ namespace PTK
             pManager.AddGenericParameter("Supports", "Sup (PTK)", "Add Supports here", GH_ParamAccess.list);
             pManager.AddGenericParameter("Loads", "L (PTK)", "Add Loads here", GH_ParamAccess.list);
             pManager.AddTextParameter("Priority txt", "Priority", "Priority", GH_ParamAccess.item, "");
+            pManager.AddGenericParameter("DG", "DetailingGroup", "", GH_ParamAccess.list);
 
             pManager[1].Optional = true;
             pManager[2].Optional = true;
             pManager[3].Optional = true;
+            pManager[4].Optional = true;
         }
 
         /// <summary>
@@ -94,6 +96,7 @@ namespace PTK
             List<PTK_Support> sups = new List<PTK_Support>();
             List<PTK_Load> loads = new List<PTK_Load>();
             List<Karamba.Models.GH_Model> models = new List<Karamba.Models.GH_Model>();
+            List<DetailingGroup> DetailingGroup = new List<DetailingGroup>();
 
             RTree rTreeNodes = new RTree();
             RTree rTreeElems = new RTree();
@@ -111,6 +114,8 @@ namespace PTK
             DA.GetDataList(1, wrapSupList);
             DA.GetDataList(2, wrapLoadList);
             DA.GetData(3, ref priorityTxt);
+            DA.GetDataList(4, DetailingGroup);
+
             #endregion
 
             #region solve
@@ -202,6 +207,16 @@ namespace PTK
             // register 
             RegisterSupports(ref sups);
 
+
+            //Assigning nodes and elems to detailingGroups
+            for (int i = 0; i < DetailingGroup.Count; i++)
+            {
+                DetailingGroup[i].assignDetails(nodes, elems);
+            }
+
+
+
+
             #endregion
 
             #region output
@@ -211,7 +226,8 @@ namespace PTK
                 new List<PTK_Material>(mats), 
                 new List<PTK_Section>(secs), 
                 new List<PTK_Support>(sups), 
-                new List<PTK_Load>(loads));
+                new List<PTK_Load>(loads),
+                DetailingGroup);
 
             var Model = new PTK.Classes.KarambaExport(Assembly).BuildModel();
             var karamba_GH_model = new Karamba.Models.GH_Model(Model);

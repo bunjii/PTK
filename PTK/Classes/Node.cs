@@ -59,9 +59,9 @@ namespace PTK
             get { return boundingbox; }
         }
 
-        public ReadOnlyCollection<int> ElemIds
+        public List<int> ElemIds
         {
-            get { return elemIds.AsReadOnly(); }
+            get { return elemIds; }
 
         }
 

@@ -29,6 +29,11 @@ namespace PTK
         private PTK_Forces forces;
         private Align align;
         private List<Subelement> subElem;
+        private List<SubElementBTL> subElementBTL;
+        private double length;
+
+
+
         private int priority;
         
         //private StructuralProperties structprop;
@@ -41,8 +46,8 @@ namespace PTK
         // below: with one of the xy- yz- zx- planes being fixed, 
         // the others can be calculated. 
         // so we can go with less field members.
-        // private Plane xyPlane;
-        // private Plane xzPlane;
+        private Plane xyPlane;
+        private Plane xzPlane;
         private Plane yzPlane;
 
         // below has moved to PTK_UTIL_1_GenerateGeometry
@@ -75,6 +80,9 @@ namespace PTK
             secId = -999;
             priority = -999;
             subElem = new List<Subelement>();
+            length = crv.GetLength();
+            
+            
 
             // initializeCentricPlanes();   // replaced by DDL on 2nd April
             InitializeCentricPlanes();
@@ -82,6 +90,9 @@ namespace PTK
             GenerateElementGeometry();
 
             nodeParams = new List<double>();
+            //Now it only supports one element. Future cross-section components will allow several btl-elements in one element. 
+            subElementBTL = new List<PTK.SubElementBTL>();
+            subElementBTL.Add( new SubElementBTL(yzPlane, section, length));
 
             //n0id = -999: This one is currently missing, but easy to remake in the AsignNeighbour function
             //n1id = -999; This one is currently missing, but easy to remake in the AsignNeighbour function
@@ -114,11 +125,14 @@ namespace PTK
             secId = -999;
             priority = -999;
             subElem = new List<Subelement>();
+            length = crv.GetLength();
 
             // initializeCentricPlanes();   // replaced by DDL on 2nd April
             InitializeCentricPlanes();
             GenerateIntervals();
             GenerateElementGeometry();
+            subElementBTL = new List<PTK.SubElementBTL>();
+            subElementBTL.Add(new SubElementBTL(yzPlane, section, length));
 
             nodeParams = new List<double>();
 
@@ -150,6 +164,20 @@ namespace PTK
         {
             get { return crv; }
         }
+        public Plane XYPlane
+        {
+            get { return xyPlane; }
+        }
+        public Plane XZPlane
+        {
+            get { return xzPlane; }
+        }
+        public Plane YZPlane
+        {
+            get { return yzPlane; }
+        }
+
+
         public int NumberOfStructuralLines
         {
             get { return numStrLns; }
@@ -171,6 +199,8 @@ namespace PTK
         {
             get { return id; }
         }
+        public List<SubElementBTL> SubElementBTL { get { return subElementBTL; } }
+
         public PTK_Section Section
         {
             get { return section; }
@@ -196,8 +226,10 @@ namespace PTK
             get { return priority; }
             set { priority = value; }
         }
+        public double Length { get { return length; } }
 
-        public ReadOnlyCollection<Subelement> SubElem
+
+    public ReadOnlyCollection<Subelement> SubElem
         {
             get { return subElem.AsReadOnly(); }
         }
@@ -344,6 +376,7 @@ namespace PTK
 
             Plane localXY = new Plane(crv.PointAtStart, localX, localY);
             Plane localYZ = new Plane(localXY.Origin, localY, localXY.ZAxis);
+            Plane localXZ = new Plane(localXY.Origin, localXY.XAxis, localXY.ZAxis);
 
             // rotation
             if (align.RotationAngle != 0.0)
@@ -369,6 +402,8 @@ namespace PTK
             }
 
             yzPlane = localYZ;
+            xyPlane = localXY;
+            xzPlane = localXZ;
         }
 
         // has moved to PTK_UTIL1_GenerateGeometry

@@ -108,7 +108,7 @@ namespace PTK
 
             OutAssembly = new Assembly(assemble.Nodes, assemble.Elems,
                 assemble.Mats, assemble.Secs, assemble.Sups,
-                assemble.Loads, gm_list);
+                assemble.Loads, gm_list,assemble.DetailingGroups);
 
             #endregion
 
@@ -298,7 +298,7 @@ namespace PTK
 
             Assembly OutAssembly = new Assembly(assemble.Nodes, assemble.Elems,
                 assemble.Mats, assemble.Secs, assemble.Sups,
-                assemble.Loads);
+                assemble.Loads, assemble.DetailingGroups);
 
             return OutAssembly;
         }

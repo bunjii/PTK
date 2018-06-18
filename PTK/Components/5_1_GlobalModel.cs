@@ -75,7 +75,7 @@ namespace PTK
             secs = assemble.Secs;
             sups = assemble.Sups;
 
-            Assembly outAssemble = new Assembly(nodes, elems, mats, secs, sups, loads);
+            Assembly outAssemble = new Assembly(nodes, elems, mats, secs, sups, loads, assemble.DetailingGroups);
             
             #endregion
 

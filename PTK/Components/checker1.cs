@@ -192,7 +192,7 @@ namespace PTK
             #region output
             Assembly Assembly = new Assembly(new List<Node>(nodes), new List<PTK_Element>(elems),
                 new List<PTK_Material>(mats), new List<PTK_Section>(secs), new List<PTK_Support>(sups),
-                new List<PTK_Load>(loads));
+                new List<PTK_Load>(loads), new List<DetailingGroup>());
 
             var Model = new PTK.Classes.KarambaExport(Assembly).BuildModel();
             var karamba_GH_model = new Karamba.Models.GH_Model(Model);

@@ -17,13 +17,14 @@ namespace PTK
         private List<PTK_Support> sups;
         private List<PTK_Load> loads;
         private List<Karamba.Models.GH_Model> krmb_GH_model;
-        
+        private List<DetailingGroup> detailingGroups;
+
 
         #endregion
 
         #region constructors
         public Assembly(List<Node> _nodes, List<PTK_Element> _elems, List<PTK_Material> _mats,
-            List<PTK_Section> _secs, List<PTK_Support> _sups, List<PTK_Load> _loads)
+            List<PTK_Section> _secs, List<PTK_Support> _sups, List<PTK_Load> _loads, List<DetailingGroup> _detailingGroup)
         {
             nodes = _nodes;
             elems = _elems;
@@ -31,11 +32,13 @@ namespace PTK
             secs = _secs;
             sups = _sups;
             loads = _loads;
+            detailingGroups = _detailingGroup;
+
             
         }
 
         public Assembly(List<Node> _nodes, List<PTK_Element> _elems, List<PTK_Material> _mats,
-            List<PTK_Section> _secs, List<PTK_Support> _sups, List<PTK_Load> _loads, List<Karamba.Models.GH_Model> _krmb_GH_model)
+            List<PTK_Section> _secs, List<PTK_Support> _sups, List<PTK_Load> _loads, List<Karamba.Models.GH_Model> _krmb_GH_model, List<DetailingGroup> _detailingGroup)
         {
             nodes = _nodes;
             elems = _elems;
@@ -44,8 +47,15 @@ namespace PTK
             sups = _sups;
             loads = _loads;
             krmb_GH_model = _krmb_GH_model ;
+            detailingGroups = _detailingGroup;
 
         }
+
+        public Assembly()
+        {
+
+        }
+
         #endregion
 
         #region properties
@@ -84,10 +94,14 @@ namespace PTK
             get { return krmb_GH_model; }
             set { krmb_GH_model = value; }
         }
-        #endregion
 
-        #region methods
-        #endregion
+        public List<DetailingGroup> DetailingGroups { get { return detailingGroups; } }
 
-    }
+
+    #endregion
+
+    #region methods
+    #endregion
+
+}
 }

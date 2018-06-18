@@ -38,19 +38,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="karamba">
-      <HintPath>..\..\..\..\..\..\Program Files\Rhinoceros 5 (64-bit)\Plug-ins\karamba.gha</HintPath>
+      <HintPath>..\..\Library\karamba.gha</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="GH_IO">
-      <HintPath>..\..\..\..\Desktop\Nikken_C#\shortcuts\GH_IO.dll</HintPath>
+      <HintPath>..\..\Library\GH_IO.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Grasshopper">
-      <HintPath>..\..\..\..\..\..\Program Files\Common Files\McNeel\Rhinoceros\5.0\Plug-ins\Grasshopper (b45a29b1-4343-4035-989e-044e8580d9cf)\0.9.76.0\Grasshopper.dll</HintPath>
+      <HintPath>..\..\Library\Grasshopper.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="RhinoCommon">
-      <HintPath>..\..\..\..\Desktop\Nikken_C#\shortcuts\RhinoCommon.dll</HintPath>
+      <HintPath>..\..\Library\RhinoCommon.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -70,6 +70,11 @@
   <ItemGroup>
     <Compile Include="Classes\Align.cs" />
     <Compile Include="Classes\Assembly.cs" />
+    <Compile Include="Classes\btlx_10.DesignerNew.cs" />
+    <Compile Include="Classes\DescriptionRule.cs" />
+    <Compile Include="Classes\Descriptions.cs" />
+    <Compile Include="Classes\Detail.cs" />
+    <Compile Include="Classes\DetailingGroup.cs" />
     <Compile Include="Classes\KarambaExport.cs" />
     <Compile Include="Classes\PTK_StructuralAnalysis.cs" />
     <Compile Include="Classes\PTK_Element.cs" />
@@ -80,13 +85,20 @@
     <Compile Include="Classes\PTK_MatProps.cs" />
     <Compile Include="Classes\Node.cs" />
     <Compile Include="Classes\CommonProps.cs" />
+    <Compile Include="Classes\PTK_SubElementBTL.cs" />
+    <Compile Include="Components\10_01_Cut.cs" />
+    <Compile Include="Components\11_00_DetailDescription.cs" />
+    <Compile Include="Components\11_01_ElementLength.cs" />
+    <Compile Include="Components\11_02_ElementAmount.cs" />
     <Compile Include="Components\9_2_FinishedModel.cs" />
     <Compile Include="Components\1_4_Alignment_Simple.cs" />
     <Compile Include="Components\1_5_Forces.cs" />
     <Compile Include="Classes\PTK_Forces.cs" />
     <Compile Include="Components\4_3_DimensioningMembers.cs" />
     <Compile Include="Components\checker1.cs" />
+    <Compile Include="Components\ExtractElement.cs" />
     <Compile Include="Components\SandBox.cs" />
+    <Compile Include="Components\SelectDetail.cs" />
     <Compile Include="Forms\F01_Supports.cs">
       <SubType>Form</SubType>
     </Compile>

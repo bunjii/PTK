@@ -16,6 +16,7 @@ namespace PTK
         public const string subcat3 = "Detail";
         public const string subcat4 = "Structure";
         public const string subcat5 = "Utility";
+        public const string subcat6 = "DetailDescriptions";
         public const string initialMessage = "PTK Ver.0.5";
         // public const string 
         #endregion
