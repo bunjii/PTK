@@ -39,6 +39,7 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
+            pManager.AddBrepParameter("Result", "", "", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -71,13 +72,37 @@ namespace PTK
                 {
 
                     assembly.Elems.Find(t => t.Id == Convert.ToInt16(process.ElemId)).SubElementBTL[0].BTLPart.Processings.Items.Add(process.Process);  //Adding processess in correct btl part
+                    assembly.Elems.Find(t => t.Id == Convert.ToInt16(process.ElemId)).SubElementBTL[0].BTLProcesses.Add(process);
 
                 }
 
 
+                List<Brep> allBreps = new List<Brep>();
+
                 for (int i = 0; i < assembly.Elems.Count; i++)
                 {
                     Parts.Part.Add(assembly.Elems[i].SubElementBTL[0].BTLPart);  //Adding part to parts for each element. Line 73 have included all processess
+
+                    List<BTLprocess> BTLProcessess = assembly.Elems[i].SubElementBTL[0].BTLProcesses;
+                    List<Brep> voids = new List<Brep>();
+                    for (int j = 0; j< BTLProcessess.Count; j++)
+                    {
+                        voids.Add(BTLProcessess[j].Voidgeometry);
+                    }
+                    List<Brep> keep = new List<Brep>();
+                    keep.Add(assembly.Elems[i].ElementGeometry);
+                    double tolerance = 0.01;
+                    Rhino.Geometry.Brep[] breps = Rhino.Geometry.Brep.CreateBooleanDifference(keep, voids, tolerance);
+                    if (breps != null)
+                    {
+                        allBreps.Add(breps[0]);
+                    }
+                    else
+                    {
+                        allBreps.AddRange(keep);
+                    }
+                    
+
                 }
 
                 //Initializing the project
@@ -109,6 +134,8 @@ namespace PTK
 
                 SerializerObj.Serialize(WriteFileStream, BTLx);
                 WriteFileStream.Close();
+
+                DA.SetDataList(0, allBreps);
 
             }
 

@@ -72,28 +72,30 @@ namespace PTK.Components
             //The next one is stupid code, but did not find a better solution. The idea is to output each element of the detail in different output. The challenge is that the element-count varies
             foreach (Detail Detail in Details)
             {
-                Nodes.Add(Detail.Nodes.Find(t => t.Id == Detail.NodeIds[0]));
+
+                Nodes.Add(assemble.Nodes.Find(t => t.Id == Detail.NodeIds[0]));
                 int elemamount = Detail.ElemsIds.Count;
 
                 if (elemamount > 0)
                 {
-                    Elements0.Add(Detail.Elems.Find(t => t.Id == Detail.ElemsIds[0]));
+                    Elements0.Add(assemble.Elems.Find(t => t.Id == Detail.ElemsIds[0]));
+                    
                 }
                 if (elemamount > 1)
                 {
-                    Elements1.Add(Detail.Elems.Find(t => t.Id == Detail.ElemsIds[1]));
+                    Elements1.Add(assemble.Elems.Find(t => t.Id == Detail.ElemsIds[1]));
                 }
                 if (elemamount > 2)
                 {
-                    Elements2.Add(Detail.Elems.Find(t => t.Id == Detail.ElemsIds[2]));
+                    Elements2.Add(assemble.Elems.Find(t => t.Id == Detail.ElemsIds[2]));
                 }
                 if (elemamount > 3)
                 {
-                    Elements3.Add(Detail.Elems.Find(t => t.Id == Detail.ElemsIds[4]));
+                    Elements3.Add(assemble.Elems.Find(t => t.Id == Detail.ElemsIds[3]));
                 }
                 if (elemamount > 4)
                 {
-                    Elements4.Add(Detail.Elems.Find(t => t.Id == Detail.ElemsIds[4]));
+                    Elements4.Add(assemble.Elems.Find(t => t.Id == Detail.ElemsIds[4]));
                 }
             }
 
@@ -115,7 +117,6 @@ namespace PTK.Components
             #endregion
 
             #region output
-            DA.SetData(0, assemble);
             #endregion
         }
 

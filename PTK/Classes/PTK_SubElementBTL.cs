@@ -22,7 +22,7 @@ namespace PTK
             PartType tempPart = new PartType();
             CoordinateSystemType CoordinateSystem = new CoordinateSystemType();   //Initializing the coordinate system of a part
             PointType Point = new PointType();  //the point of a part
-
+            btlProcesses = new List<BTLprocess>();
             refSides = new RefSides(_yzPlane, _section.Height, _section.Width, _length);
 
 
