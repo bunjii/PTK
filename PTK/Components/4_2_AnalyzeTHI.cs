@@ -275,9 +275,16 @@ namespace PTK
                     tmpForces.MX = M1_list_element;
                     tmpForces.MY = M2_list_element;
                     tmpForces.MZ = M3_list_element;
-
+                    
                     assemble.Elems[element_id].Forces = tmpForces;
 
+                    assemble.Elems[element_id].Forces.maxCompression=Math.Abs(N1_compression_max);
+                    assemble.Elems[element_id].Forces.maxTension = Math.Abs(N1_tension_max);
+                    assemble.Elems[element_id].Forces.maxShearY = Math.Abs(N2_max);
+                    assemble.Elems[element_id].Forces.maxShearZ = Math.Abs(N3_max);
+                    assemble.Elems[element_id].Forces.maxTorsion = Math.Abs(M1_max);
+                    assemble.Elems[element_id].Forces.maxBendingY = Math.Abs(M2_max);
+                    assemble.Elems[element_id].Forces.maxBendingZ = Math.Abs(M3_max);
                 }
 
             }

@@ -158,9 +158,9 @@ namespace PTK.Classes
                 "norway",
                 null,
                 mat,
-                sec.Height,
-                sec.Width,
-                sec.Width
+                sec.Height*100,
+                sec.Width * 100,
+                sec.Width * 100
                 );
             return c;
         }

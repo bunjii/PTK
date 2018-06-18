@@ -51,9 +51,10 @@ namespace PTK
         public int Id { get { return id; } set { id = value; } }
         public string TxtHash { get { return txtHash; } }
         public List<int> ElemIds { get { return elemIds;  } }
-        public double Structural_Area { get { return analysis_area; } }
+
+        public double Structural_Area { get { return analysis_area; } set { analysis_area = value; } }
+        public List<double> Structural_Radius_of_gyration { get { return analysis_radius_of_gyration; } set { analysis_radius_of_gyration = value; }}
         public List<double> Structural_Moment_of_inertia { get { return analysis_moment_of_inertia; } set { analysis_moment_of_inertia = value; } }
-        public List<double> Structural_Radius_of_gyration { get { return analysis_radius_of_gyration; } set { analysis_radius_of_gyration = value; } }
         #endregion
 
         #region methods
