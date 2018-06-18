@@ -12,12 +12,12 @@ namespace PTK.Classes
     {
         public class MatCroPair {
             private PTK_Material _mat;
-            private Section _sec;
+            private PTK_Section _sec;
 
             public PTK_Material mat { get { return _mat; } }
-            public Section sec { get { return _sec; } }
+            public PTK_Section sec { get { return _sec; } }
 
-            public MatCroPair(PTK_Material mat, Section sec) { _mat = mat; _sec = sec; }
+            public MatCroPair(PTK_Material mat, PTK_Section sec) { _mat = mat; _sec = sec; }
 
             public override int GetHashCode()
             {
@@ -150,7 +150,7 @@ namespace PTK.Classes
             return n;
         }
 
-        protected Karamba.CrossSections.CroSec krmb_crosec(Section sec, Karamba.Materials.FemMaterial mat)
+        protected Karamba.CrossSections.CroSec krmb_crosec(PTK_Section sec, Karamba.Materials.FemMaterial mat)
         {
             var c = new Karamba.CrossSections.CroSec_Trapezoid(
                 "family",

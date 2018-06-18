@@ -56,9 +56,9 @@ namespace PTK
             GH_ObjectWrapper wrapSec = new GH_ObjectWrapper();
 
             // in case the component is connected to somewhere after Assemble.
-            List<Section> secs = new List<Section>();
+            List<PTK_Section> secs = new List<PTK_Section>();
             // in case the component is connected directly to Section component.
-            Section sec;
+            PTK_Section sec;
 
             List<string> secHashes = new List<string>();
             List<string> secNames = new List<string>();
@@ -70,8 +70,8 @@ namespace PTK
 
             #region input
             if (!DA.GetData(0, ref wrapSec)) { return; }
-            wrapSec.CastTo<List<Section>>(out secs);
-            wrapSec.CastTo<Section>(out sec);
+            wrapSec.CastTo<List<PTK_Section>>(out secs);
+            wrapSec.CastTo<PTK_Section>(out sec);
             #endregion
 
             #region solve

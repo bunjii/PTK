@@ -90,7 +90,7 @@ namespace PTK
             List<Node> nodes = new List<Node>();
             List<PTK_Element> elems = new List<PTK_Element>();
             List<PTK_Material> mats = new List<PTK_Material>();
-            List<Section> secs = new List<Section>();
+            List<PTK_Section> secs = new List<PTK_Section>();
             List<PTK_Support> sups = new List<PTK_Support>();
             List<PTK_Load> loads = new List<PTK_Load>();
             List<Karamba.Models.GH_Model> models = new List<Karamba.Models.GH_Model>();
@@ -209,7 +209,7 @@ namespace PTK
                 new List<Node>(nodes), 
                 new List<PTK_Element>(elems),
                 new List<PTK_Material>(mats), 
-                new List<Section>(secs), 
+                new List<PTK_Section>(secs), 
                 new List<PTK_Support>(sups), 
                 new List<PTK_Load>(loads));
 
@@ -508,14 +508,14 @@ namespace PTK
             }
         }
 
-        internal void RegisterSections(ref List<PTK_Element> _elems, ref List<Section> _secs)
+        internal void RegisterSections(ref List<PTK_Element> _elems, ref List<PTK_Section> _secs)
         {
             List<string> _hashList = new List<string>();
             int _secIdCnt = 0;
 
             foreach (PTK_Element e in _elems)
             {
-                Section _elemSec = e.Section;
+                PTK_Section _elemSec = e.Section;
                 string _hash = _elemSec.TxtHash;
 
                 // if the hash values coincides, add existent secId.

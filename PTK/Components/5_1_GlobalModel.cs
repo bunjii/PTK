@@ -54,7 +54,7 @@ namespace PTK
             List<Node> nodes = new List<Node>();
             List<PTK_Element> elems = new List<PTK_Element>();
             List<PTK_Material> mats = new List<PTK_Material>();
-            List<Section> secs = new List<Section>();
+            List<PTK_Section> secs = new List<PTK_Section>();
             List<PTK_Support> sups = new List<PTK_Support>();
             List<PTK_Load> loads = new List<PTK_Load>();
             GH_ObjectWrapper wrapAssembly = new GH_ObjectWrapper();

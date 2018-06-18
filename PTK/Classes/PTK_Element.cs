@@ -22,7 +22,7 @@ namespace PTK
         private Point3d pointAtStart;
         private Point3d pointAtEnd;
         private Curve crv;
-        private Section section;
+        private PTK_Section section;
         private int secId;
         private PTK_Material material;
         private int matId;
@@ -59,7 +59,7 @@ namespace PTK
         #endregion
 
         #region constructors
-        public PTK_Element(Curve _crv, string _tag, Align _align, Section _section, PTK_Material _material)
+        public PTK_Element(Curve _crv, string _tag, Align _align, PTK_Section _section, PTK_Material _material)
         {
             // nodes = new List<Node>();
             nodeIds = new List<int>();
@@ -92,7 +92,7 @@ namespace PTK
             Curve _crv,
             string _tag,
             Align _align,
-            Section _section,
+            PTK_Section _section,
             PTK_Material _material,
             PTK_Forces _forces
             )
@@ -171,7 +171,7 @@ namespace PTK
         {
             get { return id; }
         }
-        public Section Section
+        public PTK_Section Section
         {
             get { return section; }
             set { section = value; }

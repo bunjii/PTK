@@ -12,6 +12,7 @@ using System.Windows.Forms;
 
 using Karamba.Models;
 using Karamba.Elements;
+
 namespace PTK.Components
 {
     public class PTK_4_3_DimensioningMembers : GH_Component
@@ -62,6 +63,36 @@ namespace PTK.Components
             #endregion
 
             #region solve
+            List<double> list_effective_lengths_dir1 = new List<double>();
+            List<double> list_effective_lengths_dir2 = new List<double>();
+
+            double tmpefflength_dir1;
+            double tmpefflength_dir2;
+
+            List<double> list_slenderness_dir1 = new List<double>();
+            List<double> list_slenderness_dir2 = new List<double>();
+
+            double tmpslender_dir1;
+            double tmpslender_dir2;
+
+            foreach (var e1 in inassembly.Elems)
+            {
+                tmpefflength_dir1 = EffectiveLength(1, e1.Crv.GetLength());
+                tmpefflength_dir2 = EffectiveLength(2, e1.Crv.GetLength());
+
+                list_effective_lengths_dir1.Add(tmpefflength_dir1);
+                list_effective_lengths_dir2.Add(tmpefflength_dir2);
+
+                tmpslender_dir1 = SlendernessRatio( e1.Section, 1, e1.Crv.GetLength());
+                tmpslender_dir2 = SlendernessRatio( e1.Section, 2, e1.Crv.GetLength());
+
+            }
+
+
+
+
+
+
 
             #endregion
 
@@ -71,6 +102,47 @@ namespace PTK.Components
             DA.SetDataList(0, infolist);
             #endregion
         }
+
+        #region methods
+        private double EffectiveLength(int direction , double Length)
+        {
+            double buckling_coefficient = 1;
+            double effective_length = Length * buckling_coefficient;
+
+            if (direction == 1)
+            {
+                buckling_coefficient = 1;
+                effective_length = Length * buckling_coefficient;
+            }
+            if (direction == 2)
+            {
+                buckling_coefficient = 1;
+                effective_length = Length * buckling_coefficient;
+            }
+
+            return effective_length;
+        }
+
+        private double SlendernessRatio(PTK_Section cs1, int direction, double length)
+        {
+
+            double effective_lenght = EffectiveLength(direction, length);
+            double slenderness = 0;
+
+            if (direction == 1)
+            {
+                slenderness = effective_lenght / cs1.Structural_Radius_of_gyration[0];
+            }
+            if (direction == 2)
+            {
+                slenderness = effective_lenght / cs1.Structural_Radius_of_gyration[1];
+            }
+
+            return slenderness;
+        }
+
+        #endregion
+
 
         /// <summary>
         /// Provides an Icon for the component.

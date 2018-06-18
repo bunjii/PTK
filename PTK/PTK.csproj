@@ -71,7 +71,7 @@
     <Compile Include="Classes\Align.cs" />
     <Compile Include="Classes\Assembly.cs" />
     <Compile Include="Classes\KarambaExport.cs" />
-    <Compile Include="Classes\StructuralProperties.cs" />
+    <Compile Include="Classes\PTK_StructuralAnalysis.cs" />
     <Compile Include="Classes\PTK_Element.cs" />
     <Compile Include="Classes\Functions.cs" />
     <Compile Include="Classes\Functions_DDL.cs" />
@@ -130,7 +130,7 @@
     <Compile Include="Components\U_5_DisassembleMaterial.cs" />
     <Compile Include="Components\U_4_DisassembleElem.cs" />
     <Compile Include="Components\U_1_GenerateGeometry.cs" />
-    <Compile Include="Classes\Section.cs" />
+    <Compile Include="Classes\PTK_Section.cs" />
     <Compile Include="Components\U_3_DisassembleNode.cs" />
     <Compile Include="Classes\PTK_Support.cs" />
     <Compile Include="Components\U_2_Disassemble.cs" />

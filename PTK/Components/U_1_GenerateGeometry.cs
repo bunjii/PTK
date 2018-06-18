@@ -56,7 +56,7 @@ namespace PTK
             Boolean isBrep = false;
             List<Node> nodes = new List<Node>();
             List<PTK_Element> elems = new List<PTK_Element>();
-            List<Section> secs = new List<Section>();
+            List<PTK_Section> secs = new List<PTK_Section>();
             List<Brep> brepGeom = new List<Brep>();
             List<Brep> slashedBreps = new List<Brep>();
             #endregion
@@ -87,7 +87,7 @@ namespace PTK
 
                     double[] paramter = { 0.0, 2.2 };
 
-                    Section sec = Section.FindSecById(secs, e.SecId);
+                    PTK_Section sec = PTK_Section.FindSecById(secs, e.SecId);
                     double HalfWidth = 0.5 * sec.Width;
                     double HalfHeight = 0.5 * sec.Height;
 

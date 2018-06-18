@@ -62,12 +62,12 @@ namespace PTK
             if (!DA.GetData(0, ref name)) { return; }
             if (!DA.GetData(1, ref width)) { return; }
             if (!DA.GetData(2, ref height)) { return; }
-            
+
 
             #endregion
 
             #region solve
-            Section rectSec = new Section(name, width/1000, height/1000);
+            PTK_Section rectSec = new PTK_Section(name, width/1000, height/1000);
             string test = "";
             test += rectSec.SectionName + ", " + rectSec.Height.ToString();
             // MessageBox.Show(test);

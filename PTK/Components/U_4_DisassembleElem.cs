@@ -74,7 +74,7 @@ namespace PTK
             List<int> elemids = new List<int>();
             // List<int> n0ids = new List<int>();
             // List<int> n1ids = new List<int>();
-            List<Section> secs = new List<Section>();
+            List<PTK_Section> secs = new List<PTK_Section>();
             List<Plane> plns = new List<Plane>();
             List<int> mids = new List<int>();
             List<int> priority = new List<int>();

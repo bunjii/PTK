@@ -13,7 +13,7 @@ namespace PTK
         private List<Node> nodes;
         private List<PTK_Element> elems;
         private List<PTK_Material> mats;
-        private List<Section> secs;
+        private List<PTK_Section> secs;
         private List<PTK_Support> sups;
         private List<PTK_Load> loads;
         private List<Karamba.Models.GH_Model> krmb_GH_model;
@@ -23,7 +23,7 @@ namespace PTK
 
         #region constructors
         public Assembly(List<Node> _nodes, List<PTK_Element> _elems, List<PTK_Material> _mats,
-            List<Section> _secs, List<PTK_Support> _sups, List<PTK_Load> _loads)
+            List<PTK_Section> _secs, List<PTK_Support> _sups, List<PTK_Load> _loads)
         {
             nodes = _nodes;
             elems = _elems;
@@ -35,7 +35,7 @@ namespace PTK
         }
 
         public Assembly(List<Node> _nodes, List<PTK_Element> _elems, List<PTK_Material> _mats,
-            List<Section> _secs, List<PTK_Support> _sups, List<PTK_Load> _loads, List<Karamba.Models.GH_Model> _krmb_GH_model)
+            List<PTK_Section> _secs, List<PTK_Support> _sups, List<PTK_Load> _loads, List<Karamba.Models.GH_Model> _krmb_GH_model)
         {
             nodes = _nodes;
             elems = _elems;
@@ -64,7 +64,7 @@ namespace PTK
             get { return mats; }
             set { mats = value; }
         }
-        public List<Section> Secs
+        public List<PTK_Section> Secs
         {
             get { return secs; }
             set { secs = value; }

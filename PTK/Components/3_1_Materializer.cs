@@ -78,7 +78,7 @@ namespace PTK
             GH_ObjectWrapper wrapAlign = new GH_ObjectWrapper();
             GH_ObjectWrapper wrapForce = new GH_ObjectWrapper();
 
-            Section section;
+            PTK_Section section;
             PTK_Material material;
             PTK_Forces forces;
             Align align;
@@ -96,14 +96,14 @@ namespace PTK
 
             #region solve
             //Turning objectwrappers into its respective objects. 
-            wrapSec.CastTo<Section>(out section);
+            wrapSec.CastTo<PTK_Section>(out section);
             wrapMat.CastTo<PTK_Material>(out material);
             wrapAlign.CastTo<Align>(out align);
             wrapForce.CastTo<PTK_Forces>(out forces);
 
 
             //Assigning Default Values if not inputed (correctly)
-            if (section == null) section = new Section("Untitled", 100, 100);
+            if (section == null) section = new PTK_Section("Untitled", 100, 100);
             if (forces == null) forces = new PTK_Forces();
             if (material == null)
             {
