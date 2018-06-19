@@ -13,9 +13,6 @@ namespace PTK
 {
     public class PTK_1_2_1_LoadMatProps : GH_Component
     {
-        /// <summary>
-        /// Initializes a new instance of the MyComponent1 class.
-        /// </summary>
         public PTK_1_2_1_LoadMatProps()
           : base("Load Material Properties (PTK)", "Load MP",
               "loads material properties from Tree.",
@@ -24,29 +21,18 @@ namespace PTK
             Message = CommonProps.initialMessage;
         }
 
-        /// <summary>
-        /// Registers all the input parameters for this component.
-        /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddTextParameter("Material Name", "MatName", "names Material.", GH_ParamAccess.item, "GL26c");      //We should add default values here.
             pManager.AddTextParameter("Load data", "dataTree", "Load data tree with properties.", GH_ParamAccess.tree);
-            
         }
 
-        /// <summary>
-        /// Registers all the output parameters for this component.
-        /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Material Properties (PTK)", "MP (PTK)", "Material Property (PTK) data to be connected to a Material (PTK) component", GH_ParamAccess.item);
+            pManager.RegisterParam(new Param_MaterialStructuralProp, "Material Properties (PTK)", "MP (PTK)", "Material Property (PTK) data to be connected to a Material (PTK) component", GH_ParamAccess.item);
             pManager.AddTextParameter("Material Properties text", "MP txt", "Text output of Material Properties (PTK)", GH_ParamAccess.list);
         }
 
-        /// <summary>
-        /// This is the method that actually does the work.
-        /// </summary>
-        /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             #region variables
@@ -205,22 +191,14 @@ namespace PTK
 
         }
 
-        /// <summary>
-        /// Provides an Icon for the component.
-        /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
             get
             {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
                 return PTK.Properties.Resources.ico_loadMP;
             }
         }
 
-        /// <summary>
-        /// Gets the unique ID for this component. Do not change this ID after release.
-        /// </summary>
         public override Guid ComponentGuid
         {
             get { return new Guid("965bef7b-feea-54d8-abe9-f126d21b9c41"); }

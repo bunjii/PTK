@@ -16,6 +16,7 @@ namespace PTK
         #region fields
         public List<Element1D> Elements { get; private set; }
         public List<Node> Nodes { get; private set; }
+        public List<string> Tags { get; private set; }
         public List<Section> Sections { get; private set; }
         public List<Material> Materials { get; private set; }
         public Dictionary<Element1D,List<int>> NodeMap { get; private set; }
@@ -26,8 +27,9 @@ namespace PTK
         {
             Elements = new List<Element1D>();
             Nodes = new List<Node>();
-            Materials = new List<Material>();
+            Tags = new List<string>();
             Sections = new List<Section>();
+            Materials = new List<Material>();
             NodeMap = new Dictionary<Element1D, List<int>>();
         }
         #endregion
@@ -43,6 +45,11 @@ namespace PTK
                 SearchNodes(_element);
 
                 Elements.Add(_element);
+                string tag = _element.Tag;
+                if (!Tags.Contains(tag))
+                {
+                    Tags.Add(tag);
+                }
                 Section sec = _element.Section;
                 if (!Sections.Contains(sec))
                 {
