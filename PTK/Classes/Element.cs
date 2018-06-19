@@ -1,4 +1,6 @@
 ﻿using Rhino.Geometry;
+using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -73,10 +75,7 @@ namespace PTK
         #endregion
 
         #region methods
-        public Element1D Clone()
-        {
-            return (Element1D)MemberwiseClone();
-        }
+
         private void InitializeCentricPlanes()
         {
             if (BaseCurve != null)
@@ -130,8 +129,23 @@ namespace PTK
                 YZPlane = new Plane();
             }
         }
+        public Element1D DeepCopy()
+        {
+            return (Element1D)base.MemberwiseClone();
+        }
+        public override string ToString()
+        {
+            string info;
+            info = "<Element1D> Tag:" + Tag +
+                " PointAtStart:" + PointAtStart.ToString() +
+                " PointAtEnd:" + PointAtEnd.ToString();
+            return info;
+        }
+        public bool IsValid()
+        {
+            return Tag != "N/A";
+        }
         #endregion
-
         // has moved to PTK_UTIL1_GenerateGeometry
         // Generating extrusion/SweepIntervals
         //private void GenerateIntervals()
@@ -170,7 +184,6 @@ namespace PTK
         //    ElementGeometry = tempgeometry;
         //}
 
-
     }
 
     public class ElementForStructural
@@ -199,7 +212,96 @@ namespace PTK
             Forces.Add(_force);
             return Forces.Count;
         }
+        public ElementForStructural DeepCopy()
+        {
+            return (ElementForStructural)base.MemberwiseClone();
+        }
+        public override string ToString()
+        {
+            string info;
+            info = "<ElementForStructural> Element1D:" + Element.Tag +
+                " Forces:" + Forces.Count.ToString();
+            return info;
+        }
+        public bool IsValid()
+        {
+            return Element != null;
+        }
         #endregion
+    }
+
+    public class GH_Element1D : GH_Goo<Element1D>
+    {
+        public GH_Element1D() { }
+        public GH_Element1D(GH_Element1D other) : base(other.Value) { this.Value = other.Value.DeepCopy(); }
+        public GH_Element1D(Element1D str) : base(str) { this.Value = str; }
+        public override IGH_Goo Duplicate()
+        {
+            return new GH_Element1D(this);
+        }
+        public override bool IsValid => base.m_value.IsValid();
+        public override string TypeName => "Element1D";
+        public override string TypeDescription => "A linear Element";
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
+    }
+
+    public class Param_Element1D : GH_PersistentParam<GH_Element1D>
+    {
+        public Param_Element1D() : base(new GH_InstanceDescription("Element1D", "Elem1D", "A linear Element", CommonProps.category, CommonProps.subcat0)) { }
+
+        protected override System.Drawing.Bitmap Icon { get { return null; } }  //クラスにアイコンを付けたい場合はここ
+
+        public override Guid ComponentGuid => new Guid("76479A6F-4C3D-43E0-B85E-FF2C6A99FEA5");
+
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_Element1D> values)
+        {
+            return GH_GetterResult.success;
+        }
+
+        protected override GH_GetterResult Prompt_Singular(ref GH_Element1D value)
+        {
+            return GH_GetterResult.success;
+        }
+    }
+
+    public class GH_ElementForStructural : GH_Goo<ElementForStructural>
+    {
+        public GH_ElementForStructural() { }
+        public GH_ElementForStructural(GH_ElementForStructural other) : base(other.Value) { this.Value = other.Value.DeepCopy(); }
+        public GH_ElementForStructural(ElementForStructural elem) : base(elem) { this.Value = elem; }
+        public override IGH_Goo Duplicate()
+        {
+            return new GH_ElementForStructural(this);
+        }
+        public override bool IsValid => base.m_value.IsValid();
+        public override string TypeName => "ElementForStructural";
+        public override string TypeDescription => "Element with structural information added";
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
+    }
+
+    public class Param_ElementForStructural : GH_PersistentParam<GH_ElementForStructural>
+    {
+        public Param_ElementForStructural() : base(new GH_InstanceDescription("ElementForStructural", "SElem", "Element with structural information added", CommonProps.category, CommonProps.subcat0)) { }
+
+        protected override System.Drawing.Bitmap Icon { get { return null; } }  //クラスにアイコンを付けたい場合はここ
+
+        public override Guid ComponentGuid => new Guid("B29BCA28-9108-48C1-B4F5-F808644F015A");
+
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_ElementForStructural> values)
+        {
+            return GH_GetterResult.success;
+        }
+
+        protected override GH_GetterResult Prompt_Singular(ref GH_ElementForStructural value)
+        {
+            return GH_GetterResult.success;
+        }
     }
 
 }

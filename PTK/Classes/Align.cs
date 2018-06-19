@@ -1,10 +1,11 @@
-﻿using Grasshopper.Kernel;
-using Rhino.Geometry;
+﻿using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 
 namespace PTK
 {
@@ -76,16 +77,67 @@ namespace PTK
         //    Rotation = vt;
 
         //}
+        public Align DeepCopy()
+        {
+            return (Align)base.MemberwiseClone();
+        }
         public override string ToString()
         {
             string info;
-            info = "Name:" + Name + 
+            info = "<Align> Name:" + Name + 
                 " OffsetY:" + OffsetY.ToString() + 
                 " OffsetZ:" + OffsetZ.ToString() + 
                 " RotationAngle:" + RotationAngle.ToString();
-            return base.ToString();
+            return info;
         }
-
+        public bool IsValid()
+        {
+            return Name != "N/A";
+        }
         #endregion
     }
+
+    public class GH_Align : GH_Goo<Align>
+    {
+        public GH_Align() { }
+        public GH_Align(GH_Align other) : base(other.Value) { this.Value = other.Value.DeepCopy(); }
+        public GH_Align(Align sec) : base(sec) { this.Value = sec; }
+        public override bool IsValid => base.m_value.IsValid();
+
+        public override string TypeName => "Align";
+
+        public override string TypeDescription => "Deformation and movement of section shape";
+
+        public override IGH_Goo Duplicate()
+        {
+            return new GH_Align(this);
+        }
+
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
+    }
+
+    public class Param_Align : GH_PersistentParam<GH_Align>
+    {
+        public Param_Align() : base(new GH_InstanceDescription("Align", "Alg", "Deformation and movement of section shape", CommonProps.category, CommonProps.subcat0)) { }
+
+        protected override System.Drawing.Bitmap Icon { get { return null; } }  //クラスにアイコンを付けたい場合はここ
+
+        public override Guid ComponentGuid => new Guid("76E8567B-EBBD-49F0-A30E-1069F4D92045");
+
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_Align> values)
+        {
+            return GH_GetterResult.success;
+        }
+
+        protected override GH_GetterResult Prompt_Singular(ref GH_Align value)
+        {
+            return GH_GetterResult.success;
+        }
+    }
+
+
+
 }

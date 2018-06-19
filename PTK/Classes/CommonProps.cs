@@ -11,6 +11,7 @@ namespace PTK
         #region fields
         public static double tolerances = 0.001;
         public static readonly string category = "PTK";
+        public static readonly string subcat0 = "Param";
         public static readonly string subcat1 = "Assemble";
         public static readonly string subcat2 = "Materialize";
         public static readonly string subcat3 = "Detail";

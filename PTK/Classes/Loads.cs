@@ -7,7 +7,7 @@ namespace PTK
     public class Load
     {
         #region fields
-        public string LoadTag { get; private set; }
+        public string Tag { get; private set; }
         public int LoadCase { get; private set; } = 0;
         public Point3d LoadPoint { get; private set; }
         public Vector3d LoadVector { get; private set; }
@@ -33,6 +33,22 @@ namespace PTK
         #endregion
 
         #region methods
+        public Load DeepCopy()
+        {
+            return (Load)base.MemberwiseClone();
+        }
+        public override string ToString()
+        {
+            string info;
+            info = "<Load> Tag:" + Tag +
+                " LoadCase:" + LoadCase.ToString() +
+                " LoadPoint:" + LoadPoint.ToString();
+            return info;
+        }
+        public bool IsValid()
+        {
+            return true;
+        }
         #endregion
     }
 }

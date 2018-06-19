@@ -6,6 +6,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 
 namespace PTK
 {
@@ -134,6 +136,24 @@ namespace PTK
 
             return param;
         }
+
+        public Assembly DeepCopy()
+        {
+            return (Assembly)base.MemberwiseClone();
+        }
+        public override string ToString()
+        {
+            string info;
+            info = "<Assembly> Elements:" + Elements.Count.ToString() +
+                " Nodes:" + Nodes.Count.ToString() +
+                " Materials:" + Materials.Count.ToString() +
+                " Sections:" + Sections.Count.ToString();
+            return info;
+        }
+        public bool IsValid()
+        {
+            return Elements.Count != 0;
+        }
         #endregion
 
     }
@@ -193,4 +213,42 @@ namespace PTK
         }
         #endregion
     }
+
+    public class GH_Assembly : GH_Goo<Assembly>
+    {
+        public GH_Assembly() { }
+        public GH_Assembly(GH_Assembly other) : base(other.Value) { this.Value = other.Value.DeepCopy(); }
+        public GH_Assembly(Assembly ass) : base(ass) { this.Value = ass; }
+        public override IGH_Goo Duplicate()
+        {
+            return new GH_Assembly(this);
+        }
+        public override bool IsValid => base.m_value.IsValid();
+        public override string TypeName => "Assembly";
+        public override string TypeDescription => "A model that gathers elements and has intersection points";
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
+    }
+
+    public class Param_Assembly : GH_PersistentParam<GH_Assembly>
+    {
+        public Param_Assembly() : base(new GH_InstanceDescription("Assembly", "Assembly", "A model that gathers elements and has intersection points", CommonProps.category, CommonProps.subcat0)) { }
+
+        protected override System.Drawing.Bitmap Icon { get { return null; } }  //クラスにアイコンを付けたい場合はここ
+
+        public override Guid ComponentGuid => new Guid("E49369AA-4F29-498E-9808-E3197929FF51");
+
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_Assembly> values)
+        {
+            return GH_GetterResult.success;
+        }
+
+        protected override GH_GetterResult Prompt_Singular(ref GH_Assembly value)
+        {
+            return GH_GetterResult.success;
+        }
+    }
+
 }

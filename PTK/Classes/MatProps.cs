@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 
 namespace PTK
@@ -84,7 +85,7 @@ namespace PTK
         public override string ToString()
         {
             string info;
-            info = "Name:" + Name;
+            info = "<MaterialStructuralProp> Name:" + Name;
             return info;
         }
 
@@ -111,7 +112,7 @@ namespace PTK
 
         public override string TypeName => "MaterialStructuralProp";
 
-        public override string TypeDescription => "MaterialStructuralProp";
+        public override string TypeDescription => "Material properties for structural calculation";
 
         public override IGH_Goo Duplicate()
         {
@@ -123,5 +124,25 @@ namespace PTK
             return Value.ToString();
         }
     }
+
+    public class Param_MaterialStructuralProp : GH_PersistentParam<GH_MaterialStructuralProp>
+    {
+        public Param_MaterialStructuralProp() : base(new GH_InstanceDescription("MaterialStructuralProp", "MatStruct", "Material properties for structural calculation", CommonProps.category, CommonProps.subcat0)) { }
+
+        protected override System.Drawing.Bitmap Icon { get { return null; } }  //クラスにアイコンを付けたい場合はここ
+
+        public override Guid ComponentGuid => new Guid("248D46D3-6995-4CE8-AAD6-D30E99E6C493");
+
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_MaterialStructuralProp> values)
+        {
+            return GH_GetterResult.success;
+        }
+
+        protected override GH_GetterResult Prompt_Singular(ref GH_MaterialStructuralProp value)
+        {
+            return GH_GetterResult.success;
+        }
+    }
+
 
 }
