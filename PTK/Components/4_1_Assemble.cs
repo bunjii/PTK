@@ -201,7 +201,8 @@ namespace PTK
 
             // main function #6
             // register priorities to element
-            RegisterPriority(ref elems, priorityTxt);
+            // JohnEdit: Testing applying the priority in the element (As earlier?) SelectDetail sorts the elements based on priority 
+            //RegisterPriority(ref elems, priorityTxt);
 
             // main function #7 
             // register 

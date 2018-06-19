@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using Grasshopper.Kernel;
 using Rhino.Geometry;
+using System.Linq; 
 
 namespace PTK.Components
 {
@@ -39,8 +40,11 @@ namespace PTK.Components
             pManager.AddGenericParameter("E0", "Elem0", "", GH_ParamAccess.list);
             pManager.AddGenericParameter("E1", "Elem1", "", GH_ParamAccess.list);
             pManager.AddGenericParameter("E2", "Elem2", "", GH_ParamAccess.list);
-            pManager.AddGenericParameter("E3", "Elem3", "", GH_ParamAccess.list);
+            pManager.AddGenericParameter("E3", "Elem3", "", GH_ParamAccess.list); 
             pManager.AddGenericParameter("E4", "Elem4", "", GH_ParamAccess.list);
+
+            
+            
         }
 
         /// <summary>
@@ -72,30 +76,36 @@ namespace PTK.Components
             //The next one is stupid code, but did not find a better solution. The idea is to output each element of the detail in different output. The challenge is that the element-count varies
             foreach (Detail Detail in Details)
             {
+                List<PTK_Element> elemsInDetail = new List<PTK_Element>();
+                for (int i = 0; i<Detail.ElemsIds.Count; i++)
+                {
+                    elemsInDetail.Add(assemble.Elems.Find(t => t.Id == Detail.ElemsIds[i]));
+                }
 
                 Nodes.Add(assemble.Nodes.Find(t => t.Id == Detail.NodeIds[0]));
-                int elemamount = Detail.ElemsIds.Count;
 
-                if (elemamount > 0)
+                elemsInDetail = elemsInDetail.OrderBy(t => -t.Priority).ToList();
+
+
+                if (elemsInDetail.Count > 0)
                 {
-                    Elements0.Add(assemble.Elems.Find(t => t.Id == Detail.ElemsIds[0]));
-                    
+                    Elements0.Add(elemsInDetail[0]);
                 }
-                if (elemamount > 1)
+                if (elemsInDetail.Count > 1)
                 {
-                    Elements1.Add(assemble.Elems.Find(t => t.Id == Detail.ElemsIds[1]));
+                    Elements1.Add(elemsInDetail[1]);
                 }
-                if (elemamount > 2)
+                if (elemsInDetail.Count > 2)
                 {
-                    Elements2.Add(assemble.Elems.Find(t => t.Id == Detail.ElemsIds[2]));
+                    Elements2.Add(elemsInDetail[2]);
                 }
-                if (elemamount > 3)
+                if (elemsInDetail.Count > 3)
                 {
-                    Elements3.Add(assemble.Elems.Find(t => t.Id == Detail.ElemsIds[3]));
+                    Elements3.Add(elemsInDetail[3]);
                 }
-                if (elemamount > 4)
+                if (elemsInDetail.Count > 4)
                 {
-                    Elements4.Add(assemble.Elems.Find(t => t.Id == Detail.ElemsIds[4]));
+                    Elements4.Add(elemsInDetail[4]);
                 }
             }
 
@@ -105,7 +115,7 @@ namespace PTK.Components
             DA.SetDataList(3, Elements2);
             DA.SetDataList(4, Elements3);
             DA.SetDataList(5, Elements4);
-
+            
 
             #endregion
 

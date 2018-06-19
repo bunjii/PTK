@@ -85,18 +85,27 @@ namespace PTK
 
                     List<BTLprocess> BTLProcessess = assembly.Elems[i].SubElementBTL[0].BTLProcesses;
                     List<Brep> voids = new List<Brep>();
-                    for (int j = 0; j< BTLProcessess.Count; j++)
-                    {
-                        voids.Add(BTLProcessess[j].Voidgeometry);
-                    }
                     List<Brep> keep = new List<Brep>();
                     keep.Add(assembly.Elems[i].ElementGeometry);
-                    double tolerance = 0.01;
-                    Rhino.Geometry.Brep[] breps = Rhino.Geometry.Brep.CreateBooleanDifference(keep, voids, tolerance);
-                    if (breps != null)
+
+                    if (BTLProcessess.Count > 0)
                     {
-                        allBreps.Add(breps[0]);
+                        for (int j = 0; j < BTLProcessess.Count; j++)
+                        {
+                            voids.Add(BTLProcessess[j].Voidgeometry);
+                        }
+                        
+                        double tolerance = 0.1;
+                        Rhino.Geometry.Brep[] breps = Rhino.Geometry.Brep.CreateBooleanDifference(keep, voids, tolerance);
+                        if (breps != null || breps.Length == 0)
+                        {
+                            for (int j = 0; j < breps.Length; j++)
+                            {
+                                allBreps.Add(breps[j]);
+                            }
+                        }
                     }
+                    
                     else
                     {
                         allBreps.AddRange(keep);

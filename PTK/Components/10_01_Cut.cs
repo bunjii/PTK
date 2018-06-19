@@ -69,69 +69,112 @@ namespace PTK.Components
                     RefSides Refsides = elem.SubElementBTL[0].Refsides;
                     Plane RefSide = Refsides.RefSide1;
                     Line refEdge = Refsides.RefEdge1;
-                    
 
-                    Point3d intersectPoint = Rhino.Geometry.Intersect.Intersection.CurvePlane(refEdge.ToNurbsCurve(), cutPlane, 0.01)[0].PointA;
-                    Line directionLine = new Line();
-                    if (Rhino.Geometry.Intersect.Intersection.PlanePlane(RefSide, cutPlane, out directionLine)) ;
-
-
-                    OrientationType orientation;
-
-                    cutPlane = SubElementBTL.AlignInputPlane(refEdge, RefSide, cutPlane, out orientation);
-                    Plane inclinationplane = new Plane(cutPlane.Origin, cutPlane.YAxis, cutPlane.ZAxis);
-
-
-
-
-
-                    Vector3d RefVector = refEdge.Direction;
-                    Vector3d Cutvector = cutPlane.YAxis;
-
-                    List<Point3d> voidpoints = Refsides.StartPoints; //Adding startpoints to be included in the cuttingbox
-
-
-                    if (orientation == OrientationType.end)
+                    Line extendEdge = refEdge;
+                    extendEdge.Extend(1000, 1000);
+                    Point3d intersectPoint;
+                    var intersectionevent = Rhino.Geometry.Intersect.Intersection.CurvePlane(extendEdge.ToNurbsCurve(), cutPlane, 0.01)[0];
+                    if (intersectionevent.PointA != null)
                     {
+                        intersectPoint = intersectionevent.PointA;
+                        Line directionLine = new Line();
+                        if (Rhino.Geometry.Intersect.Intersection.PlanePlane(RefSide, cutPlane, out directionLine)) ;
 
-                        RefVector.Reverse();
-                        Cutvector.Reverse(); //Correct
-                        voidpoints = Refsides.EndPoints;  //Adding endpoints to be included in the cuttingbox
+
+                        OrientationType orientation;
+
+                        cutPlane = SubElementBTL.AlignInputPlane(extendEdge, RefSide, cutPlane, out orientation);
+                        Plane inclinationplane = new Plane(cutPlane.Origin, cutPlane.YAxis, cutPlane.ZAxis);
+
+
+
+
+
+                        Vector3d RefVector = refEdge.Direction;
+                        Vector3d Cutvector = cutPlane.YAxis;
+
+                        List<Point3d> voidpoints = new List<Point3d>();
+
+
+                        if (orientation == OrientationType.end)
+                        {
+
+                            RefVector.Reverse();
+                            Cutvector.Reverse(); //Correct
+
+
+                        }
+
+                        //Adding points to ensure the cuttingbox includes the crossesction of the cut
+
+                        List<Point3d> testpoints = new List<Point3d>();
+                        testpoints.AddRange(Refsides.StartPoints);
+                        testpoints.AddRange(Refsides.EndPoints);
+
+
+                        foreach (Point3d point in testpoints)
+                        {
+                            Point3d localaxispoint;
+                            cutPlane.RemapToPlaneSpace(point, out localaxispoint);
+                            if (localaxispoint.Z > 0)
+                            {
+                                voidpoints.Add(point);
+                            }
+
+                        }
+
+
+
+                        //Adding the points of the edge that are on the cutplane
+                        List<Line> tempLines = new List<Line>();
+                        tempLines.Add(Refsides.RefEdge1);
+                        tempLines.Add(Refsides.RefEdge2);
+                        tempLines.Add(Refsides.RefEdge3);
+                        tempLines.Add(Refsides.RefEdge4);
+
+                        foreach (Line line in tempLines)
+                        {
+                            double tempe;
+                            if (Rhino.Geometry.Intersect.Intersection.LinePlane(line, cutPlane, out tempe)) ;
+                            voidpoints.Add(line.PointAt(tempe));
+
+
+                        }
+
+
+
+                        Box box = new Box(cutPlane, voidpoints);
+
+                        //Creating BTL processing
+                        JackRafterCutType JackRafterCut = new JackRafterCutType();
+
+                        JackRafterCut.Orientation = orientation;
+                        JackRafterCut.ReferencePlaneID = 1;
+                        JackRafterCut.Process = BooleanType.yes;
+                        JackRafterCut.StartX = refEdge.From.DistanceTo(intersectPoint);
+                        JackRafterCut.StartY = 0.0;
+                        JackRafterCut.StartDepth = 0.0;
+                        JackRafterCut.Angle = Vector3d.VectorAngle(RefVector, cutPlane.XAxis);
+                        JackRafterCut.Angle = Convert.ToDouble(Rhino.RhinoMath.ToDegrees(JackRafterCut.Angle));
+                        JackRafterCut.Inclination = Vector3d.VectorAngle(RefVector, Cutvector);
+                        JackRafterCut.Inclination = Convert.ToDouble(Rhino.RhinoMath.ToDegrees(JackRafterCut.Inclination));
+                        JackRafterCut.StartDepth = 0.0;
+                        JackRafterCut.Name = Convert.ToString(ElemID);    //Name is used as container for elemId identifier
+
+                        Processes.Add(new BTLprocess(JackRafterCut, Brep.CreateFromBox(box), ElemID));
+
 
                     }
 
-                    //Adding points to ensure the cuttingbox includes the crossesction of the cut
-                    voidpoints.Add(Rhino.Geometry.Intersect.Intersection.CurvePlane(Refsides.RefEdge1.ToNurbsCurve(), cutPlane, 0.1)[0].PointA);
-                    voidpoints.Add(Rhino.Geometry.Intersect.Intersection.CurvePlane(Refsides.RefEdge2.ToNurbsCurve(), cutPlane, 0.1)[0].PointA);
-                    voidpoints.Add(Rhino.Geometry.Intersect.Intersection.CurvePlane(Refsides.RefEdge3.ToNurbsCurve(), cutPlane, 0.1)[0].PointA);
-                    voidpoints.Add(Rhino.Geometry.Intersect.Intersection.CurvePlane(Refsides.RefEdge4.ToNurbsCurve(), cutPlane, 0.1)[0].PointA);
+                    
 
-                    Box box = new Box(cutPlane, voidpoints);
-
-                    //Creating BTL processing
-                    JackRafterCutType JackRafterCut = new JackRafterCutType();
-
-                    JackRafterCut.Orientation = orientation;
-                    JackRafterCut.ReferencePlaneID = 1;
-                    JackRafterCut.Process = BooleanType.yes;
-                    JackRafterCut.StartX = refEdge.From.DistanceTo(intersectPoint);
-                    JackRafterCut.StartY = 0.0;
-                    JackRafterCut.StartDepth = 0.0;
-                    JackRafterCut.Angle = Vector3d.VectorAngle(RefVector, cutPlane.XAxis);
-                    JackRafterCut.Angle = Convert.ToDouble(Rhino.RhinoMath.ToDegrees(JackRafterCut.Angle));
-                    JackRafterCut.Inclination = Vector3d.VectorAngle(RefVector, Cutvector);
-                    JackRafterCut.Inclination = Convert.ToDouble(Rhino.RhinoMath.ToDegrees(JackRafterCut.Inclination));
-                    JackRafterCut.StartDepth = 0.0;
-                    JackRafterCut.Name = Convert.ToString(ElemID);    //Name is used as container for elemId identifier
-
-                    Processes.Add(new BTLprocess(JackRafterCut, Brep.CreateFromBox(box), ElemID));
                     i++;
                 }
 
-                DA.SetDataList(0, Processes);
+                
 
             }
-
+            DA.SetDataList(0, Processes);
         }
 
         /// <summary>

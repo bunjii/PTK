@@ -63,6 +63,8 @@ namespace PTK
         #region methods
         static public Plane AlignInputPlane(Line _refEdge, Plane _refPlane, Plane _cutPlane, out OrientationType orientationtype)
         {
+
+            
             Point3d intersectPoint = Rhino.Geometry.Intersect.Intersection.CurvePlane(_refEdge.ToNurbsCurve(), _cutPlane, 0.01)[0].PointA;
             Line intersectionLine = new Line();
             Rhino.Geometry.Intersect.Intersection.PlanePlane(_refPlane, _cutPlane, out intersectionLine);

@@ -67,7 +67,7 @@ namespace PTK
             #endregion
 
             #region solve
-            PTK_Section rectSec = new PTK_Section(name, width/1000, height/1000);
+            PTK_Section rectSec = new PTK_Section(name, width, height);
             string test = "";
             test += rectSec.SectionName + ", " + rectSec.Height.ToString();
             // MessageBox.Show(test);

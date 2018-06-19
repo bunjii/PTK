@@ -38,6 +38,7 @@ namespace PTK
             pManager.AddGenericParameter("PTK Material", "M (PTK)", "Add Material-component here", GH_ParamAccess.item);
             pManager.AddGenericParameter("PTK Align", "Aln (PTK)", "Describes the alignment of the member. (Rotation and offset)", GH_ParamAccess.item);
             pManager.AddGenericParameter("PTK Force", "F (PTK)", "Add Forces-component here", GH_ParamAccess.item);
+            pManager.AddIntegerParameter("Priority", "P", "Structural priority", GH_ParamAccess.item,0);
 
             pManager[0].Optional = true;
             pManager[2].Optional = true;
@@ -69,6 +70,7 @@ namespace PTK
             List<PTK_Element> elems = new List<PTK_Element>();
             List<Node> nodes = new List<Node>();
             List<Align> alignList = new List<Align>();
+            int priority = 0; 
             // Align aligner;
 
             string elemTag = "N/A";
@@ -91,6 +93,7 @@ namespace PTK
             DA.GetData(3, ref wrapMat);
             DA.GetData(4, ref wrapAlign);
             DA.GetData(5, ref wrapForce);
+            DA.GetData(6, ref priority);
 
             #endregion
 
@@ -147,6 +150,7 @@ namespace PTK
                 if (!curves[i].IsValid) continue;
 
                 elems.Add(new PTK_Element(curves[i], elemTag, align, section, material ));
+                elems[i].Priority = priority; 
             }
 
             #endregion
