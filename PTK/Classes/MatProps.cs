@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Grasshopper.Kernel.Types;
 
 namespace PTK
 {
@@ -76,6 +77,51 @@ namespace PTK
         #endregion
 
         #region methods
+        public MaterialStructuralProp DeepCopy()
+        {
+            return (MaterialStructuralProp)base.MemberwiseClone();
+        }
+        public override string ToString()
+        {
+            string info;
+            info = "Name:" + Name;
+            return info;
+        }
+
+        public bool IsValid()
+        {
+            return Name != "N/A";
+        }
         #endregion
     }
+
+    public class GH_MaterialStructuralProp : GH_Goo<MaterialStructuralProp>
+    {
+        public GH_MaterialStructuralProp() { }
+        public GH_MaterialStructuralProp(GH_MaterialStructuralProp other) : base(other.Value)
+        {
+            this.Value = other.Value.DeepCopy();
+        }
+        public GH_MaterialStructuralProp(MaterialStructuralProp MSProp) : base(MSProp)
+        {
+            this.Value = MSProp;
+        }
+
+        public override bool IsValid => base.m_value.IsValid();
+
+        public override string TypeName => "MaterialStructuralProp";
+
+        public override string TypeDescription => "MaterialStructuralProp";
+
+        public override IGH_Goo Duplicate()
+        {
+            return new GH_MaterialStructuralProp(this);
+        }
+
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
+    }
+
 }
