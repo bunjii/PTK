@@ -33,7 +33,7 @@ namespace PTK
         #region constructors
         public MaterialStructuralProp() { }
         public MaterialStructuralProp(
-            string _materialName,
+            string _name,
             double _fmgk,
             double _ft0gk,
             double _ft90gk,
@@ -53,7 +53,7 @@ namespace PTK
             double _rhogmean    // density
         )
         {
-            Name = _materialName; 
+            Name = _name; 
             Fmgk = _fmgk;
             Ft0gk = _ft0gk;
             Ft90gk = _ft90gk;

@@ -7,23 +7,17 @@ namespace PTK
 {
     public class PTK_1_2_2_Material_Props : GH_Component
     {
-        /// <summary>
-        /// Initializes a new instance of the MyComponent1 class.
-        /// </summary>
         public PTK_1_2_2_Material_Props()
-          : base("Material Properties (PTK)", "MP",
+          : base("Material Structural Prop", "MatStrProp",
               "creates material properties",
               CommonProps.category, CommonProps.subcat2)
         {
             Message = CommonProps.initialMessage;
         }
 
-        /// <summary>
-        /// Registers all the input parameters for this component.
-        /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("MaterialName", "MatName", "names Material.", GH_ParamAccess.item, "GL26C");      //We should add default values here.
+            pManager.AddTextParameter("Name", "Name", "names Material.", GH_ParamAccess.item, "GL26C");      //We should add default values here.
 
             pManager.AddNumberParameter("f m,g,k", "fmgk", "in [N/mm2]", GH_ParamAccess.item, 26 );
             pManager.AddNumberParameter("f t,0,g,k", "ft0gk", "in [N/mm2]", GH_ParamAccess.item, 19 );
@@ -48,23 +42,17 @@ namespace PTK
             
         }
 
-        /// <summary>
-        /// Registers all the output parameters for this component.
-        /// </summary>
+
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Material Properties (PTK)", "MP (PTK)",
-                "Material Property (PTK) data to be connected to a Material (PTK) component", GH_ParamAccess.item);
+            pManager.RegisterParam(new Param_MaterialStructuralProp(), "Material Structural Prop", "MatProp",
+                "Material Property (PTK) data to be connected to a Material (PTK) component");
         }
 
-        /// <summary>
-        /// This is the method that actually does the work.
-        /// </summary>
-        /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             #region variables
-            string MaterialName = "N/A";
+            string Name = null;
 
             // for glulam according LIMTREBOKA
             double fmgk = new double() ;
@@ -92,7 +80,7 @@ namespace PTK
             #endregion
 
             #region input
-            DA.GetData(0, ref MaterialName);
+            DA.GetData(0, ref Name);
             if (!DA.GetData(1, ref fmgk)) { return; }
             if (!DA.GetData(2, ref ft0gk)) { return; }
             if (!DA.GetData(3, ref ft90gk)) { return; }
@@ -116,59 +104,52 @@ namespace PTK
             #endregion
 
             #region solve
-            MatProps Material_prop = new MatProps(
-                MaterialName,
-                fmgk,
+            GH_MaterialStructuralProp prop = new GH_MaterialStructuralProp(
+                new MaterialStructuralProp(
+                    Name,
+                    fmgk,
 
-                ft0gk,
-                ft90gk,
+                    ft0gk,
+                    ft90gk,
              
-                fc0gk,
-                fc90gk,
+                    fc0gk,
+                    fc90gk,
              
-                fvgk,
-                frgk, 
+                    fvgk,
+                    frgk, 
 
-                E0gmean,
-                E0g05,
-                E90gmean,
-                E90g05,
+                    E0gmean,
+                    E0g05,
+                    E90gmean,
+                    E90g05,
              
-                Ggmean,
-                Gg05,
-                Gtgmean,
-                Grg05,
+                    Ggmean,
+                    Gg05,
+                    Gtgmean,
+                    Grg05,
 
-                Rhogk,
-                Rhogmean   
-            
+                    Rhogk,
+                    Rhogmean
+                )
             );
             
 
             #endregion
 
             #region output
-            DA.SetData(0, Material_prop);
+            DA.SetData(0, prop);
             #endregion
 
         }
 
-        /// <summary>
-        /// Provides an Icon for the component.
-        /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
             get
             {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
                 return PTK.Properties.Resources.ico_matprop;
             }
         }
 
-        /// <summary>
-        /// Gets the unique ID for this component. Do not change this ID after release.
-        /// </summary>
         public override Guid ComponentGuid
         {
             get { return new Guid("965bef7b-feea-54d8-abe9-f686d28b9c41"); }

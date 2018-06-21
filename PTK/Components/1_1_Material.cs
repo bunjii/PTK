@@ -12,7 +12,7 @@ namespace PTK
     {
 
         public PTK_1_1_Material()
-          : base("Material (PTK)", "Mat",
+          : base("Material", "Mat",
               "creates a Material",
               CommonProps.category, CommonProps.subcat2)
         {
