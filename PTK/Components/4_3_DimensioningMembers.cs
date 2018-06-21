@@ -151,6 +151,7 @@ namespace PTK.Components
                 element_report.elementTensionUtilization = TensionUtilization(e1.Section, e1.Material, e1.Forces);
                 element_report.elementBendingUtilization = BendingUtilization(e1.Section, e1.Material, e1.Forces);
                 element_report.elementCombinedBendingAndAxial = CombinedBendingAndAxial(e1.Section, e1.Material, e1.Forces, e1.Crv.GetLength());
+
                 var list_of_utilizations = new List<double>() {
                     element_report.elementCompressionUtilization,
                     element_report.elementTensionUtilization,
@@ -158,12 +159,7 @@ namespace PTK.Components
                     element_report.elementCombinedBendingAndAxial
                 };
 
-                double maxutilization = list_of_utilizations.Max();
-                infolist.Add(maxutilization.ToString());
-                _breps.Add(e1.ElementGeometry);
-                Rhino.Display.ColorCMYK C=new Rhino.Display.ColorCMYK(maxutilization, maxutilization, maxutilization);
-                _materials.Add(new Rhino.Display.DisplayMaterial(C));
-
+               
                 report_list.Add(element_report);
 
                 #region temporary solution
@@ -217,7 +213,7 @@ namespace PTK.Components
             }
 
            
-
+            /*
             #region creating report of calculations
 
 
@@ -233,7 +229,7 @@ namespace PTK.Components
             SerializerObj.Serialize(WriteFileStream, report_list);
             WriteFileStream.Close();
             #endregion
-
+            */
 
             #endregion
 
@@ -582,24 +578,8 @@ namespace PTK.Components
             return utilization;
         }
         #endregion
-        private readonly List<Brep> _breps = new List<Brep>() ;
-        private readonly List<Rhino.Display.DisplayMaterial> _materials = new List<Rhino.Display.DisplayMaterial>() ;
-        private BoundingBox _box;
+        
 
-        public override BoundingBox ClippingBox
-        {
-            get { return _box; }
-        }
-        public override void DrawViewportMeshes(IGH_PreviewArgs args)
-        {
-            for (int i = 0; i < _breps.Count; i++)
-                args.Display.DrawBrepWires(_breps[i], _materials[i].Diffuse, 0);
-        }
-        public override void DrawViewportWires(IGH_PreviewArgs args)
-        {
-            for (int i = 0; i < _breps.Count; i++)
-                args.Display.DrawBrepShaded(_breps[i], _materials[i]);
-        }
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
