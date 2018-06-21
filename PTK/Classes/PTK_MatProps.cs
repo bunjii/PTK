@@ -37,6 +37,19 @@ namespace PTK
         private double rhogk;       // density characteristic value
         private double rhogmean;    // density mean value
         private string txtHash = "";
+
+
+        
+        /// <summary>
+        /// properties connected more with the structure than material,
+        /// in ver 1.0 we should add PTK_structur options
+        /// </summary>
+        private double kmod=0.8;
+        private double ksys=1;
+        private double gammaM=1.2;
+
+        private double grainangle = 0;
+        
         #endregion
 
         #region constructors
@@ -63,7 +76,7 @@ namespace PTK
             double _rhogmean    // density
         )
         {
-            materialName = _materialName; 
+            materialName = _materialName;
             fmgk = _fmgk;
             ft0gk = _ft0gk;
             ft90gk = _ft90gk;
@@ -87,6 +100,7 @@ namespace PTK
             txtHash = CreateHashFromMP(this);
 
         }
+      
         #endregion
 
         #region properties
@@ -111,10 +125,16 @@ namespace PTK
         public double Rhogk { get { return rhogk; } set { rhogk = value; } }
         public double Rhogmean { get { return rhogmean; } set { rhogmean = value; } }
         public string TxtHash { get { return txtHash; } }
-        #endregion
 
-        #region methods
-        private static string CreateHashFromMP(PTK_MatProps _m)
+    public double Kmod { get { return kmod; } set { kmod = value; } }
+    public double Ksys { get { return ksys; } set { ksys = value; } }
+    public double GammaM { get { return gammaM; } set { gammaM = value; } }
+
+    public double GrainAngle { get; set; }
+    #endregion
+
+    #region methods
+    private static string CreateHashFromMP(PTK_MatProps _m)
         {
             string _key = "";
 
