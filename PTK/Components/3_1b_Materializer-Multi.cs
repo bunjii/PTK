@@ -114,7 +114,7 @@ namespace PTK
 
             elemTag = elemTag.Trim();
 
-            
+
             // trial multi-threading by john, need to understand this.
             if (curves.Count > 20)
             {
