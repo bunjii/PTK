@@ -98,7 +98,7 @@ namespace PTK
             List<Node> nodes;
             List<Element> elems;
             List<Material> mats;
-            List<Section> secs;
+            List<CrossSection> secs;
             List<Support> sups;
 
             GH_ObjectWrapper wrapAssembly = new GH_ObjectWrapper();

@@ -16,13 +16,13 @@ namespace PTK
         #region constructors
         public Load()
         {
-            LoadTag = "N/A";
+            Tag = "N/A";
             LoadPoint = new Point3d();
             LoadVector = new Vector3d();
         }
-        public Load(string _loadTag, int _loadCase, Point3d _loadPoint, Vector3d _loadVector)
+        public Load(string _tag, int _loadCase, Point3d _loadPoint, Vector3d _loadVector)
         {
-            LoadTag = _loadTag;
+            Tag = _tag;
             LoadCase = _loadCase;
             LoadPoint = _loadPoint;
             LoadVector = _loadVector;

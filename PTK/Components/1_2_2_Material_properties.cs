@@ -17,7 +17,7 @@ namespace PTK
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "Name", "names Material.", GH_ParamAccess.item, "GL26C");      //We should add default values here.
+            pManager.AddTextParameter("Name", "Name", "names Material.", GH_ParamAccess.item);
 
             pManager.AddNumberParameter("f m,g,k", "fmgk", "in [N/mm2]", GH_ParamAccess.item, 26 );
             pManager.AddNumberParameter("f t,0,g,k", "ft0gk", "in [N/mm2]", GH_ParamAccess.item, 19 );

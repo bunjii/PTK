@@ -89,7 +89,7 @@ namespace PTK
             List<Node> nodes = new List<Node>();
             List<Element> elems = new List<Element>();
             List<Material> mats = new List<Material>();
-            List<Section> secs = new List<Section>();
+            List<CrossSection> secs = new List<CrossSection>();
             List<Support> sups = new List<Support>();
             RTree rTreeNodes = new RTree();
             RTree rTreeElems = new RTree();
@@ -220,7 +220,7 @@ namespace PTK
 
             #region output
             Assembly Assembly = new Assembly(new List<Node>(nodes), new List<Element>(elems),
-                new List<Material>(mats), new List<Section>(secs), new List<Support>(sups));
+                new List<Material>(mats), new List<CrossSection>(secs), new List<Support>(sups));
 
             // Assembly Assembly = new Assembly(nodes, elems, mats, secs, sups);
             nodes.Clear();
@@ -509,14 +509,14 @@ namespace PTK
             }
         }
 
-        internal void RegisterSections(ref List<Element> _elems, ref List<Section> _secs)
+        internal void RegisterSections(ref List<Element> _elems, ref List<CrossSection> _secs)
         {
             List<string> _hashList = new List<string>();
             int _secIdCnt = 0;
 
             foreach (Element e in _elems)
             {
-                Section _elemSec = e.Section;
+                CrossSection _elemSec = e.Section;
                 string _hash = _elemSec.TxtHash;
 
                 // if the hash values coincides, add existent secId.

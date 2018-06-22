@@ -69,22 +69,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\Align.cs" />
+    <Compile Include="Classes\Alignment.cs" />
     <Compile Include="Classes\Assembly.cs" />
     <Compile Include="Classes\StructuralProperties.cs" />
     <Compile Include="Classes\Element.cs" />
     <Compile Include="Classes\Functions.cs" />
     <Compile Include="Classes\Functions_DDL.cs" />
-    <Compile Include="Classes\Loads.cs" />
+    <Compile Include="Classes\Load.cs" />
     <Compile Include="Classes\Material.cs" />
-    <Compile Include="Classes\MatProps.cs" />
+    <Compile Include="Classes\MaterialProp.cs" />
     <Compile Include="Classes\Node.cs" />
     <Compile Include="Classes\CommonProps.cs" />
     <Compile Include="Components\3_1b_Materializer-Multi.cs" />
     <Compile Include="Components\9_2_FinishedModel.cs" />
     <Compile Include="Components\1_4_Alignment_Simple.cs" />
     <Compile Include="Components\1_5_Forces.cs" />
-    <Compile Include="Classes\Forces.cs" />
+    <Compile Include="Classes\Force.cs" />
     <Compile Include="Components\4_3_DimensioningMembers.cs" />
     <Compile Include="Components\SandBox.cs" />
     <Compile Include="Forms\F01_Supports.cs">

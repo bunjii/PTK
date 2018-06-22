@@ -8,23 +8,17 @@ namespace PTK
 {
     public class PTK_1_4_Alignment_Simple : GH_Component
     {
-        /// <summary>
-        /// Initializes a new instance of the PTK1_4_Alignment class.
-        /// </summary>
         public PTK_1_4_Alignment_Simple()
-          : base("Alignment (PTK)", "Align",
+          : base("Simple Alignment", "Align",
               "Simple Alignment",
               CommonProps.category, CommonProps.subcat2)
         {
             Message = CommonProps.initialMessage;
         }
 
-        /// <summary>
-        /// Registers all the input parameters for this component.
-        /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            
+            pManager.AddNumberParameter("Name", "N", "Alignment Name", GH_ParamAccess.item, 0.0);
             pManager.AddNumberParameter("offset Local y", "local y", "Offset length local y", GH_ParamAccess.item, 0.0);
             pManager.AddNumberParameter("offset Local z", "local z", "Offset length local z", GH_ParamAccess.item, 0.0);
             pManager.AddNumberParameter("angle", "angle", "Rotational angle in degree", GH_ParamAccess.item, 0.0);
@@ -61,7 +55,7 @@ namespace PTK
             #endregion
 
             #region solve
-            Align Simple = new Align(offsetY, offsetZ, rotationAngle);
+            Alignment Simple = new Alignment(offsetY, offsetZ, rotationAngle);
 
             #endregion
 

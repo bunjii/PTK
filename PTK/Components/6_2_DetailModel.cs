@@ -49,7 +49,7 @@ namespace PTK
             List<Node> nodes = new List<Node>();
             List<Element> elems = new List<Element>();
             List<Material> mats = new List<Material>();
-            List<Section> secs = new List<Section>();
+            List<CrossSection> secs = new List<CrossSection>();
             List<Support> sups = new List<Support>();
             GH_ObjectWrapper wrapAssembly = new GH_ObjectWrapper();
             Assembly assemble;

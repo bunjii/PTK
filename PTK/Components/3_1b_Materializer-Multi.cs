@@ -68,7 +68,7 @@ namespace PTK
             List<Point3d> pts = new List<Point3d>();
             List<Element> elems = new List<Element>();
             List<Node> nodes = new List<Node>();
-            List<Align> alignList = new List<Align>();
+            List<Alignment> alignList = new List<Alignment>();
 
             string elemTag = "N/A";
             List<Vector3d> normalVec = new List<Vector3d>();
@@ -77,10 +77,10 @@ namespace PTK
             GH_ObjectWrapper wrapAlign = new GH_ObjectWrapper();
             GH_ObjectWrapper wrapForce = new GH_ObjectWrapper();
 
-            Section section;
+            CrossSection section;
             Material material;
             Forces forces;
-            Align align;
+            Alignment align;
             #endregion
 
             #region input
@@ -95,14 +95,14 @@ namespace PTK
 
             #region solve
             //Turning objectwrappers into its respective objects. 
-            wrapSec.CastTo<Section>(out section);
+            wrapSec.CastTo<CrossSection>(out section);
             wrapMat.CastTo<Material>(out material);
-            wrapAlign.CastTo<Align>(out align);
+            wrapAlign.CastTo<Alignment>(out align);
             wrapForce.CastTo<Forces>(out forces);
 
 
             //Assigning Default Values if not inputed (correctly)
-            if (section == null) section = new Section("Untitled", 100, 100);
+            if (section == null) section = new CrossSection("Untitled", 100, 100);
             if (forces == null) forces = new Forces();
             if (material == null)
             {
@@ -110,7 +110,7 @@ namespace PTK
                 material = new Material(
                     new MatProps("Untitled", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
             }
-            if (align == null) align = new Align("Untitled", new Vector3d(0, 0, 1), new Vector3d(0, 0, 0));
+            if (align == null) align = new Alignment("Untitled", new Vector3d(0, 0, 1), new Vector3d(0, 0, 0));
 
             elemTag = elemTag.Trim();
 

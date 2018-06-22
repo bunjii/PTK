@@ -17,7 +17,7 @@ namespace PTK
         public List<Element1D> Elements { get; private set; }
         public List<Node> Nodes { get; private set; }
         public List<string> Tags { get; private set; }
-        public List<Section> Sections { get; private set; }
+        public List<CrossSection> Sections { get; private set; }
         public List<Material> Materials { get; private set; }
         public Dictionary<Element1D,List<int>> NodeMap { get; private set; }
         #endregion
@@ -28,7 +28,7 @@ namespace PTK
             Elements = new List<Element1D>();
             Nodes = new List<Node>();
             Tags = new List<string>();
-            Sections = new List<Section>();
+            Sections = new List<CrossSection>();
             Materials = new List<Material>();
             NodeMap = new Dictionary<Element1D, List<int>>();
         }
@@ -50,7 +50,7 @@ namespace PTK
                 {
                     Tags.Add(tag);
                 }
-                Section sec = _element.Section;
+                CrossSection sec = _element.Section;
                 if (!Sections.Contains(sec))
                 {
                     Sections.Add(sec);

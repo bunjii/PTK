@@ -12,8 +12,7 @@ namespace PTK
     {
 
         public PTK_1_1_Material()
-          : base("Material", "Mat",
-              "creates a Material",
+          : base("Material", "Mat","Creates a Material",
               CommonProps.category, CommonProps.subcat2)
         {
             Message = CommonProps.initialMessage;
@@ -21,13 +20,13 @@ namespace PTK
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("MaterialName","Name", "Names the material", GH_ParamAccess.item, "UntitledMaterial");      //We should add default values here.
-            pManager.AddParameter(new Param_MaterialStructuralProp(), "Structural Properties", "StrctProp", "Add material properties here", GH_ParamAccess.item);    //We should add default values here.
+            pManager.AddTextParameter("Name","N", "Material Name", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_MaterialStructuralProp(), "Structural Material Properties", "SMP", "Add material properties here", GH_ParamAccess.item);
         }
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_Material(), "Material", "Mat", "MaterialData to be connected with Materializer Component");
+            pManager.RegisterParam(new Param_Material(), "Material", "M", "MaterialData to be connected with Materializer Component");
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)

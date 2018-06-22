@@ -8,7 +8,7 @@ using Rhino.Geometry;
 
 namespace PTK
 {
-    public class Section
+    public class CrossSection
     {
         #region fields
         public string Name { get; private set; }
@@ -18,19 +18,19 @@ namespace PTK
         #endregion
 
         #region constructors
-        public Section()
+        public CrossSection()
         {
             Name = "N/A";
             Material = new Material();
         }
-       public Section(string _name, double _width, double _height)
+       public CrossSection(string _name, double _width, double _height)
         {
             Name = _name;
             Width = _width;
             Height = _height;
             Material = new Material();
         }
-        public Section(string _name, double _width, double _height, Material _material)
+        public CrossSection(string _name, double _width, double _height, Material _material)
         {
             Name = _name;
             Width = _width;
@@ -43,14 +43,14 @@ namespace PTK
         #endregion
 
         #region methods
-        public Section DeepCopy()
+        public CrossSection DeepCopy()
         {
-            return (Section)base.MemberwiseClone();
+            return (CrossSection)base.MemberwiseClone();
         }
         public override string ToString()
         {
             string info;
-            info = "<Section> Name:" + Name + 
+            info = "<CrossSection> Name:" + Name + 
                 " Width:" + Width.ToString() + 
                 " Height:" + Height.ToString() + 
                 " Material:" + Material.Name;
@@ -63,20 +63,20 @@ namespace PTK
         #endregion
     }
 
-    public class GH_Section : GH_Goo<Section>
+    public class GH_CrossSection : GH_Goo<CrossSection>
     {
-        public GH_Section() { }
-        public GH_Section(GH_Section other) : base(other.Value) { this.Value = other.Value.DeepCopy(); }
-        public GH_Section(Section sec) : base(sec) { this.Value = sec; }
+        public GH_CrossSection() { }
+        public GH_CrossSection(GH_CrossSection other) : base(other.Value) { this.Value = other.Value.DeepCopy(); }
+        public GH_CrossSection(CrossSection sec) : base(sec) { this.Value = sec; }
         public override bool IsValid => base.m_value.IsValid();
 
         public override string TypeName => "Section";
 
-        public override string TypeDescription => "Cross sectional shape of Element and its material";
+        public override string TypeDescription => "Cross Sectional shape of Element and its material";
 
         public override IGH_Goo Duplicate()
         {
-            return new GH_Section(this);
+            return new GH_CrossSection(this);
         }
 
         public override string ToString()
@@ -85,20 +85,20 @@ namespace PTK
         }
     }
 
-    public class Param_Section : GH_PersistentParam<GH_Section>
+    public class Param_CrossSection : GH_PersistentParam<GH_CrossSection>
     {
-        public Param_Section() : base(new GH_InstanceDescription("Section", "Sec", "Cross sectional shape of Element and its material", CommonProps.category, CommonProps.subcat0)) { }
+        public Param_CrossSection() : base(new GH_InstanceDescription("CrossSection", "Sec", "Cross Sectional shape of Element and its material", CommonProps.category, CommonProps.subcat0)) { }
 
-        protected override System.Drawing.Bitmap Icon { get { return null; } }  //クラスにアイコンを付けたい場合はここ
+        protected override System.Drawing.Bitmap Icon { get { return null; } }
 
         public override Guid ComponentGuid => new Guid("480DDCC7-02FB-497D-BF9F-4FAE3CE0687A");
 
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_Section> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_CrossSection> values)
         {
             return GH_GetterResult.success;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_Section value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_CrossSection value)
         {
             return GH_GetterResult.success;
         }

@@ -14,7 +14,7 @@ namespace PTK
     public class PTK_1_2_1_LoadMatProps : GH_Component
     {
         public PTK_1_2_1_LoadMatProps()
-          : base("Load Material Properties (PTK)", "Load MP",
+          : base("Load Structural Material Prop", "Load SMP",
               "loads material properties from Tree.",
               CommonProps.category, CommonProps.subcat2)
         {
@@ -23,14 +23,14 @@ namespace PTK
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Material Name", "MatName", "names Material.", GH_ParamAccess.item, "GL26c");      //We should add default values here.
-            pManager.AddTextParameter("Load data", "dataTree", "Load data tree with properties.", GH_ParamAccess.tree);
+            pManager.AddTextParameter("Name", "N", "names Material.", GH_ParamAccess.item);
+            pManager.AddTextParameter("Data", "D", "Load data tree with properties.", GH_ParamAccess.tree);
         }
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_MaterialStructuralProp, "Material Properties (PTK)", "MP (PTK)", "Material Property (PTK) data to be connected to a Material (PTK) component", GH_ParamAccess.item);
-            pManager.AddTextParameter("Material Properties text", "MP txt", "Text output of Material Properties (PTK)", GH_ParamAccess.list);
+            pManager.RegisterParam(new Param_MaterialStructuralProp(), "Structural Material Prop", "SMP", "Material Property (PTK) data to be connected to a Material (PTK) component", GH_ParamAccess.item);
+            //pManager.AddTextParameter("Material Properties text", "MP txt", "Text output of Material Properties (PTK)", GH_ParamAccess.list);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)
@@ -80,7 +80,6 @@ namespace PTK
             // check locale: "comma" or "period"
             DecimalSeparator envDs = CommonProps.FindDecimalSeparator();
             DecimalSeparator csvDs = DecimalSeparator.error;
-            //bool comma = false, period = false; // to check if text contains comma or period.
              
             // registering materials
             for (int i = 0; i < Tree.get_Branch(0).Count; i++)
@@ -150,43 +149,41 @@ namespace PTK
             rhogk = double.Parse(nlist[15]);
             rhogmean = double.Parse(nlist[16]);
 
-            MatProps matProp = new MatProps(
-             MaterialName,
-             fmgk,
-             ft0gk,
-             ft90gk,
+            GH_MaterialStructuralProp prop = new GH_MaterialStructuralProp( new MaterialStructuralProp(
+                 MaterialName,
+                 fmgk,
+                 ft0gk,
+                 ft90gk,
 
-             fc0gk,
-             fc90gk,
+                 fc0gk,
+                 fc90gk,
 
-             fvgk,
-             frgk,
+                 fvgk,
+                 frgk,
 
-             E0gmean,
-             E0g05,
-             E90gmean,
-             E90g05,
+                 E0gmean,
+                 E0g05,
+                 E90gmean,
+                 E90g05,
 
-             Ggmean,
-             Gg05,
-             Gtgmean,
-             Grg05,
+                 Ggmean,
+                 Gg05,
+                 Gtgmean,
+                 Grg05,
 
-             // Qgk,
-             // Qgmean,
+                 // Qgk,
+                 // Qgmean,
 
-             rhogk,
-             rhogmean
-                );
+                 rhogk,
+                 rhogmean
+            ));
 
 
             #endregion
             
-            // MessageBox.Show(matProp.Fmgk.ToString());//0 -> 24
-
             #region output
-            DA.SetData(0, matProp);
-            DA.SetDataList(1, nlist);
+            DA.SetData(0, prop);
+            //DA.SetDataList(1, nlist);
             #endregion
 
         }

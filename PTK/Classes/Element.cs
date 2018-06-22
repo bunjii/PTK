@@ -33,8 +33,8 @@ namespace PTK
         public Point3d PointAtStart { get; private set; }
         public Point3d PointAtEnd { get; private set; }
         public Plane YZPlane { get; private set; }
-        public Section Section { get; private set; }
-        public Align Align { get; private set; }
+        public CrossSection Section { get; private set; }
+        public Alignment Align { get; private set; }
         public bool IsIntersectWithOther { get; private set; } = true;
         //public BoundingBox BoundingBox { get; private set; }
         #endregion
@@ -45,8 +45,8 @@ namespace PTK
             BaseCurve = null;
             PointAtStart = new Point3d();
             PointAtEnd = new Point3d();
-            Section = new Section();
-            Align = new Align();
+            Section = new CrossSection();
+            Align = new Alignment();
             InitializeCentricPlanes();
         }
         public Element1D(string _tag) : base(_tag)
@@ -54,11 +54,11 @@ namespace PTK
             BaseCurve = null;
             PointAtStart = new Point3d();
             PointAtEnd = new Point3d();
-            Section = new Section();
-            Align = new Align();
+            Section = new CrossSection();
+            Align = new Alignment();
             InitializeCentricPlanes();
         }
-        public Element1D(string _tag, Curve _curve, Section _section, Align _align, bool _intersect = true) : base(_tag)
+        public Element1D(string _tag, Curve _curve, CrossSection _section, Alignment _align, bool _intersect = true) : base(_tag)
         {
             BaseCurve = _curve;
             PointAtStart = _curve.PointAtStart;
