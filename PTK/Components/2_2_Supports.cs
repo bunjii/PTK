@@ -12,8 +12,6 @@ using Grasshopper.GUI.Canvas;
 using Rhino.Geometry;
 
 using Karamba.Supports;
-
-
 // using Karamba;
 
 namespace PTK
@@ -53,6 +51,7 @@ namespace PTK
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddGenericParameter("PTK Supports", "Sup (PTK)", "Support data to be send to Assembler(PTK)", GH_ParamAccess.item);
+            pManager.RegisterParam(new Karamba.Supports.Param_Support(), "Support", "supp", "Ouput support(s)");
         }
 
         /// <summary>
@@ -66,6 +65,7 @@ namespace PTK
             int lCase = 0;
             List<Plane> supPlns = new List<Plane>();
             List<Support> sups = new List<Support>();
+            List<Karamba.Supports.GH_Support> sups_GH_krmb = new List<Karamba.Supports.GH_Support>();
             #endregion
 
             #region input
@@ -78,15 +78,19 @@ namespace PTK
             {
                 Support tmpSup = new Support(lCase, supPlns[i], new List<bool>(boolSupArray));
                 sups.Add(tmpSup);
+                Karamba.Supports.Support tmp_sup = new Karamba.Supports.Support(supPlns[i].Origin, new List<bool>(boolSupArray), supPlns[i]);
+                Karamba.Supports.GH_Support krmb_sup = new Karamba.Supports.GH_Support(tmp_sup);
+                sups_GH_krmb.Add(krmb_sup);
             }
             #endregion
 
             #region output
             Message = boolSupString;
             DA.SetData(0, sups);
+            DA.SetData(1, sups_GH_krmb);
             #endregion
         }
-        
+
         public override void CreateAttributes()
         {
             // base.CreateAttributes();
