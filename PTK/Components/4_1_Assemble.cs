@@ -13,6 +13,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
+
 namespace PTK
 {
 
@@ -42,10 +44,14 @@ namespace PTK
             pManager.AddGenericParameter("Supports", "Sup (PTK)", "Add Supports here", GH_ParamAccess.list);
             pManager.AddGenericParameter("Loads", "L (PTK)", "Add Loads here", GH_ParamAccess.list);
             pManager.AddTextParameter("Priority txt", "Priority", "Priority", GH_ParamAccess.item, "");
+            pManager.AddGenericParameter("DG", "DetailingGroup", "", GH_ParamAccess.list);
+
 
             pManager[1].Optional = true;
             pManager[2].Optional = true;
             pManager[3].Optional = true;
+            pManager[4].Optional = true;
+
         }
 
         /// <summary>
@@ -54,20 +60,7 @@ namespace PTK
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddGenericParameter("PTK Assembly", "A (PTK)", "Assembled project data", GH_ParamAccess.item);
-
-            #region obsolete
-            // outputs below just checking purposes. should be removed before release. 
-            /*
-            pManager.AddPointParameter("Point", "", "", GH_ParamAccess.list);
-            pManager.AddBrepParameter("Breptest", "", "", GH_ParamAccess.list);
-            pManager.AddTextParameter("ID", "", "", GH_ParamAccess.list);
-            pManager.AddCurveParameter("CenterCurve", "", "", GH_ParamAccess.list);
-            pManager.AddNumberParameter("CenterCurve", "", "", GH_ParamAccess.list);
-            pManager.AddTextParameter("Neighbours", "", "", GH_ParamAccess.list);
-            pManager.AddLineParameter("Lines", "", "", GH_ParamAccess.list);
-            */
-            // pManager.AddTextParameter("SubID", "", "", GH_ParamAccess.list);
-            #endregion
+            pManager.RegisterParam(new Karamba.Models.Param_Model(), "Model", "Model", "Karamba Model");
         }
 
         /// <summary>
@@ -82,6 +75,7 @@ namespace PTK
             Node.ResetIDCount();
             Element.ResetIDCount();
             Support.ResetIDCount();
+            Loads.ResetIDCount();
             #region variables
 
             // Assigning lists of objects
@@ -91,17 +85,26 @@ namespace PTK
             List<Material> mats = new List<Material>();
             List<Section> secs = new List<Section>();
             List<Support> sups = new List<Support>();
+            List<Loads> loads = new List<Loads>();
+            List<Karamba.Models.GH_Model> models = new List<Karamba.Models.GH_Model>();
+            List<DetailingGroup> DetailingGroup = new List<DetailingGroup>();
+
             RTree rTreeNodes = new RTree();
             RTree rTreeElems = new RTree();
 
             List<GH_ObjectWrapper> wrapElemList = new List<GH_ObjectWrapper>();
+            List<GH_ObjectWrapper> wrapSupListOuter = new List<GH_ObjectWrapper>();
             List<GH_ObjectWrapper> wrapSupList = new List<GH_ObjectWrapper>();
+            List<GH_ObjectWrapper> wrapLoadList = new List<GH_ObjectWrapper>();
+
             #endregion
 
             #region input
             if (!DA.GetDataList(0, wrapElemList)) { return; }
             DA.GetDataList(1, wrapSupList);
+            DA.GetDataList(2, wrapLoadList);
             DA.GetData(3, ref priorityTxt);
+            DA.GetDataList(4, DetailingGroup);
             #endregion
 
             #region solve
@@ -124,7 +127,17 @@ namespace PTK
                     List<Support> tempSupList = new List<Support>();
                     wrapSupList[i].CastTo<List<Support>>(out tempSupList);
                     sups.AddRange(tempSupList);
+                    foreach (Support s in tempSupList) sups.Add(s.Clone());
                 }
+            }
+
+            for (int i2 = 0; i2 < wrapLoadList.Count; i2++)
+            {
+                List<Loads> tempLoadList = new List<Loads>();
+                wrapLoadList[i2].CastTo<List<Loads>>(out tempLoadList);
+
+                // memberwise clone
+                foreach (Loads l in tempLoadList) loads.Add(l.Clone());
             }
 
             // main functions #1
@@ -163,64 +176,31 @@ namespace PTK
 
             // main function #6
             // register priorities to element
-            RegisterPriority(ref elems, priorityTxt);
+            // JohnEdit: Testing applying the priority in the element (As earlier?) SelectDetail sorts the elements based on priority 
+            //RegisterPriority(ref elems, priorityTxt);
 
             // main function #7 
             // register 
             RegisterSupports(ref sups);
 
-            #region obsolete
-
-            /* has moved to PTK_UTIL_1_GenerateGeometry 
-             * & PTK_UTIL_5_DisassembleElement
-            List<Brep> BokseTest = new List<Brep>();
-            List<Curve> elementCurves = new List<Curve>();
-            List<int> elementid = new List<int>();
-            List<int> ConnectedNodes = new List<int>();
-            
-            List<Line> strLine = new List<Line>();
-            List<String> SubID = new List<String>();
-
-            // Testing, making breps
-            for (int i = 0; i < elems.Count; i++)
-            {
-                has moved to PTK_UTIL_1_GenerateGeometry
-                BokseTest.Add(elems[i].ElementGeometry);
-                elementCurves.Add(elems[i].Crv);
-                ConnectedNodes.Add(elems[i].ConnectedNodes);
-                elementid.Add(elems[i].Id);
-                
-
-                string tempID = Convert.ToString(elems[i].Id);
-                
-                // making SubID output
-                for (int j = 0; j < elems[i].SubStructural.Count; j++)
-                {
-                    strLine.Add(elems[i].SubStructural[j].StrctrLine);
-                    SubID.Add(tempID + "_" + Convert.ToString(elems[i].SubStructural[j].StrctrlLineID));
-                }
-            }
-            List<string> IDs = new List<string>();
-            List<Point3d> PointNodes = new List<Point3d>();
-            List<string> NeighbourList = new List<string>();
-            for (int i = 0; i < nodes.Count; i++)
-            {
-                IDs.Add(Convert.ToString( nodes[i].ID));
-                PointNodes.Add(nodes[i].Pt3d);
-                string text ="N"+ Convert.ToString(nodes[i].ID)+"_";
-                for (int j = 0; j < nodes[i].ElemIds.Count; j++)
-                {
-                    text += "E:" +Convert.ToString(nodes[i].ElemIds[j])+" ";
-                }
-                NeighbourList.Add(text);
-            }
-            */
-            #endregion
             #endregion
 
             #region output
-            Assembly Assembly = new Assembly(new List<Node>(nodes), new List<Element>(elems),
-                new List<Material>(mats), new List<Section>(secs), new List<Support>(sups));
+            Assembly Assembly = new Assembly(
+                new List<Node>(nodes),
+                new List<Element>(elems),
+                new List<Material>(mats),
+                new List<Section>(secs),
+                new List<Support>(sups),
+                new List<Loads>(loads),
+                DetailingGroup
+            );
+
+            var Model = new PTK.Classes.KarambaExport(Assembly).BuildModel();
+            var karamba_GH_model = new Karamba.Models.GH_Model(Model);
+
+            models.Add(karamba_GH_model);
+            Assembly.Krmb_GH_model = models;
 
             // Assembly Assembly = new Assembly(nodes, elems, mats, secs, sups);
             nodes.Clear();
@@ -228,18 +208,10 @@ namespace PTK
             mats.Clear();
             secs.Clear();
             sups.Clear();
+            loads.Clear();
 
             DA.SetData(0, Assembly);
-            #region obsolete
-            // DA.SetDataList(1, PointNodes);
-            // DA.SetDataList(2, BokseTest);
-            // DA.SetDataList(3, IDs);
-            // DA.SetDataList(4, elementCurves);
-            // DA.SetDataList(5, elementid);
-            // DA.SetDataList(6, ConnectedNodes);
-            // DA.SetDataList(7, strLine);
-            // DA.SetDataList(1, SubID);
-            #endregion
+            DA.SetData(1, karamba_GH_model);
 
             #endregion
 

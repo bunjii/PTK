@@ -15,6 +15,8 @@ namespace PTK
         public int LCase { get; private set; }
         public Plane Pln { get; private set; }
         public List<bool> Conditions { get; private set; } = new List<bool>();
+        private Karamba.Supports.GH_Support krmb_GH_support;
+
         #endregion
 
         #region constructors
@@ -25,12 +27,24 @@ namespace PTK
             Conditions = _supConditions; 
             Pln = _supPln;
         }
+        public Support(Karamba.Supports.GH_Support _krmb_GH_support)
+        {
+            Id = -999;
+            krmb_GH_support = _krmb_GH_support;
+
+        }
         #endregion
 
         #region properties
+        public Karamba.Supports.GH_Support Krmb_GH_support { get { return krmb_GH_support; } set { krmb_GH_support = value; } }
+
         #endregion
 
         #region methods
+        public Support Clone()
+        {
+            return (Support)MemberwiseClone();
+        }
         public void UpdateConditions(List<bool> _conditions)
         {
             this.Conditions = _conditions;

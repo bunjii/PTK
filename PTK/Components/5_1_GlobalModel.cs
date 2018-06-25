@@ -56,6 +56,8 @@ namespace PTK
             List<Material> mats = new List<Material>();
             List<Section> secs = new List<Section>();
             List<Support> sups = new List<Support>();
+            List<Loads> loads = new List<Loads>();
+
             GH_ObjectWrapper wrapAssembly = new GH_ObjectWrapper();
             Assembly assemble;
             #endregion
@@ -74,7 +76,7 @@ namespace PTK
             secs = assemble.Secs;
             sups = assemble.Sups;
 
-            Assembly outAssemble = new Assembly(nodes, elems, mats, secs, sups);
+            Assembly outAssemble = new Assembly(nodes, elems, mats, secs, sups, loads, assemble.DetailingGroups);
             
             #endregion
 

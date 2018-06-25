@@ -16,6 +16,7 @@ namespace PTK
         public static readonly string subcat3 = "Detail";
         public static readonly string subcat4 = "Structure";
         public static readonly string subcat5 = "Utility";
+        public static readonly string subcat6 = "DetailDescriptions";
         public static readonly string initialMessage = "PTK Ver.0.5";
         #endregion
 

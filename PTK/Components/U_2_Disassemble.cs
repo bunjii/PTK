@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
+using Karamba;
 
 namespace PTK
 {
@@ -37,6 +38,9 @@ namespace PTK
             pManager.AddGenericParameter("PTK ELEM", "E (PTK)", "PTK ELEM", GH_ParamAccess.item);
             pManager.AddGenericParameter("PTK MAT", "M (PTK)", "PTK MAT", GH_ParamAccess.item);
             pManager.AddGenericParameter("PTK SEC", "S (PTK)", "PTK SEC", GH_ParamAccess.item);
+            pManager.AddGenericParameter("PTK SUP", "Su (PTK)", "PTK SUP", GH_ParamAccess.item);
+            pManager.RegisterParam(new Karamba.Supports.Param_Support(), "Krmb SUP", "Su (KARAMBA)", "Karamba SUP");
+
         }
 
         /// <summary>
@@ -52,6 +56,8 @@ namespace PTK
             List<Element> elems = new List<Element>();
             List<Material> mats = new List<Material>();
             List<Section> secs = new List<Section>();
+            List<Support> sups = new List<Support>();
+
             #endregion
 
             #region input
@@ -64,6 +70,16 @@ namespace PTK
             elems = assemble.Elems;
             mats = assemble.Mats;
             secs = assemble.Secs;
+            sups = assemble.Sups;
+
+            List<Karamba.Supports.GH_Support> sups_krmb = new List<Karamba.Supports.GH_Support>();
+
+            foreach (Support s in sups)
+            {
+                var tmp_sup = s.Krmb_GH_support;
+
+                sups_krmb.Add(tmp_sup);
+            }
             #endregion
 
             #region output

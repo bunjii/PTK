@@ -25,10 +25,12 @@ namespace PTK
         public int Id { get; private set; }
         public Section Section { get; private set; }
         public Material Material { get; private set; }
-        public Forces Force { get; private set; }
+        public Forces Force { get; set; }
         public Align Align { get; private set; }
         public int Priority { get; set; }
         public List<Subelement> SubElem { get; private set; } = new List<Subelement>();
+        public List<SubElementBTL> SubElementBTL { get; private set; } = new List<SubElementBTL>();
+
         public Brep ElementGeometry { get; private set; }
         public BoundingBox BoundingBox { get; private set; }
         public Point3d PointAtStart { get; private set; }
@@ -68,6 +70,11 @@ namespace PTK
         #endregion
 
         #region properties
+
+        public double GetLength()
+        {
+            return Crv.GetLength();
+        }
 
         public Plane LocalYZPlane
         {
