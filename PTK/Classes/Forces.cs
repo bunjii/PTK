@@ -96,13 +96,13 @@ namespace PTK
             MX = _mx;
             MY = _my;
             MZ = _mz;
-            loadcase_Max_Fx_compression = _loadcase_max_Fx_compression;
-            loadcase_Max_Fx_tension = _loadcase_max_Fx_tension;
-            loadcase_Max_Fy_shear = _loadcase_max_Fy_shear;
-            loadcase_Max_Fz_shear = _loadcase_max_Fz_shear;
-            loadcase_Max_Mx_torsion = _loadcase_max_Mx_torsion;
-            loadcase_Max_My_bending = _loadcase_max_My_bending;
-            loadcase_Max_Mz_bending = _loadcase_max_Mz_bending;
+            Loadcase_Max_Fx_compression = _loadcase_max_Fx_compression;
+            Loadcase_Max_Fx_tension = _loadcase_max_Fx_tension;
+            Loadcase_Max_Fy_shear = _loadcase_max_Fy_shear;
+            Loadcase_Max_Fz_shear = _loadcase_max_Fz_shear;
+            Loadcase_Max_Mx_torsion = _loadcase_max_Mx_torsion;
+            Loadcase_Max_My_bending = _loadcase_max_My_bending;
+            Loadcase_Max_Mz_bending = _loadcase_max_Mz_bending;
         }
 
         #endregion
