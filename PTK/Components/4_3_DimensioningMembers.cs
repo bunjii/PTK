@@ -45,6 +45,7 @@ namespace PTK.Components
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddGenericParameter("PTK Assembly", "A (PTK)", "Assembled project data", GH_ParamAccess.item);
+            pManager.AddGenericParameter("PTK Report", "R (PTK)", "Structural analysis report", GH_ParamAccess.item);
             pManager.AddTextParameter("OUT information", "info", "temporary information from analysis", GH_ParamAccess.list);
         }
 
@@ -213,30 +214,15 @@ namespace PTK.Components
             }
 
            
-            /*
-            #region creating report of calculations
-
-
-            string filepath = @"C:\Users\marcinl\Desktop\temp_files\report.xml"; /// THIS have to be input 
-            // Create a new XmlSerializer instance with the type of the test class
-
-            XmlSerializer SerializerObj = new XmlSerializer(typeof(List<PTK_StructuralAnalysis>));
-
-
-            // Create a new file stream to write the serialized object to a file
-            TextWriter WriteFileStream = new StreamWriter(filepath);
-
-            SerializerObj.Serialize(WriteFileStream, report_list);
-            WriteFileStream.Close();
-            #endregion
-            */
+           
 
             #endregion
 
             #region output
             Assembly outassembly = inassembly;
             DA.SetData(0, outassembly);
-            DA.SetDataList(1, infolist);
+            DA.SetData(1, report_list);
+            DA.SetDataList(2, infolist);
             #endregion
         }
 
