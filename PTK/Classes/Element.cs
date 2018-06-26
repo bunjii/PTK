@@ -33,7 +33,7 @@ namespace PTK
         public Point3d PointAtStart { get; private set; }
         public Point3d PointAtEnd { get; private set; }
         public Plane YZPlane { get; private set; }
-        public CrossSection Section { get; private set; }
+        public List<CrossSection> Sections { get; private set; }
         public Alignment Align { get; private set; }
         public bool IsIntersectWithOther { get; private set; } = true;
         //public BoundingBox BoundingBox { get; private set; }
@@ -45,7 +45,7 @@ namespace PTK
             BaseCurve = null;
             PointAtStart = new Point3d();
             PointAtEnd = new Point3d();
-            Section = new CrossSection();
+            Sections = new List<CrossSection>();
             Align = new Alignment();
             InitializeCentricPlanes();
         }
@@ -54,16 +54,16 @@ namespace PTK
             BaseCurve = null;
             PointAtStart = new Point3d();
             PointAtEnd = new Point3d();
-            Section = new CrossSection();
+            Sections = new List<CrossSection>();
             Align = new Alignment();
             InitializeCentricPlanes();
         }
-        public Element1D(string _tag, Curve _curve, CrossSection _section, Alignment _align, bool _intersect = true) : base(_tag)
+        public Element1D(string _tag, Curve _curve, List<CrossSection> _sections, Alignment _align, bool _intersect = true) : base(_tag)
         {
             BaseCurve = _curve;
             PointAtStart = _curve.PointAtStart;
             PointAtEnd = _curve.PointAtEnd;
-            Section = _section;
+            Sections = _sections;
             Align = _align;
             IsIntersectWithOther = _intersect;
             InitializeCentricPlanes();
@@ -186,19 +186,19 @@ namespace PTK
 
     }
 
-    public class ElementForStructural
+    public class StructuralElement
     {
         #region fields
         public Element1D Element { get; private set; }
         public List<Force> Forces { get; private set; }
         #endregion
         #region constructors
-        public ElementForStructural()
+        public StructuralElement()
         {
             Element = new Element1D();
             Forces = new List<Force>();
         }
-        public ElementForStructural(Element1D _element,List<Force> _forces)
+        public StructuralElement(Element1D _element,List<Force> _forces)
         {
             Element = _element;
             Forces = _forces;
@@ -212,14 +212,14 @@ namespace PTK
             Forces.Add(_force);
             return Forces.Count;
         }
-        public ElementForStructural DeepCopy()
+        public StructuralElement DeepCopy()
         {
-            return (ElementForStructural)base.MemberwiseClone();
+            return (StructuralElement)base.MemberwiseClone();
         }
         public override string ToString()
         {
             string info;
-            info = "<ElementForStructural> Element1D:" + Element.Tag +
+            info = "<StructuralElement> Element1D:" + Element.Tag +
                 " Forces:" + Forces.Count.ToString();
             return info;
         }
@@ -267,17 +267,17 @@ namespace PTK
         }
     }
 
-    public class GH_ElementForStructural : GH_Goo<ElementForStructural>
+    public class GH_StructuralElement : GH_Goo<StructuralElement>
     {
-        public GH_ElementForStructural() { }
-        public GH_ElementForStructural(GH_ElementForStructural other) : base(other.Value) { this.Value = other.Value.DeepCopy(); }
-        public GH_ElementForStructural(ElementForStructural elem) : base(elem) { this.Value = elem; }
+        public GH_StructuralElement() { }
+        public GH_StructuralElement(GH_StructuralElement other) : base(other.Value) { this.Value = other.Value.DeepCopy(); }
+        public GH_StructuralElement(StructuralElement elem) : base(elem) { this.Value = elem; }
         public override IGH_Goo Duplicate()
         {
-            return new GH_ElementForStructural(this);
+            return new GH_StructuralElement(this);
         }
         public override bool IsValid => base.m_value.IsValid();
-        public override string TypeName => "ElementForStructural";
+        public override string TypeName => "StructuralElement";
         public override string TypeDescription => "Element with structural information added";
         public override string ToString()
         {
@@ -285,20 +285,20 @@ namespace PTK
         }
     }
 
-    public class Param_ElementForStructural : GH_PersistentParam<GH_ElementForStructural>
+    public class Param_StructuralElement : GH_PersistentParam<GH_StructuralElement>
     {
-        public Param_ElementForStructural() : base(new GH_InstanceDescription("ElementForStructural", "SElem", "Element with structural information added", CommonProps.category, CommonProps.subcate0)) { }
+        public Param_StructuralElement() : base(new GH_InstanceDescription("StructuralElement", "SElem", "Element with structural information added", CommonProps.category, CommonProps.subcate0)) { }
 
         protected override System.Drawing.Bitmap Icon { get { return null; } }  //クラスにアイコンを付けたい場合はここ
 
         public override Guid ComponentGuid => new Guid("B29BCA28-9108-48C1-B4F5-F808644F015A");
 
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_ElementForStructural> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_StructuralElement> values)
         {
             return GH_GetterResult.success;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_ElementForStructural value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_StructuralElement value)
         {
             return GH_GetterResult.success;
         }

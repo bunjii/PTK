@@ -119,7 +119,7 @@ namespace PTK
             nodes = assemble.Nodes;
             elems = assemble.Elements;
             mats = assemble.Materials;
-            secs = assemble.Sections;
+            secs = assemble.CrossSections;
             sups = assemble.Sups;
 
             // Create Pt List

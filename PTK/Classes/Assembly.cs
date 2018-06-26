@@ -17,7 +17,7 @@ namespace PTK
         public List<Element1D> Elements { get; private set; }
         public List<Node> Nodes { get; private set; }
         public List<string> Tags { get; private set; }
-        public List<CrossSection> Sections { get; private set; }
+        public List<CrossSection> CrossSections { get; private set; }
         public List<Material> Materials { get; private set; }
         public Dictionary<Element1D,List<int>> NodeMap { get; private set; }
         #endregion
@@ -28,7 +28,7 @@ namespace PTK
             Elements = new List<Element1D>();
             Nodes = new List<Node>();
             Tags = new List<string>();
-            Sections = new List<CrossSection>();
+            CrossSections = new List<CrossSection>();
             Materials = new List<Material>();
             NodeMap = new Dictionary<Element1D, List<int>>();
         }
@@ -50,14 +50,16 @@ namespace PTK
                 {
                     Tags.Add(tag);
                 }
-                CrossSection sec = _element.Section;
-                if (!Sections.Contains(sec))
+                foreach(CrossSection sec in _element.Sections)
                 {
-                    Sections.Add(sec);
-                    Material mat = sec.Material;
-                    if (!Materials.Contains(mat))
+                    if (!CrossSections.Contains(sec))
                     {
-                        Materials.Add(mat);
+                        CrossSections.Add(sec);
+                        Material mat = sec.Material;
+                        if (!Materials.Contains(mat))
+                        {
+                            Materials.Add(mat);
+                        }
                     }
                 }
             }
@@ -154,7 +156,7 @@ namespace PTK
             info = "<Assembly> Elements:" + Elements.Count.ToString() +
                 " Nodes:" + Nodes.Count.ToString() +
                 " Materials:" + Materials.Count.ToString() +
-                " Sections:" + Sections.Count.ToString();
+                " Sections:" + CrossSections.Count.ToString();
             return info;
         }
         public bool IsValid()
@@ -165,26 +167,26 @@ namespace PTK
 
     }
 
-    public class AssemblyForStructural
+    public class StructuralAssembly
     {
         #region fields
         public Assembly Assembly { get; private set; }
-        public List<ElementForStructural> SElements { get; private set; }
+        public List<StructuralElement> SElements { get; private set; }
         public List<Support> Supports { get; private set; }
         public List<Load> Loads { get; private set; }
         #endregion
         #region constructors
-        public AssemblyForStructural()
+        public StructuralAssembly()
         {
             Assembly = new Assembly();
-            SElements = new List<ElementForStructural>();
+            SElements = new List<StructuralElement>();
             Supports = new List<Support>();
             Loads = new List<Load>();
         }
-        public AssemblyForStructural(Assembly _assembly)
+        public StructuralAssembly(Assembly _assembly)
         {
             Assembly = _assembly;
-            SElements = new List<ElementForStructural>();
+            SElements = new List<StructuralElement>();
             Supports = new List<Support>();
             Loads = new List<Load>();
         }
@@ -192,7 +194,7 @@ namespace PTK
         #region properties
         #endregion
         #region methods
-        public int AddSElement(ElementForStructural _sElement)
+        public int AddSElement(StructuralElement _sElement)
         {
             if (!SElements.Contains(_sElement))
             {
@@ -217,6 +219,23 @@ namespace PTK
                 Loads.Add(_load);
             }
             return Loads.Count;
+        }
+
+        public StructuralAssembly DeepCopy()
+        {
+            return (StructuralAssembly)base.MemberwiseClone();
+        }
+        public override string ToString()
+        {
+            string info;
+            info = "<StructuralAssembly> StructuralElements:" + SElements.Count.ToString() +
+                " Supports:" + Supports.Count.ToString() +
+                " Loads:" + Loads.Count.ToString();
+            return info;
+        }
+        public bool IsValid()
+        {
+            return SElements.Count != 0;
         }
         #endregion
     }
@@ -257,5 +276,40 @@ namespace PTK
             return GH_GetterResult.success;
         }
     }
+    public class GH_StructuralAssembly : GH_Goo<StructuralAssembly>
+    {
+        public GH_StructuralAssembly() { }
+        public GH_StructuralAssembly(GH_StructuralAssembly other) : base(other.Value) { this.Value = other.Value.DeepCopy(); }
+        public GH_StructuralAssembly(StructuralAssembly ass) : base(ass) { this.Value = ass; }
+        public override IGH_Goo Duplicate()
+        {
+            return new GH_StructuralAssembly(this);
+        }
+        public override bool IsValid => base.m_value.IsValid();
+        public override string TypeName => "StructuralAssembly";
+        public override string TypeDescription => "A model that gathers elements and has intersection points";
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
+    }
 
+    public class Param_StructuralAssembly : GH_PersistentParam<GH_StructuralAssembly>
+    {
+        public Param_StructuralAssembly() : base(new GH_InstanceDescription("StructuralAssembly", "StructuralAssembly", "A model that gathers elements and has intersection points", CommonProps.category, CommonProps.subcate0)) { }
+
+        protected override System.Drawing.Bitmap Icon { get { return null; } }  //クラスにアイコンを付けたい場合はここ
+
+        public override Guid ComponentGuid => new Guid("E49369AA-4F29-498E-9808-E3197929FF51");
+
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_StructuralAssembly> values)
+        {
+            return GH_GetterResult.success;
+        }
+
+        protected override GH_GetterResult Prompt_Singular(ref GH_StructuralAssembly value)
+        {
+            return GH_GetterResult.success;
+        }
+    }
 }

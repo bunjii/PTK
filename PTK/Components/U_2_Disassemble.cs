@@ -63,7 +63,7 @@ namespace PTK
             nodes = assemble.Nodes;
             elems = assemble.Elements;
             mats = assemble.Materials;
-            secs = assemble.Sections;
+            secs = assemble.CrossSections;
             #endregion
 
             #region output

@@ -71,7 +71,7 @@ namespace PTK
             #region solve
             nodes = assemble.Nodes;
             elems = assemble.Elements;
-            secs = assemble.Sections;
+            secs = assemble.CrossSections;
 
             if (isBrep == true)
             {

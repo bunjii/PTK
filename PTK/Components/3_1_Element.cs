@@ -42,7 +42,7 @@ namespace PTK
             #region variables
             string tag = null;
             Curve curve = null;
-            CrossSection section = null;
+            List<CrossSection> sections = null;
             Alignment align = null;
             bool intersect = true;
             #endregion
@@ -50,7 +50,10 @@ namespace PTK
             #region input
             if (!DA.GetData(0, ref tag)) { return; }
             if (!DA.GetData(1, ref curve)) { return; }
-            if (!DA.GetData(2, ref section)) { return; }
+            if (!DA.GetDataList(2, sections))
+            {
+                sections = new List<CrossSection>();
+            }
             if (!DA.GetData(3, ref align))
             {
                 align = new Alignment();
@@ -59,7 +62,7 @@ namespace PTK
             #endregion
 
             #region solve
-            GH_Element1D elem = new GH_Element1D(new Element1D(tag, curve, section, align, intersect));
+            GH_Element1D elem = new GH_Element1D(new Element1D(tag, curve, sections, align, intersect));
             #endregion
 
             #region output
