@@ -12,7 +12,7 @@ namespace PTK
         public PTK_1_3_RectangularCrossSection()
           : base("Rectangular Cross Section", "RectSec",
               "CrossSection is being generated based on width, height, alignment and height-direction ",
-              CommonProps.category, CommonProps.subcat2)
+              CommonProps.category, CommonProps.subcate2)
         {
             Message = CommonProps.initialMessage;
         }

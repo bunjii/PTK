@@ -42,9 +42,9 @@ namespace PTK.Optimization
         public int MaxGeneration { get; set; }          //Maximum number of generations to change
         public bool IsEnableContinuation { get; set; }  //Whether discontinuation by succession of the best individuals is effective
         public int ContinuationNum { get; set; }        //Number of consecutive number of best individuals who abolish generation alternation
-        public String SavePath { get; set; }            //Storage location when interrupted
+        public string SavePath { get; set; }            //Storage location when interrupted
 
-        public List<String> GeneSliderNames { get; private set; }   //Name of slider to use as gene
+        public List<string> GeneSliderNames { get; private set; }   //Name of slider to use as gene
 
 
         //-------Overview
@@ -214,10 +214,10 @@ namespace PTK.Optimization
         public static int MaxGeneration { get; private set; }           //Maximum number of generations to change
         public static bool IsEnableContinuation { get; private set; }   //Whether discontinuation by succession of the best individuals is effective
         public static int ContinuationNum { get; private set; }         //Number of consecutive number of best individuals who abolish generation alternation
-        public static String SavePath { get; private set; }
+        public static string SavePath { get; private set; }
 
-        public static List<String> GeneSliderNames { get; set; }        //Name of slider to use as gene
-        public static String FitName { get; set; }                      //Name indicating the value of the objective function to be optimized
+        public static List<string> GeneSliderNames { get; set; }        //Name of slider to use as gene
+        public static string FitName { get; set; }                      //Name indicating the value of the objective function to be optimized
         public static Grasshopper.Kernel.Special.GH_NumberSlider[] geneSliders;        //Reference of gene slider
         public static GH_Param<Grasshopper.Kernel.Types.GH_Number> fitnessParam;       //Reference to fitness parameter 
 
@@ -637,7 +637,7 @@ namespace PTK.Optimization
             var enableGeneration = _generation.Where(g => g.IsEnableFitness == true);
             if (_IsOverviewOnly) //Output summary value only
             {
-                String outputText = "Fitness: Average[";
+                string outputText = "Fitness: Average[";
                 outputText += enableGeneration.Average(g => g.Fitness).ToString("G6");  //6 significant digits
                 outputText += "],Max[";
                 outputText += enableGeneration.Max(g => g.Fitness).ToString("G6");
@@ -648,7 +648,7 @@ namespace PTK.Optimization
             }
             else                 //Output fitness for all individuals
             {
-                String outputText = "Fitness: [";
+                string outputText = "Fitness: [";
                 foreach (Individual ind in enableGeneration)
                 {
                     outputText += ind.Fitness.ToString() + ',';
@@ -746,7 +746,7 @@ namespace PTK.Optimization
         //-------Save generation with CSV
         private static void OutpuCSVGeneration(List<Individual> _generation, bool _IsAdd)
         {
-            String csvFilePath = GeneAlgoOption.SavePath;
+            string csvFilePath = GeneAlgoOption.SavePath;
             System.IO.StreamWriter sw = new System.IO.StreamWriter(csvFilePath, _IsAdd);
             NumberFormatInfo nfi = new NumberFormatInfo();
             nfi.NumberDecimalSeparator = ".";
@@ -769,7 +769,7 @@ namespace PTK.Optimization
         private static bool InputCSVGeneration(out List<Individual> _generation)
         {
             _generation = new List<Individual>();
-            String csvFilePath = GeneAlgoOption.SavePath;
+            string csvFilePath = GeneAlgoOption.SavePath;
             if (!System.IO.File.Exists(csvFilePath))    //When the file can not be found
             {
                 WriteLogForm("Not Find CSV File!");
@@ -788,7 +788,7 @@ namespace PTK.Optimization
                 {
                     Individual ind = new Individual();
 
-                    String line = sr.ReadLine();
+                    string line = sr.ReadLine();
                     string[] fields = line.Split(',');
                     individualCount++;
 
@@ -828,7 +828,7 @@ namespace PTK.Optimization
         }
 
         //-------Write String to form log
-        private static void WriteLogForm(String _logtext)
+        private static void WriteLogForm(string _logtext)
         {
             GeneAlgoOption.gaForm.WriteLog(_logtext);
         }

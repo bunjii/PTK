@@ -16,7 +16,7 @@ namespace PTK
         public PTK_1_2_1_LoadMatProps()
           : base("Load Structural Material Prop", "Load SMP",
               "loads material properties from Tree.",
-              CommonProps.category, CommonProps.subcat2)
+              CommonProps.category, CommonProps.subcate2)
         {
             Message = CommonProps.initialMessage;
         }

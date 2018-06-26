@@ -19,7 +19,7 @@ namespace PTK
         public PTK_U_5_DisassembleMaterial()
           : base("Disassemble Material (PTK)", "X Material",
               "Disassemble Material (PTK)",
-              CommonProps.category, CommonProps.subcat5)
+              CommonProps.category, CommonProps.subcate5)
         {
             Message = CommonProps.initialMessage;
         }

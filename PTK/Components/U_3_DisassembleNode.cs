@@ -18,7 +18,7 @@ namespace PTK
         public PTK_U_3()
           : base("Disassemble PTK Node", "X Node",
               "Disassemble Node (PTK)",
-              CommonProps.category, CommonProps.subcat5)
+              CommonProps.category, CommonProps.subcate5)
         {
             Message = CommonProps.initialMessage;
         }

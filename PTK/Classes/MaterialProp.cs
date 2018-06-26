@@ -127,7 +127,7 @@ namespace PTK
 
     public class Param_MaterialStructuralProp : GH_PersistentParam<GH_MaterialStructuralProp>
     {
-        public Param_MaterialStructuralProp() : base(new GH_InstanceDescription("MaterialStructuralProp", "MatStruct", "Material properties for structural calculation", CommonProps.category, CommonProps.subcat0)) { }
+        public Param_MaterialStructuralProp() : base(new GH_InstanceDescription("MaterialStructuralProp", "MatStruct", "Material properties for structural calculation", CommonProps.category, CommonProps.subcate0)) { }
 
         protected override System.Drawing.Bitmap Icon { get { return null; } }  //クラスにアイコンを付けたい場合はここ
 

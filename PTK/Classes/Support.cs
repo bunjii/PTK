@@ -10,6 +10,7 @@ namespace PTK
     public class Support
     {
         #region fields
+        public string Tag { get; private set; }
         public int LoadCase { get; private set; } = 0;
         public Plane FixingPlane { get; private set; }
         public List<bool> Conditions { get; private set; }
@@ -18,11 +19,13 @@ namespace PTK
         #region constructors
         public Support()
         {
+            Tag = "N/A";
             FixingPlane = new Plane();
             Conditions = new List<bool>();
         }
-        public Support(int _loadCase, Plane _fixingPlane, List<bool> _conditions) 
+        public Support(string _tag, int _loadCase, Plane _fixingPlane, List<bool> _conditions) 
         {
+            Tag = _tag;
             LoadCase = _loadCase;
             FixingPlane = _fixingPlane;
             Conditions = _conditions;
@@ -96,7 +99,7 @@ namespace PTK
 
     public class Param_Support : GH_PersistentParam<GH_Support>
     {
-        public Param_Support() : base(new GH_InstanceDescription("Support", "Spp", "The plane of the fixed point and the constraint condition", CommonProps.category, CommonProps.subcat0)) { }
+        public Param_Support() : base(new GH_InstanceDescription("Support", "Spp", "The plane of the fixed point and the constraint condition", CommonProps.category, CommonProps.subcate0)) { }
 
         protected override System.Drawing.Bitmap Icon { get { return null; } }  //クラスにアイコンを付けたい場合はここ
 

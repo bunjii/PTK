@@ -250,7 +250,7 @@ namespace PTK
 
     public class Param_Element1D : GH_PersistentParam<GH_Element1D>
     {
-        public Param_Element1D() : base(new GH_InstanceDescription("Element1D", "Elem1D", "A linear Element", CommonProps.category, CommonProps.subcat0)) { }
+        public Param_Element1D() : base(new GH_InstanceDescription("Element1D", "Elem1D", "A linear Element", CommonProps.category, CommonProps.subcate0)) { }
 
         protected override System.Drawing.Bitmap Icon { get { return null; } }  //クラスにアイコンを付けたい場合はここ
 
@@ -287,7 +287,7 @@ namespace PTK
 
     public class Param_ElementForStructural : GH_PersistentParam<GH_ElementForStructural>
     {
-        public Param_ElementForStructural() : base(new GH_InstanceDescription("ElementForStructural", "SElem", "Element with structural information added", CommonProps.category, CommonProps.subcat0)) { }
+        public Param_ElementForStructural() : base(new GH_InstanceDescription("ElementForStructural", "SElem", "Element with structural information added", CommonProps.category, CommonProps.subcate0)) { }
 
         protected override System.Drawing.Bitmap Icon { get { return null; } }  //クラスにアイコンを付けたい場合はここ
 

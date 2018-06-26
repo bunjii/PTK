@@ -71,7 +71,6 @@
   <ItemGroup>
     <Compile Include="Classes\Alignment.cs" />
     <Compile Include="Classes\Assembly.cs" />
-    <Compile Include="Classes\StructuralProperties.cs" />
     <Compile Include="Classes\Element.cs" />
     <Compile Include="Classes\Functions.cs" />
     <Compile Include="Classes\Functions_DDL.cs" />
@@ -112,7 +111,7 @@
     </Compile>
     <Compile Include="PTKInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Components\3_1_Materializer.cs" />
+    <Compile Include="Components\3_1_Element.cs" />
     <Compile Include="Components\4_2_KarambaExport.cs" />
     <Compile Include="Components\4_1_Assemble.cs" />
     <Compile Include="Components\1_2_1_LoadMatProps.cs" />

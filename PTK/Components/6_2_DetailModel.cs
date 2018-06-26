@@ -15,7 +15,7 @@ namespace PTK
         public PTK_6_2_DetailModel()
           : base("Detail Model (PTK)", "Detailed",
               "This is to combine detail logic to PTK Class",
-              CommonProps.category, CommonProps.subcat1)
+              CommonProps.category, CommonProps.subcate1)
         {
             Message = CommonProps.initialMessage;
         }

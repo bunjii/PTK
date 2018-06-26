@@ -60,7 +60,7 @@ namespace PTK
         public PTK_4_2_KarambaExport()
           : base("Karamba Export (PTK)", "Karamba Export",
               "Creates Model information of Karamba",
-              CommonProps.category, CommonProps.subcat4)
+              CommonProps.category, CommonProps.subcate4)
         {
             Message = CommonProps.initialMessage;
 

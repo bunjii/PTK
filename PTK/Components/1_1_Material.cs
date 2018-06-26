@@ -13,7 +13,7 @@ namespace PTK
 
         public PTK_1_1_Material()
           : base("Material", "Mat","Creates a Material",
-              CommonProps.category, CommonProps.subcat2)
+              CommonProps.category, CommonProps.subcate2)
         {
             Message = CommonProps.initialMessage;
         }

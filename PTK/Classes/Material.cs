@@ -83,7 +83,7 @@ namespace PTK
 
     public class Param_Material : GH_PersistentParam<GH_Material>
     {
-        public Param_Material() : base(new GH_InstanceDescription("Material", "Mat", "Material name and property information", CommonProps.category, CommonProps.subcat0)) { }
+        public Param_Material() : base(new GH_InstanceDescription("Material", "Mat", "Material name and property information", CommonProps.category, CommonProps.subcate0)) { }
 
         protected override System.Drawing.Bitmap Icon { get { return null; } }  //クラスにアイコンを付けたい場合はここ
 

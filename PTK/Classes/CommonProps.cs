@@ -11,23 +11,17 @@ namespace PTK
         #region fields
         public static double tolerances = 0.001;
         public static readonly string category = "PTK";
-        public static readonly string subcat0 = "Param";
-        public static readonly string subcat1 = "Assemble";
-        public static readonly string subcat2 = "Materialize";
-        public static readonly string subcat3 = "Detail";
-        public static readonly string subcat4 = "Structure";
-        public static readonly string subcat5 = "Utility";
+        public static readonly string subcate0 = "Param";
+        public static readonly string subcate1 = "Assemble";
+        public static readonly string subcate2 = "Materialize";
+        public static readonly string subcate3 = "Detail";
+        public static readonly string subcate4 = "Structure";
+        public static readonly string subcate5 = "Utility";
         public static readonly string initialMessage = "PTK Ver.0.5";
         #endregion
 
-        #region constructors
-        #endregion
-
-        #region properties
-        #endregion
-
         #region methods
-        // simple decimal separator checker
+        //Return the Decimal Separator in the use environment
         public static DecimalSeparator FindDecimalSeparator()
         {
             string txtFindLocale = string.Format("{0}", 1.1);
@@ -37,7 +31,7 @@ namespace PTK
             else return DecimalSeparator.error;
         }
 
-        
+        //Return scale ratio from scale of Rhino to specified scale
         public static double ConversionUnit(Rhino.UnitSystem _toUnitSystem)
         {
             Rhino.RhinoDoc doc = Rhino.RhinoDoc.ActiveDoc;

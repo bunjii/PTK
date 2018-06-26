@@ -14,7 +14,7 @@ namespace PTK
         public PTK_8_FeasibleCheck()
           : base("FEASIBILITY CHECK", "IsFeasible",
               "FEASIBILITY CHECK",
-              CommonProps.category, CommonProps.subcat4)
+              CommonProps.category, CommonProps.subcate4)
         {
             Message = CommonProps.initialMessage;
         }

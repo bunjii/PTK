@@ -57,7 +57,7 @@ namespace PTK.Components
         public PTK_4_3_DimensioningMembers()
           : base("Dimensioning Members", "Dimensioning",
               "Description",
-              CommonProps.category, CommonProps.subcat4)
+              CommonProps.category, CommonProps.subcate4)
         {
             Message = CommonProps.initialMessage;
         }

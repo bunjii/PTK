@@ -70,7 +70,7 @@ namespace PTK
         public GH_CrossSection(CrossSection sec) : base(sec) { this.Value = sec; }
         public override bool IsValid => base.m_value.IsValid();
 
-        public override string TypeName => "Section";
+        public override string TypeName => "CrossSection";
 
         public override string TypeDescription => "Cross Sectional shape of Element and its material";
 
@@ -87,7 +87,7 @@ namespace PTK
 
     public class Param_CrossSection : GH_PersistentParam<GH_CrossSection>
     {
-        public Param_CrossSection() : base(new GH_InstanceDescription("CrossSection", "Sec", "Cross Sectional shape of Element and its material", CommonProps.category, CommonProps.subcat0)) { }
+        public Param_CrossSection() : base(new GH_InstanceDescription("CrossSection", "Sec", "Cross Sectional shape of Element and its material", CommonProps.category, CommonProps.subcate0)) { }
 
         protected override System.Drawing.Bitmap Icon { get { return null; } }
 

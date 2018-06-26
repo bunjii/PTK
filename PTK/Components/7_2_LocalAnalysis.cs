@@ -14,7 +14,7 @@ namespace PTK
         public PTK_7_2_LocalAnalysis()
           : base("Local Analysis (PTK)", "Local Analysis",
               "Local Analysis",
-              CommonProps.category, CommonProps.subcat4)
+              CommonProps.category, CommonProps.subcate4)
         {
             Message = CommonProps.initialMessage;
         }

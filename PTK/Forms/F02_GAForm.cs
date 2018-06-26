@@ -232,7 +232,7 @@ namespace PTK.Optimization
         {
             return (int)ContinuationBox.Value;
         }
-        public String GetSavePath()
+        public string GetSavePath()
         {
             return SaveFolderTextBox.Text;
         }

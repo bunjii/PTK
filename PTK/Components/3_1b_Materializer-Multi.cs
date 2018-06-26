@@ -22,7 +22,7 @@ namespace PTK
         public PTK_3b_Materializer()
           : base("M-Materializer (PTK)", "M-Materializer",
               "creates a beam element.(multi-thread)",
-              CommonProps.category, CommonProps.subcat2)
+              CommonProps.category, CommonProps.subcate2)
         {
             Message = CommonProps.initialMessage;
         }

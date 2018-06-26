@@ -16,7 +16,7 @@ namespace PTK
         public PTK_UTIL_1()
           : base("Generate Geometry (PTK)", "Geometry",
               "Generating Mesh or Brep Geometry",
-              CommonProps.category, CommonProps.subcat5)
+              CommonProps.category, CommonProps.subcate5)
         {
             Message = CommonProps.initialMessage;
         }

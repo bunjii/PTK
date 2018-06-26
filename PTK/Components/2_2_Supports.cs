@@ -11,10 +11,6 @@ using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Rhino.Geometry;
 
-using Karamba.Supports;
-
-
-// using Karamba;
 
 namespace PTK
 {
@@ -25,65 +21,49 @@ namespace PTK
         private string boolSupString = "";
         private bool[] boolSupArray = { false, false, false, false, false, false }; // six degrees of freedom
         
-        /// <summary>
-        /// Initializes a new instance of the MyComponent1 class.
-        /// </summary>
         public PTK_2_2_Supports()
-          : base("Supports (PTK)", "Supports",
+          : base("Support", "Support",
               "Add Supports Conditions here",
-              CommonProps.category, CommonProps.subcat4)
+              CommonProps.category, CommonProps.subcate4)
         {
-            Message = CommonProps.initialMessage;
+            //Message = CommonProps.initialMessage;
         }
 
-        /// <summary>
-        /// Registers all the input parameters for this component.
-        /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
+            pManager.AddTextParameter("Tag", "T", "Tag", GH_ParamAccess.item);
             pManager.AddIntegerParameter("Load Case", "LC", "Load case", GH_ParamAccess.item, 0); 
-            pManager.AddPlaneParameter("Plane", "plane", "", GH_ParamAccess.list);
+            pManager.AddPlaneParameter("Fix Plane", "P", "", GH_ParamAccess.item);
             
-            pManager[0].Optional = true;
+            pManager[1].Optional = true;
         }
 
-        /// <summary>
-        /// Registers all the output parameters for this component.
-        /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK Supports", "Sup (PTK)", "Support data to be send to Assembler(PTK)", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Support", "S", "Support data to be send to Assembler", GH_ParamAccess.item);
         }
 
-        /// <summary>
-        /// This is the method that actually does the work.
-        /// </summary>
-        /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             #region variables
-            string Tag = "N/A";
+            string tag = null;
             int lCase = 0;
-            List<Plane> supPlns = new List<Plane>();
-            List<Support> sups = new List<Support>();
+            Plane fixPln = new Plane();
             #endregion
 
             #region input
-            if (!DA.GetDataList(1, supPlns)) { return; }
-            DA.GetData(0, ref lCase);
+            if (!DA.GetData(0, ref tag)) { return; }
+            if (!DA.GetData(1, ref lCase)) { return; }
+            if (!DA.GetData(2, ref fixPln)) { return; }
             #endregion
 
             #region solve
-            for (int i=0;i<supPlns.Count;i++)
-            {
-                Support tmpSup = new Support(lCase, supPlns[i], new List<bool>(boolSupArray));
-                sups.Add(tmpSup);
-            }
+            GH_Support sup = new GH_Support(new Support(tag, lCase, fixPln, new List<bool>(boolSupArray)));
             #endregion
 
             #region output
             Message = boolSupString;
-            DA.SetData(0, sups);
+            DA.SetData(0, sup);
             #endregion
         }
         
@@ -174,9 +154,6 @@ namespace PTK
             return base.Read(reader);
         }
 
-        /// <summary>
-        /// Provides an Icon for the component.
-        /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
             get
@@ -185,9 +162,6 @@ namespace PTK
             }
         }
 
-        /// <summary>
-        /// Gets the unique ID for this component. Do not change this ID after release.
-        /// </summary>
         public override Guid ComponentGuid
         {
             get { return new Guid("965bef7b-feea-46d1-abe9-f686d28c4c41"); }

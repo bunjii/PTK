@@ -19,7 +19,7 @@ namespace PTK
         public PTK_U_6_DisassembleSection()
           : base("Disassemble Section (PTK)", "X Section",
               "Disassemble Section (PTK)",
-              CommonProps.category, CommonProps.subcat5)
+              CommonProps.category, CommonProps.subcate5)
         {
             Message = CommonProps.initialMessage;
         }

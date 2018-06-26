@@ -53,7 +53,13 @@ namespace PTK
             OffsetZ = _offsetZ;
             OffsetY = _offsetY;
         }
-
+        // DDL added on 2nd Apr for testing purpose.
+        public Alignment(String _name, double _offsetY, double _offsetZ, double _rotationAngle)
+        {
+            OffsetY = _offsetY;
+            OffsetZ = _offsetZ;
+            RotationAngle = _rotationAngle;
+        }
         // DDL added on 2nd Apr for testing purpose.
         public Alignment(double _offsetY, double _offsetZ, double _rotationAngle)
         {
@@ -120,7 +126,7 @@ namespace PTK
 
     public class Param_Alignment : GH_PersistentParam<GH_Alignment>
     {
-        public Param_Alignment() : base(new GH_InstanceDescription("Alignment", "Align", "Deformation and movement of section shape", CommonProps.category, CommonProps.subcat0)) { }
+        public Param_Alignment() : base(new GH_InstanceDescription("Alignment", "Align", "Deformation and movement of section shape", CommonProps.category, CommonProps.subcate0)) { }
 
         protected override System.Drawing.Bitmap Icon { get { return null; } }  //クラスにアイコンを付けたい場合はここ
 

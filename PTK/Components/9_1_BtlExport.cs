@@ -14,7 +14,7 @@ namespace PTK
         public PTK_9_BtlExport()
           : base("BTL EXPORTER (PTK)", "Export BTL",
               "Exporting BTL file to the designated location",
-              CommonProps.category, CommonProps.subcat5)
+              CommonProps.category, CommonProps.subcate5)
         {
             Message = CommonProps.initialMessage;
         }

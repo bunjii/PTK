@@ -8,55 +8,38 @@ namespace PTK
 {
     public class PTK_2_1_Loads : GH_Component
     {
-        /// <summary>
-        /// Initializes a new instance of the MyComponent1 class.
-        /// </summary>
         public PTK_2_1_Loads()
-            : base("Loads (PTK)", "Loads",
-                "Add loads here",
-                CommonProps.category, CommonProps.subcat4)
+            : base("Load", "Load",
+                "Add load here",
+                CommonProps.category, CommonProps.subcate4)
         {
             Message = CommonProps.initialMessage;
         }
 
-        /// <summary>
-        /// Registers all the input parameters for this component.
-        /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-
-            pManager.AddTextParameter("tag", "tag", "tag", GH_ParamAccess.item,"0");      //We should add default values here.
-            pManager.AddIntegerParameter("Load Case", "LC", "Load case", GH_ParamAccess.item, 0);    //We should add default values here.
-            pManager.AddPointParameter("Point Load", "pt", "Point to which load will be assigned", GH_ParamAccess.item );
-            pManager.AddVectorParameter("Vector Load","load vec","in [kN]. Vector which describe the diretion and value in kN", GH_ParamAccess.item);
+            pManager.AddTextParameter("Tag", "T", "Tag", GH_ParamAccess.item);
+            pManager.AddIntegerParameter("Load Case", "LC", "Load case", GH_ParamAccess.item, 0);
+            pManager.AddPointParameter("Load Point", "P", "Point to which load will be assigned", GH_ParamAccess.item );
+            pManager.AddVectorParameter("Load Vector","V","in [kN]. Vector which describe the diretion and value in kN", GH_ParamAccess.item);
 
             pManager[0].Optional = true;
             pManager[1].Optional = true;
             pManager[2].Optional = true;
-            // pManager[3].Optional = true;
-
         }
 
-        /// <summary>
-        /// Registers all the output parameters for this component.
-        /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK Load", "L (PTK)", "Load data to be send to Assembler(PTK)", GH_ParamAccess.item);
+            pManager.RegisterParam(new Param_Load(), "Load", "L", "Load data to be send to Assembler(PTK)", GH_ParamAccess.item);
         }
 
-        /// <summary>
-        /// This is the method that actually does the work.
-        /// </summary>
-        /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             #region variables
-            string Tag = "N/A";
+            string Tag = null;
             int lcase = 0;
             Point3d lpoint = new Point3d();
             Vector3d lvector = new Vector3d();
-
             #endregion
 
             #region input
@@ -67,32 +50,22 @@ namespace PTK
             #endregion
 
             #region solve
-            Loads PTKloads = new Loads(Tag,lpoint,lvector);
-           
+            GH_Load load = new GH_Load(new Load(Tag, lcase, lpoint, lvector));
             #endregion
 
             #region output
-            DA.SetData(0, PTKloads);
+            DA.SetData(0, load);
             #endregion
-
         }
 
-        /// <summary>
-        /// Provides an Icon for the component.
-        /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
             get
             {
-            //You can add image files to your project resources and access them like this:
-            // return Resources.IconForThisComponent;
             return PTK.Properties.Resources.ico_load;
             }
         }
 
-        /// <summary>
-        /// Gets the unique ID for this component. Do not change this ID after release.
-        /// </summary>
         public override Guid ComponentGuid
         {
             get { return new Guid("965bef7b-feea-46d1-abe9-f686d28b9c41"); }

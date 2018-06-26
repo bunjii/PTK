@@ -10,7 +10,7 @@ namespace PTK
         public PTK_1_2_2_Material_Props()
           : base("Material Structural Prop", "MatStrProp",
               "creates material properties",
-              CommonProps.category, CommonProps.subcat2)
+              CommonProps.category, CommonProps.subcate2)
         {
             Message = CommonProps.initialMessage;
         }

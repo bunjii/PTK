@@ -28,7 +28,7 @@ namespace PTK
         public PTK_4_Assemble()
           : base("Assemble (PTK)", "Assemble",
               "Assemble",
-              CommonProps.category, CommonProps.subcat1)
+              CommonProps.category, CommonProps.subcate1)
         {
             Message = CommonProps.initialMessage;
         }
