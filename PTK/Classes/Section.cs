@@ -18,6 +18,11 @@ namespace PTK
         public double Height { get; private set; } = 100;
         public string TxtHash { get; private set; } = "";
         public List<int> ElemIds { get; private set; } = new List<int>();
+
+        private double analysis_area;
+        private List<double> analysis_moment_of_inertia;
+        private List<double> analysis_section_modulus;
+        private List<double> analysis_radius_of_gyration;
         #endregion
 
         #region constructors
@@ -35,6 +40,9 @@ namespace PTK
         #endregion
 
         #region properties
+        public double Structural_Area { get { return analysis_area; } set { analysis_area = value; } }
+        public List<double> Structural_Radius_of_gyration { get { return analysis_radius_of_gyration; } set { analysis_radius_of_gyration = value; } }
+        public List<double> Structural_Moment_of_inertia { get { return analysis_moment_of_inertia; } set { analysis_moment_of_inertia = value; } }
         #endregion
 
         #region methods

@@ -34,6 +34,12 @@ namespace PTK
         public double Rhogk { get; set; }
         public double Rhogmean { get; set; }
         public string TxtHash { get; } = "";
+
+        private double kmod = 0.8;
+        private double ksys = 1;
+        private double gammaM = 1.2;
+ 
+        private double grainangle = 0;
         #endregion
 
         #region constructors
@@ -87,6 +93,11 @@ namespace PTK
         #endregion
 
         #region properties
+        public double Kmod { get { return kmod; } set { kmod = value; } }
+        public double Ksys { get { return ksys; } set { ksys = value; } }
+        public double GammaM { get { return gammaM; } set { gammaM = value; } }
+ 
+        public double GrainAngle { get; set; }
         #endregion
 
         #region methods

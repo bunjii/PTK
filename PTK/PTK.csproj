@@ -67,6 +67,7 @@
     <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Windows.Forms.DataVisualization.Design" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Align.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Classes\Description.cs" />
     <Compile Include="Classes\Detail.cs" />
     <Compile Include="Classes\KarambaExport.cs" />
+    <Compile Include="Classes\StructuralAnalysis.cs" />
     <Compile Include="Classes\StructuralProperties.cs" />
     <Compile Include="Classes\Element.cs" />
     <Compile Include="Classes\Functions.cs" />
@@ -91,6 +93,7 @@
     <Compile Include="Components\11_02_ElementAmount.cs" />
     <Compile Include="Components\3_1b_Materializer-Multi.cs" />
     <Compile Include="Components\4_2_AnalyzeTHI.cs" />
+    <Compile Include="Components\4_4_Utilization_preview.cs" />
     <Compile Include="Components\9_2_FinishedModel.cs" />
     <Compile Include="Components\1_4_Alignment_Simple.cs" />
     <Compile Include="Components\1_5_Forces.cs" />
