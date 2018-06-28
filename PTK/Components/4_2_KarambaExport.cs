@@ -54,11 +54,8 @@ namespace PTK
 {
     public class PTK_4_2_KarambaExport : GH_Component
     {
-        /// <summary>
-        /// Initializes a new instance of the PTK_4_1_KarambaAssemble class.
-        /// </summary>
         public PTK_4_2_KarambaExport()
-          : base("Karamba Export (PTK)", "Karamba Export",
+          : base("Karamba Analysis", "Karamba Analysis",
               "Creates Model information of Karamba",
               CommonProps.category, CommonProps.subcate4)
         {
@@ -66,31 +63,19 @@ namespace PTK
 
         }
 
-        /// <summary>
-        /// Registers all the input parameters for this component.
-        /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK Assembly", "A (PTK)", "PTK Assembly", GH_ParamAccess.item);
-            pManager.AddParameter(new Param_Load(), "Load", "Load", "", GH_ParamAccess.list);
+            pManager.AddParameter(new Param_StructuralAssembly(), "Structural Assembly", "SA", "Structural Assembly", GH_ParamAccess.item);
         }
 
-        /// <summary>
-        /// Registers all the output parameters for this component.
-        /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddParameter(new Param_Model(), "Assembled Model", "Assembled Model", "", GH_ParamAccess.item);
             pManager.AddParameter(new Param_Model(), "Analyzed Model", "Analyzed Model", "", GH_ParamAccess.item);
-            pManager.AddNumberParameter("Displacement", "Disp", "Maximum displacement in [m]", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Displacement", "D", "Maximum displacement in [m]", GH_ParamAccess.list);
             pManager.AddNumberParameter("Gravity force", "G", "Resulting force of gravity [kN] of each load-case of the model", GH_ParamAccess.list);
-            pManager.AddNumberParameter("Strain Energy", "Energy", "Internal elastic energy in [kNm of each load cases of the model", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Strain Energy", "E", "Internal elastic energy in [kNm of each load cases of the model", GH_ParamAccess.list);
         }
 
-        /// <summary>
-        /// This is the method that actually does the work.
-        /// </summary>
-        /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             #region variables

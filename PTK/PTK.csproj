@@ -74,6 +74,7 @@
     <Compile Include="Classes\Element.cs" />
     <Compile Include="Classes\Functions.cs" />
     <Compile Include="Classes\Functions_DDL.cs" />
+    <Compile Include="Classes\KarambaConversion.cs" />
     <Compile Include="Classes\Load.cs" />
     <Compile Include="Classes\Material.cs" />
     <Compile Include="Classes\MaterialProp.cs" />
@@ -152,7 +153,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

@@ -20,6 +20,8 @@ namespace PTK
         public List<CrossSection> CrossSections { get; private set; }
         public List<Material> Materials { get; private set; }
         public Dictionary<Element1D,List<int>> NodeMap { get; private set; }
+        public Dictionary<CrossSection, Material> CrossSectionMap { get; private set; }
+
         #endregion
 
         #region constructors
@@ -31,6 +33,7 @@ namespace PTK
             CrossSections = new List<CrossSection>();
             Materials = new List<Material>();
             NodeMap = new Dictionary<Element1D, List<int>>();
+            CrossSectionMap = new Dictionary<CrossSection, Material>();
         }
         #endregion
 
@@ -52,10 +55,11 @@ namespace PTK
                 }
                 foreach(CrossSection sec in _element.Sections)
                 {
-                    if (!CrossSections.Contains(sec))
+                    if(!CrossSectionMap.ContainsKey(sec))
                     {
                         CrossSections.Add(sec);
                         Material mat = sec.Material;
+                        CrossSectionMap.Add(sec, mat);
                         if (!Materials.Contains(mat))
                         {
                             Materials.Add(mat);
