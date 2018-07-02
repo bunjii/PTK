@@ -45,8 +45,16 @@ namespace PTK.Classes
 
             foreach(Load l in _strAss.Loads)
             {
-                var load = new Karamba.Loads.PointLoad(l.LoadPoint, l.LoadVector, l.LoadVector, l.LoadCase, true);
-                loads.Add(load);
+                if(l is PointLoad pl)
+                {
+                    var load = new Karamba.Loads.PointLoad(pl.Point, pl.ForceVector, pl.MomentVector, pl.LoadCase, true);
+                    loads.Add(load);
+                }
+                else if(l is GravityLoad gl)
+                {
+                    var load = new Karamba.Loads.GravityLoad(gl.GravityVector, gl.LoadCase);
+                    loads.Add(load);
+                }
             }
 
 

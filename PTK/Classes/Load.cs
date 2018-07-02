@@ -6,46 +6,31 @@ using Grasshopper.Kernel.Types;
 
 namespace PTK
 {
-    public class Load
+    public abstract class Load
     {
         #region fields
         public string Tag { get; private set; }
-        public int LoadCase { get; private set; } = 0;
-        public Point3d LoadPoint { get; private set; }
-        public Vector3d LoadVector { get; private set; }
         #endregion
 
         #region constructors
         public Load()
         {
             Tag = "N/A";
-            LoadPoint = new Point3d();
-            LoadVector = new Vector3d();
         }
-        public Load(string _tag, int _loadCase, Point3d _loadPoint, Vector3d _loadVector)
+        public Load(string _tag)
         {
             Tag = _tag;
-            LoadCase = _loadCase;
-            LoadPoint = _loadPoint;
-            LoadVector = _loadVector;
         }
         #endregion
 
         #region properties
         #endregion
-
         #region methods
-        public Load DeepCopy()
-        {
-            return (Load)base.MemberwiseClone();
-        }
+        public abstract Load DeepCopy();
         public override string ToString()
         {
             string info;
-            info = "<Load> Tag:" + Tag +
-                " LoadCase:" + LoadCase.ToString() +
-                " LoadPoint:" + LoadPoint.ToString() +
-                " LoadVector:" + LoadVector.ToString() ;
+            info = "<Load> Tag:" + Tag;
             return info;
         }
         public bool IsValid()
@@ -54,6 +39,91 @@ namespace PTK
         }
         #endregion
     }
+
+    public class PointLoad : Load
+    {
+        #region fields
+        public int LoadCase { get; private set; } = 0;
+        public Point3d Point { get; private set; }
+        public Vector3d ForceVector { get; private set; }
+        public Vector3d MomentVector { get; private set; }
+        #endregion
+
+        #region constructors
+        public PointLoad() : base()
+        {
+            Point = new Point3d();
+            ForceVector = new Vector3d();
+            MomentVector = new Vector3d();
+        }
+        public PointLoad(string _tag, int _loadCase, Point3d _point, Vector3d _forceVector, Vector3d _momentVector) : base(_tag)
+        {
+            LoadCase = _loadCase;
+            Point = _point;
+            ForceVector = _forceVector;
+            MomentVector = _momentVector;
+        }
+        #endregion
+
+        #region properties
+        #endregion
+
+        #region methods
+        public override Load DeepCopy()
+        {
+            return (Load)MemberwiseClone();
+        }
+        public override string ToString()
+        {
+            string info;
+            info = "<PointLoad> Tag:" + Tag +
+                " LoadCase:" + LoadCase.ToString() +
+                " Point:" + Point.ToString() +
+                " ForceVector:" + ForceVector.ToString() +
+                " MomentVector:" + MomentVector.ToString() ;
+            return info;
+        }
+        #endregion
+    }
+
+    public class GravityLoad : Load
+    {
+        #region fields
+        public int LoadCase { get; private set; } = 0;
+        public Vector3d GravityVector { get; private set; }
+        #endregion
+
+        #region constructors
+        public GravityLoad() : base()
+        {
+            GravityVector = new Vector3d();
+        }
+        public GravityLoad(string _tag, int _loadCase, Vector3d _gravityVector) : base(_tag)
+        {
+            LoadCase = _loadCase;
+            GravityVector = _gravityVector;
+        }
+        #endregion
+
+        #region properties
+        #endregion
+
+        #region methods
+        public override Load DeepCopy()
+        {
+            return (Load)MemberwiseClone();
+        }
+        public override string ToString()
+        {
+            string info;
+            info = "<GravityLoad> Tag:" + Tag +
+                " LoadCase:" + LoadCase.ToString() +
+                " GravityVector:" + GravityVector.ToString();
+            return info;
+        }
+        #endregion
+    }
+
 
     public class GH_Load : GH_Goo<Load>
     {
