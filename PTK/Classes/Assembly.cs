@@ -304,7 +304,7 @@ namespace PTK
 
         protected override System.Drawing.Bitmap Icon { get { return null; } }  //クラスにアイコンを付けたい場合はここ
 
-        public override Guid ComponentGuid => new Guid("E49369AA-4F29-498E-9808-E3197929FF51");
+        public override Guid ComponentGuid => new Guid("4B468C32-EC87-47F8-A995-0832EDADEBA0");
 
         protected override GH_GetterResult Prompt_Plural(ref List<GH_StructuralAssembly> values)
         {

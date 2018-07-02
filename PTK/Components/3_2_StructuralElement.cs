@@ -18,7 +18,7 @@ namespace PTK.Components
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new Param_Element1D(), "Element", "S", "Add the cross-section componentt here", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_Element1D(), "Element", "E", "Add the cross-section componentt here", GH_ParamAccess.item);
             pManager.AddParameter(new Param_Force(), "Forces", "F", "Add the cross-section componentt here", GH_ParamAccess.list);
             pManager[1].Optional = true;
         }
@@ -32,15 +32,28 @@ namespace PTK.Components
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             #region variables
+            GH_Element1D gElem = null;
             Element1D elem = null;
+            List<GH_Force> gForces = new List<GH_Force>();
             List<Force> forces = null;
             #endregion
 
             #region input
-            if (!DA.GetData(0, ref elem)) { return; }
-            if (!DA.GetDataList(1, forces))
+            if (!DA.GetData(0, ref gElem))
+            {
+                elem = new Element1D();
+            }
+            else
+            {
+                elem = gElem.Value;
+            }
+            if (!DA.GetDataList(1, gForces))
             {
                 forces = new List<Force>();
+            }
+            else
+            {
+                forces = gForces.ConvertAll(f => f.Value);
             }
             #endregion
 

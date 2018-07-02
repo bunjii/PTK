@@ -22,6 +22,8 @@ namespace PTK
             pManager.AddTextParameter("Name", "N", "Add Cross Section Name", GH_ParamAccess.item);
             pManager.AddNumberParameter("Width", "W", "", GH_ParamAccess.item);  
             pManager.AddNumberParameter("Height", "H", "", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_Material(), "Material", "M", "Material", GH_ParamAccess.item);
+
 
             pManager[0].Optional = true;
             pManager[1].Optional = true;
@@ -39,16 +41,25 @@ namespace PTK
             string name = "N/A";
             double width = new double();
             double height = new double();
+            GH_Material gMaterial = null;
+            Material material = null;
             #endregion
 
             #region input
             if (!DA.GetData(0, ref name)) { return; }
             if (!DA.GetData(1, ref width)) { return; }
             if (!DA.GetData(2, ref height)) { return; }
+            if (!DA.GetData(3, ref gMaterial)) {
+                material = new Material();
+            }
+            else
+            {
+                material = gMaterial.Value;
+            }
             #endregion
 
             #region solve
-            GH_CrossSection sec = new GH_CrossSection(new CrossSection(name, width, height));
+            GH_CrossSection sec = new GH_CrossSection(new CrossSection(name, width, height, material));
             #endregion
 
             #region output

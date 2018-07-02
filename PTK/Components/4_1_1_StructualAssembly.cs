@@ -48,25 +48,48 @@ namespace PTK
         {
 
             #region variables
+            GH_Assembly gAssembly = null;
             Assembly assembly = null;
+            List<GH_StructuralElement> gStrElems = new List<GH_StructuralElement>();
             List<StructuralElement> strElems = null;
+            List<GH_Support> gSups = new List<GH_Support>();
             List<Support> sups = null;
+            List<GH_Load> gLoads = new List<GH_Load>();
             List<Load> loads = null;
             #endregion
 
             #region input
-            if (!DA.GetData(0, ref assembly)) { return; }
-            if (!DA.GetDataList(1, strElems))
+            if (!DA.GetData(0, ref gAssembly))
+            {
+                assembly = new Assembly();
+            }
+            else
+            {
+                assembly = gAssembly.Value;
+            }
+            if (!DA.GetDataList(1, gStrElems))
             {
                 strElems = new List<StructuralElement>();
             }
-            if (!DA.GetDataList(2, sups))
+            else
+            {
+                strElems = gStrElems.ConvertAll(s => s.Value);
+            }
+            if (!DA.GetDataList(2, gSups))
             {
                 sups = new List<Support>();
             }
-            if (!DA.GetDataList(3, loads))
+            else
+            {
+                sups = gSups.ConvertAll(s => s.Value);
+            }
+            if (!DA.GetDataList(3, gLoads))
             {
                 loads = new List<Load>();
+            }
+            else
+            {
+                loads = gLoads.ConvertAll(l => l.Value);
             }
             #endregion
 

@@ -33,19 +33,27 @@ namespace PTK
         {
             #region variables
             string name = null;
+            GH_MaterialStructuralProp gProp = null;
             MaterialStructuralProp prop = null;
             #endregion
 
             #region input
-            DA.GetData(0, ref name);
-            DA.GetData(1, ref prop);
+            if (!DA.GetData(0, ref name)) { return; }
+            if (!DA.GetData(1, ref gProp)) {
+                prop = new MaterialStructuralProp();
+            }
+            else
+            {
+                prop = gProp.Value;
+            }
             #endregion
 
             #region solve
+            GH_Material material = new GH_Material(new Material(name, prop));
             #endregion
 
             #region output
-            DA.SetData(0, new GH_Material(new Material(name, prop)));
+            DA.SetData(0, material);
             #endregion
         }
 

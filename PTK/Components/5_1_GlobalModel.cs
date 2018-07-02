@@ -11,99 +11,99 @@ using Karamba.Elements;
 
 namespace PTK
 {
-    public class PTK_5_GlobalModel : GH_Component
-    {
-        /// <summary>
-        /// Initializes a new instance of the PTK_C_01 class.
-        /// </summary>
-        public PTK_5_GlobalModel()
-          : base("Global Model (PTK)", "Global",
-              "Combine PTK class and Karamba Analysis Data",
-              CommonProps.category, CommonProps.subcate1)
-        {
-            Message = CommonProps.initialMessage;
-        }
+    //public class PTK_5_GlobalModel : GH_Component
+    //{
+    //    /// <summary>
+    //    /// Initializes a new instance of the PTK_C_01 class.
+    //    /// </summary>
+    //    public PTK_5_GlobalModel()
+    //      : base("Global Model (PTK)", "Global",
+    //          "Combine PTK class and Karamba Analysis Data",
+    //          CommonProps.category, CommonProps.subcate1)
+    //    {
+    //        Message = CommonProps.initialMessage;
+    //    }
 
-        /// <summary>
-        /// Registers all the input parameters for this component.
-        /// </summary>
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
-        {
-            pManager.AddGenericParameter("PTK Assembly", "A (PTK)", "PTK Assembly", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Dimension Data", "Dim (PTK)", "", GH_ParamAccess.item);
+    //    /// <summary>
+    //    /// Registers all the input parameters for this component.
+    //    /// </summary>
+    //    protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+    //    {
+    //        pManager.AddGenericParameter("PTK Assembly", "A (PTK)", "PTK Assembly", GH_ParamAccess.item);
+    //        pManager.AddGenericParameter("Dimension Data", "Dim (PTK)", "", GH_ParamAccess.item);
 
-            pManager[1].Optional = true;
-        }
+    //        pManager[1].Optional = true;
+    //    }
 
-        /// <summary>
-        /// Registers all the output parameters for this component.
-        /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
-        {
-            pManager.AddGenericParameter("PTK Assembly", "A (PTK)", "PTK Assembly", GH_ParamAccess.item);
-            // pManager.AddLineParameter("lines", "lines", "lines", GH_ParamAccess.list);
-        }
+    //    /// <summary>
+    //    /// Registers all the output parameters for this component.
+    //    /// </summary>
+    //    protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+    //    {
+    //        pManager.AddGenericParameter("PTK Assembly", "A (PTK)", "PTK Assembly", GH_ParamAccess.item);
+    //        // pManager.AddLineParameter("lines", "lines", "lines", GH_ParamAccess.list);
+    //    }
 
-        /// <summary>
-        /// This is the method that actually does the work.
-        /// </summary>
-        /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
-        protected override void SolveInstance(IGH_DataAccess DA)
-        {
-            #region variables
-            List<Node> nodes = new List<Node>();
-            List<Element> elems = new List<Element>();
-            List<Material> mats = new List<Material>();
-            List<CrossSection> secs = new List<CrossSection>();
-            List<Support> sups = new List<Support>();
-            GH_ObjectWrapper wrapAssembly = new GH_ObjectWrapper();
-            Assembly assemble;
-            #endregion
+    //    /// <summary>
+    //    /// This is the method that actually does the work.
+    //    /// </summary>
+    //    /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
+    //    protected override void SolveInstance(IGH_DataAccess DA)
+    //    {
+    //        #region variables
+    //        List<Node> nodes = new List<Node>();
+    //        List<Element> elems = new List<Element>();
+    //        List<Material> mats = new List<Material>();
+    //        List<CrossSection> secs = new List<CrossSection>();
+    //        List<Support> sups = new List<Support>();
+    //        GH_ObjectWrapper wrapAssembly = new GH_ObjectWrapper();
+    //        Assembly assemble;
+    //        #endregion
 
-            #region input
-            if (!DA.GetData(0, ref wrapAssembly)) { return; }
-            #endregion
+    //        #region input
+    //        if (!DA.GetData(0, ref wrapAssembly)) { return; }
+    //        #endregion
 
-            #region solve
+    //        #region solve
 
-            wrapAssembly.CastTo<Assembly>(out assemble);
+    //        wrapAssembly.CastTo<Assembly>(out assemble);
 
-            nodes = assemble.Nodes;
-            elems = assemble.Elements;
-            mats = assemble.Materials;
-            secs = assemble.CrossSections;
-            sups = assemble.Sups;
+    //        nodes = assemble.Nodes;
+    //        elems = assemble.Elements;
+    //        mats = assemble.Materials;
+    //        secs = assemble.CrossSections;
+    //        sups = assemble.Sups;
 
-            Assembly outAssemble = new Assembly(nodes, elems, mats, secs, sups);
+    //        Assembly outAssemble = new Assembly(nodes, elems, mats, secs, sups);
             
-            #endregion
+    //        #endregion
 
-            #region output
-            DA.SetData(0, outAssemble);
+    //        #region output
+    //        DA.SetData(0, outAssemble);
 
-            #endregion
+    //        #endregion
 
-        }
+    //    }
 
-        /// <summary>
-        /// Provides an Icon for the component.
-        /// </summary>
-        protected override System.Drawing.Bitmap Icon
-        {
-            get
-            {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
-                return PTK.Properties.Resources.ico_global;
-            }
-        }
+    //    /// <summary>
+    //    /// Provides an Icon for the component.
+    //    /// </summary>
+    //    protected override System.Drawing.Bitmap Icon
+    //    {
+    //        get
+    //        {
+    //            //You can add image files to your project resources and access them like this:
+    //            // return Resources.IconForThisComponent;
+    //            return PTK.Properties.Resources.ico_global;
+    //        }
+    //    }
 
-        /// <summary>
-        /// Gets the unique ID for this component. Do not change this ID after release.
-        /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("3cf82ec9-1233-4aa7-b233-a467fcf8c41b"); }
-        }
-    }
+    //    /// <summary>
+    //    /// Gets the unique ID for this component. Do not change this ID after release.
+    //    /// </summary>
+    //    public override Guid ComponentGuid
+    //    {
+    //        get { return new Guid("3cf82ec9-1233-4aa7-b233-a467fcf8c41b"); }
+    //    }
+    //}
 }

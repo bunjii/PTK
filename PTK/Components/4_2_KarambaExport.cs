@@ -39,6 +39,7 @@ namespace PTK
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             #region variables
+            GH_StructuralAssembly gStructuralAssembly = null;
             StructuralAssembly structuralAssembly = null;
             List<double> maxDisps;
             List<double> gravityForces;
@@ -47,7 +48,8 @@ namespace PTK
             #endregion
 
             #region input
-            if (!DA.GetData(0, ref structuralAssembly)) { return; }
+            if (!DA.GetData(0, ref gStructuralAssembly)) { return; }
+            structuralAssembly = gStructuralAssembly.Value;
             #endregion
 
             #region solve

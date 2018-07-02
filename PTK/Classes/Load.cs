@@ -83,7 +83,7 @@ namespace PTK
 
         protected override System.Drawing.Bitmap Icon { get { return null; } }  //クラスにアイコンを付けたい場合はここ
 
-        public override Guid ComponentGuid => new Guid("FB9C3075-220A-424E-AC7B-E515303D8A2F");
+        public override Guid ComponentGuid => new Guid("01A7F933-62C3-4780-87EB-381F3344D370");
 
         protected override GH_GetterResult Prompt_Plural(ref List<GH_Load> values)
         {

@@ -46,13 +46,18 @@ namespace PTK
         {
             #region variables
             Assembly assembly = new Assembly();
+            List<GH_Element1D> gElems = new List<GH_Element1D>();
             List<Element1D> elems = null;
             #endregion
 
             #region input
-            if (!DA.GetDataList(0, elems))
+            if (!DA.GetDataList(0, gElems))
             {
                 elems = new List<Element1D>();
+            }
+            else
+            {
+                elems = gElems.ConvertAll(e => e.Value);
             }
             #endregion
 
@@ -83,10 +88,10 @@ namespace PTK
             }
             
             DA.SetData(0, new GH_Assembly(assembly));
-            DA.SetData(1, nodes);
-            DA.SetData(2, tags);
-            DA.SetData(3, materials);
-            DA.SetData(4, sections);
+            DA.SetDataList(1, nodes);
+            DA.SetDataList(2, tags);
+            DA.SetDataList(3, materials);
+            DA.SetDataList(4, sections);
             #endregion
 
         }

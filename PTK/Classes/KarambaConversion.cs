@@ -25,7 +25,7 @@ namespace PTK.Classes
             var elemset = new List<Karamba.Utilities.ElemSet>();
 
 
-            points = _strAss.Assembly.Nodes.ConvertAll(n => n.Point * CommonProps.ConversionUnit(Rhino.UnitSystem.Meters));
+            points = _strAss.Assembly.Nodes.ConvertAll(n => n.Point);// * CommonProps.ConversionUnit(Rhino.UnitSystem.Meters));
             
             foreach(KeyValuePair<CrossSection,Material> kvp in _strAss.Assembly.CrossSectionMap)
             {
@@ -40,12 +40,13 @@ namespace PTK.Classes
             {
                 var sup = new Karamba.Supports.Support(s.FixingPlane.Origin, s.Conditions, s.FixingPlane);
                 sup.loadcase = s.LoadCase;
+                supports.Add(sup);
             }
 
             foreach(Load l in _strAss.Loads)
             {
                 var load = new Karamba.Loads.PointLoad(l.LoadPoint, l.LoadVector, l.LoadVector, l.LoadCase, true);
-
+                loads.Add(load);
             }
 
 
