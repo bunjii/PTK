@@ -23,7 +23,7 @@ namespace PTK
         {
             pManager.AddTextParameter("Tag", "T", "Add tags to the structure here.", GH_ParamAccess.item);
             pManager.AddCurveParameter("Base Curve", "C", "Add curves that shall be materalized", GH_ParamAccess.item);
-            pManager.AddParameter(new Param_CrossSection(), "Cross Sections", "S", "Add the cross-section componentt here", GH_ParamAccess.list);
+            pManager.AddParameter(new Param_CroSec(), "Cross Sections", "S", "Add the cross-section componentt here", GH_ParamAccess.list);
             pManager.AddParameter(new Param_Alignment(), "Alignment", "A", "Describes the alignment of the member. (Rotation and offset)", GH_ParamAccess.item);
             pManager.AddBooleanParameter("Intersect Other", "I", "Whether this element intersects other members at other than the end point", GH_ParamAccess.item, true);
 
@@ -42,7 +42,7 @@ namespace PTK
             #region variables
             string tag = null;
             Curve curve = null;
-            List<GH_CrossSection> gSections = new List<GH_CrossSection>();
+            List<GH_CroSec> gSections = new List<GH_CroSec>();
             List<CrossSection> sections = null;
             GH_Alignment gAlign = null;
             Alignment align = null;

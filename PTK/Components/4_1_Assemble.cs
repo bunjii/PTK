@@ -38,7 +38,7 @@ namespace PTK
             pManager.RegisterParam(new Param_Node(), "Nodes", "N", "Nodes included in the Assembly", GH_ParamAccess.list);
             pManager.AddTextParameter("Tags", "T", "Tag list held by Elements included in Assemble", GH_ParamAccess.list);
             pManager.RegisterParam(new Param_Material(), "Materials", "M", "Material list held by Elements included in Assemble", GH_ParamAccess.list);
-            pManager.RegisterParam(new Param_CrossSection(), "CrossSection", "S", "CrossSection list held by Elements included in Assemble", GH_ParamAccess.list);
+            pManager.RegisterParam(new Param_CroSec(), "CrossSection", "S", "CrossSection list held by Elements included in Assemble", GH_ParamAccess.list);
         }
 
 
@@ -69,23 +69,10 @@ namespace PTK
             #endregion
 
             #region output
-
-            List<GH_Node> nodes = new List<GH_Node>();
-            foreach(Node n in assembly.Nodes)
-            {
-                nodes.Add(new GH_Node(n));
-            }
+            List<GH_Node> nodes = assembly.Nodes.ConvertAll(n => new GH_Node(n));
             List<string> tags = assembly.Tags;
-            List<GH_Material> materials = new List<GH_Material>();
-            foreach(Material m in assembly.Materials)
-            {
-                materials.Add(new GH_Material(m));
-            }
-            List<GH_CrossSection> sections = new List<GH_CrossSection>();
-            foreach(CrossSection sec in assembly.CrossSections)
-            {
-                sections.Add(new GH_CrossSection(sec));
-            }
+            List<GH_Material> materials = assembly.Materials.ConvertAll(m => new GH_Material(m));
+            List<GH_CroSec> sections = assembly.CrossSections.ConvertAll(s => new GH_CroSec(s));
             
             DA.SetData(0, new GH_Assembly(assembly));
             DA.SetDataList(1, nodes);

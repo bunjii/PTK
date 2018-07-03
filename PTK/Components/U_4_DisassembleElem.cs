@@ -12,179 +12,82 @@ using System.Windows.Forms;
 
 namespace PTK
 {
-    //public class PTK_U_4 : GH_Component
-    //{
+    public class PTK_U_4 : GH_Component
+    {
+        public PTK_U_4()
+          : base("Disassemble Element", "X Element",
+              "Disassemble Element (PTK)",
+              CommonProps.category, CommonProps.subcate5)
+        {
+            Message = CommonProps.initialMessage;
+        }
 
-    //    /// <summary>
-    //    /// Initializes a new instance of the TestC class.
-    //    /// </summary>
-    //    public PTK_U_4()
-    //      : base("Disassemble Element (PTK)", "X Element",
-    //          "Disassemble Element (PTK)",
-    //          CommonProps.category, CommonProps.subcate5)
-    //    {
-    //        Message = CommonProps.initialMessage;
-    //    }
+        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        {
+            pManager.AddParameter(new Param_Element1D(), "Element", "E", "PTK ELEM", GH_ParamAccess.item);
+            pManager[0].Optional = true;
+        }
 
-    //    /// <summary>
-    //    /// Registers all the input parameters for this component.
-    //    /// </summary>
-    //    protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
-    //    {
-    //        pManager.AddGenericParameter("PTK ELEM", "E (PTK)", "PTK ELEM", GH_ParamAccess.item);
-    //        pManager.AddTextParameter("tag", "tag", "", GH_ParamAccess.list);
+        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        {
+            pManager.AddTextParameter("Tag", "Tag", "Tag", GH_ParamAccess.item);
+            pManager.AddCurveParameter("Curve", "Curve", "Curve", GH_ParamAccess.item);
+            pManager.AddPointParameter("Point At Start", "Ps", "Point At Start", GH_ParamAccess.item);
+            pManager.AddPointParameter("Point At End", "Pe", "Point At End", GH_ParamAccess.item);
+            pManager.AddPlaneParameter("YZ Plane", "Pl", "returns local yz plane", GH_ParamAccess.item);
+            pManager.RegisterParam(new Param_CroSec(), "CrossSections", "S", "CrossSections", GH_ParamAccess.list);
+            pManager.RegisterParam(new Param_Alignment(), "Alignment", "A", "Alignment", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("Intersect Other", "I", "Is Intersect With Other", GH_ParamAccess.item);
+        }
 
-    //        pManager[1].Optional = true;
-    //    }
+        protected override void SolveInstance(IGH_DataAccess DA)
+        {
+            #region variables
+            GH_Element1D gElem = null;
+            #endregion
 
-    //    /// <summary>
-    //    /// Registers all the output parameters for this component.
-    //    /// </summary>
-    //    protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
-    //    {
-    //        pManager.AddCurveParameter("Curve", "Curve", "Curve", GH_ParamAccess.list);
-    //        pManager.AddTextParameter("Tag", "Tag", "Tag", GH_ParamAccess.list);
-    //        pManager.AddIntegerParameter("PTK ELEM ID", "PTK E ID", "PTK ELEM ID", GH_ParamAccess.list);
-    //        // pManager.AddIntegerParameter("PTK NODE ID 0", "PTK N0 ID", "PTK NODE ID 0", GH_ParamAccess.list);
-    //        // pManager.AddIntegerParameter("PTK NODE ID 1", "PKT N1 ID", "PTK NODE ID 1", GH_ParamAccess.list);
-    //        pManager.AddGenericParameter("PTK SECTION", "PTK S", "PTK SECTION", GH_ParamAccess.list);
-    //        pManager.AddPlaneParameter("local yz plane", "yz-plane", "returns local yz plane", GH_ParamAccess.list);
-    //        pManager.AddIntegerParameter("Node ID", "NID", "", GH_ParamAccess.tree);
-    //        pManager.AddNumberParameter("ParameterConnectedNodes", "PCN", "", GH_ParamAccess.tree);
-    //        pManager.AddBoxParameter("BoundingBox", "BB", "", GH_ParamAccess.list);
-    //        pManager.AddIntegerParameter("Mat ID", "MID", "Material ID", GH_ParamAccess.list);
-    //        pManager.AddLineParameter("Structural Lines", "STR LNS", "Structural Lines", GH_ParamAccess.tree);
-    //        pManager.AddTextParameter("Sub IDs", "Sub IDs", "Sub IDs", GH_ParamAccess.tree);
-    //        pManager.AddIntegerParameter("Priority", "Priority", "Priority", GH_ParamAccess.list);
-    //    }
+            #region input
+            if (!DA.GetData(0, ref gElem)) { return; }
+            Element1D elem = gElem.Value;
+            #endregion
 
-    //    /// <summary>
-    //    /// This is the method that actually does the work.
-    //    /// </summary>
-    //    /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
-    //    protected override void SolveInstance(IGH_DataAccess DA)
-    //    {
-    //        #region variables
-    //        GH_ObjectWrapper wrapElem = new GH_ObjectWrapper();
-    //        List<Element> elems = new List<Element>();
-    //        List<Element> outElems = new List<Element>();
-    //        List<string> elemTags = new List<string>();
-    //        List<string> inputTags = new List<string>();
-    //        List<Curve> curves = new List<Curve>();
-    //        List<int> elemids = new List<int>();
-    //        // List<int> n0ids = new List<int>();
-    //        // List<int> n1ids = new List<int>();
-    //        List<CrossSection> secs = new List<CrossSection>();
-    //        List<Plane> plns = new List<Plane>();
-    //        List<int> mids = new List<int>();
-    //        List<int> priority = new List<int>();
+            #region solve
+            string tag = elem.Tag;
+            Curve curve = elem.BaseCurve;
+            Point3d ps = elem.PointAtStart;
+            Point3d pe = elem.PointAtEnd;
+            Plane plane = elem.YZPlane;
+            List<GH_CroSec> secs = elem.Sections.ConvertAll(s => new GH_CroSec(s));
+            GH_Alignment align = new GH_Alignment(elem.Align);
+            bool intersect = elem.IsIntersectWithOther;
+            #endregion
 
-    //        List<BoundingBox> bbox = new List<BoundingBox>();
+            #region output
+            DA.SetData(0, tag);
+            DA.SetData(1, curve);
+            DA.SetData(2, ps);
+            DA.SetData(3, pe);
+            DA.SetData(4, plane);
+            DA.SetDataList(5, secs);
+            DA.SetData(6, align);
+            DA.SetData(7, intersect);
+            #endregion
+        }
 
-    //        DataTree<int> nidTr = new DataTree<int>();
-    //        DataTree<double> pcnTr = new DataTree<double>();
-    //        DataTree<Line> lineTr = new DataTree<Line>();
-    //        DataTree<string> subidTr = new DataTree<string>();
-    //        #endregion
 
-    //        #region input
-    //        if (!DA.GetData(0, ref wrapElem)) { return; }
-    //        wrapElem.CastTo<List<Element>>(out elems);
+        protected override System.Drawing.Bitmap Icon
+        {
+            get
+            {
+                return PTK.Properties.Resources.ico_xelement;
+            }
+        }
 
-    //        DA.GetDataList(1, inputTags);
-    //        #endregion
+        public override Guid ComponentGuid
+        {
+            get { return new Guid("891a0366-cf2f-4642-b92b-4a93d0389330"); }
+        }
 
-    //        #region solve
-    //        // Detect Elements 
-    //        if (inputTags.Count == 0)
-    //        {
-    //            outElems = elems;
-    //        }
-    //        else
-    //        {
-    //            for (int i = 0; i < inputTags.Count; i++)
-    //            {
-    //                inputTags[i] = inputTags[i].Trim();
-    //            }
-
-    //            foreach (Element e in elems)
-    //            {
-    //                if (!inputTags.Contains(e.Tag)) continue;
-
-    //                outElems.Add(e);
-    //            }
-    //        }
-    //        // foreach (Element e in outElems)
-    //        for (int i = 0; i < outElems.Count; i++)
-    //        {
-    //            curves.Add(outElems[i].Crv);
-    //            elemTags.Add(outElems[i].Tag);
-    //            elemids.Add(outElems[i].Id);
-    //            // e.SubStructural[0].StrctrLine;
-    //            //n0ids.Add(e.N0id);
-    //            //n1ids.Add(e.N1id);
-    //            secs.Add(outElems[i].Section);
-    //            plns.Add(outElems[i].LocalYZPlane);
-    //            mids.Add(outElems[i].MatId);
-    //            priority.Add(outElems[i].Priority);
-
-    //            GH_Path pth = new GH_Path(i);
-    //            for (int j = 0; j < outElems[i].NodeParams.Count; j++)
-    //            {
-    //                pcnTr.Add(outElems[i].NodeParams[j], pth);
-    //                nidTr.Add(outElems[i].NodeIds[j], pth);
-    //            }
-
-    //            for (int j = 0; j < outElems[i].SubElem.Count; j++)
-    //            {
-    //                lineTr.Add(outElems[i].SubElem[j].StrLn, pth);
-    //                subidTr.Add(outElems[i].Id.ToString() + "_"
-    //                    + outElems[i].SubElem[j].StrLnId.ToString(), pth);
-    //            }
-
-    //            bbox.Add(outElems[i].BoundingBox);
-    //        }
-    //        #endregion
-
-    //        #region output
-    //        DA.SetDataList(0, curves);
-    //        DA.SetDataList(1, elemTags);
-    //        DA.SetDataList(2, elemids);
-    //        // DA.SetDataList(3, n0ids);
-    //        // DA.SetDataList(4, n1ids);
-    //        DA.SetDataList(3, secs);
-    //        DA.SetDataList(4, plns);
-    //        DA.SetDataTree(5, nidTr);
-    //        DA.SetDataTree(6, pcnTr);
-    //        DA.SetDataList(7, bbox);
-    //        DA.SetDataList(8, mids);
-    //        DA.SetDataTree(9, lineTr);
-    //        DA.SetDataTree(10, subidTr);
-    //        DA.SetDataList(11, priority);
-    //        #endregion
-    //    }
-
-    //    /// <summary>
-    //    /// Provides an Icon for the component.
-    //    /// </summary>
-    //    protected override System.Drawing.Bitmap Icon
-    //    {
-    //        get
-    //        {
-    //            //You can add image files to your project resources and access them like this:
-    //            // return Resources.IconForThisComponent;
-    //            return PTK.Properties.Resources.ico_xelement;
-    //        }
-    //    }
-
-    //    /// <summary>
-    //    /// Gets the unique ID for this component. Do not change this ID after release.
-    //    /// </summary>
-    //    public override Guid ComponentGuid
-    //    {
-    //        get { return new Guid("891a0366-cf2f-4642-b92b-4a93d0389330"); }
-    //    }
-
-    //}
+    }
 
 }

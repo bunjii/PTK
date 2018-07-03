@@ -12,16 +12,25 @@ namespace PTK
     {
         #region fields
         public string Name { get; private set; }
+        public Material Material { get; private set; }
+        //public Curve Curve
         #endregion
 
         #region constructors
         public CrossSection()
         {
             Name = "N/A";
+            Material = new Material();
         }
         public CrossSection(string _name)
         {
             Name = _name;
+            Material = new Material();
+        }
+        public CrossSection(string _name, Material _material)
+        {
+            Name = _name;
+            Material = _material;
         }
         #endregion
 
@@ -33,7 +42,8 @@ namespace PTK
         public override string ToString()
         {
             string info;
-            info = "<CrossSection> Name:" + Name;
+            info = "<CrossSection> Name:" + Name +
+                " Material:" + Material.Name;
             return info;
         }
         public bool IsValid()
@@ -48,25 +58,21 @@ namespace PTK
         #region fields
         public double Width { get; private set; } = 100;
         public double Height { get; private set; } = 100;
-        public Material Material { get; private set; }
         #endregion
 
         #region constructors
         public RectangleCroSec() : base()
         {
-            Material = new Material();
         }
        public RectangleCroSec(string _name, double _width, double _height) : base(_name)
         {
             Width = _width;
             Height = _height;
-            Material = new Material();
         }
-        public RectangleCroSec(string _name, double _width, double _height, Material _material) : base(_name)
+        public RectangleCroSec(string _name, double _width, double _height, Material _material) : base(_name, _material)
         {
             Width = _width;
             Height = _height;
-            Material = _material;
         }
         #endregion
 

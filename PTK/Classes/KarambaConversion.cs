@@ -100,18 +100,25 @@ namespace PTK.Classes
 
         private static Karamba.CrossSections.CroSec MakeCrossSection(CrossSection _sec, Karamba.Materials.FemMaterial _mat)
         {
-            var cs = new Karamba.CrossSections.CroSec_Trapezoid(
-                "familyName",
-                _sec.Name,
-                "Country",
-                null/*color*/,
-                _mat,
-                _sec.Height * CommonProps.ConversionUnit(Rhino.UnitSystem.Centimeters),
-                _sec.Width * CommonProps.ConversionUnit(Rhino.UnitSystem.Centimeters),
-                _sec.Width * CommonProps.ConversionUnit(Rhino.UnitSystem.Centimeters)
-                );
-
-            return cs;
+            Karamba.CrossSections.CroSec sec;
+            if (_sec is RectangleCroSec rectSec)
+            {
+                sec = new Karamba.CrossSections.CroSec_Trapezoid(
+                    "familyName",
+                    _sec.Name,
+                    "Country",
+                    null/*color*/,
+                    _mat,
+                    rectSec.Height * CommonProps.ConversionUnit(Rhino.UnitSystem.Centimeters),
+                    rectSec.Width * CommonProps.ConversionUnit(Rhino.UnitSystem.Centimeters),
+                    rectSec.Width * CommonProps.ConversionUnit(Rhino.UnitSystem.Centimeters)
+                    );
+            }
+            else
+            {
+                sec = null;
+            }
+            return sec;
         }
     }
 }

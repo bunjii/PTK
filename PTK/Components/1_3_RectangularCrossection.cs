@@ -32,7 +32,7 @@ namespace PTK
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_CrossSection(), "Cross Section", "S", "Cross Section data to be connected in the materializer", GH_ParamAccess.item);
+            pManager.RegisterParam(new Param_CroSec(), "Cross Section", "S", "Cross Section data to be connected in the materializer", GH_ParamAccess.item);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)
@@ -59,7 +59,7 @@ namespace PTK
             #endregion
 
             #region solve
-            GH_CrossSection sec = new GH_CrossSection(new CrossSection(name, width, height, material));
+            GH_CroSec sec = new GH_CroSec(new RectangleCroSec(name, width, height, material));
             #endregion
 
             #region output
