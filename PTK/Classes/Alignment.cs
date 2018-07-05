@@ -14,12 +14,12 @@ namespace PTK
     {
         #region fields
         public string Name { get; private set; }
-        //public Vector3d Rotation { get; set; } = new Vector3d(0, 0, 1);
-        //public Vector2d Transformation { get; set; } = new Vector2d(0, 0);
-        //private Point3d alignToPoint = new Point3d(0, 0, 0);
+        public AlignmentAnchorVert AnchorVert { get; private set; } = AlignmentAnchorVert.Center;
+        public AlignmentAnchorHori AnchorHori { get; private set; } = AlignmentAnchorHori.Center;
         public double OffsetY { get; private set; } = 0;
         public double OffsetZ { get; private set; } = 0;
-        public double RotationAngle { get; private set; } = 0;
+        public double RotationAngle { get; private set; } = 0;  //degree
+        public Vector3d AlongVector { get; private set; }
         #endregion
 
         #region constructors
@@ -27,45 +27,21 @@ namespace PTK
         {
             Name = "N/A";
         }
-        public Alignment(String _name, Vector3d _alignRotation, double _offsetY, double _offsetZ)// 0Align by rotational vector3d and deconstructed transformational vector
-        {
-            //alignmethod = 0;
-            Name = _name;
-            //Rotation = _alignRotation;
-            Vector3d temp = new Vector3d(0, 0, 1);
-            //RotationAngle = Rhino.Geometry.Vector3d.VectorAngle(Rotation, temp);
-            //Transformation = new Vector2d(_offsetY, _offsetZ);
-            OffsetZ = _offsetZ;
-            OffsetY = _offsetY;
-        }
-        public Alignment(String _name, Vector3d _alignRotation, Vector3d _alignTransformation)  // 1 Align by rotational and transformational vector. Not yet finnished
-        {
-            //alignmethod = 1;
-            Name = _name;
-        }
-        public Alignment(String _name, Point3d _pt, double _offsetY, double _offsetZ)// 0Align by rotational vector3d and deconstructed transformational vector
-        {
-            //alignmethod = 2;
-            Name = _name;
-            //Vector3d temp = new Vector3d(0, 0, 1);
-            //alignToPoint = _pt;
-            //Transformation = new Vector2d(_offsetY, _offsetZ);
-            OffsetZ = _offsetZ;
-            OffsetY = _offsetY;
-        }
-        // DDL added on 2nd Apr for testing purpose.
+        
         public Alignment(String _name, double _offsetY, double _offsetZ, double _rotationAngle)
         {
             OffsetY = _offsetY;
             OffsetZ = _offsetZ;
             RotationAngle = _rotationAngle;
+            AlongVector = new Vector3d(0, 0, 0);
         }
-        // DDL added on 2nd Apr for testing purpose.
-        public Alignment(double _offsetY, double _offsetZ, double _rotationAngle)
+
+        public Alignment(String _name, double _offsetY, double _offsetZ, double _rotationAngle, Vector3d _alongVector)
         {
             OffsetY = _offsetY;
             OffsetZ = _offsetZ;
             RotationAngle = _rotationAngle;
+            AlongVector = _alongVector;
         }
 
         #endregion
@@ -75,13 +51,13 @@ namespace PTK
 
         #region methods
 
-        //public void RotationVectorToPoint(Point3d pt)
-        //{
-        //    //Line ln = new Line(pt, alignToPoint);
-        //    Vector3d vt = new Vector3d(pt.X - alignToPoint.X, pt.Y - alignToPoint.Y, pt.Z - alignToPoint.Z);
-        //    Rotation = vt;
+        public void SetAnchor(AlignmentAnchorVert _ver,AlignmentAnchorHori _hor)
+        {
+            AnchorVert = _ver;
+            AnchorHori = _hor;
 
-        //}
+        }
+
         public Alignment DeepCopy()
         {
             return (Alignment)base.MemberwiseClone();
@@ -89,10 +65,11 @@ namespace PTK
         public override string ToString()
         {
             string info;
-            info = "<Alignment> Name:" + Name + 
-                " OffsetY:" + OffsetY.ToString() + 
-                " OffsetZ:" + OffsetZ.ToString() + 
-                " RotationAngle:" + RotationAngle.ToString();
+            info = "<Alignment> Name:" + Name +
+                " OffsetY:" + OffsetY.ToString() +
+                " OffsetZ:" + OffsetZ.ToString() +
+                " RotationAngle:" + RotationAngle.ToString() +
+                " AlongVector:" + AlongVector.ToString();
             return info;
         }
         public bool IsValid()
@@ -143,6 +120,6 @@ namespace PTK
         }
     }
 
-
+   
 
 }

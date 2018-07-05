@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Linq;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
@@ -38,6 +39,15 @@ namespace PTK
         #endregion
 
         #region methods
+        public abstract double GetHeight();
+        public abstract double GetWidth();
+
+        public static void GetMaxHeightAndWidth(List<CrossSection> _secs,out double _height,out double _width)
+        {
+            _height = _secs.Max(s => s.GetHeight());
+            _width = _secs.Max(s => s.GetWidth());
+        }
+
         public abstract CrossSection DeepCopy();
         public override string ToString()
         {
@@ -56,23 +66,23 @@ namespace PTK
     public class RectangleCroSec : CrossSection
     {
         #region fields
-        public double Width { get; private set; } = 100;
-        public double Height { get; private set; } = 100;
+        private double height = 100;
+        private double width = 100;
         #endregion
 
         #region constructors
         public RectangleCroSec() : base()
         {
         }
-       public RectangleCroSec(string _name, double _width, double _height) : base(_name)
+       public RectangleCroSec(string _name, double _height, double _width) : base(_name)
         {
-            Width = _width;
-            Height = _height;
+            SetHeight(_height);
+            SetWidth(_width);
         }
-        public RectangleCroSec(string _name, double _width, double _height, Material _material) : base(_name, _material)
+        public RectangleCroSec(string _name, double _height, double _width, Material _material) : base(_name, _material)
         {
-            Width = _width;
-            Height = _height;
+            SetHeight(_height);
+            SetWidth(_width);
         }
         #endregion
 
@@ -80,6 +90,31 @@ namespace PTK
         #endregion
 
         #region methods
+        private void SetHeight(double _height)
+        {
+            if (_height <= 0)
+            {
+                throw new ArgumentException("value <= 0");
+            }
+            height = _height;
+        }
+        public override double GetHeight()
+        {
+            return height;
+        }
+        private void SetWidth(double _width)
+        {
+            if (_width <= 0)
+            {
+                throw new ArgumentException("value <= 0");
+            }
+            width = _width;
+        }
+        public override double GetWidth()
+        {
+            return width;
+        }
+
         public override CrossSection DeepCopy()
         {
             return (CrossSection)base.MemberwiseClone();
@@ -87,9 +122,9 @@ namespace PTK
         public override string ToString()
         {
             string info;
-            info = "<RectangleCroSec> Name:" + Name + 
-                " Width:" + Width.ToString() + 
-                " Height:" + Height.ToString() + 
+            info = "<RectangleCroSec> Name:" + Name +
+                " Height:" + height.ToString() +
+                " Width:" + width.ToString() + 
                 " Material:" + Material.Name;
             return info; 
         }

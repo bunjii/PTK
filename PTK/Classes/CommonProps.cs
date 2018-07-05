@@ -48,5 +48,12 @@ namespace PTK
         error,period,comma
     }
 
-
+    public enum AlignmentAnchorVert
+    {
+        Center,Top,Bottom
+    }
+    public enum AlignmentAnchorHori
+    {
+        Center, Left, Right
+    }
 }

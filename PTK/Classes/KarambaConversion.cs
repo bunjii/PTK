@@ -15,9 +15,7 @@ namespace PTK.Classes
         public static Karamba.Models.Model BuildModel(StructuralAssembly _strAss)
         {
             var points = new List<Rhino.Geometry.Point3d>();
-            //var materials = new List<Karamba.Materials.FemMaterial>();
             var materialMap = new Dictionary<Material, Karamba.Materials.FemMaterial>();
-            //var crosecs = new List<Karamba.CrossSections.CroSec>();
             var crosecMap = new Dictionary<CrossSection, Karamba.CrossSections.CroSec>();
             var supports = new List<Karamba.Supports.Support>();
             var loads = new List<Karamba.Loads.Load>();
@@ -66,7 +64,7 @@ namespace PTK.Classes
             }
 
 
-            double limitDist = 0.005;
+            double limitDist = 0.5;
             var modelBuilder = new Karamba.Models.ModelBuilder(limitDist);
             var model = modelBuilder.build(
                 points,
@@ -109,9 +107,9 @@ namespace PTK.Classes
                     "Country",
                     null/*color*/,
                     _mat,
-                    rectSec.Height * CommonProps.ConversionUnit(Rhino.UnitSystem.Centimeters),
-                    rectSec.Width * CommonProps.ConversionUnit(Rhino.UnitSystem.Centimeters),
-                    rectSec.Width * CommonProps.ConversionUnit(Rhino.UnitSystem.Centimeters)
+                    rectSec.GetHeight() * CommonProps.ConversionUnit(Rhino.UnitSystem.Centimeters),
+                    rectSec.GetWidth() * CommonProps.ConversionUnit(Rhino.UnitSystem.Centimeters),
+                    rectSec.GetWidth() * CommonProps.ConversionUnit(Rhino.UnitSystem.Centimeters)
                     );
             }
             else

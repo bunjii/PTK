@@ -20,14 +20,14 @@ namespace PTK
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddTextParameter("Name", "N", "Add Cross Section Name", GH_ParamAccess.item);
-            pManager.AddNumberParameter("Width", "W", "", GH_ParamAccess.item);  
-            pManager.AddNumberParameter("Height", "H", "", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Height", "H", "", GH_ParamAccess.item,100);
+            pManager.AddNumberParameter("Width", "W", "", GH_ParamAccess.item,100);  
             pManager.AddParameter(new Param_Material(), "Material", "M", "Material", GH_ParamAccess.item);
-
 
             pManager[0].Optional = true;
             pManager[1].Optional = true;
             pManager[2].Optional = true;
+            pManager[3].Optional = true;
         }
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
@@ -47,8 +47,8 @@ namespace PTK
 
             #region input
             if (!DA.GetData(0, ref name)) { return; }
-            if (!DA.GetData(1, ref width)) { return; }
-            if (!DA.GetData(2, ref height)) { return; }
+            if (!DA.GetData(1, ref height)) { return; }
+            if (!DA.GetData(2, ref width)) { return; }
             if (!DA.GetData(3, ref gMaterial)) {
                 material = new Material();
             }
@@ -59,7 +59,7 @@ namespace PTK
             #endregion
 
             #region solve
-            GH_CroSec sec = new GH_CroSec(new RectangleCroSec(name, width, height, material));
+            GH_CroSec sec = new GH_CroSec(new RectangleCroSec(name, height, width, material));
             #endregion
 
             #region output
