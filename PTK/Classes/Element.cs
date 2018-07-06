@@ -160,43 +160,6 @@ namespace PTK
             return Tag != "N/A";
         }
         #endregion
-        // has moved to PTK_UTIL1_GenerateGeometry
-        // Generating extrusion/SweepIntervals
-        //private void GenerateIntervals()
-        //{
-        //    //double[] parameter = { 0.0, 2.2 };
-
-        //    double HalfWidth = Section.Width / 2;
-        //    double HalfHeight = Section.Height / 2;
-
-        //    iz = new Interval(-HalfHeight, HalfHeight);
-        //    iy = new Interval(-HalfWidth, HalfWidth);
-        //    ix = new Interval(0, Crv.GetLength());
-        //    crossSectionRectangle = new Rectangle3d(yzPlane, iy, iz);
-        //}
-
-        //private void GenerateElementGeometry()
-        //{
-        //    Brep tempgeometry = new Brep();
-
-        //    if (Crv.IsLinear())
-        //    {
-        //        Box boxen = new Box(yzPlane, iy, iz, ix);
-        //        tempgeometry = Brep.CreateFromBox(boxen);
-        //        BoundingBox = boxen.BoundingBox;
-
-        //    }
-        //    else
-        //    {
-        //        SweepOneRail tempsweep = new SweepOneRail();
-
-        //        var sweep = tempsweep.PerformSweep(Crv, crossSectionRectangle.ToNurbsCurve());
-        //        tempgeometry = sweep[0];
-        //        BoundingBox = tempgeometry.GetBoundingBox(Rhino.Geometry.Plane.WorldXY);
-        //        int test = 0;
-        //    }
-        //    ElementGeometry = tempgeometry;
-        //}
 
     }
 

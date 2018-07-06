@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 using Karamba;
 using Rhino.Geometry;
+using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 
 
 namespace PTK.Classes
@@ -58,9 +60,16 @@ namespace PTK.Classes
 
             foreach(StructuralElement e in _strAss.SElements)
             {
-                var elem = new Karamba.Elements.GrassBeam(e.Element.PointAtStart, e.Element.PointAtEnd);
-                elem.crosec = crosecMap[e.Element.Sections[0]]; //現在は断面材1つで想定
-                elems.Add(elem);
+                var paramList = _strAss.Assembly.SearchNodeParamAtElement(e.Element);
+                for (int i = 0; i <= paramList.Count-2; i++ )
+                {
+                    var elem = new Karamba.Elements.GrassBeam(e.Element.BaseCurve.PointAt(paramList[i]), e.Element.BaseCurve.PointAt(paramList[i + 1]));
+                    //var s = crosecMap[e.Element.Sections[0]];
+                    //s.ecce_loc = new Vector3d(e.Element.Align.OffsetY, e.Element.Align.OffsetZ,0);
+                    elem.crosec = crosecMap[e.Element.Sections[0]]; //現在は断面材1つで想定
+                    //elem.z_ori
+                    elems.Add(elem);
+                }
             }
 
 
@@ -111,6 +120,8 @@ namespace PTK.Classes
                     rectSec.GetWidth() * CommonProps.ConversionUnit(Rhino.UnitSystem.Centimeters),
                     rectSec.GetWidth() * CommonProps.ConversionUnit(Rhino.UnitSystem.Centimeters)
                     );
+                //Karamba.Utilities.UnitsConversionFactory unitsConversionFactory = Karamba.Utilities.UnitsConversionFactories.Conv();
+                //sec.ecce_loc = unitsConversionFactory.cm();
             }
             else
             {
