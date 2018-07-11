@@ -53,7 +53,7 @@ namespace PTK
             #endregion
 
             #region solve
-            var karambaModel = PTK.Classes.KarambaConversion.BuildModel(structuralAssembly);
+            var karambaModel = PTK.KarambaConversion.BuildModel(structuralAssembly);
 
             Karamba.Algorithms.Component_ThIAnalyze.solve(
                 karambaModel,

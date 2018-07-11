@@ -20,7 +20,9 @@ namespace PTK.Components
         {
             pManager.AddParameter(new Param_Element1D(), "Element", "E", "Add the cross-section componentt here", GH_ParamAccess.item);
             pManager.AddParameter(new Param_Force(), "Forces", "F", "Add the cross-section componentt here", GH_ParamAccess.list);
+            pManager.AddParameter(new Param_Force(), "Joints", "J", "Add the cross-section componentt here", GH_ParamAccess.list);
             pManager[1].Optional = true;
+            pManager[2].Optional = true;
         }
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
@@ -36,6 +38,8 @@ namespace PTK.Components
             Element1D elem = null;
             List<GH_Force> gForces = new List<GH_Force>();
             List<Force> forces = null;
+            List<GH_Joint> gJoints = new List<GH_Joint>();
+            List<Joint> joints = null;
             #endregion
 
             #region input
@@ -55,10 +59,18 @@ namespace PTK.Components
             {
                 forces = gForces.ConvertAll(f => f.Value);
             }
+            if (!DA.GetDataList(2, gJoints))
+            {
+                joints = new List<Joint>();
+            }
+            else
+            {
+                joints = gJoints.ConvertAll(j => j.Value);
+            }
             #endregion
 
             #region solve
-            GH_StructuralElement strElem = new GH_StructuralElement(new StructuralElement(elem, forces));
+            GH_StructuralElement strElem = new GH_StructuralElement(new StructuralElement(elem, forces, joints));
             #endregion
 
             #region output
