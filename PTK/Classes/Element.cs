@@ -46,7 +46,7 @@ namespace PTK
             PointAtEnd = new Point3d();
             Sections = new List<CrossSection>();
             Align = new Alignment();
-            InitializeCentricPlanes();
+            InitializeLocalPlane();
         }
         public Element1D(string _tag) : base(_tag)
         {
@@ -55,7 +55,7 @@ namespace PTK
             PointAtEnd = new Point3d();
             Sections = new List<CrossSection>();
             Align = new Alignment();
-            InitializeCentricPlanes();
+            InitializeLocalPlane();
         }
         public Element1D(string _tag, Curve _curve, List<CrossSection> _sections, Alignment _align, bool _intersect = true) : base(_tag)
         {
@@ -65,7 +65,7 @@ namespace PTK
             Sections = _sections;
             Align = _align;
             IsIntersectWithOther = _intersect;
-            InitializeCentricPlanes();
+            InitializeLocalPlane();
         }
         #endregion
 
@@ -74,7 +74,7 @@ namespace PTK
 
         #region methods
 
-        private void InitializeCentricPlanes()
+        private void InitializeLocalPlane()
         {
             if (BaseCurve != null)
             {
@@ -168,17 +168,21 @@ namespace PTK
         #region fields
         public Element1D Element { get; private set; }
         public List<Force> Forces { get; private set; }
+        public List<Joint> Joints { get; private set; }
+
         #endregion
         #region constructors
         public StructuralElement()
         {
             Element = new Element1D();
             Forces = new List<Force>();
+            Joints = new List<Joint>();
         }
-        public StructuralElement(Element1D _element,List<Force> _forces)
+        public StructuralElement(Element1D _element, List<Force> _forces, List<Joint> _joints)
         {
             Element = _element;
             Forces = _forces;
+            Joints = _joints;
         }
         #endregion
         #region properties
@@ -187,6 +191,11 @@ namespace PTK
         public int AddForce(Force _force)
         {
             Forces.Add(_force);
+            return Forces.Count;
+        }
+        public int AddJoint(Joint _joint)
+        {
+            Joints.Add(_joint);
             return Forces.Count;
         }
         public StructuralElement DeepCopy()

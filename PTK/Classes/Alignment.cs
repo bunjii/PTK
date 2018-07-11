@@ -28,7 +28,7 @@ namespace PTK
             Name = "N/A";
         }
         
-        public Alignment(String _name, double _offsetY, double _offsetZ, double _rotationAngle)
+        public Alignment(string _name, double _offsetY, double _offsetZ, double _rotationAngle)
         {
             OffsetY = _offsetY;
             OffsetZ = _offsetZ;
@@ -36,7 +36,7 @@ namespace PTK
             AlongVector = new Vector3d(0, 0, 0);
         }
 
-        public Alignment(String _name, double _offsetY, double _offsetZ, double _rotationAngle, Vector3d _alongVector)
+        public Alignment(string _name, double _offsetY, double _offsetZ, double _rotationAngle, Vector3d _alongVector)
         {
             OffsetY = _offsetY;
             OffsetZ = _offsetZ;

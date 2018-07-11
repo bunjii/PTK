@@ -10,7 +10,7 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 
 
-namespace PTK.Classes
+namespace PTK
 {
     public static class KarambaConversion
     {

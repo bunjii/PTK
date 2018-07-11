@@ -10,6 +10,7 @@ namespace PTK
     {
         #region fields
         public string Tag { get; private set; }
+        public int LoadCase { get; private set; } = 0;
         #endregion
 
         #region constructors
@@ -17,9 +18,10 @@ namespace PTK
         {
             Tag = "N/A";
         }
-        public Load(string _tag)
+        public Load(string _tag, int _loadCase)
         {
             Tag = _tag;
+            LoadCase = _loadCase;
         }
         #endregion
 
@@ -30,7 +32,8 @@ namespace PTK
         public override string ToString()
         {
             string info;
-            info = "<Load> Tag:" + Tag;
+            info = "<Load> Tag:" + Tag +
+                " LoadCase:" + LoadCase;
             return info;
         }
         public bool IsValid()
@@ -43,7 +46,6 @@ namespace PTK
     public class PointLoad : Load
     {
         #region fields
-        public int LoadCase { get; private set; } = 0;
         public Point3d Point { get; private set; }
         public Vector3d ForceVector { get; private set; }
         public Vector3d MomentVector { get; private set; }
@@ -56,9 +58,8 @@ namespace PTK
             ForceVector = new Vector3d();
             MomentVector = new Vector3d();
         }
-        public PointLoad(string _tag, int _loadCase, Point3d _point, Vector3d _forceVector, Vector3d _momentVector) : base(_tag)
+        public PointLoad(string _tag, int _loadCase, Point3d _point, Vector3d _forceVector, Vector3d _momentVector) : base(_tag,_loadCase)
         {
-            LoadCase = _loadCase;
             Point = _point;
             ForceVector = _forceVector;
             MomentVector = _momentVector;
@@ -89,7 +90,6 @@ namespace PTK
     public class GravityLoad : Load
     {
         #region fields
-        public int LoadCase { get; private set; } = 0;
         public Vector3d GravityVector { get; private set; }
         #endregion
 
@@ -98,9 +98,8 @@ namespace PTK
         {
             GravityVector = new Vector3d();
         }
-        public GravityLoad(string _tag, int _loadCase, Vector3d _gravityVector) : base(_tag)
+        public GravityLoad(string _tag, int _loadCase, Vector3d _gravityVector) : base(_tag,_loadCase)
         {
-            LoadCase = _loadCase;
             GravityVector = _gravityVector;
         }
         #endregion
