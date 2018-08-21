@@ -11,13 +11,10 @@ namespace PTK
 {
     public abstract class CrossSection
     {
-        #region fields
         public string Name { get; private set; }
         public Material Material { get; private set; }
         //public Curve Curve
-        #endregion
 
-        #region constructors
         public CrossSection()
         {
             Name = "N/A";
@@ -33,12 +30,7 @@ namespace PTK
             Name = _name;
             Material = _material;
         }
-        #endregion
 
-        #region properties
-        #endregion
-
-        #region methods
         public abstract double GetHeight();
         public abstract double GetWidth();
 
@@ -60,17 +52,13 @@ namespace PTK
         {
             return true;
         }
-        #endregion
     }
 
     public class RectangleCroSec : CrossSection
     {
-        #region fields
         private double height = 100;
         private double width = 100;
-        #endregion
 
-        #region constructors
         public RectangleCroSec() : base()
         {
         }
@@ -84,12 +72,7 @@ namespace PTK
             SetHeight(_height);
             SetWidth(_width);
         }
-        #endregion
 
-        #region properties
-        #endregion
-
-        #region methods
         private void SetHeight(double _height)
         {
             if (_height <= 0)
@@ -128,7 +111,6 @@ namespace PTK
                 " Material:" + Material.Name;
             return info; 
         }
-        #endregion
     }
 
     public class GH_CroSec : GH_Goo<CrossSection>

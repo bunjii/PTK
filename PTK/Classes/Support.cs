@@ -9,14 +9,11 @@ namespace PTK
 {
     public class Support
     {
-        #region fields
         public string Tag { get; private set; }
         public int LoadCase { get; private set; } = 0;
         public Plane FixingPlane { get; private set; }
         public List<bool> Conditions { get; private set; }
-        #endregion
 
-        #region constructors
         public Support()
         {
             Tag = "N/A";
@@ -30,12 +27,7 @@ namespace PTK
             FixingPlane = _fixingPlane;
             Conditions = _conditions;
         }
-        #endregion
 
-        #region properties
-        #endregion
-
-        #region methods
         public void UpdateConditions(List<bool> _conditions)
         {
             this.Conditions = _conditions;
@@ -76,7 +68,6 @@ namespace PTK
         {
             return true;
         }
-        #endregion
     }
 
     public class GH_Support : GH_Goo<Support>

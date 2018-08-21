@@ -8,7 +8,6 @@ namespace PTK
 {
     public static class CommonProps
     {
-        #region fields
         public static double tolerances = 0.001;
         public static readonly string category = "PTK";
         public static readonly string subcate0 = "Param";
@@ -22,9 +21,7 @@ namespace PTK
         public static readonly string subcate8 = "Utility";
         public static readonly string subcate9 = "Tool";
         public static readonly string initialMessage = "PTK Ver.0.5";
-        #endregion
 
-        #region methods
         //Return the Decimal Separator in the use environment
         public static DecimalSeparator FindDecimalSeparator()
         {
@@ -42,8 +39,6 @@ namespace PTK
             Rhino.UnitSystem fromUnitSystem = doc.ModelUnitSystem;
             return Rhino.RhinoMath.UnitScale(fromUnitSystem, _toUnitSystem);
         }
-        #endregion
-        
     }
 
 

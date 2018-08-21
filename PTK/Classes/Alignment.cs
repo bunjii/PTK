@@ -12,7 +12,6 @@ namespace PTK
 
     public class Alignment
     {
-        #region fields
         public string Name { get; private set; }
         public AlignmentAnchorVert AnchorVert { get; private set; } = AlignmentAnchorVert.Center;
         public AlignmentAnchorHori AnchorHori { get; private set; } = AlignmentAnchorHori.Center;
@@ -20,9 +19,7 @@ namespace PTK
         public double OffsetZ { get; private set; } = 0;
         public double RotationAngle { get; private set; } = 0;  //degree
         public Vector3d AlongVector { get; private set; }
-        #endregion
 
-        #region constructors
         public Alignment()
         {
             Name = "N/A";
@@ -43,13 +40,6 @@ namespace PTK
             RotationAngle = _rotationAngle;
             AlongVector = _alongVector;
         }
-
-        #endregion
-
-        #region properties
-        #endregion
-
-        #region methods
 
         public void SetAnchor(AlignmentAnchorVert _ver,AlignmentAnchorHori _hor)
         {
@@ -76,7 +66,6 @@ namespace PTK
         {
             return Name != "N/A";
         }
-        #endregion
     }
 
     public class GH_Alignment : GH_Goo<Alignment>

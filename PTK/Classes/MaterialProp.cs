@@ -9,7 +9,6 @@ namespace PTK
 {
     public class MaterialStructuralProp
     {
-        #region fields
         public string Name { get; set; }
         public double Fmgk { get; set; }
         public double Ft0gk { get; set; }
@@ -28,9 +27,7 @@ namespace PTK
         public double GGrg05 { get; set; }
         public double Rhogk { get; set; }
         public double Rhogmean { get; set; }
-        #endregion
 
-        #region constructors
         public MaterialStructuralProp() { }
         public MaterialStructuralProp(
             string _name,
@@ -72,12 +69,7 @@ namespace PTK
             Rhogk = _rhogk;          // density
             Rhogmean = _rhogmean;    // density
         }
-        #endregion
 
-        #region properties
-        #endregion
-
-        #region methods
         public MaterialStructuralProp DeepCopy()
         {
             return (MaterialStructuralProp)base.MemberwiseClone();
@@ -93,7 +85,6 @@ namespace PTK
         {
             return Name != "N/A";
         }
-        #endregion
     }
 
     public class GH_MaterialStructuralProp : GH_Goo<MaterialStructuralProp>

@@ -10,12 +10,9 @@ namespace PTK
 {
     public class Node : IEquatable<Node>
     {
-        #region fields
         public Point3d Point { get; private set; }
         public List<Vector3d> DisplacementVectors { get; private set; } = new List<Vector3d>();
-        #endregion
 
-        #region constructors
         public Node()
         {
             Point = new Point3d();
@@ -24,12 +21,7 @@ namespace PTK
         {
             Point = _point;
         }
-        #endregion
 
-        #region properties
-        #endregion
-
-        #region methods
         public bool Equals(Node _other)
         {
             //It is necessary to consider a minute error
@@ -75,7 +67,6 @@ namespace PTK
         {
             return true;
         }
-        #endregion
     }
 
     public class GH_Node : GH_Goo<Node>

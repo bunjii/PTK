@@ -12,12 +12,9 @@ namespace PTK
 {
     public class Material
     {
-        #region fields
         public string Name { get; private set; }
         public MaterialStructuralProp StructuralProp { get; private set; }
-        #endregion
 
-        #region constructors
         public Material()
         {
             Name = "N/A";
@@ -33,12 +30,6 @@ namespace PTK
             Name = _name;
             StructuralProp = _structuralProp;
         }
-        #endregion
-
-        #region properties
-        #endregion
-
-        #region methods
 
         public Material DeepCopy()
         {
@@ -56,7 +47,6 @@ namespace PTK
         {
             return Name != "N/A";
         }
-        #endregion
     }
 
     public class GH_Material : GH_Goo<Material>

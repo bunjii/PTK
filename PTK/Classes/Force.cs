@@ -10,7 +10,6 @@ namespace PTK
 {
     public class Force
     {
-        #region fields
         public int LoadCase { get; private set; } = 0;
         public double FX { get; private set; }
         public double FY { get; private set; }
@@ -18,9 +17,7 @@ namespace PTK
         public double MX { get; private set; }
         public double MY { get; private set; }
         public double MZ { get; private set; }
-        #endregion
 
-        #region constructors
         public Force()
         {
             FX = 0.0;
@@ -40,12 +37,7 @@ namespace PTK
             MY = _my;
             MZ = _mz;
         }
-        #endregion
 
-        #region properties
-        #endregion
-
-        #region methods
         public Force DeepCopy()
         {
             return (Force)base.MemberwiseClone();
@@ -65,7 +57,6 @@ namespace PTK
         {
             return true;
         }
-        #endregion
     }
 
     public class GH_Force : GH_Goo<Force>

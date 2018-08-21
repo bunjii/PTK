@@ -8,12 +8,9 @@ namespace PTK
 {
     public abstract class Load
     {
-        #region fields
         public string Tag { get; private set; }
         public int LoadCase { get; private set; } = 0;
-        #endregion
 
-        #region constructors
         public Load()
         {
             Tag = "N/A";
@@ -23,11 +20,7 @@ namespace PTK
             Tag = _tag;
             LoadCase = _loadCase;
         }
-        #endregion
 
-        #region properties
-        #endregion
-        #region methods
         public abstract Load DeepCopy();
         public override string ToString()
         {
@@ -40,18 +33,14 @@ namespace PTK
         {
             return true;
         }
-        #endregion
     }
 
     public class PointLoad : Load
     {
-        #region fields
         public Point3d Point { get; private set; }
         public Vector3d ForceVector { get; private set; }
         public Vector3d MomentVector { get; private set; }
-        #endregion
 
-        #region constructors
         public PointLoad() : base()
         {
             Point = new Point3d();
@@ -64,12 +53,7 @@ namespace PTK
             ForceVector = _forceVector;
             MomentVector = _momentVector;
         }
-        #endregion
 
-        #region properties
-        #endregion
-
-        #region methods
         public override Load DeepCopy()
         {
             return (Load)MemberwiseClone();
@@ -84,16 +68,12 @@ namespace PTK
                 " MomentVector:" + MomentVector.ToString() ;
             return info;
         }
-        #endregion
     }
 
     public class GravityLoad : Load
     {
-        #region fields
         public Vector3d GravityVector { get; private set; }
-        #endregion
 
-        #region constructors
         public GravityLoad() : base()
         {
             GravityVector = new Vector3d();
@@ -102,12 +82,7 @@ namespace PTK
         {
             GravityVector = _gravityVector;
         }
-        #endregion
 
-        #region properties
-        #endregion
-
-        #region methods
         public override Load DeepCopy()
         {
             return (Load)MemberwiseClone();
@@ -120,7 +95,6 @@ namespace PTK
                 " GravityVector:" + GravityVector.ToString();
             return info;
         }
-        #endregion
     }
 
 

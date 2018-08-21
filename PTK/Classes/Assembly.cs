@@ -13,7 +13,6 @@ namespace PTK
 {
     public class Assembly
     {
-        #region fields
         public List<Element1D> Elements { get; private set; }
         public List<Node> Nodes { get; private set; }
         public List<string> Tags { get; private set; }
@@ -22,9 +21,6 @@ namespace PTK
         public Dictionary<Element1D,List<int>> NodeMap { get; private set; }
         public Dictionary<CrossSection, Material> CrossSectionMap { get; private set; }
 
-        #endregion
-
-        #region constructors
         public Assembly()
         {
             Elements = new List<Element1D>();
@@ -35,12 +31,7 @@ namespace PTK
             NodeMap = new Dictionary<Element1D, List<int>>();
             CrossSectionMap = new Dictionary<CrossSection, Material>();
         }
-        #endregion
 
-        #region properties
-        #endregion
-
-        #region methods
         public int AddElement(Element1D _element)
         {
             if (!Elements.Contains(_element))
@@ -167,19 +158,15 @@ namespace PTK
         {
             return Elements.Count != 0;
         }
-        #endregion
-
     }
 
     public class StructuralAssembly
     {
-        #region fields
         public Assembly Assembly { get; private set; }
         public List<StructuralElement> SElements { get; private set; }
         public List<Support> Supports { get; private set; }
         public List<Load> Loads { get; private set; }
-        #endregion
-        #region constructors
+
         public StructuralAssembly()
         {
             Assembly = new Assembly();
@@ -194,10 +181,7 @@ namespace PTK
             Supports = new List<Support>();
             Loads = new List<Load>();
         }
-        #endregion
-        #region properties
-        #endregion
-        #region methods
+     
         public int AddSElement(StructuralElement _sElement)
         {
             if (!SElements.Contains(_sElement))
@@ -241,7 +225,6 @@ namespace PTK
         {
             return SElements.Count != 0;
         }
-        #endregion
     }
 
     public class GH_Assembly : GH_Goo<Assembly>

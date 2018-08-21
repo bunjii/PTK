@@ -10,11 +10,8 @@ namespace PTK
 {
     public abstract class Element
     {
-        #region fields
         public string Tag { get; private set; }
-        #endregion
 
-        #region constructors
         public Element()
         {
             Tag = "N/A";
@@ -23,12 +20,10 @@ namespace PTK
         {
             Tag = _tag;
         }
-        #endregion
     }
 
     public class Element1D : Element
     {
-        #region fields
         public Curve BaseCurve { get; private set; }
         public Point3d PointAtStart { get; private set; }
         public Point3d PointAtEnd { get; private set; }
@@ -36,9 +31,7 @@ namespace PTK
         public List<CrossSection> Sections { get; private set; }
         public Alignment Align { get; private set; }
         public bool IsIntersectWithOther { get; private set; } = true;
-        #endregion
 
-        #region constructors
         public Element1D() : base()
         {
             BaseCurve = null;
@@ -67,12 +60,6 @@ namespace PTK
             IsIntersectWithOther = _intersect;
             InitializeLocalPlane();
         }
-        #endregion
-
-        #region properties
-        #endregion
-
-        #region methods
 
         private void InitializeLocalPlane()
         {
@@ -142,7 +129,6 @@ namespace PTK
             }
         }
 
-
         public Element1D DeepCopy()
         {
             return (Element1D)base.MemberwiseClone();
@@ -159,19 +145,14 @@ namespace PTK
         {
             return Tag != "N/A";
         }
-        #endregion
-
     }
 
     public class StructuralElement
     {
-        #region fields
         public Element1D Element { get; private set; }
         public List<Force> Forces { get; private set; }
         public List<Joint> Joints { get; private set; }
 
-        #endregion
-        #region constructors
         public StructuralElement()
         {
             Element = new Element1D();
@@ -184,10 +165,7 @@ namespace PTK
             Forces = _forces;
             Joints = _joints;
         }
-        #endregion
-        #region properties
-        #endregion
-        #region methods
+
         public int AddForce(Force _force)
         {
             Forces.Add(_force);
@@ -213,7 +191,6 @@ namespace PTK
         {
             return Element != null;
         }
-        #endregion
     }
 
     public class GH_Element1D : GH_Goo<Element1D>
