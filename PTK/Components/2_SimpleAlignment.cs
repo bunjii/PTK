@@ -6,9 +6,9 @@ using Rhino.Geometry;
 
 namespace PTK
 {
-    public class PTK_1_4_Alignment_Simple : GH_Component
+    public class PTK_2_SimpleAlignment : GH_Component
     {
-        public PTK_1_4_Alignment_Simple()
+        public PTK_2_SimpleAlignment()
           : base("Alignment", "Align",
               "Alignment",
               CommonProps.category, CommonProps.subcate2)

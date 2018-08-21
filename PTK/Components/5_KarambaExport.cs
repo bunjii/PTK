@@ -12,12 +12,12 @@ using System.Windows.Forms;
 
 namespace PTK
 {
-    public class PTK_4_2_KarambaExport : GH_Component
+    public class PTK_5_KarambaExport : GH_Component
     {
-        public PTK_4_2_KarambaExport()
+        public PTK_5_KarambaExport()
           : base("Karamba Analysis", "Karamba Analysis",
               "Creates Model information of Karamba",
-              CommonProps.category, CommonProps.subcate4)
+              CommonProps.category, CommonProps.subcate5)
         {
             Message = CommonProps.initialMessage;
 

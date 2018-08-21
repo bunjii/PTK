@@ -6,13 +6,13 @@ using Rhino.Geometry;
 
 namespace PTK.Components
 {
-    public class _2_1_2_GravityLoad : GH_Component
+    public class PTK_3_GravityLoad : GH_Component
     {
 
-        public _2_1_2_GravityLoad()
+        public PTK_3_GravityLoad()
           : base("GtravityLoad", "GravityLoad",
                 "Add load here",
-                CommonProps.category, CommonProps.subcate4)
+                CommonProps.category, CommonProps.subcate3)
         {
             Message = CommonProps.initialMessage;
         }

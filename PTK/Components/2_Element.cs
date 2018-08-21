@@ -8,10 +8,10 @@ using System.Windows.Forms;
 
 namespace PTK
 {
-    public class PTK_3_Element : GH_Component
+    public class PTK_2_Element : GH_Component
     {
 
-        public PTK_3_Element()
+        public PTK_2_Element()
           : base("Element", "Element",
               "creates a beam element.",
               CommonProps.category, CommonProps.subcate2)

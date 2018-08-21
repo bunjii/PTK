@@ -6,12 +6,12 @@ using Rhino.Geometry;
 
 namespace PTK.Components
 {
-    public class U_PreviewElement : GH_Component
+    public class PTK_6_PreviewElement : GH_Component
     {
-        public U_PreviewElement()
+        public PTK_6_PreviewElement()
           : base("Preview Element", "PrevElem",
               "Preview Element",
-              CommonProps.category, CommonProps.subcate5)
+              CommonProps.category, CommonProps.subcate6)
         {
             Message = CommonProps.initialMessage;
         }

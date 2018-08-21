@@ -30,7 +30,7 @@ namespace PTK.Optimization
     //-----------------------------------
     //  Class of component body
     //-----------------------------------
-    public class GeneticAlgorithmComponent03 : GH_Component
+    public class PTK_GeneticAlgorithm : GH_Component
     {
         //-------Field ( Variable for saving for each component placed )
         public int IndividualNum { get; set; }          //Number of individuals within one generation
@@ -48,10 +48,10 @@ namespace PTK.Optimization
 
 
         //-------Overview
-        public GeneticAlgorithmComponent03()
+        public PTK_GeneticAlgorithm()
           : base("GeneticAlgorithmComponent", "GA",
               "The sliders are regarded as genes and the solution is searched for by genetic algorithm so that the fitness becomes the best.",
-              "PTK", "Utility")
+              CommonProps.category, CommonProps.subcate9)
         {
             //-------Default value
             IndividualNum = 50;
@@ -156,7 +156,7 @@ namespace PTK.Optimization
                     Rectangle rec = ButtonBounds;
                     if (rec.Contains(System.Drawing.Point.Round(e.CanvasLocation)))
                     {
-                        GeneAlgoOption.ShowGAForm((GeneticAlgorithmComponent03)Owner);        //Show Form
+                        GeneAlgoOption.ShowGAForm((PTK_GeneticAlgorithm)Owner);        //Show Form
                         return GH_ObjectResponse.Handled;
                     }
                 }
@@ -200,7 +200,7 @@ namespace PTK.Optimization
     //--------------------------------------------------------
     internal static class GeneAlgoOption
     {
-        public static GeneticAlgorithmComponent03 Comp { get; private set; }    //Parent component
+        public static PTK_GeneticAlgorithm Comp { get; private set; }    //Parent component
         public static GH_Document GhDoc { get; private set; }                   //Reference to Grasshopper's document
 
         public static GAForm gaForm;                                    //Form for managing execution of genetic algorithm
@@ -225,7 +225,7 @@ namespace PTK.Optimization
 
 
         //-------Initialize
-        public static void SetGAOption(GeneticAlgorithmComponent03 _comp)
+        public static void SetGAOption(PTK_GeneticAlgorithm _comp)
         {
             Comp = _comp;
             GhDoc = Comp.OnPingDocument();
@@ -288,7 +288,7 @@ namespace PTK.Optimization
         }
 
         //-------Show Form
-        public static void ShowGAForm(GeneticAlgorithmComponent03 _comp)
+        public static void ShowGAForm(PTK_GeneticAlgorithm _comp)
         {
             _comp.ExpireSolution(true);
             if (_comp.SavePath == null)

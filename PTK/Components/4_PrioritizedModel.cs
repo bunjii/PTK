@@ -2,18 +2,23 @@
 using System.Collections.Generic;
 
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
+
+using Karamba.Models;
+using Karamba.Elements;
+
 
 namespace PTK
 {
-    public class PTK_7_2_LocalAnalysis : GH_Component
+    public class PTK_4_PrioritizedModel : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the PTK_C_03 class.
+        /// Initializes a new instance of the PTK_C_01 class.
         /// </summary>
-        public PTK_7_2_LocalAnalysis()
-          : base("Local Analysis (PTK)", "Local Analysis",
-              "Local Analysis",
+        public PTK_4_PrioritizedModel()
+          : base("Prioritized Model", "PrioriMod",
+              "Combine PTK class and Karamba Analysis Data",
               CommonProps.category, CommonProps.subcate4)
         {
             Message = CommonProps.initialMessage;
@@ -24,8 +29,10 @@ namespace PTK
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK Assembly", "A (PTK)", "PTK DATA INPUT", GH_ParamAccess.item);
+            pManager.AddGenericParameter("PTK Assembly", "A (PTK)", "PTK Assembly", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Dimension Data", "Dim (PTK)", "", GH_ParamAccess.item);
 
+            pManager[1].Optional = true;
         }
 
         /// <summary>
@@ -33,8 +40,8 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK Local Analysis", "LA (PTK)", "PTK Local Analysis", GH_ParamAccess.item);
-
+            pManager.AddGenericParameter("PTK Assembly", "A (PTK)", "PTK Assembly", GH_ParamAccess.item);
+            // pManager.AddLineParameter("lines", "lines", "lines", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -43,6 +50,8 @@ namespace PTK
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            
+
         }
 
         /// <summary>
@@ -54,7 +63,7 @@ namespace PTK
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return PTK.Properties.Resources.ico_localanalysis;
+                return PTK.Properties.Resources.ico_global;
             }
         }
 
@@ -63,7 +72,7 @@ namespace PTK
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("9b623fe7-191b-4163-800c-2cb85fef0c2b"); }
+            get { return new Guid("3cf82ec9-1233-4aa7-b233-a467fcf8c41b"); }
         }
     }
 }

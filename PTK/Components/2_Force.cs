@@ -6,12 +6,12 @@ using Rhino.Geometry;
 
 namespace PTK
 {
-    public class PTK_1_5_Forces : GH_Component
+    public class PTK_2_Force : GH_Component
     {
-        public PTK_1_5_Forces()
+        public PTK_2_Force()
           : base("Force", "Force",
               "Adding forces here if data allready is provided ",
-              CommonProps.category, CommonProps.subcate4)
+              CommonProps.category, CommonProps.subcate2)
         {
             Message = CommonProps.initialMessage;
         }

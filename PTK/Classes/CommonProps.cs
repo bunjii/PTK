@@ -12,11 +12,15 @@ namespace PTK
         public static double tolerances = 0.001;
         public static readonly string category = "PTK";
         public static readonly string subcate0 = "Param";
-        public static readonly string subcate1 = "Assemble";
-        public static readonly string subcate2 = "Materialize";
-        public static readonly string subcate3 = "Detail";
-        public static readonly string subcate4 = "Structure";
-        public static readonly string subcate5 = "Utility";
+        public static readonly string subcate1 = "Material";
+        public static readonly string subcate2 = "MakeElement";
+        public static readonly string subcate3 = "MakeAssembly";
+        public static readonly string subcate4 = "MakeModel";
+        public static readonly string subcate5 = "StructualAnalysis";
+        public static readonly string subcate6 = "Visualize";
+        public static readonly string subcate7 = "Export";
+        public static readonly string subcate8 = "Utility";
+        public static readonly string subcate9 = "Tool";
         public static readonly string initialMessage = "PTK Ver.0.5";
         #endregion
 

@@ -6,12 +6,12 @@ using Rhino.Geometry;
 
 namespace PTK
 {
-    public class PTK_2_1_PointLoad : GH_Component
+    public class PTK_3_PointLoad : GH_Component
     {
-        public PTK_2_1_PointLoad()
+        public PTK_3_PointLoad()
             : base("PointLoad", "PointLoad",
                 "Add load here",
-                CommonProps.category, CommonProps.subcate4)
+                CommonProps.category, CommonProps.subcate3)
         {
             Message = CommonProps.initialMessage;
         }

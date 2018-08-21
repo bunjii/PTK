@@ -5,12 +5,12 @@ using System;
 
 namespace PTK
 {
-    public class PTK_1_2_2_Material_Props : GH_Component
+    public class PTK_1_StructuralMaterialProp : GH_Component
     {
-        public PTK_1_2_2_Material_Props()
+        public PTK_1_StructuralMaterialProp()
           : base("Material Structural Prop", "MatStrProp",
               "creates material properties",
-              CommonProps.category, CommonProps.subcate2)
+              CommonProps.category, CommonProps.subcate1)
         {
             Message = CommonProps.initialMessage;
         }

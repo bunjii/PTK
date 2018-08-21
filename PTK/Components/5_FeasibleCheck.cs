@@ -6,15 +6,15 @@ using Rhino.Geometry;
 
 namespace PTK
 {
-    public class PTK_6_1_Detailing : GH_Component
+    public class PTK_5_FeasibleCheck : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the PTK_C_07 class.
+        /// Initializes a new instance of the PTK_C_05 class.
         /// </summary>
-        public PTK_6_1_Detailing()
-          : base("DETAIL A (PTK)", "DETAIL A",
-              "DETAIL A",
-              CommonProps.category, CommonProps.subcate3)
+        public PTK_5_FeasibleCheck()
+          : base("FEASIBILITY CHECK", "IsFeasible",
+              "FEASIBILITY CHECK",
+              CommonProps.category, CommonProps.subcate5)
         {
             Message = CommonProps.initialMessage;
         }
@@ -25,7 +25,6 @@ namespace PTK
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("PTK Assembly", "A (PTK)", "PTK DATA INPUT", GH_ParamAccess.item);
-            pManager.AddGenericParameter("SEL NODE", "SEL NODE", "PTK LOGIC OF MAKING DETAILS", GH_ParamAccess.item);
 
         }
 
@@ -34,8 +33,8 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK LOGIC", "LOGIC (PTK)", "LOGIC (PTK)", GH_ParamAccess.item);
-
+            pManager.AddBooleanParameter("FEASIBLE?", "FEASIBLE?", "FEASIBILITY CHECK RESULT", GH_ParamAccess.item);
+            
         }
 
         /// <summary>
@@ -55,7 +54,7 @@ namespace PTK
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return PTK.Properties.Resources.ico_detailing;
+                return PTK.Properties.Resources.ico_feasible;
 
             }
         }
@@ -65,7 +64,7 @@ namespace PTK
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("d8643dc4-2a9f-4573-920f-4e808275b29b"); }
+            get { return new Guid("9f6403f8-874c-41f8-87ef-6b908c862f2a"); }
         }
     }
 }

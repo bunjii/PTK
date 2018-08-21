@@ -16,13 +16,13 @@ using System.Windows.Forms;
 namespace PTK
 {
 
-    public class PTK_4_1_1_StructualAssembly : GH_Component
+    public class PTK_3StructualAssembly : GH_Component
     {
 
-        public PTK_4_1_1_StructualAssembly()
+        public PTK_3StructualAssembly()
           : base("Structual Assembly", "Str Assembly",
               "StructualAssembly",
-              CommonProps.category, CommonProps.subcate1)
+              CommonProps.category, CommonProps.subcate3)
         {
             Message = CommonProps.initialMessage;
         }

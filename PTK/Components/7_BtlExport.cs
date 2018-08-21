@@ -6,15 +6,15 @@ using Rhino.Geometry;
 
 namespace PTK
 {
-    public class PTK_7_StrSummarize : GH_Component
+    public class PTK_7_BtlExport : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the PTK_C_04 class.
+        /// Initializes a new instance of the PTK_C_06 class.
         /// </summary>
-        public PTK_7_StrSummarize()
-          : base("Structural Report (PTK)", "Str Report",
-              "Summarizing Structure",
-              CommonProps.category, CommonProps.subcate4)
+        public PTK_7_BtlExport()
+          : base("BTL EXPORTER (PTK)", "Export BTL",
+              "Exporting BTL file to the designated location",
+              CommonProps.category, CommonProps.subcate7)
         {
             Message = CommonProps.initialMessage;
         }
@@ -25,7 +25,8 @@ namespace PTK
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("PTK Assembly", "A (PTK)", "PTK DATA INPUT", GH_ParamAccess.item);
-
+            pManager.AddTextParameter("File Path", "Path", "FILE LOCATION OF EXPORTED BTL FILE", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("Enable?", "Enable?", "ENABLE EXPORTING?", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -33,8 +34,6 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            // pManager.AddGenericParameter("PTK OUTPUT", "PTK OUT", "PTK OUTPUT", GH_ParamAccess.item);
-
         }
 
         /// <summary>
@@ -43,7 +42,6 @@ namespace PTK
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-
         }
 
         /// <summary>
@@ -55,7 +53,8 @@ namespace PTK
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return PTK.Properties.Resources.ico_summary;
+                return PTK.Properties.Resources.ico_BTL;
+
             }
         }
 
@@ -64,7 +63,7 @@ namespace PTK
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("a5f449bf-12d6-4019-8bbe-19a6bb01f280"); }
+            get { return new Guid("a638c80f-bcd6-4ecd-a075-9dc9a9c73a98"); }
         }
     }
 }

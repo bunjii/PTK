@@ -9,12 +9,12 @@ using Rhino.Geometry;
 
 namespace PTK
 {
-    public class PTK_U_2_Disassemble : GH_Component
+    public class PTK_U_Disassemble : GH_Component
     {
-        public PTK_U_2_Disassemble()
+        public PTK_U_Disassemble()
           : base("Disassemble", "Disassemble",
               "Disassemble PTK Assemble Model",
-              CommonProps.category, CommonProps.subcate5)
+              CommonProps.category, CommonProps.subcate8)
         {
             Message = CommonProps.initialMessage;
         }

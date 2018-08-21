@@ -6,15 +6,15 @@ using Rhino.Geometry;
 
 namespace PTK
 {
-    public class PTK_9_BtlExport : GH_Component
+    public class PTK_4_DetailModel : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the PTK_C_06 class.
+        /// Initializes a new instance of the PTK_C_07 class.
         /// </summary>
-        public PTK_9_BtlExport()
-          : base("BTL EXPORTER (PTK)", "Export BTL",
-              "Exporting BTL file to the designated location",
-              CommonProps.category, CommonProps.subcate5)
+        public PTK_4_DetailModel()
+          : base("DETAIL A (PTK)", "DETAIL A",
+              "DETAIL A",
+              CommonProps.category, CommonProps.subcate4)
         {
             Message = CommonProps.initialMessage;
         }
@@ -25,8 +25,8 @@ namespace PTK
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("PTK Assembly", "A (PTK)", "PTK DATA INPUT", GH_ParamAccess.item);
-            pManager.AddTextParameter("File Path", "Path", "FILE LOCATION OF EXPORTED BTL FILE", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("Enable?", "Enable?", "ENABLE EXPORTING?", GH_ParamAccess.item);
+            pManager.AddGenericParameter("SEL NODE", "SEL NODE", "PTK LOGIC OF MAKING DETAILS", GH_ParamAccess.item);
+
         }
 
         /// <summary>
@@ -34,6 +34,8 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
+            pManager.AddGenericParameter("PTK LOGIC", "LOGIC (PTK)", "LOGIC (PTK)", GH_ParamAccess.item);
+
         }
 
         /// <summary>
@@ -53,7 +55,7 @@ namespace PTK
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return PTK.Properties.Resources.ico_BTL;
+                return PTK.Properties.Resources.ico_detailing;
 
             }
         }
@@ -63,7 +65,7 @@ namespace PTK
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("a638c80f-bcd6-4ecd-a075-9dc9a9c73a98"); }
+            get { return new Guid("d8643dc4-2a9f-4573-920f-4e808275b29b"); }
         }
     }
 }

@@ -6,9 +6,9 @@ using Rhino.Geometry;
 
 namespace PTK.Components
 {
-    public class PTK_3_2_StructuralElement : GH_Component
+    public class PTK_2_StructuralElement : GH_Component
     {
-        public PTK_3_2_StructuralElement()
+        public PTK_2_StructuralElement()
           : base("Structural Element", "Str Element",
               "creates a beam element.",
               CommonProps.category, CommonProps.subcate2)

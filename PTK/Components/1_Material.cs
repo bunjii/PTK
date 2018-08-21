@@ -8,12 +8,12 @@ using Rhino.Geometry;
 
 namespace PTK
 {
-    public class PTK_1_1_Material : GH_Component
+    public class PTK_1_Material : GH_Component
     {
 
-        public PTK_1_1_Material()
+        public PTK_1_Material()
           : base("Material", "Mat","Create a Material",
-              CommonProps.category, CommonProps.subcate2)
+              CommonProps.category, CommonProps.subcate1)
         {
             Message = CommonProps.initialMessage;
         }
@@ -21,7 +21,7 @@ namespace PTK
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddTextParameter("Name","N", "Material Name", GH_ParamAccess.item);
-            pManager.AddParameter(new Param_MaterialStructuralProp(), "Structural Material Properties", "SMP", "Add material properties here", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_MaterialStructuralProp(), "Structural Material Prop", "SMP", "Add material properties here", GH_ParamAccess.item);
         }
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)

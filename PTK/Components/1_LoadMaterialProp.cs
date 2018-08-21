@@ -11,12 +11,12 @@ using Grasshopper.Kernel.Data;
 
 namespace PTK
 {
-    public class PTK_1_2_1_LoadMatProps : GH_Component
+    public class PTK_1_LoadStructuralMaterialProp : GH_Component
     {
-        public PTK_1_2_1_LoadMatProps()
+        public PTK_1_LoadStructuralMaterialProp()
           : base("Load Structural Material Prop", "Load SMP",
               "loads material properties from Tree.",
-              CommonProps.category, CommonProps.subcate2)
+              CommonProps.category, CommonProps.subcate1)
         {
             Message = CommonProps.initialMessage;
         }
@@ -109,12 +109,12 @@ namespace PTK
                 if (envDs == DecimalSeparator.comma && csvDs == DecimalSeparator.period)
                 {
                     // if csv includes "period", it needs treatment
-                    convertedTxt = Functions_DDL.ConvertCommaToPeriodDecimal(nlist[i], true);
+                    convertedTxt = Functions.ConvertCommaToPeriodDecimal(nlist[i], true);
                 }
                 else if (envDs == DecimalSeparator.period && csvDs == DecimalSeparator.comma)
                 {
                     // if csv includes "comma", it needs treatment
-                    convertedTxt = Functions_DDL.ConvertCommaToPeriodDecimal(nlist[i], false);
+                    convertedTxt = Functions.ConvertCommaToPeriodDecimal(nlist[i], false);
                 }
                 else
                 {

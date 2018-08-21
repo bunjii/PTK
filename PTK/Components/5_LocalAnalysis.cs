@@ -6,15 +6,15 @@ using Rhino.Geometry;
 
 namespace PTK
 {
-    public class PTK_8_FeasibleCheck : GH_Component
+    public class PTK_5_LocalAnalysis : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the PTK_C_05 class.
+        /// Initializes a new instance of the PTK_C_03 class.
         /// </summary>
-        public PTK_8_FeasibleCheck()
-          : base("FEASIBILITY CHECK", "IsFeasible",
-              "FEASIBILITY CHECK",
-              CommonProps.category, CommonProps.subcate4)
+        public PTK_5_LocalAnalysis()
+          : base("Local Analysis (PTK)", "Local Analysis",
+              "Local Analysis",
+              CommonProps.category, CommonProps.subcate5)
         {
             Message = CommonProps.initialMessage;
         }
@@ -33,8 +33,8 @@ namespace PTK
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddBooleanParameter("FEASIBLE?", "FEASIBLE?", "FEASIBILITY CHECK RESULT", GH_ParamAccess.item);
-            
+            pManager.AddGenericParameter("PTK Local Analysis", "LA (PTK)", "PTK Local Analysis", GH_ParamAccess.item);
+
         }
 
         /// <summary>
@@ -54,8 +54,7 @@ namespace PTK
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return PTK.Properties.Resources.ico_feasible;
-
+                return PTK.Properties.Resources.ico_localanalysis;
             }
         }
 
@@ -64,7 +63,7 @@ namespace PTK
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("9f6403f8-874c-41f8-87ef-6b908c862f2a"); }
+            get { return new Guid("9b623fe7-191b-4163-800c-2cb85fef0c2b"); }
         }
     }
 }

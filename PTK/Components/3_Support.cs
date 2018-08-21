@@ -15,16 +15,16 @@ using Rhino.Geometry;
 namespace PTK
 {
 
-    public class PTK_2_2_Supports : GH_Component
+    public class PTK_3_Support : GH_Component
     {
         
         private string boolSupString = "";
         private bool[] boolSupArray = { false, false, false, false, false, false }; // six degrees of freedom
         
-        public PTK_2_2_Supports()
+        public PTK_3_Support()
           : base("Support", "Support",
               "Add Supports Conditions here",
-              CommonProps.category, CommonProps.subcate4)
+              CommonProps.category, CommonProps.subcate3)
         {
             //Message = CommonProps.initialMessage;
         }
@@ -73,7 +73,7 @@ namespace PTK
             m_attributes = new Attributes_Custom(this);
         }
 
-        public static void Menu_CustomOnClick(PTK_2_2_Supports _comp)
+        public static void Menu_CustomOnClick(PTK_3_Support _comp)
         {
             if (_comp.boolSupString == "") _comp.boolSupString = "000000";
             Forms.F01_Supports frm = new Forms.F01_Supports(_comp.boolSupString);
@@ -130,7 +130,7 @@ namespace PTK
                     RectangleF rec = ButtonBounds;
                     if (rec.Contains(e.CanvasLocation))
                     {
-                        Menu_CustomOnClick((PTK_2_2_Supports)Owner);
+                        Menu_CustomOnClick((PTK_3_Support)Owner);
                         return GH_ObjectResponse.Handled;
                     }
                 }
