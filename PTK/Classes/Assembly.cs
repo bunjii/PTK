@@ -124,7 +124,7 @@ namespace PTK
             }
         }
         
-        public List<double> SearchNodeParamAtElement(Element1D _element)
+        public List<double> SearchNodeParamsAtElement(Element1D _element)
         {
             List<double> param = new List<double>();
             if (NodeMap.ContainsKey(_element))
@@ -140,6 +140,8 @@ namespace PTK
 
             return param;
         }
+
+        
 
         public Assembly DeepCopy()
         {

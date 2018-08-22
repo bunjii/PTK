@@ -55,4 +55,10 @@ namespace PTK
     {
         Center, Left, Right
     }
+
+    public enum DetailType
+    {
+        LType, TType, XType
+    }
+
 }

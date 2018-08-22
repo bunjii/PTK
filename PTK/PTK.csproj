@@ -88,6 +88,7 @@
     <Compile Include="Components\2_Force.cs" />
     <Compile Include="Classes\Force.cs" />
     <Compile Include="Components\6_PreviewElement.cs" />
+    <Compile Include="Classes\DetailModel.cs" />
     <Compile Include="Forms\F01_Supports.cs">
       <SubType>Form</SubType>
     </Compile>

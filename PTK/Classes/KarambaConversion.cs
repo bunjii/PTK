@@ -60,7 +60,7 @@ namespace PTK
 
             foreach(StructuralElement e in _strAss.SElements)
             {
-                var paramList = _strAss.Assembly.SearchNodeParamAtElement(e.Element);
+                var paramList = _strAss.Assembly.SearchNodeParamsAtElement(e.Element);
                 for (int i = 0; i <= paramList.Count-2; i++ )
                 {
                     var elem = new Karamba.Elements.GrassBeam(e.Element.BaseCurve.PointAt(paramList[i]), e.Element.BaseCurve.PointAt(paramList[i + 1]));

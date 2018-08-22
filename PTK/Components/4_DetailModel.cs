@@ -8,12 +8,10 @@ namespace PTK
 {
     public class PTK_4_DetailModel : GH_Component
     {
-        /// <summary>
-        /// Initializes a new instance of the PTK_C_07 class.
-        /// </summary>
+
         public PTK_4_DetailModel()
-          : base("DETAIL A (PTK)", "DETAIL A",
-              "DETAIL A",
+          : base("Detail Model", "Detail Model",
+              "Detail Model",
               CommonProps.category, CommonProps.subcate4)
         {
             Message = CommonProps.initialMessage;
