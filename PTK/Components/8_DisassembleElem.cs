@@ -12,12 +12,12 @@ using System.Windows.Forms;
 
 namespace PTK
 {
-    public class PTK_U_4 : GH_Component
+    public class PTK_8_DisassembleElement : GH_Component
     {
-        public PTK_U_4()
+        public PTK_8_DisassembleElement()
           : base("Disassemble Element", "X Element",
               "Disassemble Element (PTK)",
-              CommonProps.category, CommonProps.subcate5)
+              CommonProps.category, CommonProps.subcate8)
         {
             Message = CommonProps.initialMessage;
         }

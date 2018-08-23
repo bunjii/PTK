@@ -10,12 +10,12 @@ using System.Collections.Generic;
 
 namespace PTK
 {
-    public class PTK_U_3 : GH_Component
+    public class PTK_8_DisassembleNode : GH_Component
     {
-        public PTK_U_3()
+        public PTK_8_DisassembleNode()
           : base("Disassemble Node", "X Node",
               "Disassemble Node (PTK)",
-              CommonProps.category, CommonProps.subcate5)
+              CommonProps.category, CommonProps.subcate8)
         {
             Message = CommonProps.initialMessage;
         }

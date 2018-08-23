@@ -8,7 +8,7 @@ namespace PTK
 {
     public static class CommonProps
     {
-        public static double tolerances = 0.001;
+        public static double tolerances = Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance;
         public static readonly string category = "PTK";
         public static readonly string subcate0 = "Param";
         public static readonly string subcate1 = "Material";

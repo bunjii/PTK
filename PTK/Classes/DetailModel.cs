@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 
 namespace PTK
 {
@@ -47,7 +49,7 @@ namespace PTK
             Priority = _priorityText.Split(',').ToList();
         }
 
-        public void SearchDetails()
+        public bool SearchDetails()
         {
             foreach(Node n in Assembly.Nodes)
             {
@@ -55,8 +57,27 @@ namespace PTK
                 //指定したノードに属するエレメントの一覧
                 List<Element1D> detailElems = Assembly.NodeMap.Where(p => p.Value.Contains(ind)).ToList().ConvertAll(p => p.Key);
                 Details.Add(new Detail(n));
-                Details.Last().SetElements(detailElems, Priority);
+                if(!Details.Last().SetElements(detailElems, Priority))
+                {
+                    return false;
+                }
             }
+            return true;
+        }
+
+        public PriorityModel DeepCopy()
+        {
+            return (PriorityModel)base.MemberwiseClone();
+        }
+        public override string ToString()
+        {
+            string info;
+            info = "<PriorityModel> Details:" + Details.Count.ToString();
+            return info;
+        }
+        public bool IsValid()
+        {
+            return Details.Count != 0;
         }
     }
 
@@ -66,8 +87,8 @@ namespace PTK
         public Node Node { get; private set; }
         //public List<Element1D> Elements { get; private set; }
         public Dictionary<Element1D,int> ElementsPriorityMap { get; private set; }
+        public DetailType Type { get; private set; }
         //private int crossElementNum = 0;
-        private DetailType type;
 
         public Detail()
         {
@@ -87,7 +108,7 @@ namespace PTK
 
             if (crossElements.Count >= 2)
             {
-                type = DetailType.XType;
+                Type = DetailType.XType;
                 if (!SortElementsByPriority(ref crossElements, _priority))
                 {
                     return false;
@@ -95,11 +116,11 @@ namespace PTK
             }
             else if(crossElements.Count == 1)
             {
-                type = DetailType.TType;
+                Type = DetailType.TType;
             }
             else
             {
-                type = DetailType.LType;
+                Type = DetailType.LType;
             }
             if (cornerElements.Count >= 2)
             {
@@ -108,7 +129,28 @@ namespace PTK
                     return false;
                 }
             }
-            //List<Element1D> elements = crossElements.
+
+            string preTag = "";
+            int priorityIndex = 0;
+            foreach(Element1D e in crossElements)
+            {
+                if (preTag != e.Tag)
+                {
+                    preTag = e.Tag;
+                    priorityIndex++;
+                }
+                ElementsPriorityMap[e] = priorityIndex;
+            }
+            preTag = "";    //CrossElementとCornerElementが同じタグだったときのため
+            foreach(Element1D e in cornerElements)
+            {
+                if (preTag != e.Tag)
+                {
+                    preTag = e.Tag;
+                    priorityIndex++;
+                }
+                ElementsPriorityMap[e] = priorityIndex;
+            }
             return true;
         }
 
@@ -131,17 +173,59 @@ namespace PTK
             }
         }
 
-        //private int CountPriorityHigherElemenrt(Element1D _element, )
-
-        //private void InsertElementPriorityMap(Element1D _element,int )
-
         private bool IsNodeEndPointAtElement(Element1D _element)
         {
-            if (_element.BaseCurve.PointAtStart == Node.Point || _element.BaseCurve.PointAtEnd == Node.Point)
+            if ( Node.Point.DistanceTo(_element.BaseCurve.PointAtStart)<=CommonProps.tolerances ||
+                Node.Point.DistanceTo(_element.BaseCurve.PointAtEnd) <= CommonProps.tolerances)
             {
                 return true;
             }
             return false;
+        }
+
+        public double SearchNodeParamAtElement(Element1D _element)
+        {
+            double p;
+            _element.BaseCurve.ClosestPoint(Node.Point, out p);
+            return p;
+        }
+    }
+
+
+    public class GH_PriorityModel : GH_Goo<PriorityModel>
+    {
+        public GH_PriorityModel() { }
+        public GH_PriorityModel(GH_PriorityModel other) : base(other.Value) { this.Value = other.Value.DeepCopy(); }
+        public GH_PriorityModel(PriorityModel ass) : base(ass) { this.Value = ass; }
+        public override IGH_Goo Duplicate()
+        {
+            return new GH_PriorityModel(this);
+        }
+        public override bool IsValid => base.m_value.IsValid();
+        public override string TypeName => "PriorityModel";
+        public override string TypeDescription => "A model prioritized for mating members";
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
+    }
+
+    public class Param_PriorityModel : GH_PersistentParam<GH_PriorityModel>
+    {
+        public Param_PriorityModel() : base(new GH_InstanceDescription("PriorityModel", "PriorityModel", "A model prioritized for mating members", CommonProps.category, CommonProps.subcate0)) { }
+
+        protected override System.Drawing.Bitmap Icon { get { return null; } }  //クラスにアイコンを付けたい場合はここ
+
+        public override Guid ComponentGuid => new Guid("0A29F71C-B30D-4244-82CB-1A5ADCD38FC6");
+
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_PriorityModel> values)
+        {
+            return GH_GetterResult.success;
+        }
+
+        protected override GH_GetterResult Prompt_Singular(ref GH_PriorityModel value)
+        {
+            return GH_GetterResult.success;
         }
     }
 }

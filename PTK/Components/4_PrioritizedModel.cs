@@ -31,14 +31,27 @@ namespace PTK
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("PTK Assembly", "A (PTK)", "PTK Assembly", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_PriorityModel(), "PriorityModel", "PM", "A model prioritized for mating members", GH_ParamAccess.item);
             // pManager.AddLineParameter("lines", "lines", "lines", GH_ParamAccess.list);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            
+            GH_Assembly gAssembly = null;
+            //PriorityModel priorityModel = new PriorityModel();
+            string priority = "";
 
+            if (!DA.GetData(0, ref gAssembly)) { return; }
+            PriorityModel priorityModel = new PriorityModel(gAssembly.Value);
+            DA.GetData(1, ref priority);
+
+            priorityModel.SetPriority(priority);
+            if (!priorityModel.SearchDetails())
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The condition of the priority is insufficient");
+            }
+
+            DA.SetData(0, new GH_PriorityModel(priorityModel));
         }
 
 
