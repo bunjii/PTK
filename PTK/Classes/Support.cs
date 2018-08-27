@@ -92,7 +92,7 @@ namespace PTK
     {
         public Param_Support() : base(new GH_InstanceDescription("Support", "Spp", "The plane of the fixed point and the constraint condition", CommonProps.category, CommonProps.subcate0)) { }
 
-        protected override System.Drawing.Bitmap Icon { get { return null; } }  //クラスにアイコンを付けたい場合はここ
+        protected override System.Drawing.Bitmap Icon { get { return null; } }  //Set icon image
 
         public override Guid ComponentGuid => new Guid("6426D65C-7B2A-4B08-9A58-5547B627C7B0");
 

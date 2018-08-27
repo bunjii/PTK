@@ -68,19 +68,19 @@ namespace PTK
                 NodeMap.Add(_element, new List<int>());
             }
 
-            //エレメントの両端をノードとして登録
+            //Register both ends of the element as nodes
             AddPointToNodeMap(_element, _element.PointAtStart);
             AddPointToNodeMap(_element, _element.PointAtEnd);
 
-            //他エレメントとの交点をノードとして登録
-            foreach(Element1D otherElem in Elements.FindAll(e => e.IsIntersectWithOther == true))
+            //Register intersection with other elements as a node
+            foreach (Element1D otherElem in Elements.FindAll(e => e.IsIntersectWithOther == true))
             {
                 var events = Intersection.CurveCurve(otherElem.BaseCurve, _element.BaseCurve, Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance, 0.0);
                 if(events != null)
                 {
                     foreach(IntersectionEvent e in events)
                     {
-                        if (!_element.IsIntersectWithOther) //他部材と交差しないときは端点交差のみ検出
+                        if (!_element.IsIntersectWithOther) //When it does not intersect with another member, only endpoint contact is detected
                         {
                             if (e.PointA == _element.BaseCurve.PointAtStart || e.PointA == _element.BaseCurve.PointAtEnd)
                             {
@@ -91,7 +91,7 @@ namespace PTK
                         {
                             AddPointToNodeMap(_element, e.PointA);
                             AddPointToNodeMap(otherElem, e.PointA);
-                            if (e.IsOverlap)    //重複が区間の場合
+                            if (e.IsOverlap)    //When overlap is an interval
                             {
                                 AddPointToNodeMap(_element, e.PointA2);
                                 AddPointToNodeMap(otherElem, e.PointA2);
@@ -109,14 +109,14 @@ namespace PTK
 
         private void AddPointToNodeMap(Element1D _element, Point3d _point)
         {
-            if (!Nodes.Exists(n => n.Equals(_point)))   //その位置にノードが無い場合
+            if (!Nodes.Exists(n => n.Equals(_point)))   //When there is no node at that position
             {
                 Nodes.Add(new Node(_point));
                 NodeMap[_element].Add(Nodes.Count-1);
             }
             else
             {
-                int ind = Nodes.FindIndex(n => n.Equals(_point));   //すでにノードがある場合、そのインデックス
+                int ind = Nodes.FindIndex(n => n.Equals(_point));   //If there is already a node, its index
                 if (!NodeMap[_element].Contains(ind))
                 {
                     NodeMap[_element].Add(ind);
@@ -251,7 +251,7 @@ namespace PTK
     {
         public Param_Assembly() : base(new GH_InstanceDescription("Assembly", "Assembly", "A model that gathers elements and has intersection points", CommonProps.category, CommonProps.subcate0)) { }
 
-        protected override System.Drawing.Bitmap Icon { get { return null; } }  //クラスにアイコンを付けたい場合はここ
+        protected override System.Drawing.Bitmap Icon { get { return null; } }  //Set icon image
 
         public override Guid ComponentGuid => new Guid("E49369AA-4F29-498E-9808-E3197929FF51");
 
@@ -287,7 +287,7 @@ namespace PTK
     {
         public Param_StructuralAssembly() : base(new GH_InstanceDescription("StructuralAssembly", "StructuralAssembly", "A model that gathers elements and has intersection points", CommonProps.category, CommonProps.subcate0)) { }
 
-        protected override System.Drawing.Bitmap Icon { get { return null; } }  //クラスにアイコンを付けたい場合はここ
+        protected override System.Drawing.Bitmap Icon { get { return null; } }  //Set icon image
 
         public override Guid ComponentGuid => new Guid("4B468C32-EC87-47F8-A995-0832EDADEBA0");
 

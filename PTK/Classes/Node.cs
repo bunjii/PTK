@@ -95,7 +95,7 @@ namespace PTK
     {
         public Param_Node() : base(new GH_InstanceDescription("Node", "Node", "Description", CommonProps.category, CommonProps.subcate0)) { }
 
-        protected override System.Drawing.Bitmap Icon { get { return null; } }  //クラスにアイコンを付けたい場合はここ
+        protected override System.Drawing.Bitmap Icon { get { return null; } }  //Set icon image
 
         public override Guid ComponentGuid => new Guid("08b7c467-367e-4a25-856b-fae990bfd78a");
 

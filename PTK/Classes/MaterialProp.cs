@@ -120,7 +120,7 @@ namespace PTK
     {
         public Param_MaterialStructuralProp() : base(new GH_InstanceDescription("MaterialStructuralProp", "MatStruct", "Material properties for structural calculation", CommonProps.category, CommonProps.subcate0)) { }
 
-        protected override System.Drawing.Bitmap Icon { get { return null; } }  //クラスにアイコンを付けたい場合はここ
+        protected override System.Drawing.Bitmap Icon { get { return null; } }  //Set icon image
 
         public override Guid ComponentGuid => new Guid("248D46D3-6995-4CE8-AAD6-D30E99E6C493");
 

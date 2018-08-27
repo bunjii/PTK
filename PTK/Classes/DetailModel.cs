@@ -54,7 +54,7 @@ namespace PTK
             foreach(Node n in Assembly.Nodes)
             {
                 int ind = Assembly.Nodes.IndexOf(n);
-                //指定したノードに属するエレメントの一覧
+                //List of elements belonging to the specified node
                 List<Element1D> detailElems = Assembly.NodeMap.Where(p => p.Value.Contains(ind)).ToList().ConvertAll(p => p.Key);
                 Details.Add(new Detail(n));
                 if(!Details.Last().SetElements(detailElems, Priority))
@@ -81,7 +81,6 @@ namespace PTK
         }
     }
 
-    //納まりのクラス
     public class Detail
     {
         public Node Node { get; private set; }
@@ -141,8 +140,8 @@ namespace PTK
                 }
                 ElementsPriorityMap[e] = priorityIndex;
             }
-            preTag = "";    //CrossElementとCornerElementが同じタグだったときのため
-            foreach(Element1D e in cornerElements)
+            preTag = "";    //When CrossElement and CornerElement are the same tag
+            foreach (Element1D e in cornerElements)
             {
                 if (preTag != e.Tag)
                 {
@@ -156,12 +155,12 @@ namespace PTK
 
         private bool SortElementsByPriority(ref List<Element1D> _elements, List<string> _priority)
         {
-            //優先度による並び替えが必要ない場合
+            //When rearranging by priority is not necessary
             if (_elements.Count <= 1 || _elements.ConvertAll(e => e.Tag).Distinct().Count() <= 1)
             {
                 return true;
             }
-            //優先づけすべきElementが、全てpriority入力されているか
+            //Whether all Elements to be prioritized are input with priority
             if (_elements.ConvertAll(e => e.Tag).Except(_priority).Count() == 0)
             {
                 _elements = _elements.OrderBy(e => _priority.IndexOf(e.Tag)).ToList();
@@ -214,7 +213,7 @@ namespace PTK
     {
         public Param_PriorityModel() : base(new GH_InstanceDescription("PriorityModel", "PriorityModel", "A model prioritized for mating members", CommonProps.category, CommonProps.subcate0)) { }
 
-        protected override System.Drawing.Bitmap Icon { get { return null; } }  //クラスにアイコンを付けたい場合はここ
+        protected override System.Drawing.Bitmap Icon { get { return null; } }  //Set icon image
 
         public override Guid ComponentGuid => new Guid("0A29F71C-B30D-4244-82CB-1A5ADCD38FC6");
 
