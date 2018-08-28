@@ -1,0 +1,15 @@
+1) Moving structural element to become an input for Element
+2) Adding optional Composite Component
+          - Enables option of multiple cross-sections/composites pr element group
+          - If cross-section is inputeted to element, it will become a "composite" with one part
+          - Enables alignment of composite
+3) Node Group component is added on the left side of the assembly.
+4) Node Property component connects to NodeGroup
+5) Support is moved to Detailing Group
+6) Added 3 Group Property Descriptions (Length, name, amount)
+7) Rearrenged order: Assembly->Global Analisys->Detailing->Output
+8) Added components for extracting detailing properties
+            Assembly->DetailingGroup->Element/Node->Property
+9) Added Cut/Drill/Pocket component
+10)  Renamed output/inputs to Assembly (Proposal: Output/Input is assembly that are being incrementally informed by global analysis and detailing
+11) Detailed model is able to have 4 outputs: Local Analysis, Feasability check, Brep Model, Export BTL 
