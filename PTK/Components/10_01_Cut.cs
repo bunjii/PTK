@@ -151,7 +151,7 @@ namespace PTK.Components
                         JackRafterCut.Orientation = orientation;
                         JackRafterCut.ReferencePlaneID = 1;
                         JackRafterCut.Process = BooleanType.yes;
-                        JackRafterCut.StartX = refEdge.From.DistanceTo(intersectPoint);
+                        JackRafterCut.StartX = refEdge.From.DistanceTo(intersectPoint); // should support "negative" distance
                         JackRafterCut.StartY = 0.0;
                         JackRafterCut.StartDepth = 0.0;
                         JackRafterCut.Angle = Vector3d.VectorAngle(RefVector, cutPlane.XAxis);

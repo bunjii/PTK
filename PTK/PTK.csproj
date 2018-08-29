@@ -293,6 +293,7 @@ Erase "$(TargetPath)"</PostBuildEvent>
     <WarningLevel>2</WarningLevel>
     <NoWarn>
     </NoWarn>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>

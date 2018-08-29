@@ -14,7 +14,7 @@ namespace PTK
         private string name;
         private Descriptions trueDescriptions;
         private Descriptions falseDescriptions;
-        private List<Detail> details;
+        private List<Detail> details; // A detail is a node and its elems or a elem and its nodes. A detail should then be a list of elemID and a list of NodeID
         private List<MethodDelegate> mergeVerifierTrue;  //Methods that verify if a detail belong to this detailing group. If all methods return true, then detail belongs to group
 
 

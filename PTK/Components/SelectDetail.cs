@@ -3,7 +3,9 @@ using System.Collections.Generic;
 
 using Grasshopper.Kernel;
 using Rhino.Geometry;
-using System.Linq; 
+using System.Linq;
+using Grasshopper;
+
 
 namespace PTK.Components
 {
@@ -26,6 +28,7 @@ namespace PTK.Components
         {
             pManager.AddTextParameter("DetailingGroupName", "", "", GH_ParamAccess.item);
             pManager.AddGenericParameter("PTK Assembly", "PTK A", "PTK Assembly", GH_ParamAccess.item);
+            pManager.AddIntegerParameter("Sorting rule","SR","0=Structural, 1=Alphabetical, 2=Clockvize(based on nodeplane)",GH_ParamAccess.item);
             // pManager.AddGenericParameter("PTK LOGIC", "PTK LOGIC", "COLLECTIONS OF DETAIL SELECTIONS", GH_ParamAccess.item);
 
         }
@@ -37,11 +40,7 @@ namespace PTK.Components
         {
             //This output would be nice to be variable for PTK1.0
             pManager.AddGenericParameter("N", "Node", "", GH_ParamAccess.list);
-            pManager.AddGenericParameter("E0", "Elem0", "", GH_ParamAccess.list);
-            pManager.AddGenericParameter("E1", "Elem1", "", GH_ParamAccess.list);
-            pManager.AddGenericParameter("E2", "Elem2", "", GH_ParamAccess.list);
-            pManager.AddGenericParameter("E3", "Elem3", "", GH_ParamAccess.list); 
-            pManager.AddGenericParameter("E4", "Elem4", "", GH_ParamAccess.list);
+            pManager.AddGenericParameter("ElementTree", "", "", GH_ParamAccess.tree);
 
             
             
@@ -67,18 +66,20 @@ namespace PTK.Components
             List<Detail> Details = assemble.DetailingGroups.Find(t => t.Name == Name).Details;
 
             List<Node> Nodes = new List<Node>();
-            List<PTK_Element> Elements0 = new List<PTK_Element>();
-            List<PTK_Element> Elements1 = new List<PTK_Element>();
-            List<PTK_Element> Elements2 = new List<PTK_Element>();
-            List<PTK_Element> Elements3 = new List<PTK_Element>();
-            List<PTK_Element> Elements4 = new List<PTK_Element>();
+
+
+            DataTree<PTK_Element> ElementTree = new DataTree<PTK_Element>();
+
 
             //The next one is stupid code, but did not find a better solution. The idea is to output each element of the detail in different output. The challenge is that the element-count varies
+
+            int branchindex = 0;
             foreach (Detail Detail in Details)
             {
                 List<PTK_Element> elemsInDetail = new List<PTK_Element>();
-                for (int i = 0; i<Detail.ElemsIds.Count; i++)
+                for (int i = 0; i < Detail.ElemsIds.Count; i++)
                 {
+
                     elemsInDetail.Add(assemble.Elems.Find(t => t.Id == Detail.ElemsIds[i]));
                 }
 
@@ -86,35 +87,17 @@ namespace PTK.Components
 
                 elemsInDetail = elemsInDetail.OrderBy(t => -t.Priority).ToList();
 
+                ElementTree.AddRange(elemsInDetail, new Grasshopper.Kernel.Data.GH_Path(branchindex));
 
-                if (elemsInDetail.Count > 0)
-                {
-                    Elements0.Add(elemsInDetail[0]);
-                }
-                if (elemsInDetail.Count > 1)
-                {
-                    Elements1.Add(elemsInDetail[1]);
-                }
-                if (elemsInDetail.Count > 2)
-                {
-                    Elements2.Add(elemsInDetail[2]);
-                }
-                if (elemsInDetail.Count > 3)
-                {
-                    Elements3.Add(elemsInDetail[3]);
-                }
-                if (elemsInDetail.Count > 4)
-                {
-                    Elements4.Add(elemsInDetail[4]);
-                }
+                branchindex++;
+
             }
 
+
+
+
             DA.SetDataList(0, Nodes);
-            DA.SetDataList(1, Elements0);
-            DA.SetDataList(2, Elements1);
-            DA.SetDataList(3, Elements2);
-            DA.SetDataList(4, Elements3);
-            DA.SetDataList(5, Elements4);
+            DA.SetDataTree(6, ElementTree);
             
 
             #endregion
