@@ -97,7 +97,7 @@ namespace PTK.Components
 
 
             DA.SetDataList(0, Nodes);
-            DA.SetDataTree(6, ElementTree);
+            DA.SetDataTree(1, ElementTree);
             
 
             #endregion

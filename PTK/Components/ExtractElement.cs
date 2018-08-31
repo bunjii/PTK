@@ -41,6 +41,8 @@ namespace PTK.Components
             pManager.AddPlaneParameter("YZ-plane", "", "", GH_ParamAccess.list);
             pManager.AddBrepParameter("BrepGeometry", "", "", GH_ParamAccess.list);
             pManager.AddCurveParameter("Curve", "", "", GH_ParamAccess.list);
+
+            pManager.AddTextParameter("Tag", "", "", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -63,8 +65,9 @@ namespace PTK.Components
             List<Brep> brep = new List<Brep>();
             List<Curve> curves = new List<Curve>();
 
+            List<String> tags = new List<string>();
 
-
+            
 
 
 
@@ -80,6 +83,7 @@ namespace PTK.Components
                 brep.Add(elem.ElementGeometry);
                 curves.Add(elem.Crv);
 
+                tags.Add(elem.Tag);
             }
 
             DA.SetDataList(0, id);
@@ -91,6 +95,8 @@ namespace PTK.Components
             DA.SetDataList(6, yzPlane);
             DA.SetDataList(7, brep);
             DA.SetDataList(8, curves);
+
+            DA.SetDataList(9, tags);
 
 
         }
