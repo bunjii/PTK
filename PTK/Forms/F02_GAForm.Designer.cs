@@ -92,7 +92,7 @@
             this.MinRadioButton.AutoSize = true;
             this.MinRadioButton.Checked = true;
             this.MinRadioButton.Location = new System.Drawing.Point(12, 17);
-            this.MinRadioButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.MinRadioButton.Margin = new System.Windows.Forms.Padding(2);
             this.MinRadioButton.Name = "MinRadioButton";
             this.MinRadioButton.Size = new System.Drawing.Size(67, 16);
             this.MinRadioButton.TabIndex = 0;
@@ -106,7 +106,7 @@
             // 
             this.StartButton.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.StartButton.Location = new System.Drawing.Point(9, 10);
-            this.StartButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.StartButton.Margin = new System.Windows.Forms.Padding(2);
             this.StartButton.Name = "StartButton";
             this.StartButton.Size = new System.Drawing.Size(136, 42);
             this.StartButton.TabIndex = 1;
@@ -119,7 +119,7 @@
             this.StopButton.Enabled = false;
             this.StopButton.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.StopButton.Location = new System.Drawing.Point(150, 10);
-            this.StopButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.StopButton.Margin = new System.Windows.Forms.Padding(2);
             this.StopButton.Name = "StopButton";
             this.StopButton.Size = new System.Drawing.Size(136, 42);
             this.StopButton.TabIndex = 2;
@@ -132,9 +132,9 @@
             this.FitnessBox.Controls.Add(this.MaxRadioButton);
             this.FitnessBox.Controls.Add(this.MinRadioButton);
             this.FitnessBox.Location = new System.Drawing.Point(230, 17);
-            this.FitnessBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.FitnessBox.Margin = new System.Windows.Forms.Padding(2);
             this.FitnessBox.Name = "FitnessBox";
-            this.FitnessBox.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.FitnessBox.Padding = new System.Windows.Forms.Padding(2);
             this.FitnessBox.Size = new System.Drawing.Size(152, 38);
             this.FitnessBox.TabIndex = 3;
             this.FitnessBox.TabStop = false;
@@ -145,7 +145,7 @@
             // 
             this.MaxRadioButton.AutoSize = true;
             this.MaxRadioButton.Location = new System.Drawing.Point(79, 17);
-            this.MaxRadioButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.MaxRadioButton.Margin = new System.Windows.Forms.Padding(2);
             this.MaxRadioButton.Name = "MaxRadioButton";
             this.MaxRadioButton.Size = new System.Drawing.Size(70, 16);
             this.MaxRadioButton.TabIndex = 1;
@@ -155,8 +155,11 @@
             // 
             // OutputLogBox
             // 
+            this.OutputLogBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.OutputLogBox.Location = new System.Drawing.Point(9, 300);
-            this.OutputLogBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.OutputLogBox.Margin = new System.Windows.Forms.Padding(2);
             this.OutputLogBox.Multiline = true;
             this.OutputLogBox.Name = "OutputLogBox";
             this.OutputLogBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -167,7 +170,7 @@
             // 
             this.RestartButton.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.RestartButton.Location = new System.Drawing.Point(291, 10);
-            this.RestartButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.RestartButton.Margin = new System.Windows.Forms.Padding(2);
             this.RestartButton.Name = "RestartButton";
             this.RestartButton.Size = new System.Drawing.Size(136, 42);
             this.RestartButton.TabIndex = 5;
@@ -178,7 +181,7 @@
             // SaveFolderTextBox
             // 
             this.SaveFolderTextBox.Location = new System.Drawing.Point(9, 41);
-            this.SaveFolderTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.SaveFolderTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.SaveFolderTextBox.Name = "SaveFolderTextBox";
             this.SaveFolderTextBox.Size = new System.Drawing.Size(378, 19);
             this.SaveFolderTextBox.TabIndex = 6;
@@ -187,7 +190,7 @@
             // OpenSaveFolder
             // 
             this.OpenSaveFolder.Location = new System.Drawing.Point(391, 41);
-            this.OpenSaveFolder.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.OpenSaveFolder.Margin = new System.Windows.Forms.Padding(2);
             this.OpenSaveFolder.Name = "OpenSaveFolder";
             this.OpenSaveFolder.Size = new System.Drawing.Size(21, 18);
             this.OpenSaveFolder.TabIndex = 7;
@@ -233,7 +236,7 @@
             chartArea1.ShadowColor = System.Drawing.Color.Empty;
             this.FitnessChart.ChartAreas.Add(chartArea1);
             this.FitnessChart.Location = new System.Drawing.Point(0, 0);
-            this.FitnessChart.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.FitnessChart.Margin = new System.Windows.Forms.Padding(2);
             this.FitnessChart.Name = "FitnessChart";
             series1.ChartArea = "ChartArea1";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Range;
@@ -267,9 +270,9 @@
             this.ExitConditionsGroup.Controls.Add(this.ContinuationCheck);
             this.ExitConditionsGroup.Controls.Add(this.MaxGenerationCheck);
             this.ExitConditionsGroup.Location = new System.Drawing.Point(9, 154);
-            this.ExitConditionsGroup.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ExitConditionsGroup.Margin = new System.Windows.Forms.Padding(2);
             this.ExitConditionsGroup.Name = "ExitConditionsGroup";
-            this.ExitConditionsGroup.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ExitConditionsGroup.Padding = new System.Windows.Forms.Padding(2);
             this.ExitConditionsGroup.Size = new System.Drawing.Size(418, 65);
             this.ExitConditionsGroup.TabIndex = 12;
             this.ExitConditionsGroup.TabStop = false;
@@ -278,7 +281,7 @@
             // ContinuationBox
             // 
             this.ContinuationBox.Location = new System.Drawing.Point(172, 41);
-            this.ContinuationBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ContinuationBox.Margin = new System.Windows.Forms.Padding(2);
             this.ContinuationBox.Minimum = new decimal(new int[] {
             1,
             0,
@@ -300,7 +303,7 @@
             // MaxGenerationBox
             // 
             this.MaxGenerationBox.Location = new System.Drawing.Point(172, 18);
-            this.MaxGenerationBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.MaxGenerationBox.Margin = new System.Windows.Forms.Padding(2);
             this.MaxGenerationBox.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -329,7 +332,7 @@
             this.ContinuationCheck.Checked = true;
             this.ContinuationCheck.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ContinuationCheck.Location = new System.Drawing.Point(10, 42);
-            this.ContinuationCheck.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ContinuationCheck.Margin = new System.Windows.Forms.Padding(2);
             this.ContinuationCheck.Name = "ContinuationCheck";
             this.ContinuationCheck.Size = new System.Drawing.Size(158, 16);
             this.ContinuationCheck.TabIndex = 13;
@@ -345,7 +348,7 @@
             this.MaxGenerationCheck.Checked = true;
             this.MaxGenerationCheck.CheckState = System.Windows.Forms.CheckState.Checked;
             this.MaxGenerationCheck.Location = new System.Drawing.Point(10, 20);
-            this.MaxGenerationCheck.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.MaxGenerationCheck.Margin = new System.Windows.Forms.Padding(2);
             this.MaxGenerationCheck.Name = "MaxGenerationCheck";
             this.MaxGenerationCheck.Size = new System.Drawing.Size(104, 16);
             this.MaxGenerationCheck.TabIndex = 12;
@@ -359,9 +362,9 @@
             this.ConfigurationGroup.Controls.Add(this.tableLayoutPanel1);
             this.ConfigurationGroup.Controls.Add(this.FitnessBox);
             this.ConfigurationGroup.Location = new System.Drawing.Point(9, 57);
-            this.ConfigurationGroup.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ConfigurationGroup.Margin = new System.Windows.Forms.Padding(2);
             this.ConfigurationGroup.Name = "ConfigurationGroup";
-            this.ConfigurationGroup.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ConfigurationGroup.Padding = new System.Windows.Forms.Padding(2);
             this.ConfigurationGroup.Size = new System.Drawing.Size(418, 93);
             this.ConfigurationGroup.TabIndex = 13;
             this.ConfigurationGroup.TabStop = false;
@@ -379,7 +382,7 @@
             this.tableLayoutPanel1.Controls.Add(this.label4, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.MutationRateBox, 1, 2);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(4, 17);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -403,7 +406,7 @@
             // 
             this.IndivitualNumBox.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.IndivitualNumBox.Location = new System.Drawing.Point(97, 2);
-            this.IndivitualNumBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.IndivitualNumBox.Margin = new System.Windows.Forms.Padding(2);
             this.IndivitualNumBox.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -448,7 +451,7 @@
             0,
             131072});
             this.EliteRateBox.Location = new System.Drawing.Point(97, 25);
-            this.EliteRateBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.EliteRateBox.Margin = new System.Windows.Forms.Padding(2);
             this.EliteRateBox.Maximum = new decimal(new int[] {
             1,
             0,
@@ -489,7 +492,7 @@
             0,
             131072});
             this.MutationRateBox.Location = new System.Drawing.Point(97, 48);
-            this.MutationRateBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.MutationRateBox.Margin = new System.Windows.Forms.Padding(2);
             this.MutationRateBox.Maximum = new decimal(new int[] {
             1,
             0,
@@ -514,9 +517,9 @@
             this.SaveGenerationGroup.Controls.Add(this.SaveFolderTextBox);
             this.SaveGenerationGroup.Controls.Add(this.OpenSaveFolder);
             this.SaveGenerationGroup.Location = new System.Drawing.Point(9, 224);
-            this.SaveGenerationGroup.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.SaveGenerationGroup.Margin = new System.Windows.Forms.Padding(2);
             this.SaveGenerationGroup.Name = "SaveGenerationGroup";
-            this.SaveGenerationGroup.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.SaveGenerationGroup.Padding = new System.Windows.Forms.Padding(2);
             this.SaveGenerationGroup.Size = new System.Drawing.Size(418, 64);
             this.SaveGenerationGroup.TabIndex = 14;
             this.SaveGenerationGroup.TabStop = false;
@@ -533,7 +536,7 @@
             this.ChartTabControl.Controls.Add(this.AllGenerations);
             this.ChartTabControl.Controls.Add(this.LastSeveralGenerations);
             this.ChartTabControl.Location = new System.Drawing.Point(9, 369);
-            this.ChartTabControl.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ChartTabControl.Margin = new System.Windows.Forms.Padding(2);
             this.ChartTabControl.Name = "ChartTabControl";
             this.ChartTabControl.SelectedIndex = 0;
             this.ChartTabControl.Size = new System.Drawing.Size(420, 254);
@@ -543,9 +546,9 @@
             // 
             this.AllGenerations.Controls.Add(this.FitnessChart);
             this.AllGenerations.Location = new System.Drawing.Point(4, 22);
-            this.AllGenerations.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.AllGenerations.Margin = new System.Windows.Forms.Padding(2);
             this.AllGenerations.Name = "AllGenerations";
-            this.AllGenerations.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.AllGenerations.Padding = new System.Windows.Forms.Padding(2);
             this.AllGenerations.Size = new System.Drawing.Size(412, 228);
             this.AllGenerations.TabIndex = 1;
             this.AllGenerations.Text = "All Generations";
@@ -555,9 +558,9 @@
             // 
             this.LastSeveralGenerations.Controls.Add(this.RestrictionFitnessChart);
             this.LastSeveralGenerations.Location = new System.Drawing.Point(4, 22);
-            this.LastSeveralGenerations.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.LastSeveralGenerations.Margin = new System.Windows.Forms.Padding(2);
             this.LastSeveralGenerations.Name = "LastSeveralGenerations";
-            this.LastSeveralGenerations.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.LastSeveralGenerations.Padding = new System.Windows.Forms.Padding(2);
             this.LastSeveralGenerations.Size = new System.Drawing.Size(412, 228);
             this.LastSeveralGenerations.TabIndex = 2;
             this.LastSeveralGenerations.Text = "Last 20 Generations";
@@ -588,7 +591,7 @@
             chartArea2.Name = "ChartArea1";
             this.RestrictionFitnessChart.ChartAreas.Add(chartArea2);
             this.RestrictionFitnessChart.Location = new System.Drawing.Point(0, 0);
-            this.RestrictionFitnessChart.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.RestrictionFitnessChart.Margin = new System.Windows.Forms.Padding(2);
             this.RestrictionFitnessChart.Name = "RestrictionFitnessChart";
             series4.ChartArea = "ChartArea1";
             series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Range;
@@ -632,7 +635,7 @@
             this.Controls.Add(this.StartButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "GAForm";

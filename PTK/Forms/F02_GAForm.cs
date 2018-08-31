@@ -16,9 +16,9 @@ namespace PTK.Optimization
     //--------------------------------------------------------
     public partial class GAForm : Form
     {
-        private GeneticAlgorithmComponent03 comp;   //Component to be attached to the form
+        private PTK_GeneticAlgorithm comp;   //Component to be attached to the form
 
-        public GAForm(GeneticAlgorithmComponent03 _comp)
+        public GAForm(PTK_GeneticAlgorithm _comp)
         {
             InitializeComponent();
             Owner = Grasshopper.Instances.DocumentEditor;
@@ -232,7 +232,7 @@ namespace PTK.Optimization
         {
             return (int)ContinuationBox.Value;
         }
-        public String GetSavePath()
+        public string GetSavePath()
         {
             return SaveFolderTextBox.Text;
         }

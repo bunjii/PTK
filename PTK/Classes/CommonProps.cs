@@ -8,26 +8,21 @@ namespace PTK
 {
     public static class CommonProps
     {
-        #region fields
-        public static double tolerances = 0.001;
+        public static double tolerances = Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance;
         public static readonly string category = "PTK";
-        public static readonly string subcat1 = "Assemble";
-        public static readonly string subcat2 = "Materialize";
-        public static readonly string subcat3 = "Detail";
-        public static readonly string subcat4 = "Structure";
-        public static readonly string subcat5 = "Utility";
-        public static readonly string subcat6 = "DetailDescriptions";
+        public static readonly string subcate0 = "Param";
+        public static readonly string subcate1 = "Material";
+        public static readonly string subcate2 = "MakeElement";
+        public static readonly string subcate3 = "MakeAssembly";
+        public static readonly string subcate4 = "MakeModel";
+        public static readonly string subcate5 = "StructualAnalysis";
+        public static readonly string subcate6 = "Visualize";
+        public static readonly string subcate7 = "Export";
+        public static readonly string subcate8 = "Utility";
+        public static readonly string subcate9 = "Tool";
         public static readonly string initialMessage = "PTK Ver.0.5";
-        #endregion
 
-        #region constructors
-        #endregion
-
-        #region properties
-        #endregion
-
-        #region methods
-        // simple decimal separator checker
+        //Return the Decimal Separator in the use environment
         public static DecimalSeparator FindDecimalSeparator()
         {
             string txtFindLocale = string.Format("{0}", 1.1);
@@ -37,15 +32,13 @@ namespace PTK
             else return DecimalSeparator.error;
         }
 
-        
+        //Return scale ratio from scale of Rhino to specified scale
         public static double ConversionUnit(Rhino.UnitSystem _toUnitSystem)
         {
             Rhino.RhinoDoc doc = Rhino.RhinoDoc.ActiveDoc;
             Rhino.UnitSystem fromUnitSystem = doc.ModelUnitSystem;
             return Rhino.RhinoMath.UnitScale(fromUnitSystem, _toUnitSystem);
         }
-        #endregion
-        
     }
 
 
@@ -54,5 +47,18 @@ namespace PTK
         error,period,comma
     }
 
+    public enum AlignmentAnchorVert
+    {
+        Center,Top,Bottom
+    }
+    public enum AlignmentAnchorHori
+    {
+        Center, Left, Right
+    }
+
+    public enum DetailType
+    {
+        LType, TType, XType
+    }
 
 }

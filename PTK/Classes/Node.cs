@@ -10,89 +10,22 @@ namespace PTK
 {
     public class Node : IEquatable<Node>
     {
+        public Point3d Point { get; private set; }
+        public List<Vector3d> DisplacementVectors { get; private set; } = new List<Vector3d>();
 
-        #region fields
-        private static int idCount = 0;
-        public Point3d Pt3d { get; private set; }
-        public BoundingBox BoundingBox { get; private set; }
-        public double X { get; private set; }
-        public double Y { get; private set; }
-        public double Z { get; private set; }
-        public int Id { get; private set; }  //removed the possibility to set an ID
-        public int ConnectedElements { get; private set; }  //removed the possibility to set an ID
-        public List<int> ElemIds { get; private set; } = new List<int>();
-        public List<Element> Elems { get; private set; } = new List<Element>();
-        public List<double> ElemParams { get; private set; } = new List<double>();
-        public Plane NodePlane { get; private set; }
-        //int temp;
-        #endregion
-
-        #region constructors
-        //The points are given from the PTK4_assemble. ID is unique by iterating each time the class is instanced. idCount is static
-        public Node(Point3d pt)
+        public Node()
         {
-            Pt3d = pt;
-            X = pt.X;
-            Y = pt.Y;
-            Z = pt.Z;
-            Id = idCount;
-            NodePlane = new Plane(pt, new Vector3d(0, 0, 1));
-            idCount++;
-            BoundingBox = new BoundingBox(pt, pt);
+            Point = new Point3d();
         }
-        #endregion
-
-        #region properties
-        #endregion
-
-        #region methods
-
-        public void AddElemId(int _id)
+        public Node(Point3d _point)
         {
-            ElemIds.Add(_id);
+            Point = _point;
         }
 
-        //Adding neighbours. see the function called AssignNeighbours in function.cs. 
-        public void AddNeighbour(int ids)
-        { 
-            if (ElemIds==null)
-            {
-                ElemIds = new List<int>();
-            }
-            //temp = ids;
-            ElemIds.Add(ids);
-        }
-
-        public void AddElemParams(double _param)
+        public bool Equals(Node _other)
         {
-            this.ElemParams.Add(_param);
-        }
-
-
-        #region obsolete
-        public void AddElements(Element _element)
-        {
-            bool add = true;
-            foreach (Element elem in Elems)
-            {
-                if (elem.Id.Equals(_element.Id))
-                    add = false;
-            }
-
-            if (add)
-            {
-                Elems.Add(_element);
-            }
-            
-            Elems.Add(_element);
-        }
-        #endregion
-
-        // Are the next functions in use? -> yes, i intend to use them.
-        // Probably useful later when extracting the geometry. 
-        public bool Equals(Node other)
-        {
-            if (X == other.X && Y == other.Y && Z == other.Z)
+            //It is necessary to consider a minute error
+            if (Point == _other.Point)
             {
                 return true;
             }
@@ -102,27 +35,78 @@ namespace PTK
             }
         }
 
-        public static int FindNodeId(List<Node> _nodes, Point3d _pt)
+        public bool Equals(Point3d _point)
         {
-            int tempId = -999;
-            tempId = _nodes.Find(n => n.Pt3d == _pt).Id;
-
-            return tempId;
+            if(Point == _point)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public int AddDisplacementVector(Vector3d _vector)
+        {
+            DisplacementVectors.Add(_vector);
+            return DisplacementVectors.Count;
         }
 
-        public static Node FindNodeById(List<Node> _nodes, int _nid)
+        public Node DeepCopy()
         {
-            Node _tempNode;
-            _tempNode = _nodes.Find(n => n.Id == _nid);
+            return (Node)base.MemberwiseClone();
+        }
+        public override string ToString()
+        {
+            string info;
+            info = "<Node> Point:" + Point.ToString() +
+                " DisplacementVectors:" + DisplacementVectors.ToString();
+            return info;
+        }
+        public bool IsValid()
+        {
+            return true;
+        }
+    }
 
-            return _tempNode;
+    public class GH_Node : GH_Goo<Node>
+    {
+        public GH_Node() { }
+        public GH_Node(GH_Node other) : base(other.Value) { this.Value = other.Value.DeepCopy(); }
+        public GH_Node(Node sec) : base(sec) { this.Value = sec; }
+        public override bool IsValid => base.m_value.IsValid();
+
+        public override string TypeName => "Node";
+
+        public override string TypeDescription => "Description";
+
+        public override IGH_Goo Duplicate()
+        {
+            return new GH_Node(this);
         }
 
-        public static void ResetIDCount()
+        public override string ToString()
         {
-            idCount = 0;
+            return Value.ToString();
+        }
+    }
+
+    public class Param_Node : GH_PersistentParam<GH_Node>
+    {
+        public Param_Node() : base(new GH_InstanceDescription("Node", "Node", "Description", CommonProps.category, CommonProps.subcate0)) { }
+
+        protected override System.Drawing.Bitmap Icon { get { return null; } }  //Set icon image
+
+        public override Guid ComponentGuid => new Guid("08b7c467-367e-4a25-856b-fae990bfd78a");
+
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_Node> values)
+        {
+            return GH_GetterResult.success;
         }
 
-        #endregion
+        protected override GH_GetterResult Prompt_Singular(ref GH_Node value)
+        {
+            return GH_GetterResult.success;
+        }
     }
 }

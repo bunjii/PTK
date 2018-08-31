@@ -5,55 +5,90 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-// using Karamba.Loads ;
+using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 
 namespace PTK
 {
     public class Material
     {
+        public string Name { get; private set; }
+        public MaterialStructuralProp StructuralProp { get; private set; }
 
-        #region fields
-        public string MatName { get; set; }
-        public int Id { get; set; }
-        public List<int> ElemIds { get; private set; } = new List<int>();
-        public MatProps Properties { get; set; }
-        #endregion
-
-        #region constructors
-        /*
-        public Material(string _materialName, int _materialId, MatProps _properties)
+        public Material()
         {
-            materialName = _materialName; // inheriting  Class
-            id = -999; // inheriting  Class
-            properties = _properties;
+            Name = "N/A";
+            StructuralProp = new MaterialStructuralProp();
         }
-        */
-        public Material(MatProps _properties)
+        public Material(string _name)
         {
-            Id = -999; 
-            MatName = "N/A";
-            Properties = _properties;
+            Name = _name;
+            StructuralProp = new MaterialStructuralProp();
         }
-        #endregion
-
-        #region properties
-        #endregion
-
-        #region methods
-        public void AddElemId(int elemId)
+        public Material(string _name, MaterialStructuralProp _structuralProp)
         {
-            this.ElemIds.Add(elemId);
+            Name = _name;
+            StructuralProp = _structuralProp;
         }
 
-        public static Material FindMatById(List<Material> _mats, int _mid)
+        public Material DeepCopy()
         {
-            Material tempMat;
-            tempMat = _mats.Find(m => m.Id == _mid);
-
-            return tempMat;
+            return (Material)base.MemberwiseClone();
         }
-        #endregion
+        public override string ToString()
+        {
+            string info;
+            info = "<Material> Name:" + Name + 
+                " StructuralProp.Name:" + StructuralProp.Name;
+            return info;
+        }
+
+        public bool IsValid()
+        {
+            return Name != "N/A";
+        }
     }
+
+    public class GH_Material : GH_Goo<Material>
+    {
+        public GH_Material() { }
+        public GH_Material(GH_Material other) : base(other.Value) { this.Value = other.Value.DeepCopy(); }
+        public GH_Material(Material mat) : base(mat) { this.Value = mat; }
+        public override bool IsValid => base.m_value.IsValid();
+
+        public override string TypeName => "Material";
+
+        public override string TypeDescription => "Material";
+
+        public override IGH_Goo Duplicate()
+        {
+            return new GH_Material(this);
+        }
+
+        public override string ToString()
+        {
+            return Value.ToString(); ;
+        }
+    }
+
+    public class Param_Material : GH_PersistentParam<GH_Material>
+    {
+        public Param_Material() : base(new GH_InstanceDescription("Material", "Mat", "Material name and property information", CommonProps.category, CommonProps.subcate0)) { }
+
+        protected override System.Drawing.Bitmap Icon { get { return null; } }  //Set icon image
+
+        public override Guid ComponentGuid => new Guid("62539F56-FB20-4342-AC8F-E7C1A2F7BAA2");
+
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_Material> values)
+        {
+            return GH_GetterResult.success;
+        }
+
+        protected override GH_GetterResult Prompt_Singular(ref GH_Material value)
+        {
+            return GH_GetterResult.success;
+        }
+    }
+
 }
 
