@@ -71,22 +71,23 @@ namespace PTK
                 foreach (BTLprocess process in Processes)
                 {
 
-                    assembly.Elems.Find(t => t.Id == Convert.ToInt16(process.ElemId)).SubElementBTL[0].BTLPart.Processings.Items.Add(process.Process);  //Adding processess in correct btl part
-                    assembly.Elems.Find(t => t.Id == Convert.ToInt16(process.ElemId)).SubElementBTL[0].BTLProcesses.Add(process);
+                    // assembly.Elements.Find(t => t.Id == Convert.ToInt16(process.ElemId)).SubElementBTL[0].BTLPart.Processings.Items.Add(process.Process);  //Adding processess in correct btl part
+                    // assembly.Elements.Find(t => t.Id == Convert.ToInt16(process.ElemId)).SubElementBTL[0].BTLProcesses.Add(process);
 
                 }
 
 
                 List<Brep> allBreps = new List<Brep>();
 
-                for (int i = 0; i < assembly.Elems.Count; i++)
+                /*
+                for (int i = 0; i < assembly.Elements.Count; i++)
                 {
-                    Parts.Part.Add(assembly.Elems[i].SubElementBTL[0].BTLPart);  //Adding part to parts for each element. Line 73 have included all processess
+                    Parts.Part.Add(assembly.Elements[i].SubElementBTL[0].BTLPart);  //Adding part to parts for each element. Line 73 have included all processess
 
-                    List<BTLprocess> BTLProcessess = assembly.Elems[i].SubElementBTL[0].BTLProcesses;
+                    List<BTLprocess> BTLProcessess = assembly.Elements[i].SubElementBTL[0].BTLProcesses;
                     List<Brep> voids = new List<Brep>();
                     List<Brep> keep = new List<Brep>();
-                    keep.Add(assembly.Elems[i].ElementGeometry);
+                    keep.Add(assembly.Elements[i].ElementGeometry);
 
                     if (BTLProcessess.Count > 0)
                     {
@@ -113,6 +114,7 @@ namespace PTK
 
 
                 }
+                */
 
                 //Initializing the project
                 ProjectType Project = new ProjectType();
