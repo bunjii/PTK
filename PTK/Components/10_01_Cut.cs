@@ -48,6 +48,8 @@ namespace PTK.Components
         {
 
             //Adding small modification here
+            int test = 0;
+
             Assembly Assembly = new Assembly();
             List<Plane> cutPlanes = new List<Plane>();
 
