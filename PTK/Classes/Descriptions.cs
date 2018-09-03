@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using feb;
+using Grasshopper.Kernel;
+using Rhino.Geometry;
+using Rhino.Geometry.Intersect;
 
 namespace PTK
 {
@@ -300,19 +304,25 @@ namespace PTK
 
         #endregion
     }
-    public class Angle : Descriptions
+
+
+
+    public class ElementAngle : Descriptions
     {
         #region fields
 
-        private List<string> tagsAre = new List<string>();
-        private int mode = 0;
+        private int minimumAngle = 0;
+        private int maximumAngle = 360;
+        
 
         #endregion
         #region constructors
 
-        public Angle(int _angle = 0)
+        public ElementAngle(int _minimumAngle = 0, int _maximumAngle = 360)
         {
-            int Angle = _angle;
+            minimumAngle = _minimumAngle;
+            maximumAngle = _maximumAngle;
+
         }
 
         #endregion
@@ -321,9 +331,85 @@ namespace PTK
         #endregion
         #region methods
 
+
+
         public bool check(Detail _detail)
         {
-            return true;
+            List<Node> _nodes = _detail.Nodes;
+            List<PTK_Element> _elems = _detail.Elems;
+            List<Line> elementsFromNode = new List<Line>();
+            List<Vector3d> elementVectors = new List<Vector3d>();
+
+            for (int i = 0; i < _elems.Count; i++) //Creates a unitized vector or each element, and ensures that the vectors start in the node
+            {
+            Line elementLine = new Line(_nodes[0].Pt3d,_elems[i].Crv.PointAt(0.5));
+            Vector3d elementVector = elementLine.UnitTangent;
+            Line curveFlipped = new Line(_nodes[0].Pt3d,elementVector,_elems[i].Length);
+            
+            elementVectors.Add(elementVector);
+            elementsFromNode.Add(curveFlipped);
+            
+            }
+            
+            List<Double> elementAngles = new List<double>(); //Creates a plane in the node that has normal like the average of all elementvectors
+
+            double x = 0f;
+            double y = 0f;
+            double z = 0f;
+            
+            for (int i = 0; i < elementVectors.Count; i++)
+            {
+                x += elementVectors[i].X;
+                y += elementVectors[i].Y;
+                z += elementVectors[i].Z;
+            }
+            Vector3d nodeVector = new Vector3d(x/elementVectors.Count,y/elementVectors.Count,z/elementVectors.Count);
+            Plane nodePlane = new Plane(_nodes[0].Pt3d, nodeVector);
+
+            //har konstruert eit plan basert på snittvektoren til alle vektorene. Neste steg er å sortere basert på vinkel.
+
+            Vector3d nX = nodePlane.XAxis;
+            Vector3d nY = nodePlane.YAxis;
+            Vector3d nZ = nodePlane.ZAxis;
+
+            List<double> angles = new List<double>();
+
+            double angle = 0;
+            bool valid = false;
+
+            Vector3d nodePlaneVector = (Vector3d.Add(nX, nZ));
+
+            for (int i = 0; i < elementVectors.Count; i++)
+            {
+                angle = Vector3d.VectorAngle(nodePlaneVector, elementVectors[i]);
+                angles.Add(angle * 180 / Math.PI);
+            }
+
+            //List<KeyValuePair<> >
+            //angles.OrderByDescending().ToList();
+            //angle = (int) _angle;
+
+            //if (minimumAngle <= angle && angle <= maximumAngle)
+            //    valid = true;
+
+
+            return valid;
+
+            //Circle circle = new Circle(nodePlane,1);
+            //List<double> circleInt = new List<double>();
+
+            //for (int i = 0; i < elementsFromNode.Count; i++)
+            //{
+            //    double t1, t2;
+            //    Point3d p1, p2;
+            //    LineCircleIntersection(elementsFromNode[i], circle, out t1, out p1, out t2, out p2);
+            //    circleInt.Add(t1);
+            // }
+
+            //circleInt.Sort(x => x);
+
+           
+           
         }
 
 

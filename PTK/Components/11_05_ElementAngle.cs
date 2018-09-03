@@ -13,10 +13,10 @@ namespace PTK.Components
         /// Initializes a new instance of the _11_03_ElementTag class.
         /// </summary>
         public _11_05_ElementAngle()
-          : base("ET", "ElementTag",
-              "Checks the tags of the element",
+          : base("EA", "ElementAngle",
+              "Checks the angle of the element and neighbouring elements",
               CommonProps.category, CommonProps.subcat6)
-        {
+        {   
         }
 
         /// <summary>
@@ -24,8 +24,12 @@ namespace PTK.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddIntegerParameter("Tags Are", "Tags", "Input the tags the element must contain", GH_ParamAccess.list,0);
-            pManager.AddIntegerParameter("Mode", "Mode", "Mode 0 - EitherOf - The detail must contain either of the inputted tags"  , GH_ParamAccess.item, 0);
+
+            pManager.AddIntegerParameter("Minimum Angle", "Min", "The minimum angle between two elements", GH_ParamAccess.item, 0);
+            pManager.AddIntegerParameter("Maximum Angle", "Max", "The maximum angle allowed between two elements",
+                GH_ParamAccess.item, 360);
+            //pManager.AddIntegerParameter("Tags Are", "Tags", "Input the tags the element must contain", GH_ParamAccess.list,0);
+            //pManager.AddIntegerParameter("Mode", "Mode", "Mode 0 - EitherOf - The detail must contain either of the inputted tags"  , GH_ParamAccess.item, 0);
         }
 
         /// <summary>
@@ -43,19 +47,23 @@ namespace PTK.Components
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             //Inputs
-            
-            List<string> tagsAre = new List<string>();
-            int strict = 0;
+            int minimumAngle = 0;
+            int maximumAngle = 360;
+            //int mode = 0;
+            //plane plane = Plane.WorldXY;
 
-            DA.GetDataList(0, tagsAre);
-            DA.GetData(1, ref strict);
+            DA.GetData(0, ref minimumAngle);
+            DA.GetData(1, ref maximumAngle);
+            //    DA.GetData(2,ref mode);
+            //    DA.GetData(3, ref plane);
+        
 
-            //Initializing the object
-            ElementTag ElementTag = new ElementTag(tagsAre, strict);
+        //Initializing the object
+            ElementAngle ElementAngle = new ElementAngle(minimumAngle, maximumAngle);
 
             var Verifier = new List<MethodDelegate>();//Initializing a delegatemethodlist
             
-            Verifier.Add(ElementTag.check); //Stores the methdod in the list-> In this way the instance of the tagIs is associated with the instance of the method(!)
+            Verifier.Add(ElementAngle.check); //Stores the methdod in the list-> In this way the instance of the tagIs is associated with the instance of the method(!)
 
 
             Rule Rule = new Rule(Verifier);  //Pushing it through an object
@@ -84,7 +92,7 @@ namespace PTK.Components
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("7dbd4d6c-34e1-4b54-98bc-d08d5178ae22"); }
+            get { return new Guid("7dbd4d6c-34e1-4b54-98bc-d08d5178ae32"); }
         }
     }
 }
