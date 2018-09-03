@@ -17,13 +17,13 @@ namespace PTK
 
 
         #region constructors
-        public SubElementBTL(Plane _yzPlane, Section _section, double _length)
+        public SubElementBTL(Plane _yzPlane, CrossSection _section, double _length)
         {
             PartType tempPart = new PartType();
             CoordinateSystemType CoordinateSystem = new CoordinateSystemType();   //Initializing the coordinate system of a part
             PointType Point = new PointType();  //the point of a part
             btlProcesses = new List<BTLprocess>();
-            refSides = new RefSides(_yzPlane, _section.Height, _section.Width, _length);
+            refSides = new RefSides(_yzPlane, _section.GetHeight(), _section.GetWidth(), _length);
 
 
             Plane btlPlane = refSides.BTLPlane;
@@ -44,8 +44,8 @@ namespace PTK
             tempPart.Transformations.Transformation.Add(Reference);
 
             tempPart.Length = _length;
-            tempPart.Width = _section.Width;
-            tempPart.Height = _section.Height;
+            tempPart.Width = _section.GetWidth();
+            tempPart.Height = _section.GetHeight();
 
             btlPart = tempPart;
 
