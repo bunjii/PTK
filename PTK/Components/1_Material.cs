@@ -11,6 +11,8 @@ namespace PTK
     public class PTK_1_Material : GH_Component
     {
 
+        int i = 0;
+
         public PTK_1_Material()
           : base("Material", "Mat","Create a Material",
               CommonProps.category, CommonProps.subcate1)
