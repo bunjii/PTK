@@ -13,7 +13,6 @@ namespace PTK
     {
         public string Name { get; private set; }
         public Material Material { get; private set; }
-        //public Curve Curve
 
         public CrossSection()
         {
