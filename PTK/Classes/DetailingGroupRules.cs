@@ -3,56 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Rhino.Geometry;
+using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 
-namespace PTK
+namespace PTK.Rules
+
 {
-    public class DetailingGroupRules
+    
+
+
+    public class Rule
     {
-        #region fields
-        private ElemLength elemLength;
+        public CheckGroupDelegate checkdelegate;
 
-
-
-        #endregion
-        #region constructors
-
-
-
-        #endregion
-        #region properties
-        public ElemLength ElemLength { get { return elemLength; } set { elemLength = value; } }
-
-
-
-
-        #endregion
-        #region methods
-
-        public void MergeDescriptions(List<DetailingGroupRules> _descriptions)
+        public Rule(CheckGroupDelegate _checkdelegate)
         {
-            for (int i = 0; i < _descriptions.Count; i++)
-            {
-                if (elemLength == null && _descriptions[i].elemLength != null) { _descriptions[i].elemLength = elemLength; }
-            }
-        }
-
-        public bool CheckIfValid(Detail Detail)
-        {
-
-            if (elemLength.check(Detail) == false) { return false; };
-
-            return true;
-
+            checkdelegate = _checkdelegate;
         }
 
 
-
-        #endregion
-
+        
     }
 
+   
 
-    public class ElemLength : DetailingGroupRules
+    public class ElementLength
     {
         #region fields
         private double minLength = 0;
@@ -62,7 +38,7 @@ namespace PTK
         #endregion
 
         #region constructors
-        public ElemLength(double _min, double _max)
+        public ElementLength(double _min, double _max)
         {
 
             minLength = _min;
@@ -77,19 +53,18 @@ namespace PTK
         #endregion
         #region methods
 
-        public bool check(Detail _detail)
+        public bool check(Detail _detail)  //Checking element length
         {
-            List<Node> _nodes = _detail.Nodes;
-            List<PTK_Element> _elems = _detail.Elems;
+            Detail detail = _detail;
+            Node node = detail.Node;
+            List<Element1D> elements = detail.ElementsPriorityMap.Keys.ToList();
 
 
             bool valid = false;
-            List<int> elemIds = _nodes[0].ElemIds;
-            for (int i = 0; i < elemIds.Count; i++)
+            foreach (Element1D element in elements)
             {
-                int elemId = elemIds[i];
-                int elemIndex = _elems.FindIndex(x => x.Id == elemId);
-                if (minLength < _elems[elemIndex].Length && _elems[elemIndex].Length < maxLength == true)
+                double curvelength = element.BaseCurve.GetLength();
+                if (minLength < curvelength && curvelength < maxLength == true)
                 {
                     valid = true;
                 }
@@ -108,8 +83,7 @@ namespace PTK
         #endregion
 
     }
-
-    public class ElemAmount : DetailingGroupRules
+    public class ElementAmount 
     {
         #region fields
         private int minAmount = 0;
@@ -119,7 +93,7 @@ namespace PTK
         #endregion
 
         #region constructors
-        public ElemAmount(int _minAmount, int _maxAmount)
+        public ElementAmount(int _minAmount, int _maxAmount)
         {
 
             minAmount = _minAmount;
@@ -136,17 +110,17 @@ namespace PTK
 
         public bool check(Detail _detail)
         {
-            List<Node> _nodes = _detail.Nodes;
-            List<PTK_Element> _elems = _detail.Elems;
+            Detail detail = _detail;
+            Node node = detail.Node;
+            List<Element1D> elements = detail.ElementsPriorityMap.Keys.ToList();
+            
 
 
             bool valid = false;
-            List<int> elemIds = _nodes[0].ElemIds;
-            for (int i = 0; i < elemIds.Count; i++)
-            {
-                int elemId = elemIds[i];
+            foreach (Element1D element in elements)
 
-                if (minAmount <= _elems.Count && _elems.Count <= maxAmount == true)
+            {
+                if (minAmount <= elements.Count && elements.Count <= maxAmount == true)
                 {
                     valid = true;
                 }
@@ -166,37 +140,31 @@ namespace PTK
 
     }
 
-    public class NodeHitRegion : DetailingGroupRules
+    public class NodeHitRegion 
     {
 
 
         private List<Curve> polycurves;
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        ////Properties
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
         public List<Curve> Polycurves { get { return polycurves; } set { } }
 
 
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        ////Constructors
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         public NodeHitRegion(List<Curve> _polyCurves)
         {
             polycurves = new List<Curve>();
             polycurves = _polyCurves;
         }
 
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        ////Methods
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+    
         public bool check(Detail _detail)
         //This method checks if the node point is in the regions or not.
         {
-            double tolerance = 0.01;
+            Detail detail = _detail;
+            Node node = detail.Node;
+            List<Element1D> elements = detail.ElementsPriorityMap.Keys.ToList();
+            
+
+
+            double tolerance = CommonProps.tolerances; ;
             Plane Curveplane = new Plane();
 
             for (int i = 0; i < polycurves.Count; i++)
@@ -205,10 +173,10 @@ namespace PTK
                 if (polycurve.TryGetPlane(out Curveplane))
                 {
 
-                    PointContainment relationship = polycurve.Contains(_detail.Nodes[0].Pt3d, Curveplane, tolerance);
+                    PointContainment relationship = polycurve.Contains(node.Point, Curveplane, tolerance);
                     if (relationship == PointContainment.Inside || relationship == PointContainment.Coincident)
                     {
-                        if (Curveplane.DistanceTo(_detail.Nodes[0].Pt3d) < tolerance)
+                        if (Curveplane.DistanceTo(node.Point) < tolerance)
                         {
                             return true;
                         }
@@ -223,15 +191,11 @@ namespace PTK
 
         }
 
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        ////constructors
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 
     }
 
-
+    /*
     public class NodeClosestPoint : DetailingGroupRules
     {
 
@@ -321,7 +285,7 @@ namespace PTK
 
 
     }
-
+    */
 
 
 

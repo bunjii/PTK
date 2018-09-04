@@ -4,19 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PTK.Classes
+namespace PTK
 {
-    public delegate bool NodeRuleDelegate(Detail _detail);
+    
 
     class DetailingGroupRulesDefinition
     {
 
         public string Name { get; private set; }
-        public List<NodeRuleDelegate> ValidProperties { get; private set; }
-        public List<NodeRuleDelegate> InValidProperties { get; private set; }
+        public List<CheckGroupDelegate> ValidProperties { get; private set; }
+        public List<CheckGroupDelegate> InValidProperties { get; private set; }
         //V1: Public NodeProperty NodeProperty { get; private set; }
 
-        public DetailingGroupRulesDefinition(string _name, List<NodeRuleDelegate> _validProperties, List<NodeRuleDelegate> _inValidProperties)
+        public DetailingGroupRulesDefinition(string _name, List<CheckGroupDelegate> _validProperties, List<CheckGroupDelegate> _inValidProperties)
         {
             Name = _name;
             ValidProperties = _validProperties;
@@ -30,7 +30,7 @@ namespace PTK.Classes
 
             foreach (Detail detail in _details)
             {  
-                foreach(NodeRuleDelegate TrueProp in ValidProperties)  
+                foreach(CheckGroupDelegate TrueProp in ValidProperties)  
                 {
                     if (!TrueProp(detail)) //Testing for false. If false, the detail does not contain in the group
                     {
@@ -38,7 +38,7 @@ namespace PTK.Classes
                         break;
                     }
                 }
-                foreach(NodeRuleDelegate FalsePrope in InValidProperties) 
+                foreach(CheckGroupDelegate FalsePrope in InValidProperties) 
                 {
                     if (FalsePrope(detail))  //Testing for true. If true, the detail does not contain in the group
                     {
