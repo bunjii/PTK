@@ -12,6 +12,7 @@ namespace PTK
     {
         public Point3d Point { get; private set; }
         public List<Vector3d> DisplacementVectors { get; private set; } = new List<Vector3d>();
+        
 
         public Node()
         {
@@ -34,6 +35,8 @@ namespace PTK
                 return false;
             }
         }
+
+        
 
         public bool Equals(Point3d _point)
         {

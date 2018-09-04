@@ -3,13 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Grasshopper.Kernel;
+using Rhino.Geometry;
+using System.Linq;
+using Grasshopper;
 
 namespace PTK
 {
     public class Detail
     {
         public Node Node { get; private set; }
-        //public List<Element1D> Elements { get; private set; }
+        public List<Element1D> Elements { get; private set; }
+        public List<Vector3d> UnifiedVectors { get; private set; }
         public Dictionary<Element1D, int> ElementsPriorityMap { get; private set; }
         public DetailType Type { get; private set; }
         //private int crossElementNum = 0;
@@ -27,6 +32,17 @@ namespace PTK
             Node = _node;
             ElementsPriorityMap = new Dictionary<Element1D, int>();
         }
+
+        public Detail(Node _node, List<Element1D> _elements)
+        {
+            Node = _node;
+            Elements = _elements;
+            
+        }
+
+        
+
+
 
         public bool SetElements(List<Element1D> _elements, List<string> _priority)
         {
@@ -81,6 +97,37 @@ namespace PTK
             }
             return true;
         }
+
+        public void GenerateUnifiedElementVectors()
+        {
+            UnifiedVectors = new List<Vector3d>();
+            foreach (Element1D element in Elements)
+            {
+                double DistanceElemStart = Node.Point.DistanceTo(element.BaseCurve.PointAtStart);
+                double DistanceElemEnd = Node.Point.DistanceTo(element.BaseCurve.PointAtEnd);
+                Line test = new Line(element.BaseCurve.PointAtStart, element.BaseCurve.PointAtEnd);  
+                element.BaseCurve.Reverse();
+
+                Line test2 = new Line(Node.Point, element.BaseCurve.PointAt(element.BaseCurve.GetLength() / 2));
+
+                
+
+
+                if (DistanceElemStart < DistanceElemEnd)
+                {
+                    UnifiedVectors.Add(-element.BaseCurve.TangentAtStart);
+
+                }
+                else
+                {
+                    UnifiedVectors.Add(-element.BaseCurve.TangentAtEnd);
+
+                }
+
+            }
+
+        }
+
 
         private bool SortElementsByPriority(ref List<Element1D> _elements, List<string> _priority)
         {

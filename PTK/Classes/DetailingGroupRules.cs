@@ -57,7 +57,7 @@ namespace PTK.Rules
         {
             Detail detail = _detail;
             Node node = detail.Node;
-            List<Element1D> elements = detail.ElementsPriorityMap.Keys.ToList();
+            List<Element1D> elements = detail.Elements;// ElementsPriorityMap.Keys.ToList();
 
 
             bool valid = false;
@@ -112,7 +112,8 @@ namespace PTK.Rules
         {
             Detail detail = _detail;
             Node node = detail.Node;
-            List<Element1D> elements = detail.ElementsPriorityMap.Keys.ToList();
+            List<Element1D> elements = detail.Elements;// ElementsPriorityMap.Keys.ToList();
+
             
 
 
@@ -160,8 +161,8 @@ namespace PTK.Rules
         {
             Detail detail = _detail;
             Node node = detail.Node;
-            List<Element1D> elements = detail.ElementsPriorityMap.Keys.ToList();
-            
+            List<Element1D> elements = detail.Elements;// ElementsPriorityMap.Keys.ToList();
+
 
 
             double tolerance = CommonProps.tolerances; ;

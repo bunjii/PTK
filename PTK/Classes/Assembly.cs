@@ -20,6 +20,10 @@ namespace PTK
         public List<Material> Materials { get; private set; }
         public Dictionary<Element1D,List<int>> NodeMap { get; private set; }
         public Dictionary<CrossSection, Material> CrossSectionMap { get; private set; }
+        public List<Detail> Details { get; private set; }
+        public List<DetailingGroup> DetailingGroups { get; private set; }
+
+
 
         public Assembly()
         {
@@ -30,7 +34,33 @@ namespace PTK
             Materials = new List<Material>();
             NodeMap = new Dictionary<Element1D, List<int>>();
             CrossSectionMap = new Dictionary<CrossSection, Material>();
+            Details = new List<Detail>();
+            DetailingGroups = new List<DetailingGroup>();
+            
+
+            
+
         }
+
+        
+        public void GenerateDetails()
+        {
+            //Making Detail
+            foreach(Node node in Nodes)
+            {
+                ;
+
+                int ind = Nodes.IndexOf(node);
+                List<Element1D> Elements = NodeMap.Where(p => p.Value.Contains(ind)).ToList().ConvertAll(p => p.Key);
+
+
+                Details.Add(new Detail(node, Elements));
+
+            }
+
+            
+        }
+
 
         public int AddElement(Element1D _element)
         {
@@ -60,6 +90,11 @@ namespace PTK
             }
             return Elements.Count;
         }
+
+
+
+
+
 
         private void SearchNodes(Element1D _element)
         {
@@ -111,11 +146,16 @@ namespace PTK
         {
             if (!Nodes.Exists(n => n.Equals(_point)))   //When there is no node at that position
             {
+                //Here i make a new detail. and add the element to the detail
+                
+
+
                 Nodes.Add(new Node(_point));
                 NodeMap[_element].Add(Nodes.Count-1);
             }
             else
             {
+                //Here i add an element to the detail
                 int ind = Nodes.FindIndex(n => n.Equals(_point));   //If there is already a node, its index
                 if (!NodeMap[_element].Contains(ind))
                 {

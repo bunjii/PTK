@@ -29,6 +29,8 @@ namespace PTK
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddParameter(new Param_Element1D(), "Elements", "E", "Add elements here", GH_ParamAccess.list);
+            pManager.AddGenericParameter("DetailingGroupDefinitions", "DG", "Add detailingroups here", GH_ParamAccess.list);
+            pManager[1].Optional = true;
         }
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
@@ -47,6 +49,7 @@ namespace PTK
             Assembly assembly = new Assembly();
             List<GH_Element1D> gElems = new List<GH_Element1D>();
             List<Element1D> elems = null;
+            List<DetailingGroupRulesDefinition> DetailinGroupDefinitions = new List<DetailingGroupRulesDefinition>();
             #endregion
 
             #region input
@@ -60,12 +63,38 @@ namespace PTK
             }
             #endregion
 
+            
+
+
             #region solve
             foreach(Element1D elem in elems)
             {
                 assembly.AddElement(elem);
             }
+
+
+            if (DA.GetDataList(1, DetailinGroupDefinitions))
+            {
+                assembly.GenerateDetails();
+                foreach(DetailingGroupRulesDefinition DG in DetailinGroupDefinitions)
+                {
+                    assembly.DetailingGroups.Add(DG.GenerateDetailingGroup(assembly.Details)); 
+                }
+
+
+            }
+
+            
+            
+
+
+
+            
+
+
             #endregion
+
+
 
             #region output
             List<GH_Node> nodes = assembly.Nodes.ConvertAll(n => new GH_Node(n));

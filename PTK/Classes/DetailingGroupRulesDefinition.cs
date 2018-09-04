@@ -14,23 +14,42 @@ namespace PTK
         public string Name { get; private set; }
         public List<CheckGroupDelegate> ValidProperties { get; private set; }
         public List<CheckGroupDelegate> InValidProperties { get; private set; }
+        public static List<String> GroupNames;
+
         //V1: Public NodeProperty NodeProperty { get; private set; }
 
         public DetailingGroupRulesDefinition(string _name, List<CheckGroupDelegate> _validProperties, List<CheckGroupDelegate> _inValidProperties)
         {
+            if (GroupNames == null)
+            {
+                GroupNames = new List<string>();
+            }
+
+            if (GroupNames.FindIndex(o => string.Equals(Name, o, StringComparison.OrdinalIgnoreCase)) <0)
+            {
+                GroupNames.Add(Name);
+                
+            }
+
+
             Name = _name;
+            
+
+
             ValidProperties = _validProperties;
             InValidProperties = _inValidProperties;
         }
         
-        public DetailingGroup GetDetailingGroup(List<Detail> _details)
+        public DetailingGroup GenerateDetailingGroup(List<Detail> _details)
         {
             List<Detail> ApprovedDetails = new List<Detail>();
-            bool ValidDetail = true;
+            
 
             foreach (Detail detail in _details)
-            {  
-                foreach(CheckGroupDelegate TrueProp in ValidProperties)  
+            {
+                bool ValidDetail = true;
+
+                foreach (CheckGroupDelegate TrueProp in ValidProperties)  
                 {
                     if (!TrueProp(detail)) //Testing for false. If false, the detail does not contain in the group
                     {
@@ -46,10 +65,7 @@ namespace PTK
                         break;
                     }
                 }
-                if (!ValidDetail)
-                {
-                    break;
-                }
+                
 
                 if (ValidDetail)
                 {
@@ -57,14 +73,9 @@ namespace PTK
                 }
 
             }
-            if (ValidDetail)
-            {
-                return  new DetailingGroup(Name, ApprovedDetails);
-            }
-            else
-            {
-                return new DetailingGroup(Name);
-            }
+
+            return new DetailingGroup(Name, ApprovedDetails);
+            
 
             
 
