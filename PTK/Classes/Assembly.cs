@@ -36,6 +36,9 @@ namespace PTK
         {
             if (!Elements.Contains(_element))
             {
+                // SearchNodes:
+                //
+                // 
                 SearchNodes(_element);
 
                 Elements.Add(_element);
@@ -162,7 +165,7 @@ namespace PTK
         }
     }
 
-    public class StructuralAssembly
+    public class StructuralAssembly : Assembly
     {
         public Assembly Assembly { get; private set; }
         public List<StructuralElement> SElements { get; private set; }
@@ -211,7 +214,7 @@ namespace PTK
             return Loads.Count;
         }
 
-        public StructuralAssembly DeepCopy()
+        public new StructuralAssembly DeepCopy()
         {
             return (StructuralAssembly)base.MemberwiseClone();
         }
@@ -223,7 +226,7 @@ namespace PTK
                 " Loads:" + Loads.Count.ToString();
             return info;
         }
-        public bool IsValid()
+        public new bool IsValid()
         {
             return SElements.Count != 0;
         }
