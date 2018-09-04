@@ -23,8 +23,8 @@ namespace PTK.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddNumberParameter("Min Length", "<", "Minimum element length allowed", GH_ParamAccess.item, -1);
-            pManager.AddNumberParameter("Max Length", ">", "Maximum element length allowed", GH_ParamAccess.item, 10000000);
+            pManager.AddNumberParameter("Min Amount", "<", "Minimum element amount allowed", GH_ParamAccess.item, -1);
+            pManager.AddNumberParameter("Max Amount", ">", "Maximum element amount allowed", GH_ParamAccess.item, 10000000);
         }
 
 
@@ -44,17 +44,17 @@ namespace PTK.Components
         {
 
             //Variables 
-            double minLength = -1;
-            double maxlength = 10000000;
+            int minAmount = -1;
+            int maxAmount = 10000000;
 
 
             //Input 
-            DA.GetData(0, ref minLength);
-            DA.GetData(1, ref maxlength);
+            DA.GetData(0, ref minAmount);
+            DA.GetData(1, ref maxAmount);
 
 
             //Solve 
-            Rules.ElementLength Rule = new Rules.ElementLength(minLength, maxlength);
+            Rules.ElementAmount Rule = new Rules.ElementAmount(minAmount, maxAmount);
 
 
             //Output
