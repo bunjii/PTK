@@ -6,136 +6,117 @@ using System.Threading.Tasks;
 
 namespace PTK
 {
-
     public class Detail
     {
-        #region fields
-        private List<Node> nodes;
-        private List<int> nodeIds;
-
-        private List<Element> elems;
-        private List<int> elemsIds;
-
-
-        #endregion
-        #region constructors
-        public Detail(List<Node> _nodes, List<Element> _elems)
-        {
-            nodes = new List<Node>();
-            nodeIds = new List<int>();
-            elems = new List<Element>();
-            elemsIds = new List<int>();
+        public Node Node { get; private set; }
+        //public List<Element1D> Elements { get; private set; }
+        public Dictionary<Element1D, int> ElementsPriorityMap { get; private set; }
+        public DetailType Type { get; private set; }
+        //private int crossElementNum = 0;
 
 
-            nodes = _nodes;
-            elems = _elems;
-            elemsIds = new List<int>();
-            nodeIds = new List<int>();
-            foreach (Node node in _nodes)
-            {
-                nodeIds.Add(node.Id);
-            }
-            foreach (Element elem in _elems)
-            {
-                elemsIds.Add(elem.Id);
-            }
 
-
-        }
         public Detail()
         {
-
+            Node = new Node();
+            ElementsPriorityMap = new Dictionary<Element1D, int>();
+            
         }
-        #endregion
-        #region properties
-        public List<Node> Nodes { get { return nodes; } }
-        public List<Element> Elems { get { return elems; } }
-        public List<int> NodeIds { get { return nodeIds; } }
-        public List<int> ElemsIds { get { return elemsIds; } }
-
-        #endregion
-        #region methods
-        #endregion
-    }
-
-    public delegate bool MethodDelegate(Detail _detail);
-
-    public class DetailingGroup
-    {
-        #region fields
-        private string name;
-        private Descriptions trueDescriptions;
-        private Descriptions falseDescriptions;
-        private List<Detail> details;
-        private List<MethodDelegate> mergeVerifierTrue;  //Methods that verify if a detail belong to this detailing group. If all methods return true, then detail belongs to group
-
-
-        #endregion
-        #region constructors
-        public DetailingGroup(string _name, List<MethodDelegate> _mergeVerifierTrue)
+        public Detail(Node _node)
         {
-            name = _name;
-            mergeVerifierTrue = _mergeVerifierTrue;
-            details = new List<Detail>();
-
+            Node = _node;
+            ElementsPriorityMap = new Dictionary<Element1D, int>();
         }
-        #endregion
-        #region properties
-        public List<Detail> Details { get { return details; } }
-        public string Name { get { return name; } }
 
-        #endregion
-        #region methods
-        public void assignDetails(List<Node> _nodes, List<Element> _elems)
+        public bool SetElements(List<Element1D> _elements, List<string> _priority)
         {
-            Detail tempdetail = new Detail();
-            details = new List<Detail>();
-            //Running through node-based details first
-            //Define a detail
-            for (int i = 0; i < _nodes.Count; i++)
+            List<Element1D> crossElements = _elements.FindAll(e => !IsNodeEndPointAtElement(e));
+            List<Element1D> cornerElements = _elements.FindAll(e => IsNodeEndPointAtElement(e));
+            // test 
+
+            if (crossElements.Count >= 2)
             {
-                List<Element> tempElems = new List<Element>();
-                List<Node> tempNode = new List<Node>();
-                tempNode.Add(_nodes[i]);
-                for (int j = 0; j < _nodes[i].ElemIds.Count; j++)
+                Type = DetailType.XType;
+                if (!SortElementsByPriority(ref crossElements, _priority))
                 {
-                    tempElems.Add(_elems.Find(t => t.Id == _nodes[i].ElemIds[j]));
+                    return false;
                 }
-                tempdetail = new Detail(tempNode, tempElems);
-
-                bool valid = true;
-                if (mergeVerifierTrue.Count == 0) { valid = false; }
-                foreach (MethodDelegate merge in mergeVerifierTrue)  //runs through all the verifier rules. If false
+            }
+            else if (crossElements.Count == 1)
+            {
+                Type = DetailType.TType;
+            }
+            else
+            {
+                Type = DetailType.LType;
+            }
+            if (cornerElements.Count >= 2)
+            {
+                if (!SortElementsByPriority(ref cornerElements, _priority))
                 {
-                    if (!merge(tempdetail))
-                    {
-                        valid = false;
-                        break;
-                    }
+                    return false;
                 }
-                if (valid)
-                {
-                    details.Add(tempdetail);
-                }
-
             }
 
-
-
-
-
-
-
-            //run through true descriptions
-            //run through false descriptions
-
-
-
+            string preTag = "";
+            int priorityIndex = 0;
+            foreach (Element1D e in crossElements)
+            {
+                if (preTag != e.Tag)
+                {
+                    preTag = e.Tag;
+                    priorityIndex++;
+                }
+                ElementsPriorityMap[e] = priorityIndex;
+            }
+            preTag = "";    //When CrossElement and CornerElement are the same tag
+            foreach (Element1D e in cornerElements)
+            {
+                if (preTag != e.Tag)
+                {
+                    preTag = e.Tag;
+                    priorityIndex++;
+                }
+                ElementsPriorityMap[e] = priorityIndex;
+            }
+            return true;
         }
 
+        private bool SortElementsByPriority(ref List<Element1D> _elements, List<string> _priority)
+        {
+            //When rearranging by priority is not necessary
+            if (_elements.Count <= 1 || _elements.ConvertAll(e => e.Tag).Distinct().Count() <= 1)
+            {
+                return true;
+            }
+            //Whether all Elements to be prioritized are input with priority
+            if (_elements.ConvertAll(e => e.Tag).Except(_priority).Count() == 0)
+            {
+                _elements = _elements.OrderBy(e => _priority.IndexOf(e.Tag)).ToList();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
+        private bool IsNodeEndPointAtElement(Element1D _element)
+        {
+            if (Node.Point.DistanceTo(_element.BaseCurve.PointAtStart) <= CommonProps.tolerances ||
+                Node.Point.DistanceTo(_element.BaseCurve.PointAtEnd) <= CommonProps.tolerances)
+            {
+                return true;
+            }
+            return false;
+        }
 
-        #endregion
-
+        public double SearchNodeParamAtElement(Element1D _element)
+        {
+            double p;
+            _element.BaseCurve.ClosestPoint(Node.Point, out p);
+            return p;
+        }
     }
+
 }

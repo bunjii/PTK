@@ -74,6 +74,10 @@
     <Compile Include="Classes\Assembly.cs" />
     <Compile Include="Classes\btlx_10.DesignerNew.cs" />
     <Compile Include="Classes\Composite.cs" />
+    <Compile Include="Classes\Detail.cs" />
+    <Compile Include="Classes\DetailingGroup.cs" />
+    <Compile Include="Classes\DetailingGroupRules.cs" />
+    <Compile Include="Classes\DetailingGroupRulesDefinition.cs" />
     <Compile Include="Classes\Element.cs" />
     <Compile Include="Classes\Functions.cs" />
     <Compile Include="Classes\Joint.cs" />
@@ -86,6 +90,9 @@
     <Compile Include="Classes\SubElement.cs" />
     <Compile Include="Classes\SubElementBTL.cs" />
     <Compile Include="Components\2_SubElement.cs" />
+    <Compile Include="Components\10_DefinitionDetailingGroup.cs" />
+    <Compile Include="Components\10_Rule_ElementAmount.cs" />
+    <Compile Include="Components\10_Rule_ElementLength.cs" />
     <Compile Include="Components\3_GravityLoad.cs" />
     <Compile Include="Components\2_StructuralElement.cs" />
     <Compile Include="Components\3_StructualAssembly.cs" />
