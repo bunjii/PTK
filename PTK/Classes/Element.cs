@@ -202,6 +202,14 @@ namespace PTK
             Forces = new List<Force>();
             Joints = new List<Joint>();
         }
+
+        public StructuralElement(Element1D _element)
+        {
+            Element = _element;
+            Forces = new List<Force>();
+            Joints = new List<Joint>();
+        }
+
         public StructuralElement(Element1D _element, List<Force> _forces, List<Joint> _joints)
         {
             Element = _element;
