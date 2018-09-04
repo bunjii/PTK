@@ -13,19 +13,19 @@ namespace PTK
     public class Material
     {
         public string Name { get; private set; }
-        public MaterialStructuralProp StructuralProp { get; private set; }
+        public MaterialProperty StructuralProp { get; private set; }
 
         public Material()
         {
             Name = "N/A";
-            StructuralProp = new MaterialStructuralProp();
+            StructuralProp = new MaterialProperty();
         }
         public Material(string _name)
         {
             Name = _name;
-            StructuralProp = new MaterialStructuralProp();
+            StructuralProp = new MaterialProperty();
         }
-        public Material(string _name, MaterialStructuralProp _structuralProp)
+        public Material(string _name, MaterialProperty _structuralProp)
         {
             Name = _name;
             StructuralProp = _structuralProp;

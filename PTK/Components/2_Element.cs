@@ -39,7 +39,9 @@ namespace PTK
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            #region variables
+            /////////////////////////////////////////////////////////////////////////////////
+            // variables
+            /////////////////////////////////////////////////////////////////////////////////
             string tag = null;
             Curve curve = null;
             List<GH_CroSec> gSections = new List<GH_CroSec>();
@@ -47,11 +49,13 @@ namespace PTK
             GH_Alignment gAlign = null;
             Alignment align = null;
             bool intersect = true;
-            #endregion
 
-            #region input
+            /////////////////////////////////////////////////////////////////////////////////
+            // input
+            /////////////////////////////////////////////////////////////////////////////////
             if (!DA.GetData(0, ref tag)) { return; }
             if (!DA.GetData(1, ref curve)) { return; }
+
             if (!DA.GetDataList(2, gSections))
             {
                 sections = new List<CrossSection>();
@@ -60,6 +64,7 @@ namespace PTK
             {
                 sections = gSections.ConvertAll(s => s.Value);
             }
+
             if (!DA.GetData(3, ref gAlign))
             {
                 align = new Alignment();
@@ -69,15 +74,17 @@ namespace PTK
                 align = gAlign.Value;
             }
             if (!DA.GetData(4, ref intersect)) { return; }
-            #endregion
 
-            #region solve
+            /////////////////////////////////////////////////////////////////////////////////
+            // solve
+            /////////////////////////////////////////////////////////////////////////////////
             GH_Element1D elem = new GH_Element1D(new Element1D(tag, curve, sections, align, intersect));
-            #endregion
 
-            #region output
+            /////////////////////////////////////////////////////////////////////////////////
+            // output
+            /////////////////////////////////////////////////////////////////////////////////
             DA.SetData(0, elem);
-            #endregion
+
         }
 
         protected override System.Drawing.Bitmap Icon

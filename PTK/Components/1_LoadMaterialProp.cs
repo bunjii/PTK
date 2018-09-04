@@ -29,7 +29,7 @@ namespace PTK
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_MaterialStructuralProp(), "Structural Material Prop", "SMP", "Material Property (PTK) data to be connected to a Material (PTK) component", GH_ParamAccess.item);
+            pManager.RegisterParam(new Param_MaterialProperty(), "Structural Material Prop", "SMP", "Material Property (PTK) data to be connected to a Material (PTK) component", GH_ParamAccess.item);
             //pManager.AddTextParameter("Material Properties text", "MP txt", "Text output of Material Properties (PTK)", GH_ParamAccess.list);
         }
 
@@ -149,7 +149,7 @@ namespace PTK
             rhogk = double.Parse(nlist[15]);
             rhogmean = double.Parse(nlist[16]);
 
-            GH_MaterialStructuralProp prop = new GH_MaterialStructuralProp( new MaterialStructuralProp(
+            GH_MaterialProperty prop = new GH_MaterialProperty( new MaterialProperty(
                  MaterialName,
                  fmgk,
                  ft0gk,
