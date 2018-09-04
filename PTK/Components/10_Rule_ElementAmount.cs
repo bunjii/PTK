@@ -23,8 +23,8 @@ namespace PTK.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddNumberParameter("Min Amount", "<", "Minimum element amount allowed", GH_ParamAccess.item, -1);
-            pManager.AddNumberParameter("Max Amount", ">", "Maximum element amount allowed", GH_ParamAccess.item, 10000000);
+            pManager.AddIntegerParameter("Min Amount", "<", "Minimum element amount allowed", GH_ParamAccess.item, -1);
+            pManager.AddIntegerParameter("Max Amount", ">", "Maximum element amount allowed", GH_ParamAccess.item, 10000000);
         }
 
 
