@@ -24,21 +24,33 @@ namespace PTK
 
     public class Element1D : Element
     {
+        /////////////////////////////////////////////////////////////////////////////////
+        // fields
+        /////////////////////////////////////////////////////////////////////////////////
         public Curve BaseCurve { get; private set; }
         public Point3d PointAtStart { get; private set; }
         public Point3d PointAtEnd { get; private set; }
         public Plane CroSecLocalPlane { get; private set; }
-        public List<CrossSection> Sections { get; private set; }
+        public SubElement SubElement { get; private set; }
         public Alignment Align { get; private set; }
+        public List<Force> Forces { get; private set; }
+        public List<Joint> Joints { get; private set; }
         public bool IsIntersectWithOther { get; private set; } = true;
+
+        /////////////////////////////////////////////////////////////////////////////////
+        // constructors
+        /////////////////////////////////////////////////////////////////////////////////
 
         public Element1D() : base()
         {
             BaseCurve = null;
             PointAtStart = new Point3d();
             PointAtEnd = new Point3d();
-            Sections = new List<CrossSection>();
-            Align = new Alignment();
+            SubElement = new SubElement();
+            // Sections = new List<CrossSection>();
+            // Align = new Alignment();
+            Forces = new List<Force>();
+            Joints = new List<Joint>();
             InitializeLocalPlane();
         }
         public Element1D(string _tag) : base(_tag)
@@ -46,10 +58,15 @@ namespace PTK
             BaseCurve = null;
             PointAtStart = new Point3d();
             PointAtEnd = new Point3d();
-            Sections = new List<CrossSection>();
-            Align = new Alignment();
+            SubElement = new SubElement();
+            // Sections = new List<CrossSection>();
+            Align = new Alignment(); // 
+            Forces = new List<Force>();
+            Joints = new List<Joint>();
             InitializeLocalPlane();
         }
+
+        /*
         public Element1D(string _tag, Curve _curve, List<CrossSection> _sections, Alignment _align, bool _intersect = true) : base(_tag)
         {
             BaseCurve = _curve;
@@ -60,11 +77,37 @@ namespace PTK
             IsIntersectWithOther = _intersect;
             InitializeLocalPlane();
         }
+        */
+
+        public Element1D(string _tag, Curve _curve, List<Force> _forces, List<Joint> _joints, SubElement _subElement, int _priority, bool _intersect = true) : base(_tag)
+        {
+            BaseCurve = _curve;
+            PointAtStart = _curve.PointAtStart;
+            PointAtEnd = _curve.PointAtEnd;
+            SubElement = _subElement;
+            // Sections = new List<CrossSection>();
+            Align = new Alignment(); // should not be a new instance 
+            Forces = _forces;
+            Joints = _joints;
+            IsIntersectWithOther = _intersect;
+
+            InitializeLocalPlane();
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////
+        // properties
+        /////////////////////////////////////////////////////////////////////////////////
+
+        /////////////////////////////////////////////////////////////////////////////////
+        // methods
+        /////////////////////////////////////////////////////////////////////////////////
 
         private void InitializeLocalPlane()
         {
             if (BaseCurve != null)
             {
+                List<CrossSection> Sections = SubElement.CrossSections;
+
                 Vector3d localX = BaseCurve.TangentAtStart;
                 Vector3d globalZ = Vector3d.ZAxis;
 

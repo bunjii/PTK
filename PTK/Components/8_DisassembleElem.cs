@@ -57,7 +57,7 @@ namespace PTK
             Point3d ps = elem.PointAtStart;
             Point3d pe = elem.PointAtEnd;
             Plane plane = elem.CroSecLocalPlane;
-            List<GH_CroSec> secs = elem.Sections.ConvertAll(s => new GH_CroSec(s));
+            List<GH_CroSec> secs = elem.SubElement.CrossSections.ConvertAll(s => new GH_CroSec(s));
             GH_Alignment align = new GH_Alignment(elem.Align);
             bool intersect = elem.IsIntersectWithOther;
             #endregion

@@ -45,7 +45,7 @@ namespace PTK
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_MaterialStructuralProp(), "Structural Material Prop", "SMP",
+            pManager.RegisterParam(new Param_MaterialProperty(), "Structural Material Prop", "SMP",
                 "Material Property (PTK) data to be connected to a Material (PTK) component");
         }
 
@@ -104,8 +104,8 @@ namespace PTK
             #endregion
 
             #region solve
-            GH_MaterialStructuralProp prop = new GH_MaterialStructuralProp(
-                new MaterialStructuralProp(
+            GH_MaterialProperty prop = new GH_MaterialProperty(
+                new MaterialProperty(
                     Name,
                     fmgk,
 

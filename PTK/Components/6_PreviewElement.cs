@@ -40,7 +40,7 @@ namespace PTK.Components
 
             #region solve
             List<Curve> secs = new List<Curve>();
-            foreach(CrossSection sec in element.Sections)
+            foreach(CrossSection sec in element.SubElement.CrossSections)
             {
                 if(sec is RectangleCroSec recSec)
                 {
