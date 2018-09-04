@@ -32,6 +32,7 @@ namespace PTK
         {
             List<Element1D> crossElements = _elements.FindAll(e => !IsNodeEndPointAtElement(e));
             List<Element1D> cornerElements = _elements.FindAll(e => IsNodeEndPointAtElement(e));
+            // test 
 
             if (crossElements.Count >= 2)
             {
