@@ -47,8 +47,8 @@ namespace PTK
 
             #region input
             if (!DA.GetData(0, ref name)) { return; }
-            if (!DA.GetData(1, ref height)) { return; }
-            if (!DA.GetData(2, ref width)) { return; }
+            if (!DA.GetData(1, ref width)) { return; }
+            if (!DA.GetData(2, ref height)) { return; }
             if (!DA.GetData(3, ref gMaterial)) {
                 material = new Material();
             }
