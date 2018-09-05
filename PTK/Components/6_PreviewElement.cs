@@ -42,16 +42,18 @@ namespace PTK.Components
             List<Curve> secs = new List<Curve>();
             //
             List<CrossSection> crossSections = new List<CrossSection>();
-            foreach (Sub2DElement se in element.Sub2DElements)
+            foreach (Sub2DElement subElement in element.Sub2DElements)
             {
-                crossSections.Add(se.CrossSection);
+                crossSections.Add(subElement.CrossSection);
             }
             //
-            foreach (CrossSection sec in crossSections)
+            foreach (CrossSection crossSection in crossSections)
             {
-                if(sec is RectangleCroSec recSec)
+                if(crossSection is RectangleCroSec recSec)
                 {
-                    secs.Add(new Rectangle3d(element.CroSecLocalPlane, new Interval(-sec.GetWidth(), sec.GetWidth()), new Interval(-sec.GetHeight(), sec.GetHeight())).ToNurbsCurve());
+                    secs.Add(new Rectangle3d(element.CroSecLocalPlane, 
+                        new Interval(-crossSection.GetWidth(), crossSection.GetWidth()), 
+                        new Interval(-crossSection.GetHeight(), crossSection.GetHeight())).ToNurbsCurve());
                 }
             }
             foreach(Curve s in secs)

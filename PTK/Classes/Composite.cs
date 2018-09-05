@@ -44,6 +44,51 @@ namespace PTK
         // methods
         /////////////////////////////////////////////////////////////////////////////////
 
+        public void GetHeightAndWidth(out double _width, out double _height)
+        {
+            double maxHeight = double.MinValue;
+            double maxWidth = double.MinValue;
+            double minHeight = double.MaxValue;
+            double minWidth = double.MaxValue;
+            List<Sub2DElement> sub2DElements = this.Sub2DElements;
+            foreach (Sub2DElement s in sub2DElements)
+            {
+                double tempVal;
+
+                // update maxHeight 
+                tempVal = s.Alignment.OffsetZ + s.CrossSection.GetHeight() / 2;
+                if (tempVal > maxHeight)
+                {
+                    maxHeight = tempVal;
+                }
+
+                // update minHeight 
+                tempVal = s.Alignment.OffsetZ - s.CrossSection.GetHeight() / 2;
+                if (tempVal < minHeight)
+                {
+                    minHeight = tempVal;
+                }
+
+                // update maxWidth 
+                tempVal = s.Alignment.OffsetY + s.CrossSection.GetWidth() / 2;
+                if (tempVal > maxWidth)
+                {
+                    maxWidth = tempVal;
+                }
+
+                // update minWidth 
+                tempVal = s.Alignment.OffsetY - s.CrossSection.GetWidth() / 2;
+                if (tempVal < minWidth)
+                {
+                    minWidth = tempVal;
+                }
+                
+            }
+
+            _height = maxHeight - minHeight;
+            _width = maxWidth - minWidth;
+            
+        }
         public Composite DeepCopy()
         {
             return (Composite)base.MemberwiseClone();
