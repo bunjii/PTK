@@ -67,7 +67,7 @@ namespace PTK.Components
 
             BuildingProject GrasshopperProject = new BuildingProject(new ProjectType());
             GrasshopperProject.PrepairElements(ghAssembly.Value.Elements, Orders);
-            GrasshopperProject.ManufactureProject(ManufactureMode.BTL);
+            GrasshopperProject.ManufactureProject(ManufactureMode.BOTH);
 
             // Create a new XmlSerializer instance with the type of the test class
             //Initializing the project

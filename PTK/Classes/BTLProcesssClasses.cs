@@ -216,7 +216,7 @@ namespace PTK
             List<Point3d> StartPoints = _BTLPartGeometry.StartPoints;
 
             //Calculating the refside that has the cutpoint closest to the refpoint
-            Refside RefSide = BTLFunctions.GetRefSideFromPlane(Refsides, CutPlane, out cutpoints);
+            Refside RefSide = Refsides[0];// BTLFunctions.GetRefSideFromPlane(Refsides, CutPlane, out cutpoints);
 
 
             //Assigning variables based on chosen refplane

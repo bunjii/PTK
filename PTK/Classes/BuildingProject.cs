@@ -50,7 +50,7 @@ namespace PTK
             foreach(BuildingElement buildingElement in BuildingElements)
             {
                 buildingElement.ManufactureElement(_mode);
-                if (_mode == ManufactureMode.BTL)
+                if (_mode == ManufactureMode.BTL || _mode == ManufactureMode.BOTH)
                 {
                     BTLProject.Parts.Part.AddRange(buildingElement.BTLParts);
                 }
@@ -69,7 +69,11 @@ namespace PTK
                 for (int j = 0; j < BuildingElement.Sub3DElements.Count; j++)
                 {
                     Sub3DElement Sub3DElement = BuildingElement.Sub3DElements[j];
-                    dataTree.AddRange(Sub3DElement.ProcessedStock, new Grasshopper.Kernel.Data.GH_Path(i, j));
+                    if (Sub3DElement.ProcessedStock != null)
+                    {
+                        dataTree.AddRange(Sub3DElement.ProcessedStock, new Grasshopper.Kernel.Data.GH_Path(i, j));
+                    }
+                    
 
 
 
@@ -148,7 +152,9 @@ namespace PTK
 
         public Sub3DElement(Element1D _element, Sub2DElement _Sub2DElement, List<PerformTimberProcessDelegate> _processDelegate)     //PHASE1: PREPAIR
         {
-            BTLPart = new PartType(); 
+            BTLPart = new PartType();
+            ProcessedStock = new List<Brep>();
+            VoidProcess = new List<Brep>();
 
              height = _Sub2DElement.CrossSection.GetHeight();
              width = _Sub2DElement.CrossSection.GetWidth();
@@ -176,14 +182,22 @@ namespace PTK
             SubElemPlaneCentric.Translate(SubElemPlaneCentric.XAxis * _Sub2DElement.Alignment.OffsetY + SubElemPlaneCentric.YAxis * _Sub2DElement.Alignment.OffsetZ);
 
             
+
+
             
 
 
             //Making CornerPlane, bottom left corner
-            CornerPlane = new Plane(SubElemPlaneCentric);
-            CornerPlane.Translate(CornerPlane.XAxis * width / 2 + (CornerPlane.YAxis * -height / 2));
+            Plane TempCorner1 = new Plane(SubElemPlaneCentric);
+            TempCorner1.Translate(SubElemPlaneCentric.XAxis * -width / 2 + (SubElemPlaneCentric.YAxis * -height / 2));
+            //TempCorner.Translate(TempCorner.XAxis * 100 + (TempCorner.YAxis * 100));
+            CornerPlane = TempCorner1;
 
-            Plane btlPlane = new Plane(CornerPlane.Origin, CornerPlane.ZAxis, CornerPlane.YAxis);
+            Plane TempCorner2 = new Plane(SubElemPlaneCentric);
+            TempCorner2.Translate(SubElemPlaneCentric.XAxis * width / 2 + (SubElemPlaneCentric.YAxis * -height / 2));
+
+
+            Plane btlPlane = new Plane(TempCorner2.Origin, TempCorner2.ZAxis, CornerPlane.YAxis);
 
             Plane refPlane1 = new Plane(btlPlane.Origin, btlPlane.XAxis, btlPlane.ZAxis);
 
