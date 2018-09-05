@@ -124,7 +124,7 @@ namespace PTK.Components
 
 
 
-            */
+            //*/
 
 
             List<Detail> Details = assembly.DetailingGroups.Find(t => t.Name == Name).Details;
