@@ -14,7 +14,7 @@ namespace PTK.Components
         public ExtractNode()
           : base("ExtractNode", "Nickname",
               "Description",
-              "PTK", "Extract")
+              CommonProps.category, CommonProps.subcate4)
         {
         }
 

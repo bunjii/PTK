@@ -23,6 +23,8 @@ namespace PTK
             if (GroupNames == null)
             {
                 GroupNames = new List<string>();
+                GroupNames.Add("Test");
+                GroupNames.Add("Yeah");
             }
 
             if (GroupNames.FindIndex(o => string.Equals(Name, o, StringComparison.OrdinalIgnoreCase)) <0)
@@ -74,10 +76,24 @@ namespace PTK
 
             }
 
+
+            if (GroupNames == null)
+            {
+                GroupNames = new List<string>();
+                GroupNames.Add("Test");
+                GroupNames.Add("Yeah");
+            }
+
+            if (GroupNames.FindIndex(o => string.Equals(Name, o, StringComparison.OrdinalIgnoreCase)) < 0)
+            {
+                GroupNames.Add(Name);
+
+            }
             return new DetailingGroup(Name, ApprovedDetails);
             
 
-            
+
+
 
 
 

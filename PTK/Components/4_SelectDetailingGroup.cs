@@ -88,8 +88,10 @@ namespace PTK.Components
             }
             */
 
-            foreach (IGH_Param source in Params.Input[0].Sources)
+            foreach (IGH_Param source in Params.Input[1].Sources)
             {
+               
+
                 if (source is Grasshopper.Kernel.Special.GH_ValueList)
                 {
 
@@ -100,6 +102,8 @@ namespace PTK.Components
 
                     foreach (String name in DetailingGroupRulesDefinition.GroupNames)
                     {
+                        
+
                         var item = new Grasshopper.Kernel.Special.GH_ValueListItem(name, name);
                         nvlist.ListItems.Add(item);
 
@@ -117,10 +121,10 @@ namespace PTK.Components
             // This command makes it 'real' and adds it to the canvas.
 
 
-            
 
 
 
+            */
 
 
             List<Detail> Details = assembly.DetailingGroups.Find(t => t.Name == Name).Details;
