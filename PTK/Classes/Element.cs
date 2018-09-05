@@ -35,6 +35,7 @@ namespace PTK
         public Alignment Align { get; private set; }
         public List<Force> Forces { get; private set; }
         public List<Joint> Joints { get; private set; }
+        public int Priority { get; private set; }
         public bool IsIntersectWithOther { get; private set; } = true;
 
         /////////////////////////////////////////////////////////////////////////////////
@@ -85,6 +86,7 @@ namespace PTK
             PointAtStart = _curve.PointAtStart;
             PointAtEnd = _curve.PointAtEnd;
             SubElement = _subElement;
+            Priority = _priority;
             // Sections = new List<CrossSection>();
             Align = new Alignment(); // should not be a new instance 
             Forces = _forces;
@@ -316,6 +318,20 @@ namespace PTK
         {
             return GH_GetterResult.success;
         }
+    }
+
+    public class ElementInDetail  //Used to output an element and its detailSpesific data
+    {
+        public Element1D Element;
+        public Vector3d UnifiedVector;
+
+        public ElementInDetail(Element1D _element, Vector3d _UnifiedVector)
+        {
+            Element = _element;
+            UnifiedVector = _UnifiedVector;
+
+        }
+
     }
 
 }

@@ -27,6 +27,9 @@ namespace PTK.Components
             pManager.AddGenericParameter("True Rules", "=", "Add rules that are true for the details in the detailing group", GH_ParamAccess.list);
             pManager.AddGenericParameter("False Rules", "≠", "Add rules that are false for the details in the detailing group", GH_ParamAccess.list);
             pManager.AddGenericParameter("NodeProperties", "馬鹿 :`(", "Not implemented in 0.5", GH_ParamAccess.list);
+            pManager[0].Optional = true;
+            pManager[1].Optional = true;
+            pManager[2].Optional = true;
             pManager[3].Optional = true;
 
 

@@ -72,6 +72,7 @@
   <ItemGroup>
     <Compile Include="Classes\Alignment.cs" />
     <Compile Include="Classes\Assembly.cs" />
+    <Compile Include="Classes\BTL-classes.cs" />
     <Compile Include="Classes\btlx_10.DesignerNew.cs" />
     <Compile Include="Classes\Composite.cs" />
     <Compile Include="Classes\Detail.cs" />
@@ -88,7 +89,7 @@
     <Compile Include="Classes\Node.cs" />
     <Compile Include="Classes\CommonProps.cs" />
     <Compile Include="Classes\SubElement.cs" />
-    <Compile Include="Classes\SubElementBTL.cs" />
+    <Compile Include="Components\11_BTL_Cut.cs" />
     <Compile Include="Components\2_SubElement.cs" />
     <Compile Include="Components\10_DefinitionDetailingGroup.cs" />
     <Compile Include="Components\10_Rule_ElementAmount.cs" />
@@ -103,6 +104,9 @@
     <Compile Include="Components\6_PreviewElement.cs" />
     <Compile Include="Classes\DetailModel.cs" />
     <Compile Include="Components\6_PreviewPriority.cs" />
+    <Compile Include="Components\4_ExtractElement.cs" />
+    <Compile Include="Components\4_SelectDetailingGroup.cs" />
+    <Compile Include="Components\4_ExtractNode.cs" />
     <Compile Include="Forms\F01_Supports.cs">
       <SubType>Form</SubType>
     </Compile>
