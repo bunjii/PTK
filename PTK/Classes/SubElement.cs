@@ -12,18 +12,24 @@ using Grasshopper.Kernel.Types;
 
 namespace PTK
 {
-    public class SubElement
+    public class Sub2DElement
     {
         /////////////////////////////////////////////////////////////////////////////////
         // fields
         /////////////////////////////////////////////////////////////////////////////////
         public string Name { get; private set; }
-        public List<CrossSection> CrossSections { get; private set; }
-        public List<MaterialProperty> MaterialProperties { get; private set; }
-        public List<Alignment> Alignments { get; private set; }
+        // public List<CrossSection> CrossSections { get; private set; }
+        public CrossSection CrossSection { get; private set; }
+        // public List<MaterialProperty> MaterialProperties { get; private set; }
+        public MaterialProperty MaterialProperty { get; private set; }
+        // public List<Alignment> Alignments { get; private set; }
+        public Alignment Alignment { get; private set; }
+
         /////////////////////////////////////////////////////////////////////////////////
         // constructors
         /////////////////////////////////////////////////////////////////////////////////
+
+        /*
         public SubElement()
         {
             Name = null;
@@ -38,6 +44,25 @@ namespace PTK
             CrossSections = _crossSections;
             Alignments = _alignments;
         }
+        */
+
+        public Sub2DElement()
+        {
+            Name = null;
+            MaterialProperty = new MaterialProperty();
+            CrossSection = new RectangleCroSec();
+            Alignment = new Alignment();
+        }
+
+        public Sub2DElement(string _name, MaterialProperty _materialProperty, CrossSection _crossSection, Alignment _alignment)
+        {
+            Name = _name;
+            MaterialProperty = _materialProperty;
+            CrossSection = _crossSection;
+            Alignment = _alignment;
+        }        
+
+
         /////////////////////////////////////////////////////////////////////////////////
         // properties
         /////////////////////////////////////////////////////////////////////////////////
@@ -46,9 +71,9 @@ namespace PTK
         // methods
         /////////////////////////////////////////////////////////////////////////////////
 
-        public SubElement DeepCopy()
+        public Sub2DElement DeepCopy()
         {
-            return (SubElement)base.MemberwiseClone();
+            return (Sub2DElement)base.MemberwiseClone();
         }
 
         public override string ToString()
@@ -66,7 +91,7 @@ namespace PTK
         
     }
 
-    public class GH_SubElement : GH_Goo<SubElement>
+    public class GH_Sub2DElement : GH_Goo<Sub2DElement>
     {
         /////////////////////////////////////////////////////////////////////////////////
         // fields
@@ -74,9 +99,9 @@ namespace PTK
         /////////////////////////////////////////////////////////////////////////////////
         // constructors
         /////////////////////////////////////////////////////////////////////////////////
-        public GH_SubElement() { }
-        public GH_SubElement(GH_SubElement other) : base(other.Value) { this.Value = other.Value.DeepCopy(); }
-        public GH_SubElement(SubElement subelem) : base(subelem) { this.Value = subelem; }
+        public GH_Sub2DElement() { }
+        public GH_Sub2DElement(GH_Sub2DElement other) : base(other.Value) { this.Value = other.Value.DeepCopy(); }
+        public GH_Sub2DElement(Sub2DElement subelem) : base(subelem) { this.Value = subelem; }
 
         /////////////////////////////////////////////////////////////////////////////////
         // properties
@@ -87,7 +112,7 @@ namespace PTK
         /////////////////////////////////////////////////////////////////////////////////
         public override IGH_Goo Duplicate()
         {
-            return new GH_SubElement(this);
+            return new GH_Sub2DElement(this);
         }
         public override bool IsValid => base.m_value.IsValid();
         public override string TypeName => "SubElement";
@@ -100,7 +125,7 @@ namespace PTK
         
     }
 
-    public class Param_SubElement : GH_PersistentParam<GH_SubElement>
+    public class Param_Sub2DElement : GH_PersistentParam<GH_Sub2DElement>
     {
 
         /////////////////////////////////////////////////////////////////////////////////
@@ -109,7 +134,7 @@ namespace PTK
         /////////////////////////////////////////////////////////////////////////////////
         // constructors
         /////////////////////////////////////////////////////////////////////////////////
-        public Param_SubElement() : base(new GH_InstanceDescription("SubElement", "SubElem",
+        public Param_Sub2DElement() : base(new GH_InstanceDescription("SubElement", "SubElem",
             "A part of an Element", CommonProps.category, CommonProps.subcate0))
         { }
         /////////////////////////////////////////////////////////////////////////////////
@@ -117,7 +142,7 @@ namespace PTK
         /////////////////////////////////////////////////////////////////////////////////
 
         
-        // set icon here
+        // set an icon here
         protected override System.Drawing.Bitmap Icon { get { return null; } }
 
         public override Guid ComponentGuid => new Guid("8a12f26a-532b-4da0-80a0-d775f5648123");
@@ -125,11 +150,11 @@ namespace PTK
         /////////////////////////////////////////////////////////////////////////////////
         // methods
         /////////////////////////////////////////////////////////////////////////////////
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_SubElement> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_Sub2DElement> values)
         {
             return GH_GetterResult.success;
         }
-        protected override GH_GetterResult Prompt_Singular(ref GH_SubElement value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_Sub2DElement value)
         {
             return GH_GetterResult.success;
         }

@@ -25,7 +25,7 @@ namespace PTK
             pManager.AddCurveParameter("Base Curve", "C", "Add curves that shall be materalized", GH_ParamAccess.item);
             pManager.AddParameter(new Param_Force(), "Forces", "F", "Add forces", GH_ParamAccess.list);
             pManager.AddParameter(new Param_Joint(), "Joint", "J", "Add joint", GH_ParamAccess.list);
-            pManager.AddParameter(new Param_SubElement(), "Subelement", "S", "Add the sub-element component here", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_Composite(), "Composite", "CP", "Add the sub-element component here", GH_ParamAccess.item);
             pManager.AddIntegerParameter("Structural Priority", "P", "Add integer value to set the priority of the member", GH_ParamAccess.item, -999);
             pManager.AddBooleanParameter("Intersection Nodes?", "I?", "Whether the element intersects other members at other than the end point", GH_ParamAccess.item, true);
 
@@ -55,8 +55,13 @@ namespace PTK
             List<GH_Joint> gJoints = new List<GH_Joint>();
             List<Joint> joints = null;
 
+            /*
             GH_SubElement gSubElement = new GH_SubElement();
             SubElement subElement = null;
+            */
+
+            GH_Composite gComposite = null;
+            Composite composite = null;
 
             int priority = new int();
             bool intersect = true;
@@ -86,13 +91,13 @@ namespace PTK
                 joints = gJoints.ConvertAll(j => j.Value);
             }
 
-            if (!DA.GetData(4, ref gSubElement))
+            if (!DA.GetData(4, ref gComposite))
             {
-                subElement = new SubElement();
+                composite = new Composite();
             }
             else
             {
-                subElement = gSubElement.Value;
+                composite = gComposite.Value;
             }
 
             if (!DA.GetData(5, ref priority))
@@ -108,7 +113,7 @@ namespace PTK
             /////////////////////////////////////////////////////////////////////////////////
             // solve
             /////////////////////////////////////////////////////////////////////////////////
-            GH_Element1D elem = new GH_Element1D(new Element1D(tag, curve, forces, joints, subElement, priority, intersect));
+            GH_Element1D elem = new GH_Element1D(new Element1D(tag, curve, forces, joints, composite, priority, intersect));
 
             /////////////////////////////////////////////////////////////////////////////////
             // output
