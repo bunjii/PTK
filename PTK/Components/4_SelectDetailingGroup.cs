@@ -66,52 +66,9 @@ namespace PTK.Components
             assembly = ghAssembly.Value;
 
             
-            /*
-            var vallist = new Grasshopper.Kernel.Special.GH_ValueList();
+           
 
-
-            //instantiate  new value list
             
-            vallist.CreateAttributes();
-
-            //customise value list position
-            int inputcount = Params.Input[1].SourceCount;
-            vallist.Attributes.Pivot = new PointF((float)Attributes.Bounds.Left - vallist.Attributes.Bounds.Width - 30, Attributes.Bounds.Y + inputcount * 30);
-            
-            //populate value list with our own data
-            vallist.ListItems.Clear();
-            foreach(String name in DetailingGroupRulesDefinition.GroupNames)
-            {
-                var item = new Grasshopper.Kernel.Special.GH_ValueListItem(name, name);
-                
-
-            }
-            */
-
-            foreach (IGH_Param source in Params.Input[1].Sources)
-            {
-               
-
-                if (source is Grasshopper.Kernel.Special.GH_ValueList)
-                {
-
-                    Grasshopper.Kernel.Special.GH_ValueList nvlist
-                      = source as Grasshopper.Kernel.Special.GH_ValueList;
-
-                    nvlist.ListItems.Clear();
-
-                    foreach (String name in DetailingGroupRulesDefinition.GroupNames)
-                    {
-                        
-
-                        var item = new Grasshopper.Kernel.Special.GH_ValueListItem(name, name);
-                        nvlist.ListItems.Add(item);
-
-
-                    }
-                }
-                   
-            }
 
 
 
@@ -124,7 +81,7 @@ namespace PTK.Components
 
 
 
-            */
+            
 
 
             List<Detail> Details = assembly.DetailingGroups.Find(t => t.Name == Name).Details;

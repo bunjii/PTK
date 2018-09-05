@@ -166,4 +166,26 @@ namespace PTK
         }
     }
 
+
+    
+
+    public class ElementInDetail
+    {
+        public Element1D Element { get; private set; }
+        public Vector3d UnifiedVector { get; private set; }
+
+
+        public ElementInDetail(Element1D _element, Vector3d _unifiedVector)
+        {
+            Element = _element;
+            UnifiedVector = _unifiedVector;
+        }
+
+        public ElementInDetail()
+        {
+
+        }
+ 
+    }
+
 }

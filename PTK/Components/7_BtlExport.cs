@@ -48,6 +48,7 @@ namespace PTK
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            /*
             bool enable = false;
             Assembly assembly = new Assembly();
             List<BTLprocess> Processes = new List<BTLprocess>();
@@ -79,7 +80,7 @@ namespace PTK
 
                 List<Brep> allBreps = new List<Brep>();
 
-                /*
+                
                 for (int i = 0; i < assembly.Elements.Count; i++)
                 {
                     Parts.Part.Add(assembly.Elements[i].SubElementBTL[0].BTLPart);  //Adding part to parts for each element. Line 73 have included all processess
@@ -114,7 +115,7 @@ namespace PTK
 
 
                 }
-                */
+                
 
                 //Initializing the project
                 ProjectType Project = new ProjectType();
@@ -147,7 +148,10 @@ namespace PTK
                 WriteFileStream.Close();
 
                 DA.SetDataList(0, allBreps);
+                
+            
             }
+            */
         }
 
         /// <summary>

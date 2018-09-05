@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 
-namespace PTK.Components
+namespace PTK
 {
     public class _11_BTL_Cut : GH_Component
     {
@@ -23,9 +23,9 @@ namespace PTK.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("A", "Assembly", "", GH_ParamAccess.item);
-            pManager.AddPlaneParameter("P", "CutPlane", "", GH_ParamAccess.list);
-            pManager.AddIntegerParameter("ID", "ElemID", "", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Element", "E", "", GH_ParamAccess.item);
+            pManager.AddPlaneParameter("P", "CutPlane", "", GH_ParamAccess.item);
+            
         }
 
         /// <summary>
@@ -33,8 +33,8 @@ namespace PTK.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("B", "BTL-Cut", "", GH_ParamAccess.list);
-            pManager.AddBrepParameter("Brep", "BTL-Cut", "", GH_ParamAccess.list);
+            pManager.AddGenericParameter("B", "BTL-Cut", "", GH_ParamAccess.item);
+            
         }
 
         /// <summary>
@@ -43,32 +43,30 @@ namespace PTK.Components
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            Assembly Assembly = new Assembly();
-            List<Plane> cutPlanes = new List<Plane>();
 
-            List<int> ElemIDs = new List<int>();
+            ElementInDetail temp = new ElementInDetail(); 
+            Element1D Element = new Element1D();
+            Plane Plane = new Plane();
 
-            DA.GetData(0, ref Assembly);
-            DA.GetDataList(1, cutPlanes);
-            DA.GetDataList(2, ElemIDs);
+            DA.GetData(0, ref temp);
+            DA.GetData(1, ref Plane);
 
-            List<BTLprocess> Processes = new List<BTLprocess>();
-            List<Brep> Breps = new List<Brep>();
+            Element = temp.Element;
+            List<Element1D> test = new List<Element1D>();
 
-            int i = 0;
-            foreach (int ElemID in ElemIDs)
-            {
-                Plane cutPlane = cutPlanes[i];
-                PTK_Element elem = Assembly.Elems.Find(t => t.Id == ElemID);
-                Processes.Add(BTLprocess.Cut(elem, cutPlane));
-                Breps.Add(Processes[i].Voidgeometry);
+            
 
-                i++;
+            BTLCut cut = new BTLCut(Plane);
+             
 
-            }
 
-            DA.SetDataList(0, Processes);
-            DA.SetDataList(1, Breps);
+            // Making Object with delegate and ID
+            OrderedTimberProcess Order = new OrderedTimberProcess(Element, new PerformTimberProcessDelegate(cut.DelegateProcess));
+
+
+            DA.SetData(0, Order);
+
+            
         }
 
         /// <summary>

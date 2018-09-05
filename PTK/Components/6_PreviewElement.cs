@@ -42,7 +42,7 @@ namespace PTK.Components
             List<Curve> secs = new List<Curve>();
             //
             List<CrossSection> crossSections = new List<CrossSection>();
-            foreach (Sub2DElement se in element.Sub2dElements)
+            foreach (Sub2DElement se in element.Sub2DElements)
             {
                 crossSections.Add(se.CrossSection);
             }
