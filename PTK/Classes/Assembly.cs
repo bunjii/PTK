@@ -77,7 +77,7 @@ namespace PTK
                 {
                     Tags.Add(tag);
                 }
-                foreach(CrossSection sec in _element.SubElement.CrossSections)
+                foreach(CrossSection sec in _element.CrossSections)
                 {
                     if(!CrossSectionMap.ContainsKey(sec))
                     {
