@@ -104,6 +104,7 @@
     <Compile Include="Classes\Force.cs" />
     <Compile Include="Components\6_PreviewElement.cs" />
     <Compile Include="Classes\DetailModel.cs" />
+    <Compile Include="Components\6_PreviewGeometry.cs" />
     <Compile Include="Components\6_PreviewPriority.cs" />
     <Compile Include="Components\4_ExtractElement.cs" />
     <Compile Include="Components\4_SelectDetailingGroup.cs" />

@@ -39,7 +39,7 @@ namespace PTK
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_StructuralAssembly(), "StructuralAssembly", "SA", "StructuralAssembly", GH_ParamAccess.item);
+            pManager.RegisterParam(new Param_Assembly(), "StructuralAssembly", "SA", "StructuralAssembly", GH_ParamAccess.item);
             // pManager.RegisterParam(new Param_Node(), "Nodes", "N", "Nodes included in the Assembly", GH_ParamAccess.list);
             pManager.AddLineParameter("Lines", "Lns", "only for V.0.3", GH_ParamAccess.list);
         }
@@ -128,12 +128,14 @@ namespace PTK
             {
                 strAssembly.AddLoad(l);
             }
-            
+
+            Assembly upcastedAssembly = strAssembly;
+
             /////////////////////////////////////////////////////////////////////////////////
             // output
             /////////////////////////////////////////////////////////////////////////////////
 
-            DA.SetData(0, new GH_StructuralAssembly(strAssembly));
+            DA.SetData(0, new GH_Assembly(upcastedAssembly));
 
             // below: temporal output at V.0.3
             DA.SetDataList(1, tempLines);

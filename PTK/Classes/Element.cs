@@ -41,6 +41,8 @@ namespace PTK
         public bool IsIntersectWithOther { get; private set; } = true;
         public int Priority { get; private set; } = 0;
 
+        public int Priority { get; private set; }
+
         /////////////////////////////////////////////////////////////////////////////////
         // constructors
         /////////////////////////////////////////////////////////////////////////////////
@@ -84,7 +86,7 @@ namespace PTK
             Forces = _forces;
             Joints = _joints;
             IsIntersectWithOther = _intersect;
-
+            Priority = _priority;
             SetSub2DElements();
             SetCrossSections();
             InitializeLocalPlane();
@@ -346,6 +348,17 @@ namespace PTK
         protected override GH_GetterResult Prompt_Singular(ref GH_StructuralElement value)
         {
             return GH_GetterResult.success;
+        }
+    }
+
+    public class ElementInDetail  //Used to output an element and its detailSpesific data
+    {
+        public Element1D Element;
+        public Vector3d UnifiedVector;
+        public ElementInDetail(Element1D _element, Vector3d _UnifiedVector)
+        {
+            Element = _element;
+            UnifiedVector = _UnifiedVector;
         }
     }
 
