@@ -40,22 +40,26 @@ namespace PTK.Components
 
             #region solve
             List<Curve> secs = new List<Curve>();
-            //
+            
             List<CrossSection> crossSections = new List<CrossSection>();
             foreach (Sub2DElement subElement in element.Sub2DElements)
             {
-                crossSections.Add(subElement.CrossSection);
+                Vector3d localY = element.CroSecLocalPlane.XAxis;
+                Vector3d localZ = element.CroSecLocalPlane.YAxis;
+
+                Point3d originElement = element.CroSecLocalPlane.Origin;
+                Point3d originSubElement = originElement + subElement.Alignment.OffsetY * localY + subElement.Alignment.OffsetZ * localZ;
+                
+                Plane localPlaneSubElement = new Plane(originSubElement, 
+                    element.CroSecLocalPlane.XAxis, 
+                    element.CroSecLocalPlane.YAxis);
+
+                secs.Add(new Rectangle3d(
+                            localPlaneSubElement,
+                            new Interval(-subElement.CrossSection.GetWidth()/2, subElement.CrossSection.GetWidth()/2),
+                            new Interval(-subElement.CrossSection.GetHeight()/2, subElement.CrossSection.GetHeight()/2)).ToNurbsCurve());
             }
-            //
-            foreach (CrossSection crossSection in crossSections)
-            {
-                if(crossSection is RectangleCroSec recSec)
-                {
-                    secs.Add(new Rectangle3d(element.CroSecLocalPlane, 
-                        new Interval(-crossSection.GetWidth(), crossSection.GetWidth()), 
-                        new Interval(-crossSection.GetHeight(), crossSection.GetHeight())).ToNurbsCurve());
-                }
-            }
+
             foreach(Curve s in secs)
             {
                 Brep[] breps = Brep.CreateFromSweep(element.BaseCurve, s, true, Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance);
