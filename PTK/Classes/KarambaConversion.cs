@@ -66,7 +66,7 @@ namespace PTK
                     var elem = new Karamba.Elements.GrassBeam(e.Element.BaseCurve.PointAt(paramList[i]), e.Element.BaseCurve.PointAt(paramList[i + 1]));
                     //var s = crosecMap[e.Element.Sections[0]];
                     //s.ecce_loc = new Vector3d(e.Element.Align.OffsetY, e.Element.Align.OffsetZ,0);
-                    elem.crosec = crosecMap[e.Element.Sections[0]]; //At present it is supposed to be one section material
+                    elem.crosec = crosecMap[e.Element.CrossSections[0]]; //At present it is supposed to be one section material
                     //elem.z_ori
                     elems.Add(elem);
                 }

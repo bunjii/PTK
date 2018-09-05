@@ -24,21 +24,39 @@ namespace PTK
 
     public class Element1D : Element
     {
+        /////////////////////////////////////////////////////////////////////////////////
+        // fields
+        /////////////////////////////////////////////////////////////////////////////////
         public Curve BaseCurve { get; private set; }
         public Point3d PointAtStart { get; private set; }
         public Point3d PointAtEnd { get; private set; }
         public Plane CroSecLocalPlane { get; private set; }
-        public List<CrossSection> Sections { get; private set; }
+        // public Sub2DElement SubElement { get; private set; }
+        public List<Sub2DElement> Sub2DElements { get; private set; }
+        public List<CrossSection> CrossSections { get; private set; }
+        public Composite Composite { get; private set; }
         public Alignment Align { get; private set; }
+        public List<Force> Forces { get; private set; }
+        public List<Joint> Joints { get; private set; }
         public bool IsIntersectWithOther { get; private set; } = true;
+
+        public int Priority { get; private set; }
+
+        /////////////////////////////////////////////////////////////////////////////////
+        // constructors
+        /////////////////////////////////////////////////////////////////////////////////
 
         public Element1D() : base()
         {
             BaseCurve = null;
             PointAtStart = new Point3d();
             PointAtEnd = new Point3d();
-            Sections = new List<CrossSection>();
-            Align = new Alignment();
+            Composite = new Composite();
+            Sub2DElements = new List<Sub2DElement>();
+            CrossSections = new List<CrossSection>();
+            // Align = new Alignment();
+            Forces = new List<Force>();
+            Joints = new List<Joint>();
             InitializeLocalPlane();
         }
         public Element1D(string _tag) : base(_tag)
@@ -46,25 +64,77 @@ namespace PTK
             BaseCurve = null;
             PointAtStart = new Point3d();
             PointAtEnd = new Point3d();
-            Sections = new List<CrossSection>();
-            Align = new Alignment();
+            Composite = new Composite();
+            Sub2DElements = new List<Sub2DElement>();
+            CrossSections = new List<CrossSection>();
+            Align = new Alignment(); // 
+            Forces = new List<Force>();
+            Joints = new List<Joint>();
             InitializeLocalPlane();
         }
-        public Element1D(string _tag, Curve _curve, List<CrossSection> _sections, Alignment _align, bool _intersect = true) : base(_tag)
+
+        public Element1D(string _tag, Curve _curve, List<Force> _forces, List<Joint> _joints, Composite _composite, int _priority, bool _intersect = true) : base(_tag)
         {
             BaseCurve = _curve;
             PointAtStart = _curve.PointAtStart;
             PointAtEnd = _curve.PointAtEnd;
-            Sections = _sections;
-            Align = _align;
+            // SubElement = _subElement;
+            CrossSections = new List<CrossSection>();
+            Composite = _composite;
+            Align = new Alignment(); // should not be a new instance 
+            Forces = _forces;
+            Joints = _joints;
             IsIntersectWithOther = _intersect;
+            Priority = _priority;
+            SetSub2DElements();
+            SetCrossSections();
             InitializeLocalPlane();
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////
+        // properties
+        /////////////////////////////////////////////////////////////////////////////////
+
+        /////////////////////////////////////////////////////////////////////////////////
+        // methods
+        /////////////////////////////////////////////////////////////////////////////////
+
+        private void SetSub2DElements()
+        {
+            if (Composite.Sub2DElements != null)
+            {
+                Sub2DElements = Composite.Sub2DElements;
+            }
+            else
+            {
+                Sub2DElements = new List<Sub2DElement>();
+            }
+        }
+
+        private void SetCrossSections()
+        {
+            if (Composite.Sub2DElements != null)
+            {
+                foreach(Sub2DElement se in Composite.Sub2DElements)
+                CrossSections.Add(se.CrossSection);
+            }
+            else
+            {
+                CrossSections = new List<CrossSection>();
+            }
         }
 
         private void InitializeLocalPlane()
         {
             if (BaseCurve != null)
             {
+                List<CrossSection> crossSections = new List<CrossSection>();
+                foreach (Sub2DElement se in Sub2DElements)
+                {
+                    crossSections.Add(se.CrossSection);
+                }
+                // List<CrossSection> Sections = SubElement.CrossSections;
+
                 Vector3d localX = BaseCurve.TangentAtStart;
                 Vector3d globalZ = Vector3d.ZAxis;
 
@@ -100,7 +170,7 @@ namespace PTK
                 // move origin
                 double offsetV = 0.0;
                 double offsetU = 0.0;
-                CrossSection.GetMaxHeightAndWidth(Sections, out double height, out double width);
+                CrossSection.GetMaxHeightAndWidth(crossSections, out double height, out double width);
                 if(Align.AnchorVert == AlignmentAnchorVert.Top)
                 {
                     offsetV += height / 2;
@@ -159,6 +229,14 @@ namespace PTK
             Forces = new List<Force>();
             Joints = new List<Joint>();
         }
+
+        public StructuralElement(Element1D _element)
+        {
+            Element = _element;
+            Forces = new List<Force>();
+            Joints = new List<Joint>();
+        }
+
         public StructuralElement(Element1D _element, List<Force> _forces, List<Joint> _joints)
         {
             Element = _element;
@@ -264,6 +342,17 @@ namespace PTK
         protected override GH_GetterResult Prompt_Singular(ref GH_StructuralElement value)
         {
             return GH_GetterResult.success;
+        }
+    }
+
+    public class ElementInDetail  //Used to output an element and its detailSpesific data
+    {
+        public Element1D Element;
+        public Vector3d UnifiedVector;
+        public ElementInDetail(Element1D _element, Vector3d _UnifiedVector)
+        {
+            Element = _element;
+            UnifiedVector = _UnifiedVector;
         }
     }
 

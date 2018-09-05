@@ -10,6 +10,7 @@ namespace PTK
 {
     public class PTK_1_Material : GH_Component
     {
+        //change yuto
 
         public PTK_1_Material()
           : base("Material", "Mat","Create a Material",
@@ -21,7 +22,7 @@ namespace PTK
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddTextParameter("Name","N", "Material Name", GH_ParamAccess.item);
-            pManager.AddParameter(new Param_MaterialStructuralProp(), "Structural Material Prop", "SMP", "Add material properties here", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_MaterialProperty(), "Structural Material Prop", "SMP", "Add material properties here", GH_ParamAccess.item);
         }
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
@@ -33,14 +34,14 @@ namespace PTK
         {
             #region variables
             string name = null;
-            GH_MaterialStructuralProp gProp = null;
-            MaterialStructuralProp prop = null;
+            GH_MaterialProperty gProp = null;
+            MaterialProperty prop = null;
             #endregion
 
             #region input
             if (!DA.GetData(0, ref name)) { return; }
             if (!DA.GetData(1, ref gProp)) {
-                prop = new MaterialStructuralProp();
+                prop = new MaterialProperty();
             }
             else
             {

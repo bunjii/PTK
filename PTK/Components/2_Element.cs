@@ -21,15 +21,19 @@ namespace PTK
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Tag", "T", "Add tags to the structure here.", GH_ParamAccess.item);
+            pManager.AddTextParameter("Tag", "T", "Add a tag to the element here.", GH_ParamAccess.item);
             pManager.AddCurveParameter("Base Curve", "C", "Add curves that shall be materalized", GH_ParamAccess.item);
-            pManager.AddParameter(new Param_CroSec(), "Cross Sections", "S", "Add the cross-section componentt here", GH_ParamAccess.list);
-            pManager.AddParameter(new Param_Alignment(), "Alignment", "A", "Describes the alignment of the member. (Rotation and offset)", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("Intersect Other", "I", "Whether this element intersects other members at other than the end point", GH_ParamAccess.item, true);
+            pManager.AddParameter(new Param_Force(), "Forces", "F", "Add forces", GH_ParamAccess.list);
+            pManager.AddParameter(new Param_Joint(), "Joint", "J", "Add joint", GH_ParamAccess.list);
+            pManager.AddParameter(new Param_Composite(), "Composite", "CP", "Add the sub-element component here", GH_ParamAccess.item);
+            pManager.AddIntegerParameter("Structural Priority", "P", "Add integer value to set the priority of the member", GH_ParamAccess.item, -999);
+            pManager.AddBooleanParameter("Intersection Nodes?", "I?", "Whether the element intersects other members at other than the end point", GH_ParamAccess.item, true);
 
             pManager[0].Optional = true;
+            pManager[2].Optional = true;
             pManager[3].Optional = true;
-            pManager[4].Optional = true;
+            pManager[5].Optional = true;
+            pManager[6].Optional = true;
         }
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
@@ -39,45 +43,83 @@ namespace PTK
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            #region variables
+            /////////////////////////////////////////////////////////////////////////////////
+            // variables
+            /////////////////////////////////////////////////////////////////////////////////
             string tag = null;
             Curve curve = null;
-            List<GH_CroSec> gSections = new List<GH_CroSec>();
-            List<CrossSection> sections = null;
-            GH_Alignment gAlign = null;
-            Alignment align = null;
+
+            List<GH_Force> gForces = new List<GH_Force>();
+            List<Force> forces = null;
+
+            List<GH_Joint> gJoints = new List<GH_Joint>();
+            List<Joint> joints = null;
+
+            /*
+            GH_SubElement gSubElement = new GH_SubElement();
+            SubElement subElement = null;
+            */
+
+            GH_Composite gComposite = null;
+            Composite composite = null;
+
+            int priority = new int();
             bool intersect = true;
-            #endregion
-
-            #region input
+            
+            /////////////////////////////////////////////////////////////////////////////////
+            // input
+            /////////////////////////////////////////////////////////////////////////////////
             if (!DA.GetData(0, ref tag)) { return; }
+
             if (!DA.GetData(1, ref curve)) { return; }
-            if (!DA.GetDataList(2, gSections))
+
+            if (!DA.GetDataList(2, gForces))
             {
-                sections = new List<CrossSection>();
+                forces = new List<Force>();
             }
             else
             {
-                sections = gSections.ConvertAll(s => s.Value);
+                forces = gForces.ConvertAll(f => f.Value);
             }
-            if (!DA.GetData(3, ref gAlign))
+
+            if (!DA.GetDataList(3, gJoints))
             {
-                align = new Alignment();
+                joints = new List<Joint>();
             }
             else
             {
-                align = gAlign.Value;
+                joints = gJoints.ConvertAll(j => j.Value);
             }
-            if (!DA.GetData(4, ref intersect)) { return; }
-            #endregion
 
-            #region solve
-            GH_Element1D elem = new GH_Element1D(new Element1D(tag, curve, sections, align, intersect));
-            #endregion
+            if (!DA.GetData(4, ref gComposite))
+            {
+                composite = new Composite();
+            }
+            else
+            {
+                composite = gComposite.Value;
+            }
 
-            #region output
+            if (!DA.GetData(5, ref priority))
+            {
+                return;
+            }
+
+            if (!DA.GetData(6, ref intersect))
+            {
+                return;
+            }
+
+            /////////////////////////////////////////////////////////////////////////////////
+            // solve
+            /////////////////////////////////////////////////////////////////////////////////
+            GH_Element1D elem = new GH_Element1D(new Element1D(tag, curve, forces, joints, composite, priority, intersect));
+
+            /////////////////////////////////////////////////////////////////////////////////
+            // output
+            /////////////////////////////////////////////////////////////////////////////////
             DA.SetData(0, elem);
-            #endregion
+
         }
 
         protected override System.Drawing.Bitmap Icon

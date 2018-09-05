@@ -20,6 +20,8 @@ namespace PTK
         public static readonly string subcate7 = "Export";
         public static readonly string subcate8 = "Utility";
         public static readonly string subcate9 = "Tool";
+        public static readonly string subcate10 = "DetailGroupRules";
+        public static readonly string subcate11 = "TimberDetailing";
         public static readonly string initialMessage = "PTK Ver.0.5";
 
         //Return the Decimal Separator in the use environment
@@ -40,6 +42,8 @@ namespace PTK
             return Rhino.RhinoMath.UnitScale(fromUnitSystem, _toUnitSystem);
         }
     }
+
+    public delegate bool CheckGroupDelegate(Detail detail);
 
 
     public enum DecimalSeparator

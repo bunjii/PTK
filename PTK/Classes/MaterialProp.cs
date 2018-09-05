@@ -7,7 +7,7 @@ using Grasshopper.Kernel.Types;
 
 namespace PTK
 {
-    public class MaterialStructuralProp
+    public class MaterialProperty
     {
         public string Name { get; set; }
         public double Fmgk { get; set; }
@@ -28,8 +28,8 @@ namespace PTK
         public double Rhogk { get; set; }
         public double Rhogmean { get; set; }
 
-        public MaterialStructuralProp() { }
-        public MaterialStructuralProp(
+        public MaterialProperty() { }
+        public MaterialProperty(
             string _name,
             double _fmgk,
             double _ft0gk,
@@ -70,14 +70,14 @@ namespace PTK
             Rhogmean = _rhogmean;    // density
         }
 
-        public MaterialStructuralProp DeepCopy()
+        public MaterialProperty DeepCopy()
         {
-            return (MaterialStructuralProp)base.MemberwiseClone();
+            return (MaterialProperty)base.MemberwiseClone();
         }
         public override string ToString()
         {
             string info;
-            info = "<MaterialStructuralProp> Name:" + Name;
+            info = "<MaterialProperty> Name:" + Name;
             return info;
         }
 
@@ -87,27 +87,27 @@ namespace PTK
         }
     }
 
-    public class GH_MaterialStructuralProp : GH_Goo<MaterialStructuralProp>
+    public class GH_MaterialProperty : GH_Goo<MaterialProperty>
     {
-        public GH_MaterialStructuralProp() { }
-        public GH_MaterialStructuralProp(GH_MaterialStructuralProp other) : base(other.Value)
+        public GH_MaterialProperty() { }
+        public GH_MaterialProperty(GH_MaterialProperty other) : base(other.Value)
         {
             this.Value = other.Value.DeepCopy();
         }
-        public GH_MaterialStructuralProp(MaterialStructuralProp MSProp) : base(MSProp)
+        public GH_MaterialProperty(MaterialProperty MSProp) : base(MSProp)
         {
             this.Value = MSProp;
         }
 
         public override bool IsValid => base.m_value.IsValid();
 
-        public override string TypeName => "MaterialStructuralProp";
+        public override string TypeName => "GH_MaterialProperty";
 
         public override string TypeDescription => "Material properties for structural calculation";
 
         public override IGH_Goo Duplicate()
         {
-            return new GH_MaterialStructuralProp(this);
+            return new GH_MaterialProperty(this);
         }
 
         public override string ToString()
@@ -116,20 +116,20 @@ namespace PTK
         }
     }
 
-    public class Param_MaterialStructuralProp : GH_PersistentParam<GH_MaterialStructuralProp>
+    public class Param_MaterialProperty : GH_PersistentParam<GH_MaterialProperty>
     {
-        public Param_MaterialStructuralProp() : base(new GH_InstanceDescription("MaterialStructuralProp", "MatStruct", "Material properties for structural calculation", CommonProps.category, CommonProps.subcate0)) { }
+        public Param_MaterialProperty() : base(new GH_InstanceDescription("MaterialProperty", "MatStruct", "Material properties for structural calculation", CommonProps.category, CommonProps.subcate0)) { }
 
         protected override System.Drawing.Bitmap Icon { get { return null; } }  //Set icon image
 
         public override Guid ComponentGuid => new Guid("248D46D3-6995-4CE8-AAD6-D30E99E6C493");
 
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_MaterialStructuralProp> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_MaterialProperty> values)
         {
             return GH_GetterResult.success;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_MaterialStructuralProp value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_MaterialProperty value)
         {
             return GH_GetterResult.success;
         }

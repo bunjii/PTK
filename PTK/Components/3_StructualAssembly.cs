@@ -30,24 +30,26 @@ namespace PTK
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddParameter(new Param_Assembly(), "Assembly", "A", "Assembly", GH_ParamAccess.item);
-            pManager.AddParameter(new Param_StructuralElement(), "Structural Elements", "SE", "Structural Elements", GH_ParamAccess.list);
             pManager.AddParameter(new Param_Support(), "Supports", "S", "Supports", GH_ParamAccess.list);
             pManager.AddParameter(new Param_Load(), "Loads", "L", "Loads", GH_ParamAccess.list);
 
+            pManager[1].Optional = true;
             pManager[2].Optional = true;
-            pManager[3].Optional = true;
         }
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_StructuralAssembly(), "StructuralAssembly", "SA", "StructuralAssembly", GH_ParamAccess.item);
-            pManager.RegisterParam(new Param_Node(), "Nodes", "N", "Nodes included in the Assembly", GH_ParamAccess.list);
+            pManager.RegisterParam(new Param_Assembly(), "StructuralAssembly", "SA", "StructuralAssembly", GH_ParamAccess.item);
+            // pManager.RegisterParam(new Param_Node(), "Nodes", "N", "Nodes included in the Assembly", GH_ParamAccess.list);
+            pManager.AddLineParameter("Lines", "Lns", "only for V.0.3", GH_ParamAccess.list);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-
-            #region variables
+            /////////////////////////////////////////////////////////////////////////////////
+            // variables
+            /////////////////////////////////////////////////////////////////////////////////
+            
             GH_Assembly gAssembly = null;
             Assembly assembly = null;
             List<GH_StructuralElement> gStrElems = new List<GH_StructuralElement>();
@@ -56,9 +58,16 @@ namespace PTK
             List<Support> sups = null;
             List<GH_Load> gLoads = new List<GH_Load>();
             List<Load> loads = null;
-            #endregion
 
-            #region input
+            // below: tempLines will be removed after V.0.3
+            // just a temporal line element exporter to connect to Karamba
+            List<Line> tempLines = new List<Line>(); 
+
+
+            /////////////////////////////////////////////////////////////////////////////////
+            // input
+            /////////////////////////////////////////////////////////////////////////////////
+
             if (!DA.GetData(0, ref gAssembly))
             {
                 assembly = new Assembly();
@@ -67,15 +76,8 @@ namespace PTK
             {
                 assembly = gAssembly.Value;
             }
-            if (!DA.GetDataList(1, gStrElems))
-            {
-                strElems = new List<StructuralElement>();
-            }
-            else
-            {
-                strElems = gStrElems.ConvertAll(s => s.Value);
-            }
-            if (!DA.GetDataList(2, gSups))
+
+            if (!DA.GetDataList(1, gSups))
             {
                 sups = new List<Support>();
             }
@@ -83,7 +85,8 @@ namespace PTK
             {
                 sups = gSups.ConvertAll(s => s.Value);
             }
-            if (!DA.GetDataList(3, gLoads))
+
+            if (!DA.GetDataList(2, gLoads))
             {
                 loads = new List<Load>();
             }
@@ -91,14 +94,32 @@ namespace PTK
             {
                 loads = gLoads.ConvertAll(l => l.Value);
             }
-            #endregion
 
-            #region solve
+
+            /////////////////////////////////////////////////////////////////////////////////
+            // solve
+            /////////////////////////////////////////////////////////////////////////////////
+
             StructuralAssembly strAssembly = new StructuralAssembly(assembly);
-            foreach(StructuralElement sElem in strElems)
+
+            foreach(Element1D e in assembly.Elements)
+            {
+                strAssembly.AddSElement(new StructuralElement(e));
+
+                var paramList = strAssembly.Assembly.SearchNodeParamsAtElement(e);
+                for (int i = 0; i < paramList.Count - 1; i++)
+                {
+                    Point3d spt = e.BaseCurve.PointAt(paramList[i]);
+                    Point3d ept = e.BaseCurve.PointAt(paramList[i + 1]);
+                    tempLines.Add(new Line(spt, ept));
+                }
+            }
+            /*
+            foreach(StructuralElement sElem in strAssembly.SElements)
             {
                 strAssembly.AddSElement(sElem);
             }
+            */
             foreach (Support s in sups)
             {
                 strAssembly.AddSupport(s);
@@ -107,11 +128,17 @@ namespace PTK
             {
                 strAssembly.AddLoad(l);
             }
-            #endregion
 
-            #region output
-            DA.SetData(0, new GH_StructuralAssembly(strAssembly));
-            #endregion
+            Assembly upcastedAssembly = strAssembly;
+
+            /////////////////////////////////////////////////////////////////////////////////
+            // output
+            /////////////////////////////////////////////////////////////////////////////////
+
+            DA.SetData(0, new GH_Assembly(upcastedAssembly));
+
+            // below: temporal output at V.0.3
+            DA.SetDataList(1, tempLines);
 
         }
 
