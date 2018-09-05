@@ -11,7 +11,7 @@ namespace PTK
     {
 
         private PartType btlPart;
-        //private List<BTLprocess> btlProcesses;
+        private List<BTLprocess> btlProcesses;
         private List<Refside> refSides;
         private int uid;
         private Plane yzPlane;

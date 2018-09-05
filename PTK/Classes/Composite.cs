@@ -18,7 +18,7 @@ namespace PTK
         // fields
         /////////////////////////////////////////////////////////////////////////////////
         public string Name { get; private set; }
-        public List<Sub2DElement> SubElements { get; private set; }
+        public List<Sub2DElement> Sub2DElements { get; private set; }
         public Alignment Alignment { get; private set; }
         /////////////////////////////////////////////////////////////////////////////////
         // constructors
@@ -26,14 +26,14 @@ namespace PTK
         public Composite()
         {
             Name = null;
-            SubElements = new List<Sub2DElement>();
+            Sub2DElements = new List<Sub2DElement>();
             Alignment = new Alignment();
         }
 
-        public Composite(string _name, List<Sub2DElement> _subElements, Alignment _alignment)
+        public Composite(string _name, List<Sub2DElement> _sub2DElements, Alignment _alignment)
         {
             Name = _name;
-            SubElements = _subElements;
+            Sub2DElements = _sub2DElements;
             Alignment = _alignment;
         }
         /////////////////////////////////////////////////////////////////////////////////

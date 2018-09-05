@@ -32,7 +32,8 @@ namespace PTK
         public Point3d PointAtEnd { get; private set; }
         public Plane CroSecLocalPlane { get; private set; }
         // public Sub2DElement SubElement { get; private set; }
-        public List<Sub2DElement> Sub2dElements { get; private set; }
+        public List<Sub2DElement> Sub2DElements { get; private set; }
+        public List<CrossSection> CrossSections { get; private set; }
         public Composite Composite { get; private set; }
         public Alignment Align { get; private set; }
         public List<Force> Forces { get; private set; }
@@ -49,8 +50,8 @@ namespace PTK
             PointAtStart = new Point3d();
             PointAtEnd = new Point3d();
             Composite = new Composite();
-            Sub2dElements = new List<Sub2DElement>();
-            // Sections = new List<CrossSection>();
+            Sub2DElements = new List<Sub2DElement>();
+            CrossSections = new List<CrossSection>();
             // Align = new Alignment();
             Forces = new List<Force>();
             Joints = new List<Joint>();
@@ -62,8 +63,8 @@ namespace PTK
             PointAtStart = new Point3d();
             PointAtEnd = new Point3d();
             Composite = new Composite();
-            Sub2dElements = new List<Sub2DElement>();
-            // Sections = new List<CrossSection>();
+            Sub2DElements = new List<Sub2DElement>();
+            CrossSections = new List<CrossSection>();
             Align = new Alignment(); // 
             Forces = new List<Force>();
             Joints = new List<Joint>();
@@ -76,14 +77,15 @@ namespace PTK
             PointAtStart = _curve.PointAtStart;
             PointAtEnd = _curve.PointAtEnd;
             // SubElement = _subElement;
-            // Sections = new List<CrossSection>();
+            CrossSections = new List<CrossSection>();
             Composite = _composite;
             Align = new Alignment(); // should not be a new instance 
             Forces = _forces;
             Joints = _joints;
             IsIntersectWithOther = _intersect;
 
-            SetSub2dElements();
+            SetSub2DElements();
+            SetCrossSections();
             InitializeLocalPlane();
         }
 
@@ -95,23 +97,37 @@ namespace PTK
         // methods
         /////////////////////////////////////////////////////////////////////////////////
 
-        private void SetSub2dElements()
+        private void SetSub2DElements()
         {
-            if (Composite.SubElements != null)
+            if (Composite.Sub2DElements != null)
             {
-                Sub2dElements = Composite.SubElements;
+                Sub2DElements = Composite.Sub2DElements;
             }
             else
             {
-                Sub2dElements = new List<Sub2DElement>();
+                Sub2DElements = new List<Sub2DElement>();
             }
         }
+
+        private void SetCrossSections()
+        {
+            if (Composite.Sub2DElements != null)
+            {
+                foreach(Sub2DElement se in Composite.Sub2DElements)
+                CrossSections.Add(se.CrossSection);
+            }
+            else
+            {
+                CrossSections = new List<CrossSection>();
+            }
+        }
+
         private void InitializeLocalPlane()
         {
             if (BaseCurve != null)
             {
                 List<CrossSection> crossSections = new List<CrossSection>();
-                foreach (Sub2DElement se in Sub2dElements)
+                foreach (Sub2DElement se in Sub2DElements)
                 {
                     crossSections.Add(se.CrossSection);
                 }
