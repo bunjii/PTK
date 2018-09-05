@@ -358,7 +358,7 @@ namespace PTK
         ///ALL METHODS OUT'S A BTLPROCSESS
         ////////////////////////////////
 
-
+        /*
         static public BTLprocess Cut(PTK_Element _Element, Plane _Plane)
         {
             PTK_Element element = _Element;
@@ -471,9 +471,9 @@ namespace PTK
 
 
         }
+        */
 
-
-        static public bool Drill(PTK_Element _Element, /*SOMEDATA HERE, */ out BTLprocess Drill)
+        static public bool Drill(GH_Element1D _Element, /*SOMEDATA HERE, */ out BTLprocess Drill)
         {
             Drill = new BTLprocess();
             return false;
