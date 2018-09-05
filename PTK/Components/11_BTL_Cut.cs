@@ -43,6 +43,7 @@ namespace PTK.Components
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            /*
             Assembly Assembly = new Assembly();
             List<Plane> cutPlanes = new List<Plane>();
 
@@ -69,6 +70,7 @@ namespace PTK.Components
 
             DA.SetDataList(0, Processes);
             DA.SetDataList(1, Breps);
+            */
         }
 
         /// <summary>
