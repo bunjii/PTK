@@ -41,7 +41,7 @@ namespace PTK
         public bool IsIntersectWithOther { get; private set; } = true;
         public int Priority { get; private set; } = 0;
 
-        public int Priority { get; private set; }
+        
 
         /////////////////////////////////////////////////////////////////////////////////
         // constructors
@@ -355,6 +355,11 @@ namespace PTK
     {
         public Element1D Element;
         public Vector3d UnifiedVector;
+        public ElementInDetail()
+        {
+
+        }
+
         public ElementInDetail(Element1D _element, Vector3d _UnifiedVector)
         {
             Element = _element;
