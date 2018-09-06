@@ -21,8 +21,6 @@ namespace PTK.Rules
         {
             checkdelegate = _checkdelegate;
         }
-
-
         
     }
 
@@ -195,6 +193,139 @@ namespace PTK.Rules
 
 
     }
+
+
+    public class ElementTag
+    {
+        #region fields
+
+        private List<string> tagsAre = new List<string>();
+        private int mode = 0;
+
+        #endregion
+        #region constructors
+
+        public ElementTag(List<string> _tagsAre, int _mode = 0)
+        {
+            tagsAre = _tagsAre;
+            mode = _mode;
+        }
+
+        #endregion
+        #region properties
+
+        #endregion
+        #region methods
+
+        public bool check(Detail _detail)
+        {
+            List<Element1D> _elements = _detail.Elements;
+
+
+            List<String> detailTags = new List<string>();
+            List<String> tagsAreStrict = tagsAre;
+            List<String> tagsAreDistinct = tagsAre.Distinct().ToList();
+
+            tagsAreStrict.Sort();
+            tagsAreDistinct.Sort();
+
+            bool valid = false;
+
+           
+            if (mode >= 4) //mode verifier
+                mode = 0;
+
+            if (mode == 0)  // Mode 0 - One of - The detail must contain one of the inputted tags
+            {
+                for (int i = 0; i < _elements.Count; i++)
+                {
+                    for (int j = 0; j < tagsAre.Count; j++)
+                    {
+                        if (_elements[i].Tag.Equals(tagsAre[j]))
+                        {
+                            valid = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (mode == 1) // Mode 1 - At least -  The detail must contain all the inputted tags, but can also contain other tags
+            {
+                for (int j = 0; j < _elements.Count; j++)
+                {
+                    foreach (Element element in _elements)
+                    {
+                        detailTags.Add(element.Tag);
+                    }
+
+                    if (tagsAre.Count == 1)
+                    {
+                        if (detailTags.Contains(tagsAre[0]))
+                            valid = true;
+                    }
+                    else
+                    {
+                        List<string> detailTagsDistinct = detailTags.Distinct().ToList();
+
+                        if (detailTagsDistinct.Except(tagsAreDistinct).Count() == 0 && tagsAreDistinct.Except(detailTagsDistinct).Count() == 0)
+                            valid = true;
+                    }
+                }
+            }
+
+
+            if (mode == 2) // Mode 2 - Distinct - The detail must contain all the inputted tags and no other tags
+            {
+                for (int j = 0; j < _elements.Count; j++)
+                {
+
+                    foreach (Element element in _elements)
+                    {
+                        detailTags.Add(element.Tag);
+                    }
+
+                    List<string> detailTagsDistinct = detailTags.Distinct().ToList();
+                    detailTagsDistinct.Sort();
+                    if (detailTagsDistinct.SequenceEqual(tagsAreDistinct))
+                    {
+                        valid = true;
+                    }
+                }
+            }
+
+            if (mode == 3) // Mode 3 - Strict - The detai must contain all the inputted tags and the exact amount 
+
+            {
+                for (int j = 0; j < _elements.Count; j++)
+                {
+                    foreach (Element element in _elements)
+                    {
+                        detailTags.Add(element.Tag);
+                    }
+
+                    detailTags.Sort();
+                    if (detailTags.SequenceEqual(tagsAreStrict))
+                    {
+                        valid = true;
+                    }
+                }
+            }
+
+            return valid;
+        }
+
+
+
+
+
+
+
+
+        #endregion
+    }
+
+
 
     /*
     public class NodeClosestPoint : DetailingGroupRules

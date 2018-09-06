@@ -39,6 +39,7 @@ namespace PTK
         public List<Force> Forces { get; private set; }
         public List<Joint> Joints { get; private set; }
         public bool IsIntersectWithOther { get; private set; } = true;
+        public int Priority { get; private set; } = 0;
 
         public int Priority { get; private set; }
 
@@ -91,6 +92,11 @@ namespace PTK
             SetSub2DElements();
             SetCrossSections();
             InitializeLocalPlane();
+
+
+
+
+
         }
 
         /////////////////////////////////////////////////////////////////////////////////

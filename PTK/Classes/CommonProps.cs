@@ -44,6 +44,7 @@ namespace PTK
     }
 
     public delegate bool CheckGroupDelegate(Detail detail);
+    public delegate PerformedProcess PerformTimberProcessDelegate(BTLPartGeometry _BTLPartGeometry, ManufactureMode _mode);
 
 
     public enum DecimalSeparator
@@ -63,6 +64,11 @@ namespace PTK
     public enum DetailType
     {
         LType, TType, XType
+    }
+
+    public enum ManufactureMode
+    {
+        BTL, NURBS, BOTH
     }
 
 }
