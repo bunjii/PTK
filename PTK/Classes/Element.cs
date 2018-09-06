@@ -41,7 +41,6 @@ namespace PTK
         public bool IsIntersectWithOther { get; private set; } = true;
         public int Priority { get; private set; } = 0;
 
-        
 
         /////////////////////////////////////////////////////////////////////////////////
         // constructors
@@ -55,9 +54,10 @@ namespace PTK
             Composite = new Composite();
             Sub2DElements = new List<Sub2DElement>();
             CrossSections = new List<CrossSection>();
-            // Align = new Alignment();
+            Align = new Alignment();
             Forces = new List<Force>();
             Joints = new List<Joint>();
+            Priority = int.MinValue;
             InitializeLocalPlane();
         }
         public Element1D(string _tag) : base(_tag)
@@ -68,9 +68,10 @@ namespace PTK
             Composite = new Composite();
             Sub2DElements = new List<Sub2DElement>();
             CrossSections = new List<CrossSection>();
-            Align = new Alignment(); // 
+            Align = new Alignment(); 
             Forces = new List<Force>();
             Joints = new List<Joint>();
+            Priority = int.MinValue;
             InitializeLocalPlane();
         }
 
@@ -351,20 +352,17 @@ namespace PTK
         }
     }
 
-    public class ElementInDetail  //Used to output an element and its detailSpesific data
-    {
-        public Element1D Element;
-        public Vector3d UnifiedVector;
-        public ElementInDetail()
-        {
+    //Predefined in detail.cs
 
-        }
-
-        public ElementInDetail(Element1D _element, Vector3d _UnifiedVector)
-        {
-            Element = _element;
-            UnifiedVector = _UnifiedVector;
-        }
-    }
+    //public class ElementInDetail  //Used to output an element and its detailSpesific data
+    //{
+    //    public Element1D Element;
+    //    public Vector3d UnifiedVector;
+    //    public ElementInDetail(Element1D _element, Vector3d _UnifiedVector)
+    //    {
+    //        Element = _element;
+    //        UnifiedVector = _UnifiedVector;
+    //    }
+    //}
 
 }
