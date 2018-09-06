@@ -68,7 +68,7 @@ namespace PTK
 
         public override Guid ComponentGuid
         {
-            get { return new Guid("60e4fc96-c247-4896-ba9a-5322f4359b2d"); }
+            get { return new Guid("c209addb-d004-4841-937e-15a6a0e9ebdc"); }
         }
 
         public class Attributes_Custom : GH_ComponentAttributes
