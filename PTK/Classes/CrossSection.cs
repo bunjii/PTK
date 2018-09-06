@@ -15,7 +15,7 @@ namespace PTK
         // fields
         /////////////////////////////////////////////////////////////////////////////////
         public string Name { get; private set; }
-        public Material Material { get; private set; }
+        // public MaterialProperty MaterialProperty { get; private set; }
 
         /////////////////////////////////////////////////////////////////////////////////
         // constructors
@@ -23,17 +23,17 @@ namespace PTK
         public CrossSection()
         {
             Name = "N/A";
-            Material = new Material();
+            // MaterialProperty = new MaterialProperty();
         }
         public CrossSection(string _name)
         {
             Name = _name;
-            Material = new Material();
+            // MaterialProperty = new MaterialProperty();
         }
-        public CrossSection(string _name, Material _material)
+        public CrossSection(string _name, MaterialProperty _materialProperty)
         {
             Name = _name;
-            Material = _material;
+            // MaterialProperty = _materialProperty;
         }
         /////////////////////////////////////////////////////////////////////////////////
         // properties
@@ -56,8 +56,8 @@ namespace PTK
         public override string ToString()
         {
             string info;
-            info = "<CrossSection> Name:" + Name +
-                " Material:" + Material.Name;
+            info = "<CrossSection> Name:" + Name;  
+              //  " Material Property:" + MaterialProperty.Name;
             return info;
         }
         public bool IsValid()
@@ -85,11 +85,13 @@ namespace PTK
             SetHeight(_height);
             SetWidth(_width);
         }
-        public RectangleCroSec(string _name, double _height, double _width, Material _material) : base(_name, _material)
+        /*
+        public RectangleCroSec(string _name, double _height, double _width, MaterialProperty _materialProperty) : base(_name, _materialProperty)
         {
             SetHeight(_height);
             SetWidth(_width);
         }
+        */
 
         /////////////////////////////////////////////////////////////////////////////////
         // properties
@@ -133,8 +135,8 @@ namespace PTK
             string info;
             info = "<RectangleCroSec> Name:" + Name +
                 " Height:" + height.ToString() +
-                " Width:" + width.ToString() + 
-                " Material:" + Material.Name;
+                " Width:" + width.ToString(); 
+                // " Material Property:" + MaterialProperty.Name;
             return info; 
         }
     }

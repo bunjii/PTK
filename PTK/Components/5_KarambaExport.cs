@@ -25,7 +25,7 @@ namespace PTK
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new Param_StructuralAssembly(), "Structural Assembly", "SA", "Structural Assembly", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_Assembly(), "Structural Assembly", "SA", "Structural Assembly", GH_ParamAccess.item);
         }
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
@@ -39,7 +39,7 @@ namespace PTK
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             #region variables
-            GH_StructuralAssembly gStructuralAssembly = null;
+            GH_Assembly gAssembly = null;
             StructuralAssembly structuralAssembly = null;
             List<double> maxDisps;
             List<double> gravityForces;
@@ -48,8 +48,15 @@ namespace PTK
             #endregion
 
             #region input
-            if (!DA.GetData(0, ref gStructuralAssembly)) { return; }
-            structuralAssembly = gStructuralAssembly.Value;
+            if (!DA.GetData(0, ref gAssembly)) { return; }
+            if (gAssembly.Value is StructuralAssembly)
+            {
+                structuralAssembly = (StructuralAssembly)gAssembly.Value;
+            }
+            else
+            {
+                return;
+            }
             #endregion
 
             #region solve
