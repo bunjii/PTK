@@ -54,9 +54,10 @@ namespace PTK
             Composite = new Composite();
             Sub2DElements = new List<Sub2DElement>();
             CrossSections = new List<CrossSection>();
-            // Align = new Alignment();
+            Align = new Alignment();
             Forces = new List<Force>();
             Joints = new List<Joint>();
+            Priority = int.MinValue;
             InitializeLocalPlane();
         }
         public Element1D(string _tag) : base(_tag)
@@ -67,9 +68,10 @@ namespace PTK
             Composite = new Composite();
             Sub2DElements = new List<Sub2DElement>();
             CrossSections = new List<CrossSection>();
-            Align = new Alignment(); // 
+            Align = new Alignment(); 
             Forces = new List<Force>();
             Joints = new List<Joint>();
+            Priority = int.MinValue;
             InitializeLocalPlane();
         }
 

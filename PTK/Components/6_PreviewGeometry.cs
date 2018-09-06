@@ -46,6 +46,11 @@ namespace PTK.Components
             /////////////////////////////////////////////////////////////////////////////////
             GH_Assembly gAssembly = null;
             Assembly assembly = null;
+            // StructuralAssembly structuralAssembly = null;
+            List<Node> nodes = new List<Node>();
+            List<Element> elems = new List<Element>();
+            List<CrossSection> secs = new List<CrossSection>();
+            List<Brep> brepGeom = new List<Brep>();
 
             /////////////////////////////////////////////////////////////////////////////////
             // input
@@ -58,16 +63,47 @@ namespace PTK.Components
             {
                 assembly = gAssembly.Value;
             }
-            
+
             /////////////////////////////////////////////////////////////////////////////////
             // solve
             /////////////////////////////////////////////////////////////////////////////////
+
+
+            List<Curve> sectionCurves = new List<Curve>();
+            /*
+            List<CrossSection> crossSections = new List<CrossSection>();
+            foreach (Sub2DElement subElement in element.Sub2DElements)
+            {
+                Vector3d localY = element.CroSecLocalPlane.XAxis;
+                Vector3d localZ = element.CroSecLocalPlane.YAxis;
+
+                Point3d originElement = element.CroSecLocalPlane.Origin;
+                Point3d originSubElement = originElement + subElement.Alignment.OffsetY * localY + subElement.Alignment.OffsetZ * localZ;
+
+                Plane localPlaneSubElement = new Plane(originSubElement,
+                    element.CroSecLocalPlane.XAxis,
+                    element.CroSecLocalPlane.YAxis);
+
+                sectionCurves.Add(new Rectangle3d(
+                            localPlaneSubElement,
+                            new Interval(-subElement.CrossSection.GetWidth() / 2, subElement.CrossSection.GetWidth() / 2),
+                            new Interval(-subElement.CrossSection.GetHeight() / 2, subElement.CrossSection.GetHeight() / 2)).ToNurbsCurve());
+            }
+
+            foreach (Curve s in sectionCurves)
+            {
+                Brep[] breps = Brep.CreateFromSweep(element.BaseCurve, s, true, Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance);
+                models.AddRange(breps);
+            }
+            */
 
             /////////////////////////////////////////////////////////////////////////////////
             // output
             /////////////////////////////////////////////////////////////////////////////////
         }
 
+        
+        
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>

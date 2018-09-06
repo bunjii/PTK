@@ -107,6 +107,7 @@ namespace PTK
                 strAssembly.AddSElement(new StructuralElement(e));
 
                 var paramList = strAssembly.Assembly.SearchNodeParamsAtElement(e);
+
                 for (int i = 0; i < paramList.Count - 1; i++)
                 {
                     Point3d spt = e.BaseCurve.PointAt(paramList[i]);
