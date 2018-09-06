@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 
@@ -17,11 +18,13 @@ namespace PTK
         public List<Node> Nodes { get; private set; }
         public List<string> Tags { get; private set; }
         public List<CrossSection> CrossSections { get; private set; }
-        public List<Material> Materials { get; private set; }
+        public List<MaterialProperty> MaterialProperties { get; private set; }
         public Dictionary<Element1D,List<int>> NodeMap { get; private set; }
-        public Dictionary<CrossSection, Material> CrossSectionMap { get; private set; }
+        public Dictionary<CrossSection, MaterialProperty> CrossSectionMap { get; private set; }
         public List<Detail> Details { get; private set; }
         public List<DetailingGroup> DetailingGroups { get; private set; }
+
+        RTree rTreeNodes = new RTree();
 
 
 
@@ -31,9 +34,9 @@ namespace PTK
             Nodes = new List<Node>();
             Tags = new List<string>();
             CrossSections = new List<CrossSection>();
-            Materials = new List<Material>();
+            MaterialProperties = new List<MaterialProperty>();
             NodeMap = new Dictionary<Element1D, List<int>>();
-            CrossSectionMap = new Dictionary<CrossSection, Material>();
+            CrossSectionMap = new Dictionary<CrossSection, MaterialProperty>();
             Details = new List<Detail>();
             DetailingGroups = new List<DetailingGroup>();
             
@@ -77,16 +80,20 @@ namespace PTK
                 {
                     Tags.Add(tag);
                 }
-                foreach(CrossSection sec in _element.CrossSections)
+                // foreach(CrossSection sec in _element.CrossSections)
+                for (int i=0; i< _element.CrossSections.Count; i++)
                 {
+                    CrossSection sec = _element.CrossSections[i];
                     if(!CrossSectionMap.ContainsKey(sec))
                     {
                         CrossSections.Add(sec);
-                        Material mat = sec.Material;
-                        CrossSectionMap.Add(sec, mat);
-                        if (!Materials.Contains(mat))
+                        // MaterialProperty matProp = sec.MaterialProperty;
+                        MaterialProperty matProp = _element.Sub2DElements[i].MaterialProperty;
+
+                        CrossSectionMap.Add(sec, matProp);
+                        if (!MaterialProperties.Contains(matProp))
                         {
-                            Materials.Add(mat);
+                            MaterialProperties.Add(matProp);
                         }
                     }
                 }
@@ -94,19 +101,15 @@ namespace PTK
             return Elements.Count;
         }
 
-
-
-
-
-
         private void SearchNodes(Element1D _element)
         {
+            // Add a new Key if NodeMap doesn't contain "_element"
             if (!NodeMap.ContainsKey(_element))
             {
                 NodeMap.Add(_element, new List<int>());
             }
 
-            //Register both ends of the element as nodes
+            // Register both ends of the element as nodes
             AddPointToNodeMap(_element, _element.PointAtStart);
             AddPointToNodeMap(_element, _element.PointAtEnd);
 
@@ -118,7 +121,8 @@ namespace PTK
                 {
                     foreach(IntersectionEvent e in events)
                     {
-                        if (!_element.IsIntersectWithOther) //When it does not intersect with another member, only endpoint contact is detected
+                        if (!_element.IsIntersectWithOther) 
+                        //When it does not intersect with another member, only endpoint contact is detected
                         {
                             if (e.PointA == _element.BaseCurve.PointAtStart || e.PointA == _element.BaseCurve.PointAtEnd)
                             {
@@ -126,6 +130,7 @@ namespace PTK
                             }
                         }
                         else
+                        // intersection happens
                         {
                             AddPointToNodeMap(_element, e.PointA);
                             AddPointToNodeMap(otherElem, e.PointA);
@@ -145,28 +150,67 @@ namespace PTK
 
         }
 
-        private void AddPointToNodeMap(Element1D _element, Point3d _point)
+        private void AddPointToNodeMap(Element1D _element, Point3d _pt)
         {
-            if (!Nodes.Exists(n => n.Equals(_point)))   //When there is no node at that position
+
+            bool nodeExists = false;
+            int nodeIndex = new int();
+            //bool nodeExists = NodeExists(Nodes, ref rTreeNodes, _point);
+            // "nodeExisting" will be performed, when items are found.
+            EventHandler<RTreeEventArgs> nodeExisting =
+                (object sender, RTreeEventArgs args) =>
+                {
+                    nodeExists = true;
+                    nodeIndex = args.Id;
+                };
+
+            double tol = CommonProps.tolerances;
+            // bounding box of a node considering the tolerance
+            BoundingBox spotBBox = new BoundingBox
+                (_pt.X - tol, _pt.Y - tol, _pt.Z - tol, _pt.X + tol, _pt.Y + tol, _pt.Z + tol);
+
+            // performs node search, making nodeExists to true when an existent node is detected.
+            rTreeNodes.Search(spotBBox, nodeExisting);
+
+            // in case node doesn't exist:
+            if (!nodeExists)
             {
-                //Here i make a new detail. and add the element to the detail
-                
-
-
-                Nodes.Add(new Node(_point));
-                NodeMap[_element].Add(Nodes.Count-1);
+                Nodes.Add(new Node(_pt));
+                nodeIndex = Nodes.Count - 1;
+                NodeMap[_element].Add(nodeIndex);
+                rTreeNodes.Insert(new BoundingBox(_pt, _pt), nodeIndex);
             }
             else
             {
+                NodeMap[_element].Add(nodeIndex);
+            }
+
+            /*
+            // When there is no node found at the position
+            // if (!Nodes.Exists(n => n.Equals(_point)))
+            if (!Nodes.Exists(n => n.Point == _pt))
+            {
+                //Here i make a new detail. and add the element to the detail
+                // node location less than the tolerance
+                Nodes.Add(new Node(_pt));
+                NodeMap[_element].Add(Nodes.Count-1);
+            }
+            else // when there's an existent node
+            {
                 //Here i add an element to the detail
-                int ind = Nodes.FindIndex(n => n.Equals(_point));   //If there is already a node, its index
+                // int ind = Nodes.FindIndex(n => n.Equals(_point));
+                int ind = Nodes.FindIndex(n => n.Point.Equals(_pt));
+                //If there is already a node, map its index
                 if (!NodeMap[_element].Contains(ind))
                 {
                     NodeMap[_element].Add(ind);
                 }
             }
+            */
+
         }
-        
+
+
         public List<double> SearchNodeParamsAtElement(Element1D _element)
         {
             List<double> param = new List<double>();
@@ -176,7 +220,21 @@ namespace PTK
                 {
                     double p;
                     _element.BaseCurve.ClosestPoint(Nodes[i].Point, out p);
-                    param.Add(p);
+                    // remove same values
+                    if (param.Count == 0)
+                    {
+                        param.Add(p);
+                    }
+                    else
+                    {
+                        // double closestParam = param.Min(c => Math.Abs(c - p));
+                        double closestParam = param.Aggregate((x, y) => Math.Abs(x - p) < Math.Abs(y - p) ? x : y);
+                        if (Math.Abs(closestParam - p) > CommonProps.tolerances)
+                        {
+                            param.Add(p);
+                        }
+                    }
+
                 }
                 param.Sort();
             }
@@ -195,7 +253,7 @@ namespace PTK
             string info;
             info = "<Assembly> Elements:" + Elements.Count.ToString() +
                 " Nodes:" + Nodes.Count.ToString() +
-                " Materials:" + Materials.Count.ToString() +
+                " Material Properties:" + MaterialProperties.Count.ToString() +
                 " Sections:" + CrossSections.Count.ToString();
             return info;
         }
