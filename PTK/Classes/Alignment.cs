@@ -12,6 +12,8 @@ namespace PTK
 
     public class Alignment
     {
+        //This is a useless comment
+
         public string Name { get; private set; }
         public AlignmentAnchorVert AnchorVert { get; private set; } = AlignmentAnchorVert.Center;
         public AlignmentAnchorHori AnchorHori { get; private set; } = AlignmentAnchorHori.Center;
